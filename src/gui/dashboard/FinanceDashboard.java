@@ -1,0 +1,107 @@
+package gui.dashboard;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+
+import javax.swing.JPanel;
+
+import gui.components.SectionTitle;
+import gui.components.TitledCard;
+
+public class FinanceDashboard extends JPanel {
+
+	private static final int IDEAL_DASHBOARD_SPACING = 16;
+	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
+	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 270;
+	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
+	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
+
+	public FinanceDashboard() {
+		setLayout(new BorderLayout());
+		setBackground(IDEAL_DASHBOARD_BACKGROUND_COLOR);
+
+		JPanel content = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
+		content.setOpaque(false);
+
+		JPanel leftSpace = new JPanel();
+		leftSpace.setPreferredSize(new Dimension(IDEAL_DASHBOARD_SPACING, 0));
+		leftSpace.setOpaque(false);
+
+		JPanel rightSpace = new JPanel();
+		rightSpace.setPreferredSize(new Dimension(IDEAL_DASHBOARD_SPACING, 0));
+		rightSpace.setOpaque(false);
+
+		JPanel bottomSpace = new JPanel();
+		bottomSpace.setPreferredSize(new Dimension(0, IDEAL_DASHBOARD_SPACING));
+		bottomSpace.setOpaque(false);
+
+		add(leftSpace, BorderLayout.WEST);
+		add(rightSpace, BorderLayout.EAST);
+		add(content, BorderLayout.CENTER);
+		add(bottomSpace, BorderLayout.SOUTH);
+
+		content.add(buildHeaderRow(), BorderLayout.NORTH);
+		content.add(buildBody(), BorderLayout.CENTER);
+	}
+
+	private JPanel buildHeaderRow() {
+		JPanel header = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, 0));
+		header.setOpaque(false);
+
+		JPanel leftHeader = new SectionTitle("FINANCE DE LA LIGUE", "Vue d'ensemble consolidée");
+		leftHeader.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, IDEAL_DASHBOARD_HEADER_HEIGHT));
+
+		JPanel centerHeader = new SectionTitle("FINANCE PAR ÉQUIPE", "Distribution par club");
+
+		JPanel rightHeader = new SectionTitle("ANALYSE DÉTAILLÉE", "Équipe sélectionnée");
+		rightHeader.setPreferredSize(new Dimension(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, IDEAL_DASHBOARD_HEADER_HEIGHT));
+
+		header.add(leftHeader, BorderLayout.WEST);
+		header.add(centerHeader, BorderLayout.CENTER);
+		header.add(rightHeader, BorderLayout.EAST);
+
+		return header;
+	}
+
+	private JPanel buildBody() {
+		JPanel body = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, 0));
+		body.setOpaque(false);
+
+		JPanel leagueColumn = buildLeagueColumn();
+		leagueColumn.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, 10));
+
+		JPanel teamFinanceCard = new TitledCard("DISTRIBUTION PAR CLUB", "Zone principale");
+
+		JPanel analysisColumn = buildAnalysisColumn();
+		analysisColumn.setPreferredSize(new Dimension(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, 10));
+
+		body.add(leagueColumn, BorderLayout.WEST);
+		body.add(teamFinanceCard, BorderLayout.CENTER);
+		body.add(analysisColumn, BorderLayout.EAST);
+
+		return body;
+	}
+
+	private JPanel buildLeagueColumn() {
+		JPanel column = new JPanel(new GridLayout(3, 1, 0, 12));
+		column.setOpaque(false);
+
+		column.add(new TitledCard("REVENUS TOTAUX", "Placeholder"));
+		column.add(new TitledCard("DÉPENSES TOTALES", "Placeholder"));
+		column.add(new TitledCard("RÉSULTAT NET", "Placeholder"));
+
+		return column;
+	}
+
+	private JPanel buildAnalysisColumn() {
+		JPanel column = new JPanel(new GridLayout(2, 1, 0, 12));
+		column.setOpaque(false);
+
+		column.add(new TitledCard("DISTRIBUTION - ÉQUIPE", "Placeholder"));
+		column.add(new TitledCard("DÉPENSES", "Placeholder"));
+
+		return column;
+	}
+}

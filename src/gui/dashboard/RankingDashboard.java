@@ -1,4 +1,4 @@
-package gui2;
+package gui.dashboard;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -7,13 +7,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- * Dashboard dédié à la page Finance.
+ * Dashboard dédié à la page Classement.
  */
-public class FinanceDashboard extends JPanel {
+public class RankingDashboard extends JPanel {
 
-    public FinanceDashboard() {
+    public RankingDashboard() {
         setLayout(new BorderLayout());
-        JTextField tf = new JTextField("FINANCE");
+        JTextField tf = new JTextField("CLASSEMENT");
         tf.setEditable(false);
         tf.setHorizontalAlignment(JTextField.CENTER);
         add(tf, BorderLayout.CENTER);

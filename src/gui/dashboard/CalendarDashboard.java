@@ -1,4 +1,4 @@
-package gui2;
+package gui.dashboard;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
