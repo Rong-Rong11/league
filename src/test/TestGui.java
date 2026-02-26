@@ -1,6 +1,6 @@
 package test;
 
-import gui2.MainGui;
+import gui.frame.MainGui;
 
 public class TestGui {
 

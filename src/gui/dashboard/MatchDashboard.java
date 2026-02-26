@@ -14,6 +14,7 @@ public class MatchDashboard extends JPanel {
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
 	private static final int IDEAL_DASHBOARD_SIDE_COLUMN_WIDTH = 300;
+	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 270;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
 	public MatchDashboard() {
@@ -46,7 +47,7 @@ public class MatchDashboard extends JPanel {
 
 	private JPanel buildHeader() {
 		JPanel header = new SectionTitle("SAISON RÉGULIÈRE", ""); // dans le subtitle il faut mettre quelque choes qui change selon le jour selctionner 
-		header.setPreferredSize(new Dimension( IDEAL_DASHBOARD_HEADER_HEIGHT,0));
+		header.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, IDEAL_DASHBOARD_HEADER_HEIGHT));
 		return header;
 	}
 
