@@ -1,157 +1,93 @@
 package gui.dashboard;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.time.LocalDate;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import data.calendar.GameDay;
-import data.league.RegularSeason;
-import data.sport.setup.Game;
-import data.sport.setup.GameResult;
-import process.LeagueManager;
+import gui.components.BuildBox;
+import gui.components.SectionTitle;
 
 public class CalendarDashboard extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	private static final Font DISPLAY_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 12);
-
-	private JButton previousDayButton = new JButton("Jour -");
-	private JButton simulateDayButton = new JButton("Simuler jour");
-	private JButton nextDayButton = new JButton("Jour +");
-
-	private JLabel currentDateLabel = new JLabel();
-
-	private LeagueManager leagueManager;
-	private RegularSeason regularSeason;
-	private LocalDate currentDate;
-	private GameDay currentGameDay;
+	private static final int IDEAL_DASHBOARD_SPACING = 16;
+	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
+	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 270;
+	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
+	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
 	public CalendarDashboard() {
-
 		setLayout(new BorderLayout());
+		setBackground(IDEAL_DASHBOARD_BACKGROUND_COLOR);
 
-		leagueManager = new LeagueManager();
-		leagueManager.buildLeague();
-		leagueManager.buildRegularSeasonCalendar();
+		JPanel content = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
+		content.setOpaque(false);
 
-		regularSeason = leagueManager.getLeague().getReagularSeason();
-		currentDate = regularSeason.getDebutDate();
+		JPanel leftSpace = new JPanel();
+		leftSpace.setPreferredSize(new Dimension(IDEAL_DASHBOARD_SPACING, 0));
+		leftSpace.setOpaque(false);
 
-		JPanel topBarPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		currentDateLabel.setFont(DISPLAY_FONT);
+		JPanel rightSpace = new JPanel();
+		rightSpace.setPreferredSize(new Dimension(IDEAL_DASHBOARD_SPACING, 0));
+		rightSpace.setOpaque(false);
 
-		previousDayButton.addActionListener(new PreviousDayListener());
-		simulateDayButton.addActionListener(new simulateCurrentDayListener());
-		nextDayButton.addActionListener(new NextDayListener());
+		JPanel bottomSpace = new JPanel();
+		bottomSpace.setPreferredSize(new Dimension(0, IDEAL_DASHBOARD_SPACING));
+		bottomSpace.setOpaque(false);
 
-		topBarPanel.add(previousDayButton);
-		topBarPanel.add(simulateDayButton);
-		topBarPanel.add(nextDayButton);
-		topBarPanel.add(currentDateLabel);
+		add(leftSpace, BorderLayout.WEST);
+		add(rightSpace, BorderLayout.EAST);
+		add(bottomSpace, BorderLayout.SOUTH);
+		add(content, BorderLayout.CENTER);
 
-		add(topBarPanel, BorderLayout.NORTH);
-
-		updateDisplay();
+		content.add(buildHeader(), BorderLayout.NORTH);
+		content.add(buildBody(), BorderLayout.CENTER);
 	}
 
-	private void updateDisplay() {
-		currentGameDay = regularSeason.getCalendar().getCalendar().get(currentDate);
-		currentDateLabel.setText("Date : " + currentDate);
-		repaint();
+	private JPanel buildHeader() {
+		JPanel header = new SectionTitle("CALENDRIER DE LA SAISON", "Saison régulière");
+		header.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, IDEAL_DASHBOARD_HEADER_HEIGHT));
+		return header;
 	}
 
-	private class PreviousDayListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (currentDate.isAfter(regularSeason.getDebutDate())) {
-				currentDate = currentDate.minusDays(1);
-				updateDisplay();
-			}
-		}
+	private JPanel buildBody() {
+		JPanel body = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
+		body.setOpaque(false);
+
+		JPanel leftColumn = buildLeftColumn();
+		JPanel rightColumn = buildRightColumn();
+		rightColumn.setPreferredSize(new Dimension(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, 10));
+
+		body.add(leftColumn, BorderLayout.CENTER);
+		body.add(rightColumn, BorderLayout.EAST);
+		return body;
 	}
 
-	private class NextDayListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (currentDate.isBefore(regularSeason.getEndDate())) {
-				currentDate = currentDate.plusDays(1);
-				updateDisplay();
-			}
-		}
+	private JPanel buildLeftColumn() {
+		JPanel column = new JPanel(new BorderLayout(0, 12));
+		column.setOpaque(false);
+
+		JPanel progressCard = new BuildBox("PROGRESSION DE LA SAISON", "", "BARRE DE PROGRESSION");
+		progressCard.setPreferredSize(new Dimension(10, 110));
+
+		JPanel matchDaysCard = new BuildBox("JOURS DE MATCH", "", "LISTE DES JOURS");
+
+		column.add(progressCard, BorderLayout.NORTH);
+		column.add(matchDaysCard, BorderLayout.CENTER);
+		return column;
 	}
 
-	private class simulateCurrentDayListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			leagueManager.simulateDay(currentDate, regularSeason);
-			updateDisplay();
+	private JPanel buildRightColumn() {
+		JPanel column = new JPanel(new GridLayout(2, 1, 0, 12));
+		column.setOpaque(false);
 
-		}
-	}
+		JPanel actionsCard = new BuildBox("ACTIONS RAPIDES", "", "BOUTONS D'ACTION");
+		JPanel infoCard = new BuildBox("INFORMATIONS SAISON", "", "STATISTIQUES SAISON");
 
-	@Override
-	protected void paintComponent(Graphics graphics) {
-		super.paintComponent(graphics);
-
-		graphics.setFont(DISPLAY_FONT);
-
-		int yPosition = 60;
-
-		if (currentGameDay == null || currentGameDay.isEmpty()) {
-			graphics.drawString("Aucun match ce jour.", 20, yPosition);
-			return;
-		}
-
-		for (Game game : currentGameDay.getGames()) {
-
-			String matchLine = game.getGameContext().getAwayTeam().getName()
-					+ " vs "
-					+ game.getGameContext().getHomeTeam().getName();
-
-			if (currentGameDay.isSimulated()) {
-				matchLine += " | " + game.getHomeFinalScore() + " - " + game.getAwayFinalScore();
-			} else {
-				matchLine += " | non simulé";
-			}
-
-			graphics.drawString(matchLine, 20, yPosition += 30);
-
-			if (currentGameDay.isSimulated()) {
-				int threePointsHome = 0;
-				int twoPointsHome = 0;
-				int freeThrowsHome = 0;
-				int threePointsAway = 0;
-				int twoPointsAway = 0;
-				int freeThrowsAway = 0;
-
-				for (GameResult quarter : game.getQuarterResults()) {
-					threePointsHome += quarter.getThreePointsHomeTeam();
-					twoPointsHome += quarter.getTwoPointsHomeTeam();
-					freeThrowsHome += quarter.getFreeThrowHomeTeam();
-
-					threePointsAway += quarter.getThreePointsAwayTeam();
-					twoPointsAway += quarter.getTwoPointsAwayTeam();
-					freeThrowsAway += quarter.getFreeThrowAwayTeam();
-
-				}
-
-				String pointsDetail = "Détail: " + game.getGameContext().getHomeTeam().getName() + " [3P: "
-						+ threePointsHome + ", 2P: " + twoPointsHome + ", LF: " + freeThrowsHome + "]";
-				graphics.drawString(pointsDetail, 40, yPosition += 15);
-
-				pointsDetail = game.getGameContext().getAwayTeam().getName() + " [3P: " + threePointsAway + ", 2P: "
-						+ twoPointsAway + ", LF: " + freeThrowsAway + "]";
-				graphics.drawString(pointsDetail, 40, yPosition += 15);
-
-			}
-		}
+		column.add(actionsCard);
+		column.add(infoCard);
+		return column;
 	}
 }

@@ -7,8 +7,8 @@ import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 
+import gui.components.BuildBox;
 import gui.components.SectionTitle;
-import gui.components.TitledCard;
 
 public class FinanceDashboard extends JPanel {
 
@@ -72,7 +72,7 @@ public class FinanceDashboard extends JPanel {
 		JPanel leagueColumn = buildLeagueColumn();
 		leagueColumn.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, 10));
 
-		JPanel teamFinanceCard = new TitledCard("DISTRIBUTION PAR CLUB", "Zone principale");
+		JPanel teamFinanceCard = new BuildBox("DISTRIBUTION PAR CLUB", "Zone principale", "DISTRIBUTION");
 
 		JPanel analysisColumn = buildAnalysisColumn();
 		analysisColumn.setPreferredSize(new Dimension(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, 10));
@@ -88,9 +88,9 @@ public class FinanceDashboard extends JPanel {
 		JPanel column = new JPanel(new GridLayout(3, 1, 0, 12));
 		column.setOpaque(false);
 
-		column.add(new TitledCard("REVENUS TOTAUX", "Placeholder"));
-		column.add(new TitledCard("DÉPENSES TOTALES", "Placeholder"));
-		column.add(new TitledCard("RÉSULTAT NET", "Placeholder"));
+		column.add(new BuildBox("REVENUS TOTAUX", "Synthèse ligue", "REVENUS"));
+		column.add(new BuildBox("DÉPENSES TOTALES", "Synthèse ligue", "DÉPENSES"));
+		column.add(new BuildBox("RÉSULTAT NET", "Synthèse ligue", "RÉSULTAT"));
 
 		return column;
 	}
@@ -99,8 +99,8 @@ public class FinanceDashboard extends JPanel {
 		JPanel column = new JPanel(new GridLayout(2, 1, 0, 12));
 		column.setOpaque(false);
 
-		column.add(new TitledCard("DISTRIBUTION - ÉQUIPE", "Placeholder"));
-		column.add(new TitledCard("DÉPENSES", "Placeholder"));
+		column.add(new BuildBox("DISTRIBUTION - ÉQUIPE", "Équipe sélectionnée", "DISTRIBUTION"));
+		column.add(new BuildBox("DÉPENSES", "Équipe sélectionnée", "DÉPENSES"));
 
 		return column;
 	}
