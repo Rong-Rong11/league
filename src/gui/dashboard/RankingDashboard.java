@@ -59,7 +59,7 @@ public class RankingDashboard extends JPanel {
 		JPanel body = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
 		body.setOpaque(false);
 
-		JPanel rankingCard = new BuildBox("CLASSEMENT COMPLET", "12 équipes", "TABLEAU CLASSEMENT");
+		JPanel rankingCard = new BuildBox("CLASSEMENT COMPLET", "12 équipes", "TABLEAU CLASSEMENT");//! À changer le string par un jpanel quand on aura la fonctionnalité
 		JPanel sideColumn = buildSideColumn();
 		sideColumn.setPreferredSize(new Dimension(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, 10));
 
@@ -73,8 +73,8 @@ public class RankingDashboard extends JPanel {
 		JPanel column = new JPanel(new GridLayout(2, 1, 0, 12));
 		column.setOpaque(false);
 
-		column.add(new BuildBox("ZONE PLAYOFFS", "Équipes qualifiées", "PLAYOFFS"));
-		column.add(new BuildBox("PERFORMANCES", "Forme récente", "STATISTIQUES"));
+		column.add(new BuildBox("ZONE PLAYOFFS", "Équipes qualifiées", "PLAYOFFS"));//! À changer le string par un jpanel quand on aura la fonctionnalité
+		column.add(new BuildBox("PERFORMANCES", "Forme récente", "STATISTIQUES"));//! À changer le string par un jpanel quand on aura la fonctionnalité
 
 		return column;
 	}

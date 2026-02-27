@@ -72,7 +72,7 @@ public class FinanceDashboard extends JPanel {
 		JPanel leagueColumn = buildLeagueColumn();
 		leagueColumn.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, 10));
 
-		JPanel teamFinanceCard = new BuildBox("DISTRIBUTION PAR CLUB", "Zone principale", "DISTRIBUTION");
+		JPanel teamFinanceCard = new BuildBox("DISTRIBUTION PAR CLUB", "Zone principale", "DISTRIBUTION");//! À changer le string par un jpanel quand on aura la fonctionnalité
 
 		JPanel analysisColumn = buildAnalysisColumn();
 		analysisColumn.setPreferredSize(new Dimension(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, 10));
@@ -88,9 +88,9 @@ public class FinanceDashboard extends JPanel {
 		JPanel column = new JPanel(new GridLayout(3, 1, 0, 12));
 		column.setOpaque(false);
 
-		column.add(new BuildBox("REVENUS TOTAUX", "Synthèse ligue", "REVENUS"));
-		column.add(new BuildBox("DÉPENSES TOTALES", "Synthèse ligue", "DÉPENSES"));
-		column.add(new BuildBox("RÉSULTAT NET", "Synthèse ligue", "RÉSULTAT"));
+		column.add(new BuildBox("REVENUS TOTAUX", "Synthèse ligue", "REVENUS"));//! À changer le string par un jpanel quand on aura la fonctionnalité
+		column.add(new BuildBox("DÉPENSES TOTALES", "Synthèse ligue", "DÉPENSES"));//! À changer le string par un jpanel quand on aura la fonctionnalité
+		column.add(new BuildBox("RÉSULTAT NET", "Synthèse ligue", "RÉSULTAT"));//! À changer le string par un jpanel quand on aura la fonctionnalité
 
 		return column;
 	}
@@ -99,8 +99,8 @@ public class FinanceDashboard extends JPanel {
 		JPanel column = new JPanel(new GridLayout(2, 1, 0, 12));
 		column.setOpaque(false);
 
-		column.add(new BuildBox("DISTRIBUTION - ÉQUIPE", "Équipe sélectionnée", "DISTRIBUTION"));
-		column.add(new BuildBox("DÉPENSES", "Équipe sélectionnée", "DÉPENSES"));
+		column.add(new BuildBox("DISTRIBUTION - ÉQUIPE", "Équipe sélectionnée", "DISTRIBUTION"));//! À changer le string par un jpanel quand on aura la fonctionnalité
+		column.add(new BuildBox("DÉPENSES", "Équipe sélectionnée", "DÉPENSES"));//! À changer le string par un jpanel quand on aura la fonctionnalité
 
 		return column;
 	}
