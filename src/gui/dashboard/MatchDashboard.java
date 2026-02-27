@@ -6,15 +6,15 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
+import gui.components.BuildBox;
 import gui.components.SectionTitle;
-import gui.components.TitledCard;
 
 public class MatchDashboard extends JPanel {
 
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
-	private static final int IDEAL_DASHBOARD_SIDE_COLUMN_WIDTH = 300;
 	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 270;
+	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 300;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
 	public MatchDashboard() {
@@ -38,7 +38,7 @@ public class MatchDashboard extends JPanel {
 
 		add(leftSpace, BorderLayout.WEST);
 		add(rightSpace, BorderLayout.EAST);
-		add(bottomSpace,BorderLayout.SOUTH) ;
+		add(bottomSpace, BorderLayout.SOUTH);
 		add(content, BorderLayout.CENTER);
 
 		content.add(buildHeader(), BorderLayout.NORTH);
@@ -46,22 +46,22 @@ public class MatchDashboard extends JPanel {
 	}
 
 	private JPanel buildHeader() {
-		JPanel header = new SectionTitle("SAISON RÉGULIÈRE", ""); // dans le subtitle il faut mettre quelque choes qui change selon le jour selctionner 
+		JPanel header = new SectionTitle("SAISON RÉGULIÈRE", "");
 		header.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, IDEAL_DASHBOARD_HEADER_HEIGHT));
 		return header;
 	}
 
 	private JPanel buildBody() {
-		JPanel body = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
+		JPanel body = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, 0));
 		body.setOpaque(false);
 
-		JPanel leftCard = new TitledCard("MATCHS DU JOUR", "Liste des rencontres");
-		leftCard.setPreferredSize(new Dimension(IDEAL_DASHBOARD_SIDE_COLUMN_WIDTH, 10));
+		JPanel leftCard = new BuildBox("MATCHS DU JOUR", "Liste des rencontres", "LISTE MATCHS");
+		leftCard.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, 10));
 
-		JPanel centerCard = new TitledCard("MATCH SÉLECTIONNÉ", "Détails du match");
+		JPanel centerCard = new BuildBox("MATCH SÉLECTIONNÉ", "Détails du match", "DÉTAILS MATCH");
 
-		JPanel rightCard = new TitledCard("FINANCES DU MATCH", "Revenus et dépenses");
-		rightCard.setPreferredSize(new Dimension(IDEAL_DASHBOARD_SIDE_COLUMN_WIDTH, 10));
+		JPanel rightCard = new BuildBox("FINANCES DU MATCH", "Revenus et dépenses", "FINANCES");
+		rightCard.setPreferredSize(new Dimension(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, 10));
 
 		body.add(leftCard, BorderLayout.WEST);
 		body.add(centerCard, BorderLayout.CENTER);

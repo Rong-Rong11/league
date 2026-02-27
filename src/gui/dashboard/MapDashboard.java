@@ -7,10 +7,10 @@ import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 
+import gui.components.BuildBox;
 import gui.components.SectionTitle;
-import gui.components.TitledCard;
 /**
- * Dashboard dédié à la page Finance.
+ * Dashboard dédié à la page Carte.
  */
 	public class MapDashboard extends JPanel {
 		private static final int IDEAL_DASHBOARD_SPACING = 16;
@@ -59,7 +59,7 @@ import gui.components.TitledCard;
 
 			JPanel teamSelctCard = buildTeamSelctCard();
 
-			TitledCard mapCard = new TitledCard("LOCALISATION DES FRANCHISES", "");
+			JPanel mapCard = new BuildBox("LOCALISATION DES FRANCHISES", "", "CARTE");
 
 			body.add(mapCard, BorderLayout.CENTER);
 			body.add(teamSelctCard,BorderLayout.EAST);
@@ -72,11 +72,10 @@ import gui.components.TitledCard;
 			JPanel column = new JPanel(new GridLayout(2, 1, 0, 12));
 			column.setOpaque(false);
 			
-			column.add(new TitledCard("Détails de l'équipe", "Informations détaillées sur l'équipe sélectionnée"));
-			column.add(new TitledCard("Joueur de l'equipe", ""));
+			column.add(new BuildBox("Détails de l'équipe", "Informations détaillées sur l'équipe sélectionnée", "INFOS ÉQUIPE"));
+			column.add(new BuildBox("Joueur de l'équipe", "", "JOUEURS"));
 
 			return column;
 		}
 
 }
-
