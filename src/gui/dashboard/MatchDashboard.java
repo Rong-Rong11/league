@@ -55,12 +55,12 @@ public class MatchDashboard extends JPanel {
 		JPanel body = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, 0));
 		body.setOpaque(false);
 
-		JPanel leftCard = new BuildBox("MATCHS DU JOUR", "Liste des rencontres", "LISTE MATCHS");
+		JPanel leftCard = new BuildBox("MATCHS DU JOUR", "Liste des rencontres", "LISTE MATCHS");//! À changer le string par un jpanel quand on aura la fonctionnalité
 		leftCard.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, 10));
 
-		JPanel centerCard = new BuildBox("MATCH SÉLECTIONNÉ", "Détails du match", "DÉTAILS MATCH");
+		JPanel centerCard = new BuildBox("MATCH SÉLECTIONNÉ", "Détails du match", "DÉTAILS MATCH");//! À changer le string par un jpanel quand on aura la fonctionnalité
 
-		JPanel rightCard = new BuildBox("FINANCES DU MATCH", "Revenus et dépenses", "FINANCES");
+		JPanel rightCard = new BuildBox("FINANCES DU MATCH", "Revenus et dépenses", "FINANCES");//! À changer le string par un jpanel quand on aura la fonctionnalité
 		rightCard.setPreferredSize(new Dimension(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, 10));
 
 		body.add(leftCard, BorderLayout.WEST);

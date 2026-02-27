@@ -69,10 +69,10 @@ public class CalendarDashboard extends JPanel {
 		JPanel column = new JPanel(new BorderLayout(0, 12));
 		column.setOpaque(false);
 
-		JPanel progressCard = new BuildBox("PROGRESSION DE LA SAISON", "", "BARRE DE PROGRESSION");
+		JPanel progressCard = new BuildBox("PROGRESSION DE LA SAISON", "", "BARRE DE PROGRESSION");//! À changer le string par un jpanel quand on aura la fonctionnalité
 		progressCard.setPreferredSize(new Dimension(10, 110));
 
-		JPanel matchDaysCard = new BuildBox("JOURS DE MATCH", "", "LISTE DES JOURS");
+		JPanel matchDaysCard = new BuildBox("JOURS DE MATCH", "", "LISTE DES JOURS");//! À changer le string par un jpanel quand on aura la fonctionnalité
 
 		column.add(progressCard, BorderLayout.NORTH);
 		column.add(matchDaysCard, BorderLayout.CENTER);
@@ -83,8 +83,8 @@ public class CalendarDashboard extends JPanel {
 		JPanel column = new JPanel(new GridLayout(2, 1, 0, 12));
 		column.setOpaque(false);
 
-		JPanel actionsCard = new BuildBox("ACTIONS RAPIDES", "", "BOUTONS D'ACTION");
-		JPanel infoCard = new BuildBox("INFORMATIONS SAISON", "", "STATISTIQUES SAISON");
+		JPanel actionsCard = new BuildBox("ACTIONS RAPIDES", "", "BOUTONS D'ACTION");//! À changer le string par un jpanel quand on aura la fonctionnalité
+		JPanel infoCard = new BuildBox("INFORMATIONS SAISON", "", "STATISTIQUES SAISON");//! À changer le string par un jpanel quand on aura la fonctionnalité
 
 		column.add(actionsCard);
 		column.add(infoCard);

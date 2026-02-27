@@ -59,7 +59,7 @@ import gui.components.SectionTitle;
 
 			JPanel teamSelctCard = buildTeamSelctCard();
 
-			JPanel mapCard = new BuildBox("LOCALISATION DES FRANCHISES", "", "CARTE");
+			JPanel mapCard = new BuildBox("LOCALISATION DES FRANCHISES", "", "CARTE");//! À changer le string par un jpanel quand on aura la fonctionnalité
 
 			body.add(mapCard, BorderLayout.CENTER);
 			body.add(teamSelctCard,BorderLayout.EAST);
@@ -72,8 +72,8 @@ import gui.components.SectionTitle;
 			JPanel column = new JPanel(new GridLayout(2, 1, 0, 12));
 			column.setOpaque(false);
 			
-			column.add(new BuildBox("Détails de l'équipe", "Informations détaillées sur l'équipe sélectionnée", "INFOS ÉQUIPE"));
-			column.add(new BuildBox("Joueur de l'équipe", "", "JOUEURS"));
+			column.add(new BuildBox("Détails de l'équipe", "Informations détaillées sur l'équipe sélectionnée", "INFOS ÉQUIPE"));//! À changer le string par un jpanel quand on aura la fonctionnalité
+			column.add(new BuildBox("Joueur de l'équipe", "", "JOUEURS"));//! À changer le string par un jpanel quand on aura la fonctionnalité
 
 			return column;
 		}
