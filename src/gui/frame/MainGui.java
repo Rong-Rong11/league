@@ -1,5 +1,7 @@
 package gui.frame;
 
+//! a relire 
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
@@ -8,52 +10,44 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import gui.layout.SidebarPanel;
 import gui.dashboard.CalendarDashboard;
-import gui.dashboard.MatchDashboard;
 import gui.dashboard.FinanceDashboard;
-import gui.dashboard.RankingDashboard;
 import gui.dashboard.MapDashboard;
+import gui.dashboard.MatchDashboard;
+import gui.dashboard.OpeningDashboard;
+import gui.dashboard.RankingDashboard;
+import gui.layout.SidebarPanel;
 
 public class MainGui extends JFrame {
 
-	private CardLayout cardLayout;
-	private JPanel centerPanel;
+	private CardLayout rootLayout;
+	private JPanel rootPanel;
+	private CardLayout dashboardLayout;
+	private JPanel dashboardPanel;
 
 	public MainGui() {
-
 		setTitle("NBA League");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		cardLayout = new CardLayout();
-		centerPanel = new JPanel(cardLayout);
+		rootLayout = new CardLayout();
+		rootPanel = new JPanel(rootLayout);
 
-		MatchDashboard matchPanel = new MatchDashboard();
-		CalendarDashboard calendarPanel = new CalendarDashboard();
-		RankingDashboard rankingPanel = new RankingDashboard();
-		FinanceDashboard financePanel = new FinanceDashboard();
-		MapDashboard mapPanel = new MapDashboard();
+		dashboardLayout = new CardLayout();
+		dashboardPanel = new JPanel(dashboardLayout);
 
-		centerPanel.add(matchPanel, "match");
-		centerPanel.add(calendarPanel, "calendar");
-		centerPanel.add(rankingPanel, "ranking");
-		centerPanel.add(financePanel, "finance");
-		centerPanel.add(mapPanel, "map");
+		OpeningDashboard openingPanel = new OpeningDashboard();
+		JPanel mainPanel = buildApplicationPanel();
 
-		SidebarPanel sidebar = new SidebarPanel();
+		rootPanel.add(openingPanel, "opening");
+		rootPanel.add(mainPanel, "main");
 
-		sidebar.getMatchButton().addActionListener(new SwitchAction("match"));
-		sidebar.getCalendarButton().addActionListener(new SwitchAction("calendar"));
-		sidebar.getRankingButton().addActionListener(new SwitchAction("ranking"));
-		sidebar.getFinanceButton().addActionListener(new SwitchAction("finance"));
-		sidebar.getMapButton().addActionListener(new SwitchAction("map"));
-		sidebar.getExitButton().addActionListener(new QuitAction());
+		openingPanel.getContinueButton().addActionListener(new OpenApplicationAction(openingPanel));
 
 		setLayout(new BorderLayout());
-		add(sidebar, BorderLayout.WEST);
-		add(centerPanel, BorderLayout.CENTER);
+		add(rootPanel, BorderLayout.CENTER);
 
-		cardLayout.show(centerPanel, "match");
+		dashboardLayout.show(dashboardPanel, "map");
+		rootLayout.show(rootPanel, "opening");
 
 		pack();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -61,15 +55,58 @@ public class MainGui extends JFrame {
 		setVisible(true);
 	}
 
-	private class SwitchAction implements ActionListener {
+	private JPanel buildApplicationPanel() {
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		SidebarPanel sidebar = new SidebarPanel();
+
+		dashboardPanel.add(new MatchDashboard(), "match");
+		dashboardPanel.add(new CalendarDashboard(), "calendar");
+		dashboardPanel.add(new RankingDashboard(), "ranking");
+		dashboardPanel.add(new FinanceDashboard(), "finance");
+		dashboardPanel.add(new MapDashboard(), "map");
+
+		sidebar.getMatchButton().addActionListener(new SwitchDashboardAction("match"));
+		sidebar.getCalendarButton().addActionListener(new SwitchDashboardAction("calendar"));
+		sidebar.getRankingButton().addActionListener(new SwitchDashboardAction("ranking"));
+		sidebar.getFinanceButton().addActionListener(new SwitchDashboardAction("finance"));
+		sidebar.getMapButton().addActionListener(new SwitchDashboardAction("map"));
+		sidebar.getExitButton().addActionListener(new QuitAction());
+
+		mainPanel.add(sidebar, BorderLayout.WEST);
+		mainPanel.add(dashboardPanel, BorderLayout.CENTER);
+
+		return mainPanel;
+	}
+
+	private class SwitchDashboardAction implements ActionListener {
 		private String cardName;
-		public SwitchAction(String cardName) {
+
+		public SwitchDashboardAction(String cardName) {
 			this.cardName = cardName;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			cardLayout.show(centerPanel, cardName);
+			dashboardLayout.show(dashboardPanel, cardName);
+		}
+	}
+
+	private class OpenApplicationAction implements ActionListener {
+		private OpeningDashboard openingPanel;
+
+		public OpenApplicationAction(OpeningDashboard openingPanel) {
+			this.openingPanel = openingPanel;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (!openingPanel.hasSelectedProfil()) {
+				openingPanel.showSelectionWarning();
+				return;
+			}
+
+			dashboardLayout.show(dashboardPanel, "map");
+			rootLayout.show(rootPanel, "main");
 		}
 	}
 
