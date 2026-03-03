@@ -122,39 +122,39 @@ public class PlayerUtilitary {
 		double matchMinutes = matchAsset.getMinutesPlayedPerMatch();
 		double totalMinutes = seasonMinutes + matchMinutes;
 
-		seasonAsset.setPointPerMatch((int) Math.round(
+		seasonAsset.setPointPerMatch(
 				(seasonAsset.getPointPerMatch() * seasonMinutes
-						+ matchAsset.getPointPerMatch() * matchMinutes)
-						/ totalMinutes));
+				+ matchAsset.getPointPerMatch() * matchMinutes)
+						/ totalMinutes);
 
 		seasonAsset.setReboundPerMatch(
 				(seasonAsset.getReboundPerMatch() * seasonMinutes
-						+ matchAsset.getReboundPerMatch() * matchMinutes)
+				+ matchAsset.getReboundPerMatch() * matchMinutes)
 						/ totalMinutes);
 
 		seasonAsset.setAssistPerMatch(
 				(seasonAsset.getAssistPerMatch() * seasonMinutes
-						+ matchAsset.getAssistPerMatch() * matchMinutes)
-						/ totalMinutes);
+				+ matchAsset.getAssistPerMatch() * matchMinutes)
+				/ totalMinutes);
 
 		seasonAsset.setInterceptionPerMatch(
 				(seasonAsset.getInterceptionPerMatch() * seasonMinutes
-						+ matchAsset.getInterceptionPerMatch() * matchMinutes)
-						/ totalMinutes);
+				+ matchAsset.getInterceptionPerMatch() * matchMinutes)
+				/ totalMinutes);
 
 		seasonAsset.setBlockPerMatch(
 				(seasonAsset.getBlockPerMatch() * seasonMinutes
-						+ matchAsset.getBlockPerMatch() * matchMinutes)
-						/ totalMinutes);
+				+ matchAsset.getBlockPerMatch() * matchMinutes)
+				/ totalMinutes);
 
 		seasonAsset.setLostBallPerMatch(
 				(seasonAsset.getLostBallPerMatch() * seasonMinutes
-						+ matchAsset.getLostBallPerMatch() * matchMinutes)
-						/ totalMinutes);
+				+ matchAsset.getLostBallPerMatch() * matchMinutes)
+				/ totalMinutes);
 
 		seasonAsset.setMinutesPlayedPerMatch(
 				(seasonAsset.getMinutesPlayedPerMatch() * seasonMinutes
-						+ matchAsset.getMinutesPlayedPerMatch() * matchMinutes)
-						/ totalMinutes);
+				+ matchAsset.getMinutesPlayedPerMatch() * matchMinutes)
+				/ totalMinutes);
 	}
 }

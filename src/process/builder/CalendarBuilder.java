@@ -31,7 +31,7 @@ public class CalendarBuilder {
 
 	}
 
-	public void initialization(League league) {
+	public void initialization() {
 		for (Team team : teamRepositery.getAllTeams()) {
 			team.getSchedule().setNumberOfAwayGames(0);
 			team.getSchedule().setNumberOfHomeGames(0);

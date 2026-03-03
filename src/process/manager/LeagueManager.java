@@ -49,7 +49,7 @@ public class LeagueManager {
 	}
 
 	private void buildRegularSeasonCalendar() {
-		calendarBuilder.initialization(league);
+		calendarBuilder.initialization();
 		calendarBuilder.specialEventsPlacement(league.getReagularSeason());
 		calendarBuilder.generateAllGames(league);
 		calendarBuilder.generateRegulaSeasonCalendar(league);

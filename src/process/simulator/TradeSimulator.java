@@ -113,7 +113,7 @@ public class TradeSimulator {
 		for (Player player : teamIncoming) {
 			if (player.isStar()) {
 				team.setStarPlayer(player);
-				break;
+				return;
 			}
 		}
 		team.setStarPlayer(null);
