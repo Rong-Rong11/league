@@ -86,9 +86,8 @@ public class LeagueBuilder {
 				playerRepositery.register(player.getName(), player);
 				preSeasonAssetRepositery.register(player, player.getPreSeasonAssets());
 				currentSeasonAssetRepositery.register(player, player.getCurrentSeasonAssets());
-				setStarPlayerTeams();
-
 			}
+<<<<<<< HEAD
 <<<<<<< HEAD
 			bufferedReader.close();
 
@@ -96,6 +95,9 @@ public class LeagueBuilder {
 		catch (IOException e) {
 =======
 
+=======
+			setStarPlayerTeams();
+>>>>>>> fatima2
 			bufferedReader.close();
 
 		} catch (IOException e) {

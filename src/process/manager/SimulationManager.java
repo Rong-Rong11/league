@@ -14,7 +14,7 @@ public class SimulationManager {
 	private LocalDate date = SimulationConfiguration.REGULAR_SEASON_DEBUT_DATE;
 
 	public SimulationManager() {
-		leagueManager.buildLeague();
+		
 	}
 
 	public void randomFinance() {

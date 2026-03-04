@@ -7,12 +7,11 @@ import java.util.TreeMap;
 
 import config.SimulationConfiguration;
 import data.calendar.GameDay;
-import data.calendar.SpecialEvent;
-import data.league.Conference;
-import data.league.Division;
+
 import data.league.League;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
+<<<<<<< HEAD
 import data.team.Team;
 import data.team.calendar.Schedule;
 import process.GameGenerator;
@@ -47,28 +46,38 @@ import process.repositery.DivisionRepositery;
 import process.repositery.PlayerRepositery;
 import process.repositery.TeamRepositery;
 import process.utilitary.CalendarUtilitary;
+=======
+import process.builder.calendartools.GameGenerator;
+import process.builder.calendartools.GameSelector;
+import process.builder.calendartools.ScheduleReset;
+import process.builder.calendartools.SpecialEventPlanner;
+
+>>>>>>> fatima2
 
 public class CalendarBuilder {
 
-	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
-	private DivisionRepositery divisionRepositery = DivisionRepositery.getInstance();
-	private PlayerRepositery playerRepositery = PlayerRepositery.getInstance();
+	private ScheduleReset  scheduleReset = new ScheduleReset();
+	private GameSelector gameSelector ; 
+	private League league ; 
 
-	public CalendarBuilder() {
-
+	public CalendarBuilder(League league) {
+		this.league = league ; 
+		gameSelector = new GameSelector(SimulationConfiguration.REGULAR_SEASON_DEBUT_DATE, league) ; 
+	}
+	
+	private void resetSchedule() {
+		scheduleReset.initialization();
+	}
+	private void specialEventsPlacement() {
+		SpecialEventPlanner.specialEventsPlacement(league.getReagularSeason());
 	}
 
-	public void initialization() {
-		for (Team team : teamRepositery.getAllTeams()) {
-			team.getSchedule().setNumberOfAwayGames(0);
-			team.getSchedule().setNumberOfHomeGames(0);
-			team.getSchedule().setNumberOfPlayedGames(0);
-			team.getSchedule().clearGames();
-			team.getSchedule().clearScheduledGames();
-
-		}
+	private void generateAllGames() {
+		GameGenerator.generateAllGamesRegularSeason(league);
 	}
+	
 
+<<<<<<< HEAD
 	public void specialEventsPlacement(RegularSeason regularSeason) {
 		regularSeason.addSpecialEvents(new SpecialEvent(SimulationConfiguration.CHRISTMAS_DAY, "christmas"));
 		regularSeason.addSpecialEvents(new SpecialEvent(regularSeason.getDebutDate(), "opening night"));
@@ -97,6 +106,13 @@ public class CalendarBuilder {
 =======
 	public void generateRegulaSeasonCalendar(League league) {
 >>>>>>> Fatima2
+=======
+	public void buildRegulaSeasonCalendar() {
+		resetSchedule();
+		specialEventsPlacement();
+		generateAllGames();
+		
+>>>>>>> fatima2
 		RegularSeason regularSeason = league.getReagularSeason();
 		TreeMap<LocalDate, GameDay> calendar = new TreeMap<LocalDate, GameDay>();
 		LocalDate debutDate = regularSeason.getDebutDate();
@@ -104,7 +120,10 @@ public class CalendarBuilder {
 
 		for (LocalDate date = debutDate; !date.isAfter(endDate); date = date.plusDays(1)) {
 			GameDay gameDay = new GameDay(date);
-			ArrayList<Game> games = selectGamesForDay(date, league, regularSeason);
+			gameSelector.setDate(date);
+			
+			ArrayList<Game> games = gameSelector.selectGamesForDay();
+			
 			gameDay.setGames(games);
 			for (Game game : games) {
 				game.getGameContext().setScheduled(true);
@@ -118,6 +137,7 @@ public class CalendarBuilder {
 		league.getReagularSeason().getCalendar().setCalendar(calendar);
 	}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	private static ArrayList<Game> selectGamesForDay(LocalDate date, League league, RegularSeason regularSeason) {
 =======
@@ -239,4 +259,6 @@ public class CalendarBuilder {
 		}
 		return remaining;
 	}
+=======
+>>>>>>> fatima2
 }
