@@ -1,12 +1,9 @@
 package data.team.finance;
 
 import data.finance.budget.Budget;
-<<<<<<< HEAD
-=======
 import data.team.finance.financialprofil.FinancialProfil;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.transfer.TeamTransferStrategy;
->>>>>>> Fatima2
 
 public class TeamFinance {
 	
@@ -15,16 +12,6 @@ public class TeamFinance {
 	private double payroll ; 
 	private MarketSize marketSize ; 
 	private double luxuryTaxPaid ;
-<<<<<<< HEAD
-	
-	public TeamFinance(FinancialProfil financialProfil, Budget budget, MarketSize marketSize) {
-		super();
-		this.financialProfil = financialProfil;
-		this.budget = budget;
-		this.payroll = 0 ; 
-		this.marketSize = marketSize;
-		this.luxuryTaxPaid = 0 ;
-=======
 	private int transferMade = 0 ; 
 	private TeamTransferStrategy teamTransferStrategy ; 
 	
@@ -37,15 +24,10 @@ public class TeamFinance {
 		luxuryTaxPaid = 0 ;
 		transferMade = 0 ; 
 		this.teamTransferStrategy = teamTransferStrategy ; 
->>>>>>> Fatima2
 	}
 
 	public FinancialProfil getFinancialProfil() {
 		return financialProfil;
-<<<<<<< HEAD
-	} 
-	
-=======
 	}
 
 	public double getPayroll() {
@@ -115,7 +97,6 @@ public class TeamFinance {
 	
 	
 	
->>>>>>> Fatima2
 	
 	
 	

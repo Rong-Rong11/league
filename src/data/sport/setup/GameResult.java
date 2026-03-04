@@ -4,19 +4,12 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import data.player.Player;
-<<<<<<< HEAD
-import data.sport.play.ActionResult;
-import data.team.Team;
-
-public class GameResult {
-=======
 import data.sport.play.action.ActionResult;
 import data.team.Team;
 
 public class GameResult {
 	private Team winner = null ; 
 	private Team loser = null ; 
->>>>>>> Fatima2
 	private int scorehomeTeam ; 
 	private int scoreAwayTeam; 
 	

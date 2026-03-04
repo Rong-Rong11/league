@@ -93,15 +93,12 @@ public class League {
 	public void setLeagueFinance(LeagueFinance leagueFinance) {
 		this.leagueFinance = leagueFinance;
 	}
-<<<<<<< HEAD
-=======
 
 	public LeagueFinance getLeagueFinance() {
 		return leagueFinance;
 	}
 	
 	
->>>>>>> Fatima2
 	
 	
 

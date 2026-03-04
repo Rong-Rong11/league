@@ -13,13 +13,6 @@ import data.league.League;
 import data.league.LeagueFinance;
 import data.player.Player;
 import data.team.Team;
-<<<<<<< HEAD
-import data.team.finance.AmbitiousProfil;
-import data.team.finance.BalancedProfil;
-import data.team.finance.EconomicalProfil;
-import data.team.finance.FinancialProfil;
-=======
->>>>>>> Fatima2
 import process.factory.PlayerFactory;
 import process.factory.TeamFactory;
 import process.repositery.CurrentSeasonAssetRepositery;
@@ -27,11 +20,8 @@ import process.repositery.DivisionRepositery;
 import process.repositery.PlayerRepositery;
 import process.repositery.PreSeasonAssetRepositery;
 import process.repositery.TeamRepositery;
-<<<<<<< HEAD
-=======
 import process.utilitary.FinanceUtilitary;
 import process.utilitary.TeamUtilitary;
->>>>>>> Fatima2
 
 public class LeagueBuilder {
 
@@ -87,21 +77,10 @@ public class LeagueBuilder {
 				preSeasonAssetRepositery.register(player, player.getPreSeasonAssets());
 				currentSeasonAssetRepositery.register(player, player.getCurrentSeasonAssets());
 			}
-<<<<<<< HEAD
-<<<<<<< HEAD
-			bufferedReader.close();
-
-		} 
-		catch (IOException e) {
-=======
-
-=======
 			setStarPlayerTeams();
->>>>>>> fatima2
 			bufferedReader.close();
 
 		} catch (IOException e) {
->>>>>>> Fatima2
 			System.err.println(e.getMessage());
 		}
 		buildFinanceLeague(league);
@@ -110,27 +89,6 @@ public class LeagueBuilder {
 
 	private void setStarPlayerTeams() {
 		for (Team team : teamRepositery.getAllTeams()) {
-<<<<<<< HEAD
-			team.setStarPlayer();
-		}
-	}
-	private void buildFinanceLeague(League league) {
-		double initialBudget = FinanceConfiguration.INITIAL_LEAGUE_BUDGET ; 
-		Budget budget = new Budget(initialBudget) ; 
-
-		budget.addIncome(new Income(FinanceConfiguration.REVENUE_TYPE_TV, initialBudget * 0.65));
-		budget.addIncome(new Income(FinanceConfiguration.REVENUE_TYPE_SPONSORING, initialBudget * 0.15));
-		budget.addIncome(new Income(FinanceConfiguration.REVENUE_TYPE_MERCHANDISING, initialBudget * 0.10));
-		budget.addIncome(new Income(FinanceConfiguration.REVENUE_TYPE_OTHER, initialBudget * 0.10));
-		
-		double salaryCap = (initialBudget * FinanceConfiguration.PLAYER_SHARE) / SimulationConfiguration.NUMBER_OF_TEAM ; 
-		double luxuryTaxLine = salaryCap * FinanceConfiguration.LUXURYTAX_THRESHOLD_RATE ;
-		double minimumTeamSalary = salaryCap * FinanceConfiguration.MINIMUM_TEAM_SALARY_RATE ;
-		
-		LeagueFinance leagueFinance = new LeagueFinance(budget, salaryCap, luxuryTaxLine, minimumTeamSalary) ; 
-		league.setLeagueFinance(leagueFinance);
-	}
-=======
 			TeamUtilitary.setStarPlayer(team);
 		}
 	}
@@ -156,5 +114,4 @@ public class LeagueBuilder {
 		league.setLeagueFinance(leagueFinance);
 	}
 
->>>>>>> Fatima2
 }

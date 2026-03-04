@@ -84,13 +84,8 @@ public class GameGenerator {
 		Conference westernConference = league.getWesternConference();
 		Conference easternConference = league.getEasternConference();
 
-<<<<<<< HEAD
-		for (Team team : GameManager.getAllTeamsOfConference(westernConference)) {
-			for (Team other : GameManager.getAllTeamsOfConference(easternConference)) {
-=======
 		for (Team team : getAllTeamsOfConference(westernConference)) {
 			for (Team other : getAllTeamsOfConference(easternConference)) {
->>>>>>> Fatima2
 				for (int i = 0; i < 2; i++) {
 					boolean home = (i % 2 == 0);
 					Game game;
@@ -118,8 +113,6 @@ public class GameGenerator {
 		team.addGame(game);
 	}
 
-<<<<<<< HEAD
-=======
 	private static ArrayList<Team> getAllTeamsOfConference(Conference conference) {
 		ArrayList<Team> teams = new ArrayList<Team>();
 		for (Division division : conference.getDivisions().values()) {
@@ -128,5 +121,4 @@ public class GameGenerator {
 		return teams;
 	}
 
->>>>>>> Fatima2
 }

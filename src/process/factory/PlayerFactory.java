@@ -27,31 +27,19 @@ public class PlayerFactory {
 		boolean playerIsStar = Boolean.parseBoolean(data[13]);
 		double playerNote = checkPlayerNote(data[14]);
 
-<<<<<<< HEAD
-		double minutesPlayed = Float.valueOf(data[24]);
-=======
 		double minutesPlayedPerMatch = Float.valueOf(data[24]);
->>>>>>> Fatima2
 		int pointPerMatch = (int) Math.round(Float.valueOf(data[25]));
 		int reboundPerMatch = (int) Math.round(Float.valueOf(data[26]));
 		int assistPerMatch = (int) Math.round(Float.valueOf(data[27]));
 		int interceptionPerMatch = (int) Math.round(Float.valueOf(data[28]));
 		int blockPerMatch = (int) Math.round(Float.valueOf(data[29]));
 		int lostBallPerMatch = (int) Math.round(Float.valueOf(data[30]));
-<<<<<<< HEAD
-		double salary = Float.valueOf(data[31]);
-		String playerPosition = data[32];
-		double trueShooting = checkPlayerTrueShooting(data[23]);
-
-		Asset preSeasonAsset = new Asset(playerNote, minutesPlayed, pointPerMatch, reboundPerMatch, assistPerMatch,
-=======
 		double salary = Float.valueOf(data[31]) / 1_000_000;
 		String playerPosition = data[32];
 		double trueShooting = checkPlayerTrueShooting(data[23]);
 
 		Asset preSeasonAsset = new Asset(playerNote, minutesPlayedPerMatch, pointPerMatch, reboundPerMatch,
 				assistPerMatch,
->>>>>>> Fatima2
 				interceptionPerMatch, blockPerMatch, lostBallPerMatch, trueShooting);
 		Player player = new Player(playerId, playerName, playerNote, playerPosition, preSeasonAsset, salary,
 				playerIsStar);
