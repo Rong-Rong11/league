@@ -2,42 +2,37 @@
 
 ## 1. Par où commencer
 
-Commencer par [`LeagueManager.java`](../src/process/LeagueManager.java).
+Commencer par [`LeagueManager.java`](../src/process/manager/LeagueManager.java).
 
-Cette classe donne la meilleure vue d’ensemble du projet :
+Cette classe donne la meilleure vue d’ensemble du flux principal :
 
-- construction de la ligue ;
+- création de la ligue ;
 - génération du calendrier ;
-- simulation d’une journée.
+- simulation d’une journée ;
+- initialisation des profils financiers et des transferts.
 
-Ensuite, lire [`LeagueBuilder.java`](../src/process/builder/LeagueBuilder.java), car c’est lui qui transforme les données sources en objets métier.
+Lire ensuite [`LeagueBuilder.java`](../src/process/builder/LeagueBuilder.java), puis [`CalendarBuilder.java`](../src/process/builder/CalendarBuilder.java), pour comprendre comment le projet passe des données source à une saison jouable.
 
 ## 2. Point d’entrée du programme
 
-Le point d’entrée exécutable actuellement repéré est [`TestGui.java`](../src/test/TestGui.java), avec une méthode `main`.
+Aucune méthode `main` n’est présente dans `src` hors tests.
 
-Pour comprendre l’application, la classe la plus importante reste toutefois [`MainGui.java`](../src/gui/frame/MainGui.java), car c’est elle qui construit réellement la fenêtre Swing.
+Le point d’entrée exécutable repéré aujourd’hui est [`TestGui.java`](../src/test/TestGui.java), dans `src/test`.
 
-En pratique :
-
-- `TestGui` lance ;
-- `MainGui` organise l’interface.
+Pour comprendre l’application, il faut cependant lire surtout [`MainGui.java`](../src/gui/frame/MainGui.java), car c’est cette classe qui construit la fenêtre Swing et branche les dashboards.
 
 ## 3. Comment fonctionne l’interface graphique
 
 Lire d’abord [`MainGui.java`](../src/gui/frame/MainGui.java).
 
-La fenêtre utilise deux `CardLayout` :
+La fenêtre utilise un `CardLayout` racine pour passer de l’écran d’ouverture à l’application, puis un second `CardLayout` pour alterner entre les dashboards.
 
-- un pour passer de l’écran d’ouverture à l’application ;
-- un pour naviguer entre les dashboards.
+Poursuivre avec :
 
-Puis lire :
-
-- [`OpeningDashboard.java`](../src/gui/dashboard/OpeningDashboard.java) pour l’écran initial ;
-- [`SidebarPanel.java`](../src/gui/layout/SidebarPanel.java) pour la navigation latérale ;
-- les dashboards de `src/gui/dashboard` pour les vues métier ;
-- les composants de `src/gui/components` pour les briques visuelles réutilisées.
+1. [`OpeningDashboard.java`](../src/gui/dashboard/OpeningDashboard.java) pour la sélection initiale.
+2. [`SidebarPanel.java`](../src/gui/layout/SidebarPanel.java) pour la navigation.
+3. les dashboards de [`src/gui/dashboard`](../src/gui/dashboard) pour les vues métier.
+4. les composants de [`src/gui/components`](../src/gui/components) pour les briques visuelles partagées.
 
 ## 4. Comment les données sont organisées
 
@@ -46,61 +41,45 @@ Le cœur du modèle se trouve dans `src/data`.
 Ordre conseillé :
 
 1. [`League.java`](../src/data/league/League.java)
-2. [`Conference.java`](../src/data/league/Conference.java)
-3. [`Division.java`](../src/data/league/Division.java)
-4. [`Team.java`](../src/data/team/Team.java)
-5. [`Player.java`](../src/data/player/Player.java)
-
-Ensuite, lire les objets satellites :
-
-- [`Season.java`](../src/data/league/Season.java), [`RegularSeason.java`](../src/data/league/RegularSeason.java), [`Playoff.java`](../src/data/league/Playoff.java)
-- [`NBACalendar.java`](../src/data/calendar/NBACalendar.java), [`GameDay.java`](../src/data/calendar/GameDay.java), [`SpecialEvent.java`](../src/data/calendar/SpecialEvent.java)
-- [`Game.java`](../src/data/sport/setup/Game.java), [`GameContext.java`](../src/data/sport/setup/GameContext.java), [`GameResult.java`](../src/data/sport/setup/GameResult.java)
+2. [`Conference.java`](../src/data/league/Conference.java) et [`Division.java`](../src/data/league/Division.java)
+3. [`Team.java`](../src/data/team/Team.java) puis [`TeamFinance.java`](../src/data/team/finance/TeamFinance.java)
+4. [`Player.java`](../src/data/player/Player.java), [`Asset.java`](../src/data/player/Asset.java) et [`Injury.java`](../src/data/player/Injury.java)
+5. [`RegularSeason.java`](../src/data/league/RegularSeason.java), [`Playoff.java`](../src/data/league/Playoff.java) et [`Ranking.java`](../src/data/league/Ranking.java)
+6. [`NBACalendar.java`](../src/data/calendar/NBACalendar.java), [`GameDay.java`](../src/data/calendar/GameDay.java) et [`SpecialEvent.java`](../src/data/calendar/SpecialEvent.java)
+7. [`Game.java`](../src/data/sport/setup/Game.java), [`GameContext.java`](../src/data/sport/setup/GameContext.java) et [`GameResult.java`](../src/data/sport/setup/GameResult.java)
 
 ## 5. Comment la logique métier est implémentée
 
 La logique métier est concentrée dans `src/process`.
 
-Ordre de compréhension :
+Ordre de compréhension recommandé :
 
 1. [`LeagueBuilder.java`](../src/process/builder/LeagueBuilder.java)
-2. [`PlayerFactory.java`](../src/process/factory/PlayerFactory.java)
-3. [`TeamFactory.java`](../src/process/factory/TeamFactory.java)
-4. [`CalendarBuilder.java`](../src/process/builder/CalendarBuilder.java)
-5. [`GameGenerator.java`](../src/process/GameGenerator.java)
-6. [`GameManager.java`](../src/process/GameManager.java)
-7. [`GameSimulator.java`](../src/process/GameSimulator.java)
+2. [`PlayerFactory.java`](../src/process/factory/PlayerFactory.java) et [`TeamFactory.java`](../src/process/factory/TeamFactory.java)
+3. [`CalendarBuilder.java`](../src/process/builder/CalendarBuilder.java)
+4. [`GameGenerator.java`](../src/process/builder/calendartools/GameGenerator.java), [`GameSelector.java`](../src/process/builder/calendartools/GameSelector.java) et [`SpecialEventPlanner.java`](../src/process/builder/calendartools/SpecialEventPlanner.java)
+5. [`GameManager.java`](../src/process/manager/GameManager.java) puis [`GameSimulator.java`](../src/process/simulator/GameSimulator.java)
+6. [`FinanceManager.java`](../src/process/manager/FinanceManager.java), [`RevenueSharingManager.java`](../src/process/manager/RevenueSharingManager.java) et [`TradeManager.java`](../src/process/manager/TradeManager.java)
+7. les repositories, utilitaires et visitors si un détail d’implémentation reste flou.
 
-À retenir :
+## 6. Dans quel ordre lire les classes importantes
 
-- `LeagueBuilder` lit le CSV et crée les objets ;
-- `CalendarBuilder` place les matchs ;
-- `GameGenerator` fabrique les rencontres ;
-- `GameManager` fournit les règles de sélection et de calendrier ;
-- `GameSimulator` joue le match et met à jour l’état.
+Pour un nouveau développeur, un parcours efficace est :
 
-## 6. Ordre de lecture recommandé
-
-Pour un nouveau développeur, le meilleur parcours est le suivant :
-
-1. [`LeagueManager.java`](../src/process/LeagueManager.java)
+1. [`LeagueManager.java`](../src/process/manager/LeagueManager.java)
 2. [`LeagueBuilder.java`](../src/process/builder/LeagueBuilder.java)
 3. [`League.java`](../src/data/league/League.java)
 4. [`Team.java`](../src/data/team/Team.java)
 5. [`Player.java`](../src/data/player/Player.java)
 6. [`CalendarBuilder.java`](../src/process/builder/CalendarBuilder.java)
-7. [`GameGenerator.java`](../src/process/GameGenerator.java)
-8. [`GameManager.java`](../src/process/GameManager.java)
-9. [`GameSimulator.java`](../src/process/GameSimulator.java)
+7. [`GameManager.java`](../src/process/manager/GameManager.java)
+8. [`GameSimulator.java`](../src/process/simulator/GameSimulator.java)
+9. [`FinanceManager.java`](../src/process/manager/FinanceManager.java)
 10. [`MainGui.java`](../src/gui/frame/MainGui.java)
 
 ## 7. Points d’attention
 
-- Le chargement initial dépend d’un CSV situé dans `src/test`, même si les classes de test ne font pas partie du périmètre principal de documentation.
-
-- Les classes `repositery` sont des registres globaux.
-  Elles simplifient la lecture du builder, mais augmentent le couplage.
-
-- `FinanceBuilder` est encore très peu développé.
-
-- Une grande partie de `data` porte l’état, tandis que l’intelligence métier est surtout dans `process`.
+- Le chargement initial dépend encore du fichier `src/test/nba.csv`, même si `src/test` est hors périmètre de documentation des classes.
+- Les classes `repositery` jouent le rôle de registres globaux; elles simplifient l’accès aux objets mais augmentent le couplage.
+- Les classes `visitor` encapsulent des règles spécialisées et deviennent importantes quand on touche au calcul financier ou aux transferts.
+- Une partie importante du projet est constituée d’objets de données; l’intelligence métier est surtout centralisée dans `process`.

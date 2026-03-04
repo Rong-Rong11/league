@@ -13,7 +13,7 @@ import data.team.finance.transfer.TeamTransferStrategy;
 import process.repositery.TeamRepositery;
 import process.simulator.TradeSimulator;
 import process.utilitary.TeamUtilitary;
-import process.visitor.PreSeasonTradeSatisfactionVisitor;
+import process.visitor.teamtransfer.PreSeasonTradeSatisfactionVisitor;
 import process.visitor.teamtransfer.EvaluateSeasonIntentVisitor;
 import process.visitor.teamtransfer.PreSeasonPlayerToTradeVisitor;
 import process.visitor.teamtransfer.SeasonPlayerToTradeVisitor;

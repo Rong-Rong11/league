@@ -1,138 +1,47 @@
 # Architecture
 
-## Vue d’ensemble
+## Vue simple du projet
 
-- `config` → constantes globales de simulation et de finance.
-- `data` → modèle métier de la ligue, des équipes, des joueurs et des matchs.
-- `process` → chargement des données, génération du calendrier et simulation.
-- `gui` → interface Swing, navigation et dashboards.
+- `src/config` : constantes et règles globales de la simulation.
+- `src/data` : objets métier, états sportifs, calendrier et finance.
+- `src/process` : construction de la ligue, calculs, visitors et simulateurs.
+- `src/gui` : interface Swing, navigation et dashboards.
 
-Le projet suit une séparation simple :
+## Répartition des classes
 
-- les objets de `data` stockent surtout l’état ;
-- les classes de `process` construisent et font évoluer cet état ;
-- les classes de `gui` affichent une maquette d’application autour de ces données.
-
-## Vue simple des dossiers
-
-- `src/config`
-  - `FinanceConfiguration`
-  - `SimulationConfiguration`
-
-- `src/data`
-  - `league`, `team`, `player` : noyau métier
-  - `calendar` : jours de match et événements spéciaux
-  - `sport` : contexte, résultat et actions de jeu
-  - `finance` : budgets, revenus, dépenses, transferts
-
-- `src/process`
-  - `LeagueBuilder` : charge les données CSV
-  - `CalendarBuilder` : place les matchs dans le calendrier
-  - `GameGenerator` : crée les affiches
-  - `GameSimulator` : simule un match
-  - `LeagueManager` : enchaîne les grandes étapes
-  - `repositery/*` : registres partagés
-
-- `src/gui`
-  - `frame` : fenêtre principale
-  - `layout` : barre latérale
-  - `dashboard` : vues principales
-  - `components` : briques graphiques réutilisables
+- `CONFIG` : 3 classes
+- `DATA` : 51 classes
+- `PROCESS` : 42 classes
+- `GUI` : 12 classes
 
 ## Rôle des grands blocs
 
-### CONFIG
+- `CONFIG` → fixe les seuils, constantes financières et paramètres de saison.
+- `DATA` → porte le modèle de ligue: conférences, équipes, joueurs, matchs et budgets.
+- `PROCESS` → transforme les données brutes en objets, génère le calendrier puis simule la saison.
+- `GUI` → affiche une interface Swing autour des dashboards match, calendrier, classement, finance et carte.
 
-- Fournit les constantes utilisées partout dans le projet.
-- Évite de dupliquer les valeurs de dates, de quotas, de probabilités et de seuils financiers.
+## Classes centrales
 
-### DATA
-
-- Contient les entités du domaine.
-- `League` relie conférences, divisions, saisons et finance globale.
-- `Team` et `Player` portent l’essentiel des données manipulées par la simulation.
-
-### PROCESS
-
-- Porte la logique métier réelle.
-- Lit le fichier CSV, instancie les objets, génère les rencontres puis simule les journées.
-- Utilise des registres (`PlayerRepositery`, `TeamRepositery`, etc.) pour retrouver rapidement les objets déjà créés.
-
-### GUI
-
-- Assemble une interface Swing à base de `JFrame`, `JPanel` et `CardLayout`.
-- La GUI reste surtout une couche de présentation.
-- Elle ne contient pas le cœur de la simulation sportive.
-
-## Classes centrales du système
-
-- `LeagueManager`
-  - Orchestrateur principal.
-  - Lance la construction de la ligue, du calendrier puis la simulation d’une journée.
-
-- `LeagueBuilder`
-  - Lit `src/test/nba.csv`.
-  - Construit `League`, `Team`, `Player` et initialise les registres.
-
-- `League`
-  - Objet racine du domaine.
-  - Donne accès aux conférences, à la saison régulière, aux playoffs et à la finance de ligue.
-
-- `CalendarBuilder`
-  - Prépare la saison régulière.
-  - Ajoute les événements spéciaux, génère les affiches et répartit les matchs par date.
-
-- `GameSimulator`
-  - Moteur de simulation.
-  - Produit score, actions de jeu, fatigue et mises à jour statistiques.
-
-- `MainGui`
-  - Fenêtre principale de l’interface.
-  - Passe de l’écran d’ouverture aux dashboards via `CardLayout`.
+- [`LeagueManager`](../src/process/manager/LeagueManager.java) : point d’orchestration de la construction de ligue et de la simulation quotidienne.
+- [`LeagueBuilder`](../src/process/builder/LeagueBuilder.java) : lit `src/test/nba.csv`, crée `League`, `Team`, `Player` et initialise les registres.
+- [`CalendarBuilder`](../src/process/builder/CalendarBuilder.java) : prépare la saison régulière avec `GameGenerator`, `GameSelector` et `SpecialEventPlanner`.
+- [`GameManager`](../src/process/manager/GameManager.java) et [`GameSimulator`](../src/process/simulator/GameSimulator.java) : jouent les matchs, mettent à jour le score, les statistiques et l’état sportif.
+- [`FinanceManager`](../src/process/manager/FinanceManager.java), [`RevenueSharingManager`](../src/process/manager/RevenueSharingManager.java) et [`TradeManager`](../src/process/manager/TradeManager.java) : couvrent les revenus, le partage financier et les transferts.
+- [`MainGui`](../src/gui/frame/MainGui.java) : assemble les écrans Swing et la navigation par `CardLayout`.
 
 ## Dépendances principales
 
-- `process` dépend fortement de `data` et de `config`.
+- `process` dépend fortement de `data` et de `config`; c’est la couche qui pilote presque tout le comportement.
+- `LeagueBuilder` dépend surtout de `PlayerFactory`, `TeamFactory` et des repositories pour hydrater les objets métier.
+- `CalendarBuilder` et `GameManager` manipulent `League`, `RegularSeason`, `Schedule`, `GameDay` et `Game` pour organiser les rencontres.
+- `GameSimulator` dépend des classes de `data/sport`, des joueurs, des équipes et des visitors de résultat.
+- `FinanceManager`, `GameRevenueSimulator` et `GameExpenseSimulator` s’appuient sur `Budget`, `Income`, `Expense`, `LeagueFinance` et `TeamFinance`.
+- `gui` dépend principalement de `gui/components`, `gui/dashboard` et `gui/layout`, avec peu de logique métier embarquée.
 
-- `LeagueBuilder` dépend de :
-  - `PlayerFactory`
-  - `TeamFactory`
-  - `DivisionRepositery`
-  - `PlayerRepositery`
-  - `TeamRepositery`
-  - `PreSeasonAssetRepositery`
-  - `CurrentSeasonAssetRepositery`
+## Ce qu’il faut retenir
 
-- `CalendarBuilder` dépend de :
-  - `League`
-  - `RegularSeason`
-  - `GameGenerator`
-  - `GameManager`
-  - `Schedule`
-
-- `GameSimulator` dépend de :
-  - `Player`, `Team`, `Game`, `GameResult`
-  - les actions de `data/sport/play`
-  - les statistiques de `Asset`
-  - `FinanceManager` pour certaines pondérations économiques
-
-- `gui` dépend surtout de :
-  - `gui/components`
-  - `gui/dashboard`
-  - `gui/layout`
-
-## Points structurants à retenir
-
-- Le modèle métier est assez riche, mais beaucoup de classes `data` sont surtout des conteneurs.
-
-- La logique métier est concentrée dans peu de classes :
-  - `LeagueBuilder`
-  - `CalendarBuilder`
-  - `GameGenerator`
-  - `GameManager`
-  - `GameSimulator`
-  - `LeagueManager`
-
-- `FinanceBuilder` existe, mais reste peu exploité dans l’état actuel du code.
-
-- L’entrée exécutable repérée est dans `src/test/TestGui.java`, alors que la vraie classe centrale de l’IHM est `MainGui`.
+- Le cœur du domaine est concentré dans [`League`](../src/data/league/League.java), [`Team`](../src/data/team/Team.java), [`Player`](../src/data/player/Player.java) et les classes de saison.
+- Les visitors servent surtout à factoriser des règles de calcul sur les `ActionResult`, les `MarketSize` et les stratégies de transfert.
+- Le point d’entrée exécutable repéré est [`TestGui`](../src/test/TestGui.java), mais la classe centrale de l’interface reste [`MainGui`](../src/gui/frame/MainGui.java).
+- Le dépôt contient déjà une modification locale dans `src/process/manager/TradeManager.java`; la documentation n’y touche pas.
