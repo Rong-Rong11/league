@@ -16,6 +16,7 @@ import data.sport.setup.Game;
 import data.team.Team;
 import data.team.calendar.Schedule;
 import process.GameGenerator;
+<<<<<<< HEAD
 import process.GameManager;
 
 public class CalendarBuilder {
@@ -41,6 +42,42 @@ public class CalendarBuilder {
 	}
 
 	public static void generateAllGames(League league) {
+=======
+import process.repositery.DivisionRepositery;
+import process.repositery.PlayerRepositery;
+import process.repositery.TeamRepositery;
+import process.utilitary.CalendarUtilitary;
+
+public class CalendarBuilder {
+
+	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+	private DivisionRepositery divisionRepositery = DivisionRepositery.getInstance();
+	private PlayerRepositery playerRepositery = PlayerRepositery.getInstance();
+
+	public CalendarBuilder() {
+
+	}
+
+	public void initialization() {
+		for (Team team : teamRepositery.getAllTeams()) {
+			team.getSchedule().setNumberOfAwayGames(0);
+			team.getSchedule().setNumberOfHomeGames(0);
+			team.getSchedule().setNumberOfPlayedGames(0);
+			team.getSchedule().clearGames();
+			team.getSchedule().clearScheduledGames();
+
+		}
+	}
+
+	public void specialEventsPlacement(RegularSeason regularSeason) {
+		regularSeason.addSpecialEvents(new SpecialEvent(SimulationConfiguration.CHRISTMAS_DAY, "christmas"));
+		regularSeason.addSpecialEvents(new SpecialEvent(regularSeason.getDebutDate(), "opening night"));
+		regularSeason.addSpecialEvents(new SpecialEvent(regularSeason.getEndDate(), "ending night"));
+		regularSeason.addSpecialEvents(new SpecialEvent(CalendarUtilitary.getMLKDay(), "mlk day"));
+	}
+
+	public void generateAllGames(League league) {
+>>>>>>> Fatima2
 		Conference westernConference = league.getWesternConference();
 		Conference easternConference = league.getEasternConference();
 		for (Division division : westernConference.getDivisions().values()) {
@@ -55,7 +92,11 @@ public class CalendarBuilder {
 		GameGenerator.generateInterConference(league);
 	}
 
+<<<<<<< HEAD
 	public static void generateRegulaSeasonCalendar(League league) {
+=======
+	public void generateRegulaSeasonCalendar(League league) {
+>>>>>>> Fatima2
 		RegularSeason regularSeason = league.getReagularSeason();
 		TreeMap<LocalDate, GameDay> calendar = new TreeMap<LocalDate, GameDay>();
 		LocalDate debutDate = regularSeason.getDebutDate();
@@ -77,7 +118,11 @@ public class CalendarBuilder {
 		league.getReagularSeason().getCalendar().setCalendar(calendar);
 	}
 
+<<<<<<< HEAD
 	private static ArrayList<Game> selectGamesForDay(LocalDate date, League league, RegularSeason regularSeason) {
+=======
+	private ArrayList<Game> selectGamesForDay(LocalDate date, League league, RegularSeason regularSeason) {
+>>>>>>> Fatima2
 		ArrayList<Game> selectedGames = new ArrayList<Game>();
 		ArrayList<Game> candidates = getCandidates(league, date);
 
@@ -88,8 +133,13 @@ public class CalendarBuilder {
 			double loadScore = homeLoad + awayLoad;
 
 			double popularityScore = 0;
+<<<<<<< HEAD
 			if (GameManager.isSpecialEvent(regularSeason, date) || GameManager.isImportantDay(date)) {
 				popularityScore = GameManager.popularityScoreGame(game, date);
+=======
+			if (CalendarUtilitary.isSpecialEvent(regularSeason, date) || CalendarUtilitary.isImportantDay(date)) {
+				popularityScore = CalendarUtilitary.popularityScoreGame(game, date);
+>>>>>>> Fatima2
 			}
 			double totalScore = loadScore + popularityScore;
 			if (scoreMap.containsKey(totalScore)) {
@@ -150,10 +200,17 @@ public class CalendarBuilder {
 		return false;
 	}
 
+<<<<<<< HEAD
 	private static ArrayList<Game> getCandidates(League league, LocalDate date) {
 		ArrayList<Game> candidates = new ArrayList<Game>();
 
 		for (Team team : GameManager.getAllTeamsOfLeague(league)) {
+=======
+	private ArrayList<Game> getCandidates(League league, LocalDate date) {
+		ArrayList<Game> candidates = new ArrayList<Game>();
+
+		for (Team team : teamRepositery.getAllTeams()) {
+>>>>>>> Fatima2
 			for (Game game : getUnscheduledGames(team.getSchedule())) {
 				if (!candidates.contains(game) && canBeScheduled(game, date)) {
 					candidates.add(game);

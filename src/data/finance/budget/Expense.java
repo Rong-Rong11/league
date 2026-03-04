@@ -12,6 +12,13 @@ public class Expense {
 	}
 	public double getAmount() {
 		return amount;
+<<<<<<< HEAD
+=======
+	}
+	
+	public void setAmount(double amount) {
+		this.amount = amount;
+>>>>>>> Fatima2
 	} 
 	
 	

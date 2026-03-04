@@ -7,13 +7,20 @@ import data.player.Player;
 import data.sport.setup.Game;
 import data.sport.setup.GameContext;
 import data.team.calendar.Schedule;
+<<<<<<< HEAD
 import data.team.finance.FinancialProfil;
 import data.team.finance.TeamFinance;
+=======
+import data.team.finance.TeamFinance;
+import data.team.finance.financialprofil.FinancialProfil;
+import data.team.finance.transfer.TeamTransferStrategy;
+>>>>>>> Fatima2
 
 public class Team {
 	private String name ; 
 	private String rival ; 
 	private double popularity ;
+<<<<<<< HEAD
 	
 	private HashMap<String, Player> players = new HashMap<String, Player>() ;  
 	private Schedule schedule ;
@@ -26,6 +33,19 @@ public class Team {
 	
 	
 	public Team(String name, String rival, double popularity, TeamFinance teamFinance) {
+=======
+	private TeamPerformance teamPerformance = new TeamPerformance() ; 
+	
+	private HashMap<String, Player> players = new HashMap<String, Player>() ;  
+	private Schedule schedule ;
+	private Player starPlayer = null ; 
+	
+	private TeamFinance teamFinance ; 
+	private Stadium stadium ; 
+
+	
+	public Team(String name, String rival, double popularity, TeamFinance teamFinance, Stadium stadium) {
+>>>>>>> Fatima2
 		this.name = name;
 		this.rival = rival;
 		schedule = new Schedule() ; 
@@ -33,6 +53,10 @@ public class Team {
 		schedule = new Schedule() ; 
 		starPlayer = null ; 
 		this.teamFinance = teamFinance ; 
+<<<<<<< HEAD
+=======
+		this.stadium = stadium ; 
+>>>>>>> Fatima2
 		
 	}
 	
@@ -81,6 +105,7 @@ public class Team {
 	public void addGame(Game game) {
 		schedule.addGame(game) ; 
 	}
+<<<<<<< HEAD
 	//à enlever car pas une méthode de donnée
 	public void setStarPlayer() {
 		for(Player player : players.values()) {
@@ -91,6 +116,10 @@ public class Team {
 		}
 		starPlayer = null ; 
 	}
+=======
+	
+	
+>>>>>>> Fatima2
 
 	@Override
 	public String toString() {
@@ -119,6 +148,27 @@ public class Team {
 	public TeamFinance getTeamFinance() {
 		return teamFinance;
 	}
+<<<<<<< HEAD
+=======
+
+	public Stadium getStadium() {
+		return stadium;
+	}
+
+	public TeamPerformance getTeamPerformance() {
+		return teamPerformance;
+	}
+
+	public void setTeamPerformance(TeamPerformance teamPerformance) {
+		this.teamPerformance = teamPerformance;
+	}
+	
+	
+	
+	
+	
+	
+>>>>>>> Fatima2
 	
 	
 	

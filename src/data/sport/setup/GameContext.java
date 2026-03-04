@@ -3,7 +3,11 @@ package data.sport.setup;
 import java.text.Normalizer;
 
 import data.team.Team;
+<<<<<<< HEAD
 import process.GameManager;
+=======
+import process.utilitary.CalendarUtilitary;
+>>>>>>> Fatima2
 
 public class GameContext {
 	private Team homeTeam ; 
@@ -15,7 +19,11 @@ public class GameContext {
 	public GameContext (Team homeTeam, Team awayTeam, int typeGame) {
 		setAwayTeam(awayTeam);
 		setHomeTeam(homeTeam);
+<<<<<<< HEAD
 		isRivalry = GameManager.isRivalry(this) ; 
+=======
+		isRivalry = CalendarUtilitary.isRivalry(this) ; 
+>>>>>>> Fatima2
 	}
 	
 

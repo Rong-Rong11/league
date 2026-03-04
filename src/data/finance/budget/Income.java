@@ -12,8 +12,19 @@ public class Income {
 	}
 	public double getAmount() {
 		return amount;
+<<<<<<< HEAD
+=======
+	}
+	public void setAmount(double amount) {
+		this.amount = amount;
+>>>>>>> Fatima2
 	} 
 	
 	
 	
+<<<<<<< HEAD
+=======
+	
+	
+>>>>>>> Fatima2
 }
