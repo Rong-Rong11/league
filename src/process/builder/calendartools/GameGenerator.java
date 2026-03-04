@@ -1,4 +1,4 @@
-package process;
+package process.builder.calendartools;
 
 import java.util.ArrayList;
 
@@ -11,10 +11,23 @@ import data.sport.setup.GameContext;
 import data.team.Team;
 
 public class GameGenerator {
-	public static void generateIntraDivision(Division division) {
-
+	
+	public static void generateAllGamesRegularSeason(League league) {
+		Conference westernConference = league.getWesternConference();
+		Conference easternConference = league.getEasternConference();
+		for (Division division : westernConference.getDivisions().values()) {
+			generateIntraDivision(division);
+		}
+		for (Division division : easternConference.getDivisions().values()) {
+			generateIntraDivision(division);
+		}
+		generateIntraConference(easternConference);
+		generateIntraConference(westernConference);
+		generateInterConference(league);
+	}
+	
+	private static void generateIntraDivision(Division division) {
 		ArrayList<Team> teams = new ArrayList<Team>(division.getTeams().values());
-
 		for (int i = 0; i < teams.size(); i++) {
 			for (int j = i + 1; j < teams.size(); j++) {
 				Team team = teams.get(i);
@@ -36,10 +49,9 @@ public class GameGenerator {
 			}
 		}
 	}
-
-	public static void generateIntraConference(Conference conference) {
-
-		ArrayList<Division> divisions = new ArrayList<>(conference.getDivisions().values());
+	
+	private static void generateIntraConference(Conference conference) {
+		ArrayList<Division> divisions = new ArrayList<Division>(conference.getDivisions().values());
 		for (int division1 = 0; division1 < divisions.size(); division1++) {
 			for (int division2 = division1 + 1; division2 < divisions.size(); division2++) {
 				Division divisionA = divisions.get(division1);

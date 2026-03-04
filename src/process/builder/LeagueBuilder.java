@@ -76,10 +76,8 @@ public class LeagueBuilder {
 				playerRepositery.register(player.getName(), player);
 				preSeasonAssetRepositery.register(player, player.getPreSeasonAssets());
 				currentSeasonAssetRepositery.register(player, player.getCurrentSeasonAssets());
-				setStarPlayerTeams();
-
 			}
-
+			setStarPlayerTeams();
 			bufferedReader.close();
 
 		} catch (IOException e) {
