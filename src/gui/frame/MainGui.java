@@ -46,7 +46,7 @@ public class MainGui extends JFrame {
 		setLayout(new BorderLayout());
 		add(rootPanel, BorderLayout.CENTER);
 
-		dashboardLayout.show(dashboardPanel, "map");
+		dashboardLayout.show(dashboardPanel, "match");
 		rootLayout.show(rootPanel, "opening");
 
 		pack();
@@ -105,7 +105,7 @@ public class MainGui extends JFrame {
 				return;
 			}
 
-			dashboardLayout.show(dashboardPanel, "map");
+			dashboardLayout.show(dashboardPanel, "match");
 			rootLayout.show(rootPanel, "main");
 		}
 	}
