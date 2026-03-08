@@ -3,7 +3,6 @@ package data.player;
 public class Player {
 	private String id ; 
 	private String name ; 
-	private double lastSeasonNote ; 
 	private String position ; 
 	private Asset preSeasonAssets ;
 	private Asset currentSeasonAssets ; 
@@ -21,7 +20,6 @@ public class Player {
 			double salary, boolean isStar) {
 		this.id = id;
 		this.name = name;
-		this.lastSeasonNote = lastSeasonNote ; 
 		this.position = position;
 		this.preSeasonAssets = preSeasonAssets;
 		currentSeasonAssets = new Asset() ; 
@@ -78,13 +76,10 @@ public class Player {
 	}
 	@Override
 	public String toString() {
-		return "Player [id=" + id + ", name=" + name + ", note=" + lastSeasonNote + ", position=" + position + ", preSeasonAssets="
+		return "Player [id=" + id + ", name=" + name + ", note="  + ", position=" + position + ", preSeasonAssets="
 				+ preSeasonAssets.toString() + ", currentSeasonAssets=" + currentSeasonAssets.toString() + ", salary=" + salary
 				+ ", healthStatus=" + healthStatus.toString() + ", preSeasonTransfer=" + preSeasonTransfer + ", isStar=" + isStar
 				;
-	}
-	public double getLastSeasonNote() {
-		return lastSeasonNote;
 	}
 	
 	

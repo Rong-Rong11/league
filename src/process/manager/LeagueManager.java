@@ -50,8 +50,12 @@ public class LeagueManager {
 		calendarBuilder.buildRegulaSeasonCalendar();
 	}
 
-	public boolean simulateDay(LocalDate date, int month) {
-		return gameManager.simulateDay(league, date, month);
+	public boolean simulateRegularSeasonDay(LocalDate date, int month) {
+		return gameManager.simulateRegularSeasonDay(date, month);
+	}
+	
+	public void newMonth(int month) {
+		financeManager.applyRevenueSharing(month);
 	}
 
 	public void randomFinancialProfil() {

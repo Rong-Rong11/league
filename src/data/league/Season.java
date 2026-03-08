@@ -51,4 +51,14 @@ public abstract class Season {
 		}
 	}
 
+	public Ranking getRanking() {
+		return ranking;
+	}
+
+	public void setRanking(Ranking ranking) {
+		this.ranking = ranking;
+	}
+	
+	
+
 }

@@ -1,6 +1,7 @@
 package process.visitor.teamtransfer;
 
 import config.FinanceConfiguration;
+import data.player.Player;
 import data.team.Team;
 import data.team.finance.transfer.AllIn;
 import data.team.finance.transfer.Balanced;
@@ -9,6 +10,7 @@ import data.team.finance.transfer.SalaryDump;
 import data.team.finance.transfer.SmallAdjust;
 import data.team.finance.transfer.SuperstarBuild;
 import process.simulator.TradeSimulator;
+import process.simulator.tradetools.TradeValidator;
 
 public class EvaluateSeasonIntentVisitor implements TeamTransferVisitor<String> {
 
@@ -23,12 +25,12 @@ public class EvaluateSeasonIntentVisitor implements TeamTransferVisitor<String> 
 		teamPerformatingRate = team.getTeamPerformance().getPerformanceRating();
 	}
 
-	public String visit(AllIn allIn) {
-		if (teamPerformatingRate > 0.65) {
+	public String visit(AllIn allIn) {		
+		if (teamPerformatingRate > 0.70) {
 			return FinanceConfiguration.SEASON_TRADE_INTENT_BUYER;
 		}
-		if (teamPerformatingRate < 0.40) {
-			return FinanceConfiguration.SEASON_TRADE_INTENT_BUYER;
+		if (teamPerformatingRate < 0.45) {
+			return FinanceConfiguration.SEASON_TRADE_INTENT_SELLER;
 		}
 		return FinanceConfiguration.SEASON_TRADE_INTENT_STABLE;
 	}
@@ -38,9 +40,8 @@ public class EvaluateSeasonIntentVisitor implements TeamTransferVisitor<String> 
 			return FinanceConfiguration.SEASON_TRADE_INTENT_SELLER;
 		} else if (teamPerformatingRate < 0.65) {
 			return FinanceConfiguration.SEASON_TRADE_INTENT_BUYER;
-		} else {
-			return FinanceConfiguration.SEASON_TRADE_INTENT_STABLE;
-		}
+		} 		
+		return FinanceConfiguration.SEASON_TRADE_INTENT_STABLE;
 
 	}
 
@@ -70,10 +71,10 @@ public class EvaluateSeasonIntentVisitor implements TeamTransferVisitor<String> 
 	}
 
 	public String visit(SalaryDump salaryDump) {
-		if (!TradeSimulator.respectEconomicPayroll(team.getTeamFinance().getPayroll(), salaryCap)) {
+		if (!TradeValidator.respectEconomicPayroll(team.getTeamFinance().getPayroll(), salaryCap)) {
 			return FinanceConfiguration.SEASON_TRADE_INTENT_SELLER;
 		}
-		if (teamPerformatingRate > 0.70) {
+		if (teamPerformatingRate > 0.75) {
 			return FinanceConfiguration.SEASON_TRADE_INTENT_STABLE;
 		}
 		return FinanceConfiguration.SEASON_TRADE_INTENT_SELLER;

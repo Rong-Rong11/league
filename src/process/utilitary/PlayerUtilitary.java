@@ -84,7 +84,7 @@ public class PlayerUtilitary {
 		double defenseNote = getPlayerDefenseNote(player);
 
 		double performanceNote = (attackNote * 0.6) + (defenseNote * 0.4);
-		double lastSeasonNote = player.getLastSeasonNote();
+		double lastSeasonNote = player.getPreSeasonAssets().getNote();
 
 		return (performanceNote * 0.7) + (lastSeasonNote * 0.3);
 	}

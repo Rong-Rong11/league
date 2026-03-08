@@ -44,6 +44,9 @@ public class LeagueBuilder {
 			bufferedReader.readLine();
 
 			while ((line = bufferedReader.readLine()) != null) {
+				if (line.startsWith("player_id")) {
+			        continue;
+			    }
 				String[] data = line.split(",", -1);
 				String teamName = data[2];
 				String conferenceName = data[4];
