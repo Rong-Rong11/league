@@ -31,5 +31,9 @@ public class PlayerRepositery {
 	public ArrayList<Player> getAllPlayers() {
 		return new ArrayList<Player>(players.values());
 	}
+	
+	public void clear() {
+		players.clear();
+	}
 
 }
