@@ -8,8 +8,8 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import gui.components.BuildBox;
-import gui.components.SectionTitle;
+import gui.panel.common.BuildBox;
+import gui.panel.common.SectionTitle;
 
 public class OpeningDashboard extends JPanel {
 

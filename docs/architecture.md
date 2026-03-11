@@ -1,47 +1,38 @@
 # Architecture
 
-## Vue simple du projet
+## Vue des dossiers
 
-- `src/config` : constantes et règles globales de la simulation.
-- `src/data` : objets métier, états sportifs, calendrier et finance.
-- `src/process` : construction de la ligue, calculs, visitors et simulateurs.
-- `src/gui` : interface Swing, navigation et dashboards.
+- `src/config`
+- `src/data`
+- `src/process`
+- `src/gui`
 
-## Répartition des classes
+## Rôle des couches
 
-- `CONFIG` : 3 classes
-- `DATA` : 51 classes
-- `PROCESS` : 42 classes
-- `GUI` : 12 classes
-
-## Rôle des grands blocs
-
-- `CONFIG` → fixe les seuils, constantes financières et paramètres de saison.
-- `DATA` → porte le modèle de ligue: conférences, équipes, joueurs, matchs et budgets.
-- `PROCESS` → transforme les données brutes en objets, génère le calendrier puis simule la saison.
-- `GUI` → affiche une interface Swing autour des dashboards match, calendrier, classement, finance et carte.
+- `CONFIG` : paramètres globaux, constantes financières et règles de simulation.
+- `DATA` : objets métier persistants de la ligue, des équipes, des joueurs et des matchs.
+- `PROCESS` : construction du monde, orchestration des managers, simulation et visitors.
+- `GUI` : dashboards Swing, panneaux et navigation utilisateur.
 
 ## Classes centrales
 
-- [`LeagueManager`](../src/process/manager/LeagueManager.java) : point d’orchestration de la construction de ligue et de la simulation quotidienne.
-- [`LeagueBuilder`](../src/process/builder/LeagueBuilder.java) : lit `src/test/nba.csv`, crée `League`, `Team`, `Player` et initialise les registres.
-- [`CalendarBuilder`](../src/process/builder/CalendarBuilder.java) : prépare la saison régulière avec `GameGenerator`, `GameSelector` et `SpecialEventPlanner`.
-- [`GameManager`](../src/process/manager/GameManager.java) et [`GameSimulator`](../src/process/simulator/GameSimulator.java) : jouent les matchs, mettent à jour le score, les statistiques et l’état sportif.
-- [`FinanceManager`](../src/process/manager/FinanceManager.java), [`RevenueSharingManager`](../src/process/manager/RevenueSharingManager.java) et [`TradeManager`](../src/process/manager/TradeManager.java) : couvrent les revenus, le partage financier et les transferts.
-- [`MainGui`](../src/gui/frame/MainGui.java) : assemble les écrans Swing et la navigation par `CardLayout`.
+- [League](../src/data/league/League.java) : modèle central de la ligue et des saisons.
+- [Team](../src/data/team/Team.java) : franchise avec effectif, finances et performances.
+- [Player](../src/data/player/Player.java) : joueur, santé et valeur sportive.
+- [LeagueBuilder](../src/process/builder/LeagueBuilder.java) : initialisation des structures métier.
+- [GameManager](../src/process/manager/GameManager.java) : pilotage des journées et résultats.
+- [MainGui](../src/gui/frame/MainGui.java) : point de coordination de l’interface Swing.
 
 ## Dépendances principales
 
-- `process` dépend fortement de `data` et de `config`; c’est la couche qui pilote presque tout le comportement.
-- `LeagueBuilder` dépend surtout de `PlayerFactory`, `TeamFactory` et des repositories pour hydrater les objets métier.
-- `CalendarBuilder` et `GameManager` manipulent `League`, `RegularSeason`, `Schedule`, `GameDay` et `Game` pour organiser les rencontres.
-- `GameSimulator` dépend des classes de `data/sport`, des joueurs, des équipes et des visitors de résultat.
-- `FinanceManager`, `GameRevenueSimulator` et `GameExpenseSimulator` s’appuient sur `Budget`, `Income`, `Expense`, `LeagueFinance` et `TeamFinance`.
-- `gui` dépend principalement de `gui/components`, `gui/dashboard` et `gui/layout`, avec peu de logique métier embarquée.
+- `GUI` -> `PROCESS` : les vues déclenchent les traitements via les managers.
+- `PROCESS` -> `DATA` : les builders/managers manipulent le modèle métier.
+- `PROCESS` -> `CONFIG` : la logique lit les politiques et constantes globales.
+- `DATA` reste majoritairement passif ; la mutation est pilotée par `PROCESS`.
 
-## Ce qu’il faut retenir
+## Répartition actuelle
 
-- Le cœur du domaine est concentré dans [`League`](../src/data/league/League.java), [`Team`](../src/data/team/Team.java), [`Player`](../src/data/player/Player.java) et les classes de saison.
-- Les visitors servent surtout à factoriser des règles de calcul sur les `ActionResult`, les `MarketSize` et les stratégies de transfert.
-- Le point d’entrée exécutable repéré est [`TestGui`](../src/test/TestGui.java), mais la classe centrale de l’interface reste [`MainGui`](../src/gui/frame/MainGui.java).
-- Le dépôt contient déjà une modification locale dans `src/process/manager/TradeManager.java`; la documentation n’y touche pas.
+- `CONFIG` : 3 classes Java.
+- `DATA` : 51 classes Java.
+- `PROCESS` : 43 classes Java.
+- `GUI` : 14 classes Java.

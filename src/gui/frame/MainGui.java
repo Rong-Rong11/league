@@ -24,6 +24,7 @@ public class MainGui extends JFrame {
 	private JPanel rootPanel;
 	private CardLayout dashboardLayout;
 	private JPanel dashboardPanel;
+	private CalendarDashboard calendarDashboard;
 
 	public MainGui() {
 		setTitle("NBA League");
@@ -60,7 +61,8 @@ public class MainGui extends JFrame {
 		SidebarPanel sidebar = new SidebarPanel();
 
 		dashboardPanel.add(new MatchDashboard(), "match");
-		dashboardPanel.add(new CalendarDashboard(), "calendar");
+		calendarDashboard = new CalendarDashboard();
+		dashboardPanel.add(calendarDashboard, "calendar");
 		dashboardPanel.add(new RankingDashboard(), "ranking");
 		dashboardPanel.add(new FinanceDashboard(), "finance");
 		dashboardPanel.add(new MapDashboard(), "map");
@@ -105,6 +107,7 @@ public class MainGui extends JFrame {
 				return;
 			}
 
+			calendarDashboard.startSeason();
 			dashboardLayout.show(dashboardPanel, "match");
 			rootLayout.show(rootPanel, "main");
 		}
