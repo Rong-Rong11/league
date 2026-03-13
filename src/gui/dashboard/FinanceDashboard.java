@@ -24,23 +24,8 @@ public class FinanceDashboard extends JPanel {
 
 		JPanel content = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
 		content.setOpaque(false);
-
-		JPanel leftSpace = new JPanel();
-		leftSpace.setPreferredSize(new Dimension(IDEAL_DASHBOARD_SPACING, 0));
-		leftSpace.setOpaque(false);
-
-		JPanel rightSpace = new JPanel();
-		rightSpace.setPreferredSize(new Dimension(IDEAL_DASHBOARD_SPACING, 0));
-		rightSpace.setOpaque(false);
-
-		JPanel bottomSpace = new JPanel();
-		bottomSpace.setPreferredSize(new Dimension(0, IDEAL_DASHBOARD_SPACING));
-		bottomSpace.setOpaque(false);
-
-		add(leftSpace, BorderLayout.WEST);
-		add(rightSpace, BorderLayout.EAST);
+		content.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
 		add(content, BorderLayout.CENTER);
-		add(bottomSpace, BorderLayout.SOUTH);
 
 		content.add(buildHeaderRow(), BorderLayout.NORTH);
 		content.add(buildBody(), BorderLayout.CENTER);

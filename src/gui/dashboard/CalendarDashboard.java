@@ -4,19 +4,23 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import config.SimulationConfiguration;
+import gui.dashboard.MatchDashboard;
+import gui.panel.calendarPanel.CalendarQuickActionsPanel;
 import gui.panel.calendarPanel.CalendarSimulationPanel;
 import gui.panel.calendarPanel.SeasonProgressBarPanel;
 import gui.panel.common.BuildBox;
 import gui.panel.common.SectionTitle;
+import process.manager.SimulationManager;
 
 public class CalendarDashboard extends JPanel {
 
@@ -26,12 +30,15 @@ public class CalendarDashboard extends JPanel {
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 	private static final Color SECONDARY_TEXT_COLOR = new Color(0x6D, 0x75, 0x83);
+	private final SimulationManager simulationManager;
 	private final CalendarSimulationPanel calendarSimulationPanel;
 	private final SeasonProgressBarPanel seasonProgressBarPanel;
 
 
-	public CalendarDashboard() {
-		calendarSimulationPanel = new CalendarSimulationPanel();
+	public CalendarDashboard(MatchDashboard matchDashboard, Runnable showMatchDashboardAction) {
+		simulationManager = new SimulationManager();
+		calendarSimulationPanel = new CalendarSimulationPanel(simulationManager);
+		calendarSimulationPanel.setMatchDaySelectionListener(new OpenMatchDayListener(matchDashboard, showMatchDashboardAction));
 		seasonProgressBarPanel = new SeasonProgressBarPanel(
 				SimulationConfiguration.REGULAR_SEASON_DEBUT_DATE,
 				SimulationConfiguration.REGULAR_SEASON_END_DATE,
@@ -43,22 +50,7 @@ public class CalendarDashboard extends JPanel {
 
 		JPanel content = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
 		content.setOpaque(false);
-
-		JPanel leftSpace = new JPanel();
-		leftSpace.setPreferredSize(new Dimension(IDEAL_DASHBOARD_SPACING, 0));
-		leftSpace.setOpaque(false);
-
-		JPanel rightSpace = new JPanel();
-		rightSpace.setPreferredSize(new Dimension(IDEAL_DASHBOARD_SPACING, 0));
-		rightSpace.setOpaque(false);
-
-		JPanel bottomSpace = new JPanel();
-		bottomSpace.setPreferredSize(new Dimension(0, IDEAL_DASHBOARD_SPACING));
-		bottomSpace.setOpaque(false);
-
-		add(leftSpace, BorderLayout.WEST);
-		add(rightSpace, BorderLayout.EAST);
-		add(bottomSpace, BorderLayout.SOUTH);
+		content.setBorder(BorderFactory.createEmptyBorder(0, IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
 		add(content, BorderLayout.CENTER);
 
 		content.add(buildHeader(), BorderLayout.NORTH);
@@ -66,9 +58,12 @@ public class CalendarDashboard extends JPanel {
 	}
 
 	public void startSeason() {
-		calendarSimulationPanel.getLeagueManager().startSeason();
+		simulationManager.randomFinance();
+		simulationManager.startSeason();
 		calendarSimulationPanel.loadSeasonState();
 	}
+
+	
 
 	private JPanel buildHeader() {
 		JPanel header = new SectionTitle("CALENDRIER DE LA SAISON", "Saison régulière");
@@ -111,7 +106,10 @@ public class CalendarDashboard extends JPanel {
 		JPanel column = new JPanel(new GridLayout(2, 1, 0, 12));
 		column.setOpaque(false);
 
-		JPanel actionsCard = new BuildBox("ACTIONS RAPIDES", "", buildActionsPanel());
+		JPanel actionsCard = new BuildBox("ACTIONS RAPIDES", "", new CalendarQuickActionsPanel(
+				new SimulateDayAction(),
+				new SimulateWeekAction(),
+				new SimulateSeasonAction()));
 		JPanel infoCard = new BuildBox("INFORMATIONS SAISON", "", buildSeasonInfoPanel());
 
 		column.add(actionsCard);
@@ -124,21 +122,42 @@ public class CalendarDashboard extends JPanel {
 		return calendarSimulationPanel;
 	}
 
-	private JPanel buildActionsPanel() {
+	private class OpenMatchDayListener implements CalendarSimulationPanel.MatchDaySelectionListener {
+		private final MatchDashboard matchDashboard;
+		private final Runnable showMatchDashboardAction;
 
-		JPanel panel = new JPanel();
-		panel.setBackground(Color.WHITE);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBorder(BorderFactory.createEmptyBorder(12, 16, 16, 16));
+		private OpenMatchDayListener(MatchDashboard matchDashboard, Runnable showMatchDashboardAction) {
+			this.matchDashboard = matchDashboard;
+			this.showMatchDashboardAction = showMatchDashboardAction;
+		}
 
-		JButton simulateDay = new JButton("Simuler un jour");
-		JButton simulateWeek = new JButton("Simuler une semaine");
+		@Override
+		public void openMatchDay(data.calendar.GameDay gameDay, java.time.LocalDate date) {
+			matchDashboard.showGameDay(gameDay, date);
+			showMatchDashboardAction.run();
+		}
+	}
 
-		panel.add(simulateDay);
-		panel.add(Box.createVerticalStrut(10));
-		panel.add(simulateWeek);
+	private class SimulateDayAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			calendarSimulationPanel.advanceDay();
+		}
+	}
 
-		return panel;
+	private class SimulateWeekAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			calendarSimulationPanel.advanceWeek();
+		}
+	}
+
+	private class SimulateSeasonAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			simulationManager.simulateCurrentSeason();
+			calendarSimulationPanel.loadSeasonState();
+		}
 	}
 
 	private JPanel buildSeasonInfoPanel() {

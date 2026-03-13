@@ -25,6 +25,7 @@ public class MainGui extends JFrame {
 	private CardLayout dashboardLayout;
 	private JPanel dashboardPanel;
 	private CalendarDashboard calendarDashboard;
+	private MatchDashboard matchDashboard;
 
 	public MainGui() {
 		setTitle("NBA League");
@@ -47,7 +48,7 @@ public class MainGui extends JFrame {
 		setLayout(new BorderLayout());
 		add(rootPanel, BorderLayout.CENTER);
 
-		dashboardLayout.show(dashboardPanel, "match");
+		dashboardLayout.show(dashboardPanel, "calendar");
 		rootLayout.show(rootPanel, "opening");
 
 		pack();
@@ -60,8 +61,9 @@ public class MainGui extends JFrame {
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		SidebarPanel sidebar = new SidebarPanel();
 
-		dashboardPanel.add(new MatchDashboard(), "match");
-		calendarDashboard = new CalendarDashboard();
+		matchDashboard = new MatchDashboard();
+		dashboardPanel.add(matchDashboard, "match");
+		calendarDashboard = new CalendarDashboard(matchDashboard, new ShowMatchDashboardAction());
 		dashboardPanel.add(calendarDashboard, "calendar");
 		dashboardPanel.add(new RankingDashboard(), "ranking");
 		dashboardPanel.add(new FinanceDashboard(), "finance");
@@ -108,7 +110,7 @@ public class MainGui extends JFrame {
 			}
 
 			calendarDashboard.startSeason();
-			dashboardLayout.show(dashboardPanel, "match");
+			dashboardLayout.show(dashboardPanel, "calendar");
 			rootLayout.show(rootPanel, "main");
 		}
 	}
@@ -117,6 +119,13 @@ public class MainGui extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.exit(0);
+		}
+	}
+
+	private class ShowMatchDashboardAction implements Runnable {
+		@Override
+		public void run() {
+			dashboardLayout.show(dashboardPanel, "match");
 		}
 	}
 }
