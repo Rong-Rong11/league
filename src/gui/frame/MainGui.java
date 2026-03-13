@@ -48,7 +48,7 @@ public class MainGui extends JFrame {
 		setLayout(new BorderLayout());
 		add(rootPanel, BorderLayout.CENTER);
 
-		dashboardLayout.show(dashboardPanel, "calendar");
+		dashboardLayout.show(dashboardPanel, "match");
 		rootLayout.show(rootPanel, "opening");
 
 		pack();
@@ -110,7 +110,7 @@ public class MainGui extends JFrame {
 			}
 
 			calendarDashboard.startSeason();
-			dashboardLayout.show(dashboardPanel, "calendar");
+			dashboardLayout.show(dashboardPanel, "match");
 			rootLayout.show(rootPanel, "main");
 		}
 	}
