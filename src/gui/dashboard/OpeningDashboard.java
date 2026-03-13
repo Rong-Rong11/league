@@ -8,8 +8,8 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import gui.components.BuildBox;
-import gui.components.SectionTitle;
+import gui.panel.common.BuildBox;
+import gui.panel.common.SectionTitle;
 
 public class OpeningDashboard extends JPanel {
 
@@ -27,22 +27,7 @@ public class OpeningDashboard extends JPanel {
 
 		JPanel content = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
 		content.setOpaque(false);
-
-		JPanel leftSpace = new JPanel();
-		leftSpace.setPreferredSize(new Dimension(IDEAL_DASHBOARD_SPACING, 0));
-		leftSpace.setOpaque(false);
-
-		JPanel rightSpace = new JPanel();
-		rightSpace.setPreferredSize(new Dimension(IDEAL_DASHBOARD_SPACING, 0));
-		rightSpace.setOpaque(false);
-
-		JPanel bottomSpace = new JPanel();
-		bottomSpace.setPreferredSize(new Dimension(0, IDEAL_DASHBOARD_SPACING));
-		bottomSpace.setOpaque(false);
-
-		add(leftSpace, BorderLayout.WEST);
-		add(rightSpace, BorderLayout.EAST);
-		add(bottomSpace, BorderLayout.SOUTH);
+		content.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
 
 		content.add(buildHeaderRow(), BorderLayout.NORTH);
 		content.add(buildBody(), BorderLayout.CENTER);
