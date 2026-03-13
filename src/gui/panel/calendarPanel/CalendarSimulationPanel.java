@@ -173,8 +173,7 @@ public class CalendarSimulationPanel extends JPanel {
 
 	private JPanel buildDayRow(LocalDate day) {
 		GameDay gameDay = regularSeason.getCalendar().getCalendar().get(day);
-		boolean hasGames = gameDay != null && !gameDay.isEmpty();
-		boolean simulated = hasGames && isGameDaySimulated(gameDay);
+		boolean simulated = isGameDaySimulated(gameDay);
 
 		JPanel rowPanel = new JPanel(new BorderLayout(12, 0));
 		rowPanel.setOpaque(false);
@@ -184,14 +183,7 @@ public class CalendarSimulationPanel extends JPanel {
 		JLabel dayTitle = new JLabel(DAY_FORMATTER.format(day));
 		dayTitle.setFont(TITLE_FONT);
 
-		String detailText;
-		if (!hasGames) {
-			detailText = "Aucun match";
-		} else if (gameDay.getGames().size() == 1) {
-			detailText = "1 match";
-		} else {
-			detailText = gameDay.getGames().size() + " matchs";
-		}
+		String detailText = gameDay.getGames().size() == 1 ? "1 match" : gameDay.getGames().size() + " matchs";
 		JLabel dayDetail = new JLabel(detailText);
 		dayDetail.setFont(TEXT_FONT);
 
@@ -203,23 +195,11 @@ public class CalendarSimulationPanel extends JPanel {
 
 		JButton simulateButton = new JButton("Simuler");
 		simulateButton.setFont(TEXT_FONT);
-		simulateButton.addActionListener(e -> {
-			if (!hasGames || simulated) {
-				return;
-			}
-			simulateUntil(day);
-			currentDate = day;
-			updateDisplay();
-		});
+		simulateButton.addActionListener(new SimulateDayListener(day, simulated));
 
 		JButton detailButton = new JButton("Détail");
 		detailButton.setFont(TEXT_FONT);
-		detailButton.addActionListener(e -> {
-			if (!hasGames) {
-				return;
-			}
-			openMatchDashboard(gameDay, day);
-		});
+		detailButton.addActionListener(new DetailDayListener(gameDay, day));
 
 		JLabel stateLabel = new JLabel(simulated ? "Simulé" : "À simuler");
 		stateLabel.setFont(TEXT_FONT);
@@ -261,13 +241,11 @@ public class CalendarSimulationPanel extends JPanel {
 		if (game.getQuarterResults() == null) {
 			return false;
 		}
-
 		for (int index = 0; index < game.getQuarterResults().length; index++) {
 			if (game.getQuarterResults()[index] == null) {
 				return false;
 			}
 		}
-
 		return true;
 	}
 
@@ -361,6 +339,41 @@ public class CalendarSimulationPanel extends JPanel {
 				currentDate = nextWeek;
 				updateDisplay();
 			}
+		}
+	}
+
+	private class SimulateDayListener implements ActionListener {
+		private final LocalDate day;
+		private final boolean simulated;
+
+		private SimulateDayListener(LocalDate day, boolean simulated) {
+			this.day = day;
+			this.simulated = simulated;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (simulated) {
+				return;
+			}
+			simulateUntil(day);
+			currentDate = day;
+			updateDisplay();
+		}
+	}
+
+	private class DetailDayListener implements ActionListener {
+		private final GameDay gameDay;
+		private final LocalDate day;
+
+		private DetailDayListener(GameDay gameDay, LocalDate day) {
+			this.gameDay = gameDay;
+			this.day = day;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			openMatchDashboard(gameDay, day);
 		}
 	}
 }
