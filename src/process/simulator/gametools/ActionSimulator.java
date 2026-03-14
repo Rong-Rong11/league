@@ -18,7 +18,8 @@ public class ActionSimulator {
 		double playerDefenseNote = Math.min(PlayerUtilitary.getPlayerDefenseNote(defendingPlayer), 2);
 		double playerAttackNote = Math.min(PlayerUtilitary.getPlayerAttackNote(attackingPlayer), 2);
 		double noteGap = Math.max(0, playerDefenseNote - playerAttackNote);
-		double turnoverProbability = 0.08 + (noteGap * 0.18);
+		double turnoverProbability = 0.05 + (noteGap * 0.06);
+		turnoverProbability = Math.min(turnoverProbability, 0.12);
 		return Math.random() < turnoverProbability;
 	}
 	
@@ -35,14 +36,14 @@ public class ActionSimulator {
 		} else {
 			shotProbability = SimulationConfiguration.FOULDRAW_PROBABILITY_SUCESS;
 		}
-		shotProbability += (trueShootingPercentage * 0.35);
+		shotProbability += (trueShootingPercentage * 0.30);
 
 		double defenseNote = defensingPlayersNote(defensivePlayers);
-		shotProbability -= defenseNote * 0.02;
+		shotProbability -= defenseNote * 0.006;
 
-		shotProbability -= attackingPlayer.getHealthStatus().getFatigue() * 0.15;
+		shotProbability -= attackingPlayer.getHealthStatus().getFatigue() * 0.05;
 
-		shotProbability = Math.max(0.08, Math.min(0.9, shotProbability));
+		shotProbability = Math.max(0.18, Math.min(0.82, shotProbability));
 
 		return Math.random() < shotProbability;
 

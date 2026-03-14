@@ -19,20 +19,27 @@ import gui.panel.common.SectionTitle;
 		private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
 		public MapDashboard() {
+		organize();
+	}
+
+		private void organize() {
 		setLayout(new BorderLayout());
 		setBackground(IDEAL_DASHBOARD_BACKGROUND_COLOR);
 
-		JPanel content = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
-		content.setOpaque(false);
-		content.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
-
-		content.add(buildHeaderRow(), BorderLayout.NORTH);
+		JPanel content = buildContentPanel();
+		content.add(buildHeader(), BorderLayout.NORTH);
 		content.add(buildBody(), BorderLayout.CENTER);
-
 		add(content, BorderLayout.CENTER);
 	}
 
-		private JPanel buildHeaderRow(){
+		private JPanel buildContentPanel() {
+		JPanel content = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
+		content.setOpaque(false);
+		content.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
+		return content;
+	}
+
+		private JPanel buildHeader(){
 			JPanel header = new SectionTitle("Carte des equipes", "Distribution geographique"); // dans le subtitle il faut mettre quelque choes qui change selon le jour selctionner 
 			header.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, IDEAL_DASHBOARD_HEADER_HEIGHT));
 			return header;
@@ -41,19 +48,16 @@ import gui.panel.common.SectionTitle;
 		private JPanel buildBody() {
 			JPanel body = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
 			body.setOpaque(false);
-
-			JPanel teamSelctCard = buildTeamSelctCard();
-
-			JPanel mapCard = new BuildBox("LOCALISATION DES FRANCHISES", "", "CARTE");//! À changer le string par un jpanel quand on aura la fonctionnalité
-
-			body.add(mapCard, BorderLayout.CENTER);
-			body.add(teamSelctCard,BorderLayout.EAST);
-
-
+			body.add(buildCenterColumn(), BorderLayout.CENTER);
+			body.add(buildRightColumn(),BorderLayout.EAST);
 			return body;
 		}
 
-		private JPanel buildTeamSelctCard(){
+		private JPanel buildCenterColumn() {
+			return new BuildBox("LOCALISATION DES FRANCHISES", "", "CARTE");//! À changer le string par un jpanel quand on aura la fonctionnalité
+		}
+
+		private JPanel buildRightColumn(){
 			JPanel column = new JPanel(new GridLayout(2, 1, 0, 12));
 			column.setOpaque(false);
 			
