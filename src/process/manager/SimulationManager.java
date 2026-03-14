@@ -67,6 +67,7 @@ public class SimulationManager {
 
 	// simuler la fin de saison régulière ou fin playoff
 	public void simulateCurrentSeason() {
+
 		if (CalendarUtilitary.checkDate(date, CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE,
 				CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
 			while (!date.equals(CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
