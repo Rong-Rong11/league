@@ -1,7 +1,7 @@
 package process.utilitary;
 
 import config.FinancialPolicy;
-import config.SimulationConfiguration;
+import config.TeamConfiguration;
 import data.team.finance.financialprofil.FinancialProfil;
 import data.team.finance.transfer.AllIn;
 import data.team.finance.transfer.Balanced;
@@ -25,7 +25,7 @@ public class TransferStrategyUtilitary {
 
 	public static TeamTransferStrategy chooseTransferStrategyAmbitious(String rivalTeamName) {
 		double random = Math.random();
-		if (!rivalTeamName.equals(SimulationConfiguration.NO_RIVAL)) {
+		if (!rivalTeamName.equals(TeamConfiguration.NO_RIVAL)) {
 			if (random < 0.5) {
 				return new AllIn(FinancialPolicy.TRANSFER_STRATEGY_ALL_IN);
 			}
@@ -46,7 +46,7 @@ public class TransferStrategyUtilitary {
 
 	public static TeamTransferStrategy chooseTransferStrategyBalanced(String rivalTeamName) {
 		double random = Math.random();
-		if (!rivalTeamName.equals(SimulationConfiguration.NO_RIVAL)) {
+		if (!rivalTeamName.equals(TeamConfiguration.NO_RIVAL)) {
 			if (random < 0.4) {
 				return new SmallAdjust(FinancialPolicy.TRANSFER_STRATEGY_SMALL_ADJUST);
 			}
@@ -68,7 +68,7 @@ public class TransferStrategyUtilitary {
 
 	public static TeamTransferStrategy chooseTransferStrategyEconomic(String rivalTeamName) {
 		double random = Math.random();
-		if (!rivalTeamName.equals(SimulationConfiguration.NO_RIVAL)) {
+		if (!rivalTeamName.equals(TeamConfiguration.NO_RIVAL)) {
 			if (random < 0.2) {
 				return new Rebuild(FinancialPolicy.TRANSFER_STRATEGY_REBUILD);
 			}

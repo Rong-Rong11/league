@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import config.SimulationConfiguration;
+import config.GameConfiguration;
 import data.player.Asset;
 import data.player.Player;
 import data.sport.play.OffensiveTry;
@@ -43,11 +43,11 @@ public class GameSimulator {
 	}
 
 	private static boolean isAssist() {
-		return Math.random() < SimulationConfiguration.ASSIST_PROBABILITY;
+		return Math.random() < GameConfiguration.ASSIST_PROBABILITY;
 	}
 
 	private static boolean isBlock() {
-		return Math.random() < SimulationConfiguration.BLOCK_PROBABILTY;
+		return Math.random() < GameConfiguration.BLOCK_PROBABILTY;
 	}
 
 	private ActionResult simulateAction(Player attackingPlayer, TreeMap<Double, Player> attackingPlayers,
@@ -58,59 +58,50 @@ public class GameSimulator {
 		int actionTime = 14 + (int) (Math.random() * 10);
 		ActionResult actionResult;
 		if (quarterTimeRemaining <= actionTime) {
-			actionResult = new EndOfTime(SimulationConfiguration.END_OF_TIME_ACTION);
-		}
-
-		else {
+			actionResult = new EndOfTime(GameConfiguration.END_OF_TIME_ACTION);
+		} else {
 			Player defendingPlayer = eventSimulator.chooseDefendingPlayer(defensivePlayers);
 
 			if (actionSimulator.effectiveTurnover(attackingPlayer, defendingPlayer)) {
-				actionResult = new Turnover(SimulationConfiguration.TURNOVER_ACTION, attackingPlayer, defendingPlayer);
+				actionResult = new Turnover(GameConfiguration.TURNOVER_ACTION, attackingPlayer, defendingPlayer);
 			} else {
-				OffensiveTry offensiveTry = eventSimulator.chooseOffensiveAction(attackingPlayer,
-						attackPlayersAssetsOfMatch);
+				OffensiveTry offensiveTry = eventSimulator.chooseOffensiveAction(attackingPlayer, attackPlayersAssetsOfMatch);
 
-				if (offensiveTry.getName().equals(SimulationConfiguration.FOULDRAW)) {
-					injuryManager.simulateInjury(playersNewAssets, attackingPlayer, SimulationConfiguration.FOULDRAW);
+				if (offensiveTry.getName().equals(GameConfiguration.FOULDRAW)) {
+					injuryManager.simulateInjury(playersNewAssets, attackingPlayer, GameConfiguration.FOULDRAW);
 				}
 				if (actionSimulator.simulateShot(attackingPlayer, offensiveTry, defensivePlayers)) {
 					Player assistPlayer = null;
-					if (offensiveTry.getName().equals(SimulationConfiguration.THREEPOINT)
-							|| offensiveTry.getName().equals(SimulationConfiguration.TWOPOINT)) {
+					if (offensiveTry.getName().equals(GameConfiguration.THREEPOINT)
+							|| offensiveTry.getName().equals(GameConfiguration.TWOPOINT)) {
 						if (isAssist()) {
 							assistPlayer = eventSimulator.chooseAssistPlayer(attackingPlayer, attackPlayersAssetsOfMatch);
 						}
 					}
 
-					if (offensiveTry.getName().equals(SimulationConfiguration.THREEPOINT)) {
-						actionResult = new PointScored(SimulationConfiguration.SCORED_ACTION, 3, attackingPlayer,
-								assistPlayer);
+					if (offensiveTry.getName().equals(GameConfiguration.THREEPOINT)) {
+						actionResult = new PointScored(GameConfiguration.SCORED_ACTION, 3, attackingPlayer, assistPlayer);
 					} else {
-						actionResult = new PointScored(SimulationConfiguration.SCORED_ACTION, 2, attackingPlayer,
-								assistPlayer);
+						actionResult = new PointScored(GameConfiguration.SCORED_ACTION, 2, attackingPlayer, assistPlayer);
 					}
 
-				}
-
-				else {
+				} else {
 					if (isBlock()) {
 						Player blockingPlayer = eventSimulator.chooseBlockingPlayer(defensivePlayersAssetsOfMatch);
-						actionResult = new Block(SimulationConfiguration.BLOCK_ACTION, blockingPlayer);
+						actionResult = new Block(GameConfiguration.BLOCK_ACTION, blockingPlayer);
 					} else {
 						Player reboundPlayer = eventSimulator.chooseRebounder(attackPlayersAssetsOfMatch,
 								defensivePlayersAssetsOfMatch);
 						if (attackingPlayers.containsValue(reboundPlayer)) {
-							actionResult = new Rebound(SimulationConfiguration.OFFENSIVE_REBOUND_ACTION, reboundPlayer,
+							actionResult = new Rebound(GameConfiguration.OFFENSIVE_REBOUND_ACTION, reboundPlayer,
 									attackingPlayer);
 							injuryManager.simulateInjury(playersNewAssets, reboundPlayer,
-									SimulationConfiguration.OFFENSIVE_REBOUND_ACTION);
-						}
-
-						else {
-							actionResult = new Rebound(SimulationConfiguration.DEFENSIVE_REBOUND_ACTION, reboundPlayer,
+									GameConfiguration.OFFENSIVE_REBOUND_ACTION);
+						} else {
+							actionResult = new Rebound(GameConfiguration.DEFENSIVE_REBOUND_ACTION, reboundPlayer,
 									attackingPlayer);
 							injuryManager.simulateInjury(playersNewAssets, reboundPlayer,
-									SimulationConfiguration.DEFENSIVE_REBOUND_ACTION);
+									GameConfiguration.DEFENSIVE_REBOUND_ACTION);
 						}
 					}
 				}
@@ -127,7 +118,8 @@ public class GameSimulator {
 	private static HashMap<Player, Asset> createMapOfPlayerAsset(ArrayList<Player> players) {
 		HashMap<Player, Asset> assets = new HashMap<Player, Asset>();
 		for (Player player : players) {
-			Asset asset = player.getCurrentSeasonAssets().getMinutesPlayedPerMatch() != 0 ? player.getCurrentSeasonAssets()
+			Asset asset = player.getCurrentSeasonAssets().getMinutesPlayedPerMatch() != 0
+					? player.getCurrentSeasonAssets()
 					: player.getPreSeasonAssets();
 			assets.put(player, asset);
 		}
@@ -159,7 +151,7 @@ public class GameSimulator {
 		HashMap<Player, Asset> homePlayersAssetsOfMatch = createMapOfPlayerAsset(homeTeamPlayers);
 		HashMap<Player, Asset> awayPlayersAssetsOfMatch = createMapOfPlayerAsset(awayTeamPlayers);
 
-		int quarterTime = SimulationConfiguration.QUARTER_DURATION;
+		int quarterTime = GameConfiguration.QUARTER_DURATION;
 		boolean homeTeamStart = (Math.random() < 0.5);
 		String possession;
 		if (homeTeamStart) {
@@ -196,8 +188,8 @@ public class GameSimulator {
 			ActionResult actionResult = simulateAction(attackingPlayer, attackingPlayers, defensivePlayers, quarterTime,
 					attackPlayersAssetsOfMatch, defensivePlayersAssetsOfMatch, playersNewAssets);
 
-			if (actionResult.getName().equals(SimulationConfiguration.DEFENSIVE_REBOUND_ACTION) ||
-					actionResult.getName().equals(SimulationConfiguration.TURNOVER_ACTION)) {
+			if (actionResult.getName().equals(GameConfiguration.DEFENSIVE_REBOUND_ACTION)
+					|| actionResult.getName().equals(GameConfiguration.TURNOVER_ACTION)) {
 				if (possession.equals("home")) {
 					possession = "away";
 				} else {
@@ -205,8 +197,7 @@ public class GameSimulator {
 				}
 			}
 			healthManager.updateFatigue(homeTeamPlayers, awayTeamPlayers, actionResult.getActionTime());
-			healthManager.addMinutesPlayed(homeTeamPlayers, awayTeamPlayers, playersNewAssets,
-					actionResult.getActionTime());
+			healthManager.addMinutesPlayed(homeTeamPlayers, awayTeamPlayers, playersNewAssets, actionResult.getActionTime());
 
 			lineupSelector.updatePlayers(awayTeam, awayTeamPlayers);
 			awayPlayersAssetsOfMatch = createMapOfPlayerAsset(awayTeamPlayers);
@@ -218,7 +209,7 @@ public class GameSimulator {
 
 			gameResult.addActions(actionResult);
 
-			if (actionResult.getName().equals(SimulationConfiguration.END_OF_TIME_ACTION)) {
+			if (actionResult.getName().equals(GameConfiguration.END_OF_TIME_ACTION)) {
 				quarterTime = 0;
 			} else {
 				quarterTime -= actionResult.getActionTime();
@@ -231,7 +222,6 @@ public class GameSimulator {
 	private void updateCurrentSeasonAsset(Team team, HashMap<Player, Asset> playersNewAssets) {
 		for (Player player : team.getPlayers().values()) {
 			PlayerUtilitary.updateAsset(player, playersNewAssets.get(player));
-			// faire màj note du joeur
 		}
 	}
 
@@ -283,18 +273,21 @@ public class GameSimulator {
 
 	private static int totalHome(Game game) {
 		int totalHome = 0;
-		for (GameResult gameResult : game.getQuarterResults())
-			if (gameResult != null)
+		for (GameResult gameResult : game.getQuarterResults()) {
+			if (gameResult != null) {
 				totalHome += gameResult.getScorehomeTeam();
+			}
+		}
 		return totalHome;
 	}
 
 	private static int totalAway(Game game) {
 		int totalAway = 0;
-		for (GameResult gameResult : game.getQuarterResults())
-			if (gameResult != null)
+		for (GameResult gameResult : game.getQuarterResults()) {
+			if (gameResult != null) {
 				totalAway += gameResult.getScoreAwayTeam();
+			}
+		}
 		return totalAway;
 	}
-
 }

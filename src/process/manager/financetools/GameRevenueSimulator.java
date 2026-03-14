@@ -1,4 +1,4 @@
-package process.simulator;
+package process.manager.financetools;
 
 import java.time.LocalDate;
 
@@ -21,8 +21,8 @@ public class GameRevenueSimulator {
         double popularityRate = calculatePopularityRate(game, date);
         Stadium stadium = homeTeam.getStadium();
         int capacity = stadium.getCapacity();
-        int attendees = calculateAttendees(capacity, popularityRate);
-        calculateAttendanceRate(attendees, capacity);
+        double attendanceRate = calculateAttendanceRate(date, homeTeam, popularityRate);
+        int attendees = calculateAttendees(capacity, attendanceRate);
         int ticketPrice = calculateTicketPrice(stadium, popularityRate);
         calculateTicketRevenue(attendees, ticketPrice);
         calculateConcessionsRevenue(attendees);
@@ -34,7 +34,7 @@ public class GameRevenueSimulator {
 
     private double calculatePopularityRate(Game game, LocalDate date) {
         double gamePopularity = CalendarUtilitary.popularityScoreGame(game, date);
-        double gameScore = gamePopularity / 1200;
+        double gameScore = gamePopularity / 800;
         double performatingRate = (game.getGameContext().getHomeTeam().getTeamPerformance().getPerformanceRating() +
                 game.getGameContext().getAwayTeam().getTeamPerformance().getPerformanceRating())
                 / 2;
@@ -51,15 +51,23 @@ public class GameRevenueSimulator {
         return newPrice;
     }
 
-    private int calculateAttendees(int capacity, double popularityRate) {
-        int attendees = (int) (capacity * popularityRate);
+    private int calculateAttendees(int capacity, double attendanceRate) {
+        int attendees = (int) (capacity * attendanceRate);
         gameStat.setAttendees(attendees);
         return attendees;
     }
 
-    private void calculateAttendanceRate(int attendees, int capacity) {
-        double attendanceRate = (double) attendees / capacity;
+    private double calculateAttendanceRate(LocalDate date, Team homeTeam, double popularityRate) {
+        double importantDayBonus = CalendarUtilitary.isImportantDay(date) ? 0.04 : 0.0;
+        double randomVariation = (Math.random() * 0.05) - 0.025;
+
+        double attendanceRate = 0.50
+                + (popularityRate * 0.35)
+                + importantDayBonus
+                + randomVariation;
+        attendanceRate = Math.max(0.55, Math.min(0.98, attendanceRate));
         gameStat.setAttendanceRate(attendanceRate);
+        return attendanceRate;
     }
 
     private void calculateTicketRevenue(int attendees, double ticketPrice) {

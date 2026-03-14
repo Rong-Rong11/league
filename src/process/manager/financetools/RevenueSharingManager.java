@@ -1,4 +1,4 @@
-package process.manager;
+package process.manager.financetools;
 
 import config.FinanceConfiguration;
 import data.finance.budget.Budget;

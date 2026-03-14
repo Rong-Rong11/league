@@ -6,11 +6,10 @@ import data.team.Team;
 import process.utilitary.FinanceUtilitary;
 
 public class TradeImpact {
-
+	
 	public TradeImpact() {
-
+		
 	}
-
 	public void applyFinanceImpact(Team team, double luxuryTaxLine, int month) {
 		FinanceUtilitary.updateTeamPayroll(team);
 		if (team.getTeamFinance().getPayroll() > luxuryTaxLine) {

@@ -2,9 +2,11 @@ package process.simulator.gametools;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.TreeMap;
 
-import config.SimulationConfiguration;
+import config.GameConfiguration;
+import data.player.Asset;
 import data.player.Player;
 import data.team.Team;
 import data.team.finance.financialprofil.AmbitiousProfil;
@@ -15,11 +17,11 @@ import process.utilitary.PlayerUtilitary;
 import process.utilitary.TeamUtilitary;
 
 public class LineupSelector {
-
+	
 	public LineupSelector() {
-
+		
 	}
-
+	
 	public ArrayList<Player> choosePlayerToPlay(Team team, Team opponent) {
 		String opponentProfile = TeamUtilitary.getTeamSportProfile(opponent);
 		double averageSalary = FinanceUtilitary.getAverageSalary(team);
@@ -46,10 +48,10 @@ public class LineupSelector {
 
 			double matchProfileScore;
 			switch (opponentProfile) {
-				case SimulationConfiguration.TEAM_DEFENSIVE_MATCH_PROFIL:
+				case GameConfiguration.TEAM_DEFENSIVE_MATCH_PROFIL:
 					matchProfileScore = playerDefenseNote;
 					break;
-				case SimulationConfiguration.TEAM_OFFENSIVE_MATCH_PROFIL:
+				case GameConfiguration.TEAM_OFFENSIVE_MATCH_PROFIL:
 					matchProfileScore = playerAttackNote;
 					break;
 				default:
@@ -74,7 +76,7 @@ public class LineupSelector {
 		}
 		return chosenPlayers;
 	}
-
+	
 	public void updatePlayers(Team team, ArrayList<Player> players) {
 		ArrayList<Player> playersToRemove = new ArrayList<Player>();
 		for (Player player : players) {
@@ -89,7 +91,7 @@ public class LineupSelector {
 			}
 		}
 	}
-
+	
 	public TreeMap<Double, Player> sortPlayersAccordingToAttack(ArrayList<Player> players) {
 		TreeMap<Double, Player> attackingPlayers = new TreeMap<Double, Player>();
 		double total = 0;
@@ -125,5 +127,6 @@ public class LineupSelector {
 		}
 		return defensivePlayers;
 	}
-
+	
+	
 }

@@ -9,16 +9,16 @@ import process.utilitary.TeamUtilitary;
 import process.visitor.teamtransfer.EvaluateSeasonIntentVisitor;
 
 public class TradeFinder {
-
-	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
-	private double salaryCap;
-
+	
+	private TeamRepositery teamRepositery = TeamRepositery.getInstance() ;
+	private double salaryCap ; 
+	
 	public TradeFinder(double salaryCap) {
 		super();
 		this.salaryCap = salaryCap;
 	}
 
-	public Team findTeamForTrade(Team teamA, boolean season) {
+	public  Team findTeamForTrade(Team teamA, boolean season) {
 		for (Team teamB : teamRepositery.getAllTeams()) {
 			if (teamB.equals(teamA)) {
 				continue;
@@ -56,22 +56,21 @@ public class TradeFinder {
 		if (isSelling(teamB, strategyB, season) && isBuying(teamA, strategyA, season)) {
 			return true;
 		}
-		if (isStable(strategyA.getSeasonIntent()) || isStable(strategyB.getSeasonIntent())) {
-			return false;
+		if(isStable(strategyA.getSeasonIntent()) || isStable(strategyB.getSeasonIntent())) {
+			return false ; 
 		}
 		if (!TeamUtilitary.getTeamSportProfile(teamA).equals(TeamUtilitary.getTeamSportProfile(teamB))) {
 			return true;
 		}
 		return false;
 	}
-
+	
 	private boolean isStable(String seasonIntent) {
-		return seasonIntent.equals(FinanceConfiguration.SEASON_TRADE_INTENT_STABLE);
+		return seasonIntent.equals(FinanceConfiguration.SEASON_TRADE_INTENT_STABLE) ; 
 	}
-
 	private boolean isSelling(Team team, TeamTransferStrategy teamTransferStrategy, boolean season) {
 		if (season) {
-			String seasonIntent = evaluateSeasonIntent(team, teamTransferStrategy);
+			String seasonIntent = evaluateSeasonIntent(team, teamTransferStrategy) ; 
 			teamTransferStrategy.setSeasonIntent(seasonIntent);
 			return seasonIntent.equals(FinanceConfiguration.SEASON_TRADE_INTENT_SELLER);
 		}
@@ -81,7 +80,7 @@ public class TradeFinder {
 
 	private boolean isBuying(Team team, TeamTransferStrategy teamTransferStrategy, boolean season) {
 		if (season) {
-			String seasonIntent = evaluateSeasonIntent(team, teamTransferStrategy);
+			String seasonIntent = evaluateSeasonIntent(team, teamTransferStrategy) ; 
 			teamTransferStrategy.setSeasonIntent(seasonIntent);
 			return seasonIntent.equals(FinanceConfiguration.SEASON_TRADE_INTENT_BUYER);
 		}

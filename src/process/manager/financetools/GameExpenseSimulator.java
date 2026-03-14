@@ -1,7 +1,7 @@
-package process.simulator;
+package process.manager.financetools;
 
 import config.FinanceConfiguration;
-import config.SimulationConfiguration;
+import config.GameConfiguration;
 import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.team.Team;
@@ -65,9 +65,9 @@ public class GameExpenseSimulator {
 	private void calculateAwayTravelCost(Game game) {
 		double travelCost = 0;
 		int typeGame = game.getGameContext().getTypeGame();
-		if (typeGame == SimulationConfiguration.GAME_INTRA_DIVISION) {
+		if (typeGame == GameConfiguration.GAME_INTRA_DIVISION) {
 			travelCost = FinanceConfiguration.BASE_TRAVEL_INTRA_DIVISION_COST;
-		} else if (typeGame == SimulationConfiguration.GAME_INTRA_CONFERENCE) {
+		} else if (typeGame == GameConfiguration.GAME_INTRA_CONFERENCE) {
 			travelCost = FinanceConfiguration.BASE_TRAVEL_INTRA_CONFERENCE_COST;
 		} else {
 			travelCost = FinanceConfiguration.BASE_TRAVEL_INTER_CONFERENCE_COST;

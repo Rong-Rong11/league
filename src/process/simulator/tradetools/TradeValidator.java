@@ -11,10 +11,11 @@ import process.utilitary.FinanceUtilitary;
 
 public class TradeValidator {
 
+	
 	public TradeValidator() {
-
+		
 	}
-
+	
 	public boolean validateTrade(Team teamA, Team teamB, ArrayList<Player> teamAIncoming,
 			ArrayList<Player> teamBIncoming, double salaryCap) {
 		double teamAOutgoingPayroll = teamA.getTeamFinance().getPayroll();
@@ -35,7 +36,7 @@ public class TradeValidator {
 		}
 		return true;
 	}
-
+	
 	public static boolean respectPayroll(Team team, double outgoingPayroll, double incomingPayroll, double salaryCap) {
 		FinancialProfil financialProfil = team.getTeamFinance().getFinancialProfil();
 		if (incomingPayroll < salaryCap) {
@@ -66,7 +67,7 @@ public class TradeValidator {
 	private static boolean respectBalancedPayroll(double payroll, double salaryCap) {
 		return payroll <= salaryCap * FinancialPolicy.SALARY_CAP_RATE_BALANCED;
 	}
-
+	
 	private static boolean riskBudget(Team team) {
 		FinancialProfil financialProfil = team.getTeamFinance().getFinancialProfil();
 		Budget budget = team.getTeamFinance().getBudget();

@@ -2,7 +2,7 @@ package process.factory;
 
 import config.FinanceConfiguration;
 import config.FinancialPolicy;
-import config.SimulationConfiguration;
+import config.TeamConfiguration;
 import data.finance.budget.Budget;
 import data.team.Stadium;
 import data.team.Team;
@@ -24,7 +24,7 @@ public class TeamFactory {
 
 	private static String checkRivalTeam(String rivalTeam) {
 		if (rivalTeam.equals("")) {
-			return SimulationConfiguration.NO_RIVAL;
+			return TeamConfiguration.NO_RIVAL;
 		}
 		return rivalTeam;
 	}

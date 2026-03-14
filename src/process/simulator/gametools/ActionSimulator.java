@@ -2,18 +2,18 @@ package process.simulator.gametools;
 
 import java.util.TreeMap;
 
-import config.SimulationConfiguration;
+import config.GameConfiguration;
 import data.player.Asset;
 import data.player.Player;
 import data.sport.play.OffensiveTry;
 import process.utilitary.PlayerUtilitary;
 
 public class ActionSimulator {
-
+	
 	public ActionSimulator() {
-
+		
 	}
-
+	
 	public boolean effectiveTurnover(Player attackingPlayer, Player defendingPlayer) {
 		double playerDefenseNote = Math.min(PlayerUtilitary.getPlayerDefenseNote(defendingPlayer), 2);
 		double playerAttackNote = Math.min(PlayerUtilitary.getPlayerAttackNote(attackingPlayer), 2);
@@ -25,19 +25,19 @@ public class ActionSimulator {
 		}
 		return false;
 	}
-
-	public boolean simulateShot(Player attackingPlayer, OffensiveTry action, TreeMap<Double, Player> defensivePlayers) {
+	
+	public boolean simulateShot(Player attackingPlayer, OffensiveTry action,TreeMap<Double, Player> defensivePlayers) {
 		Asset asset = attackingPlayer.getCurrentSeasonAssets().getMinutesPlayedPerMatch() > 0
 				? attackingPlayer.getCurrentSeasonAssets()
 				: attackingPlayer.getPreSeasonAssets();
 		double trueShootingPercentage = asset.getTrueShootingPercentage();
 		double shotProbability;
-		if (action.getName().equals(SimulationConfiguration.THREEPOINT)) {
-			shotProbability = SimulationConfiguration.THREEPOINT_PROBABILITY_SUCCESS;
-		} else if (action.getName().equals(SimulationConfiguration.TWOPOINT)) {
-			shotProbability = SimulationConfiguration.TWO_PROBABILITY_SUCCESS;
+		if (action.getName().equals(GameConfiguration.THREEPOINT)) {
+			shotProbability = GameConfiguration.THREEPOINT_PROBABILITY_SUCCESS;
+		} else if (action.getName().equals(GameConfiguration.TWOPOINT)) {
+			shotProbability = GameConfiguration.TWO_PROBABILITY_SUCCESS;
 		} else {
-			shotProbability = SimulationConfiguration.FOULDRAW_PROBABILITY_SUCESS;
+			shotProbability = GameConfiguration.FOULDRAW_PROBABILITY_SUCESS;
 		}
 		shotProbability += (trueShootingPercentage * 0.5);
 
@@ -49,7 +49,7 @@ public class ActionSimulator {
 		return Math.random() < shotProbability;
 
 	}
-
+	
 	private double defensingPlayersNote(TreeMap<Double, Player> defensivePlayers) {
 		double sumOfNote = 0;
 		double numberOfPlayer = 0;
@@ -61,5 +61,6 @@ public class ActionSimulator {
 		note = sumOfNote / numberOfPlayer;
 		return note;
 	}
-
+	
+	
 }
