@@ -25,7 +25,7 @@ import process.utilitary.TeamUtilitary;
 
 public class LeagueBuilder {
 
-	private String filename = "src/test/nba.csv";
+	private String filename = "/Users/enzophung/Fac/L2/GL projet/git/league/src/test/nba.csv";
 	private PlayerRepositery playerRepositery = PlayerRepositery.getInstance();
 	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 	private DivisionRepositery divisionRepositery = DivisionRepositery.getInstance();
@@ -44,6 +44,9 @@ public class LeagueBuilder {
 			bufferedReader.readLine();
 
 			while ((line = bufferedReader.readLine()) != null) {
+				if (line.startsWith("player_id")) {
+			        continue;
+			    }
 				String[] data = line.split(",", -1);
 				String teamName = data[2];
 				String conferenceName = data[4];

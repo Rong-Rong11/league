@@ -26,15 +26,14 @@ public class SimulationManager {
 	//méthode à utiliser pour lancer la saison 
 	public void startSeason() {
 		leagueManager.startSeason();
-		simulateDay(); //simule le premier jour 
+		simulateCurrentSeason();
+		resetCalendarCursor();
 	}
 	
 	//passe le prochain jour, méthode à utiliser pour la simulation et tout se fais tous seul 
 	public void nextDay() {
 		date = date.plusDays(1);
 		currentMonthDate = date.getMonth();
-		verifyMonth();
-		simulateDay();
 	}
 	
 	// si nouveau mois les évènements des nouveaux mois sont appliqués comme le partage des revenus etc ...
@@ -76,9 +75,46 @@ public class SimulationManager {
 			}
 		}    
 	}
+
+	private void resetCalendarCursor() {
+		date = SimulationConfiguration.REGULAR_SEASON_DEBUT_DATE;
+		debutMonthDate = SimulationConfiguration.REGULAR_SEASON_DEBUT_DATE.getMonth();
+		currentMonthDate = debutMonthDate;
+		month = 1;
+	}
+
+	public void displayGameDay(LocalDate date) {
+		if (date == null) {
+			return;
+		}
+		data.calendar.GameDay gameDay = leagueManager.getLeague().getReagularSeason().getCalendar().getCalendar().get(date);
+		if (gameDay != null) {
+			gameDay.setDisplayed(true);
+		}
+	}
+
+	public void displayWeek(LocalDate startDate) {
+		if (startDate == null) {
+			return;
+		}
+		for (int offset = 0; offset < 7; offset++) {
+			displayGameDay(startDate.plusDays(offset));
+		}
+	}
+
+	public void displayCurrentSeason() {
+		java.util.TreeMap<LocalDate, data.calendar.GameDay> calendar = leagueManager.getLeague().getReagularSeason().getCalendar().getCalendar();
+		for (data.calendar.GameDay gameDay : calendar.values()) {
+			gameDay.setDisplayed(true);
+		}
+	}
 	
 	public League getLeague() {
 		return leagueManager.getLeague(); 
+	}
+
+	public LeagueManager getLeagueManager() {
+		return leagueManager;
 	}
 
 	public LocalDate getCurrentDate() {

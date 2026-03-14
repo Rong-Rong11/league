@@ -84,12 +84,12 @@ public class PlayerUtilitary {
 		double defenseNote = getPlayerDefenseNote(player);
 
 		double performanceNote = (attackNote * 0.6) + (defenseNote * 0.4);
-		double lastSeasonNote = player.getLastSeasonNote();
+		double lastSeasonNote = player.getPreSeasonAssets().getNote();
 
 		return (performanceNote * 0.7) + (lastSeasonNote * 0.3);
 	}
 
-	public static void updateFatigue(int minutesPlayed, Player player) {
+	public static void updateFatigue(double minutesPlayed, Player player) {
 		HealthStatus healthStatus = player.getHealthStatus();
 		double fatigue = healthStatus.getFatigue();
 		fatigue += (0.02 * minutesPlayed);
@@ -100,7 +100,7 @@ public class PlayerUtilitary {
 		player.setHealthStatus(healthStatus);
 	}
 
-	public static void updateRest(int restMinutes, Player player) {
+	public static void updateRest(double restMinutes, Player player) {
 		HealthStatus healthStatus = player.getHealthStatus();
 		double fatigue = healthStatus.getFatigue();
 		fatigue -= 0.02 * restMinutes;

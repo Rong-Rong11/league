@@ -19,27 +19,22 @@ public class PreSeasonTradeSatisfactionVisitor implements TeamTransferVisitor<Bo
     return transferMade >= 2;
   }
 
-  @Override
   public Boolean visit(SuperstarBuild superstarBuild) {
     return transferMade >= 1;
   }
 
-  @Override
   public Boolean visit(SmallAdjust smallAdjust) {
     return transferMade >= 1;
   }
 
-  @Override
   public Boolean visit(Balanced balanced) {
     return transferMade >= 1;
   }
 
-  @Override
   public Boolean visit(Rebuild rebuild) {
     return transferMade >= 2;
   }
 
-  @Override
   public Boolean visit(SalaryDump salaryDump) {
     return transferMade >= 1;
   }

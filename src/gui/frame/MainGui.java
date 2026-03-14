@@ -12,11 +12,13 @@ import javax.swing.JPanel;
 
 import gui.dashboard.CalendarDashboard;
 import gui.dashboard.FinanceDashboard;
+import gui.dashboard.LiveMatchDashboard;
 import gui.dashboard.MapDashboard;
 import gui.dashboard.MatchDashboard;
 import gui.dashboard.OpeningDashboard;
 import gui.dashboard.RankingDashboard;
 import gui.layout.SidebarPanel;
+import process.manager.SimulationManager;
 
 public class MainGui extends JFrame {
 
@@ -26,6 +28,9 @@ public class MainGui extends JFrame {
 	private JPanel dashboardPanel;
 	private CalendarDashboard calendarDashboard;
 	private MatchDashboard matchDashboard;
+	private LiveMatchDashboard liveMatchDashboard;
+	private SimulationManager simulationManager;
+	private SidebarPanel sidebar;
 
 	public MainGui() {
 		setTitle("NBA League");
@@ -59,15 +64,21 @@ public class MainGui extends JFrame {
 
 	private JPanel buildApplicationPanel() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
-		SidebarPanel sidebar = new SidebarPanel();
+		sidebar = new SidebarPanel();
+		simulationManager = new SimulationManager();
 
-		matchDashboard = new MatchDashboard();
+		matchDashboard = new MatchDashboard(simulationManager.getLeagueManager());
+		liveMatchDashboard = new LiveMatchDashboard();
 		dashboardPanel.add(matchDashboard, "match");
-		calendarDashboard = new CalendarDashboard(matchDashboard, new ShowMatchDashboardAction());
+		dashboardPanel.add(liveMatchDashboard, "liveMatch");
+		calendarDashboard = new CalendarDashboard(simulationManager, matchDashboard, new ShowMatchDashboardAction());
 		dashboardPanel.add(calendarDashboard, "calendar");
 		dashboardPanel.add(new RankingDashboard(), "ranking");
 		dashboardPanel.add(new FinanceDashboard(), "finance");
 		dashboardPanel.add(new MapDashboard(), "map");
+
+		matchDashboard.setOpenLiveMatchAction(new ShowLiveMatchDashboardAction());
+		liveMatchDashboard.setBackToMatchAction(new ShowMatchDashboardAction());
 
 		sidebar.getMatchButton().addActionListener(new SwitchDashboardAction("match"));
 		sidebar.getCalendarButton().addActionListener(new SwitchDashboardAction("calendar"));
@@ -91,6 +102,13 @@ public class MainGui extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if ("calendar".equals(cardName)) {
+				calendarDashboard.refreshSeasonState();
+			}
+			if ("match".equals(cardName)) {
+				matchDashboard.refreshSelectedGame();
+			}
+			sidebar.setActiveSection(cardName);
 			dashboardLayout.show(dashboardPanel, cardName);
 		}
 	}
@@ -110,6 +128,8 @@ public class MainGui extends JFrame {
 			}
 
 			calendarDashboard.startSeason();
+			matchDashboard.loadGamesOfDay(simulationManager.getCurrentDate());
+			sidebar.setActiveSection("match");
 			dashboardLayout.show(dashboardPanel, "match");
 			rootLayout.show(rootPanel, "main");
 		}
@@ -125,7 +145,20 @@ public class MainGui extends JFrame {
 	private class ShowMatchDashboardAction implements Runnable {
 		@Override
 		public void run() {
+			calendarDashboard.refreshSeasonState();
+			matchDashboard.refreshSelectedGame();
+			sidebar.setActiveSection("match");
 			dashboardLayout.show(dashboardPanel, "match");
 		}
 	}
+
+	private class ShowLiveMatchDashboardAction implements Runnable {
+		@Override
+		public void run() {
+			liveMatchDashboard.setSimulationContext(matchDashboard.getLeagueManager(), matchDashboard.getSelectedDate());
+			liveMatchDashboard.setGame(matchDashboard.getSelectedGame());
+			dashboardLayout.show(dashboardPanel, "liveMatch");
+		}
+	}
+
 }

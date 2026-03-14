@@ -33,4 +33,8 @@ public class DivisionRepositery {
 		ArrayList<Division> allDivisions = new ArrayList<Division>(divisions.values());
 		return allDivisions;
 	}
+	
+	public void clear() {
+		divisions.clear(); 
+	}
 }
