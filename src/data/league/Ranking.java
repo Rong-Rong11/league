@@ -4,13 +4,21 @@ import java.util.TreeMap;
 
 import data.team.Team;
 
-
-
 public class Ranking {
 	
-	public TreeMap<Integer, Team> ranking ; 
+	public TreeMap<Integer, Team> ranking = new TreeMap<Integer, Team>(); 
 	
 	public Ranking() {
-		ranking = new TreeMap<Integer, Team>() ; 
+		
 	}
+
+	public TreeMap<Integer, Team> getRanking() {
+		return ranking;
+	}
+
+	public void setRanking(TreeMap<Integer, Team> ranking) {
+		this.ranking = ranking;
+	}
+	
+	
 }

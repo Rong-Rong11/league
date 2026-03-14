@@ -14,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import config.SimulationConfiguration;
-import gui.dashboard.MatchDashboard;
 import gui.panel.calendarPanel.CalendarQuickActionsPanel;
 import gui.panel.calendarPanel.CalendarSimulationPanel;
 import gui.panel.calendarPanel.SeasonProgressBarPanel;
@@ -35,8 +34,8 @@ public class CalendarDashboard extends JPanel {
 	private final SeasonProgressBarPanel seasonProgressBarPanel;
 
 
-	public CalendarDashboard(MatchDashboard matchDashboard, Runnable showMatchDashboardAction) {
-		simulationManager = new SimulationManager();
+	public CalendarDashboard(SimulationManager simulationManager, MatchDashboard matchDashboard, Runnable showMatchDashboardAction) {
+		this.simulationManager = simulationManager;
 		calendarSimulationPanel = new CalendarSimulationPanel(simulationManager);
 		calendarSimulationPanel.setMatchDaySelectionListener(new OpenMatchDayListener(matchDashboard, showMatchDashboardAction));
 		seasonProgressBarPanel = new SeasonProgressBarPanel(
@@ -60,6 +59,10 @@ public class CalendarDashboard extends JPanel {
 	public void startSeason() {
 		simulationManager.randomFinance();
 		simulationManager.startSeason();
+		calendarSimulationPanel.loadSeasonState();
+	}
+
+	public void refreshSeasonState() {
 		calendarSimulationPanel.loadSeasonState();
 	}
 
@@ -155,7 +158,7 @@ public class CalendarDashboard extends JPanel {
 	private class SimulateSeasonAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			simulationManager.simulateCurrentSeason();
+			simulationManager.displayCurrentSeason();
 			calendarSimulationPanel.loadSeasonState();
 		}
 	}

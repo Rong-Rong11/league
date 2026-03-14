@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -15,6 +17,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+
+import gui.layout.strategy.ButtonHighlightStrategy;
+import gui.layout.strategy.SidebarHighlightStrategy;
 
 public class SidebarPanel extends JPanel {
 	private static final Color SIDEBAR_BACKGROUND_COLOR = new Color(255, 255, 255);
@@ -27,15 +32,19 @@ public class SidebarPanel extends JPanel {
 	private JButton financeButton = new JButton("Finance");
 	private JButton mapButton = new JButton("Carte");
 	private JButton exitButton = new JButton("Quitter");
+	private Map<String, SidebarHighlightStrategy> highlightStrategies = new HashMap<String, SidebarHighlightStrategy>();
+	private JButton[] menuButtons;
 
 	public SidebarPanel() {
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(240, 0));
 		setBackground(SIDEBAR_BACKGROUND_COLOR);
+		menuButtons = new JButton[] { matchButton, calendarButton, rankingButton, financeButton, mapButton };
 
 		add(buildTopSection(), BorderLayout.NORTH);
 		add(buildMenuSection(), BorderLayout.CENTER);
 		add(buildBottomSection(), BorderLayout.SOUTH);
+		initializeHighlightStrategies();
 	}
 
 	private JPanel buildTopSection() {
@@ -133,6 +142,19 @@ public class SidebarPanel extends JPanel {
 		}
 	}
 
+	private void initializeHighlightStrategies() {
+		highlightStrategies.put("match", new ButtonHighlightStrategy(
+				matchButton, menuButtons, SIDEBAR_BACKGROUND_COLOR, ACTIVE_BUTTON_BACKGROUND_COLOR));
+		highlightStrategies.put("calendar", new ButtonHighlightStrategy(
+				calendarButton, menuButtons, SIDEBAR_BACKGROUND_COLOR, ACTIVE_BUTTON_BACKGROUND_COLOR));
+		highlightStrategies.put("ranking", new ButtonHighlightStrategy(
+				rankingButton, menuButtons, SIDEBAR_BACKGROUND_COLOR, ACTIVE_BUTTON_BACKGROUND_COLOR));
+		highlightStrategies.put("finance", new ButtonHighlightStrategy(
+				financeButton, menuButtons, SIDEBAR_BACKGROUND_COLOR, ACTIVE_BUTTON_BACKGROUND_COLOR));
+		highlightStrategies.put("map", new ButtonHighlightStrategy(
+				mapButton, menuButtons, SIDEBAR_BACKGROUND_COLOR, ACTIVE_BUTTON_BACKGROUND_COLOR));
+	}
+
 	private void highlightActiveButton(JButton activeButton) {
 		JButton[] buttons = {
 			matchButton,
@@ -147,6 +169,13 @@ public class SidebarPanel extends JPanel {
 		}
 
 		activeButton.setBackground(ACTIVE_BUTTON_BACKGROUND_COLOR);
+	}
+
+	public void setActiveSection(String sectionName) {
+		SidebarHighlightStrategy strategy = highlightStrategies.get(sectionName);
+		if (strategy != null) {
+			strategy.highlight();
+		}
 	}
 
 	public JButton getMatchButton() { 

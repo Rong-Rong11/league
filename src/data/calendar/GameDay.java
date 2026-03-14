@@ -9,11 +9,13 @@ public class GameDay {
 	private ArrayList<Game> games;
 	private LocalDate date;
 	private boolean isSimulated;
+	private boolean isDisplayed;
 
 	public GameDay(LocalDate date) {
 		games = new ArrayList<Game>();
 		this.date = date;
 		isSimulated = false;
+		isDisplayed = false;
 	}
 
 	public LocalDate getDate() {
@@ -38,6 +40,14 @@ public class GameDay {
 
 	public void setSimulated(boolean isSimulated) {
 		this.isSimulated = isSimulated;
+	}
+
+	public boolean isDisplayed() {
+		return isDisplayed;
+	}
+
+	public void setDisplayed(boolean isDisplayed) {
+		this.isDisplayed = isDisplayed;
 	}
 
 }

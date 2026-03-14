@@ -23,18 +23,17 @@ public class PlayerFactory {
 		String[] data = line.split(",", -1);
 		String playerId = data[0];
 		String playerName = data[1];
-		double teamPopularity = Float.valueOf(data[12]);
 		boolean playerIsStar = Boolean.parseBoolean(data[13]);
 		double playerNote = checkPlayerNote(data[14]);
 
 		double minutesPlayedPerMatch = Float.valueOf(data[24]);
-		int pointPerMatch = (int) Math.round(Float.valueOf(data[25]));
-		int reboundPerMatch = (int) Math.round(Float.valueOf(data[26]));
-		int assistPerMatch = (int) Math.round(Float.valueOf(data[27]));
-		int interceptionPerMatch = (int) Math.round(Float.valueOf(data[28]));
-		int blockPerMatch = (int) Math.round(Float.valueOf(data[29]));
-		int lostBallPerMatch = (int) Math.round(Float.valueOf(data[30]));
-		double salary = Float.valueOf(data[31]) / 1_000_000;
+		double pointPerMatch = Double.parseDouble(data[25]);
+		double reboundPerMatch = Double.parseDouble(data[26]);
+		double assistPerMatch = Double.parseDouble(data[27]);
+		double interceptionPerMatch = Double.parseDouble(data[28]);
+		double blockPerMatch = Double.parseDouble(data[29]);
+		double lostBallPerMatch = Double.parseDouble(data[30]);
+		double salary = Double.parseDouble(data[31]) / 1_000_000;
 		String playerPosition = data[32];
 		double trueShooting = checkPlayerTrueShooting(data[23]);
 
