@@ -19,19 +19,27 @@ public class FinanceDashboard extends JPanel {
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
 	public FinanceDashboard() {
+		organize();
+	}
+
+	private void organize() {
 		setLayout(new BorderLayout());
 		setBackground(IDEAL_DASHBOARD_BACKGROUND_COLOR);
 
+		JPanel content = buildContentPanel();
+		content.add(buildHeader(), BorderLayout.NORTH);
+		content.add(buildBody(), BorderLayout.CENTER);
+		add(content, BorderLayout.CENTER);
+	}
+
+	private JPanel buildContentPanel() {
 		JPanel content = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
 		content.setOpaque(false);
 		content.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING, IDEAL_DASHBOARD_SPACING));
-		add(content, BorderLayout.CENTER);
-
-		content.add(buildHeaderRow(), BorderLayout.NORTH);
-		content.add(buildBody(), BorderLayout.CENTER);
+		return content;
 	}
 
-	private JPanel buildHeaderRow() {
+	private JPanel buildHeader() {
 		JPanel header = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, 0));
 		header.setOpaque(false);
 
@@ -53,25 +61,16 @@ public class FinanceDashboard extends JPanel {
 	private JPanel buildBody() {
 		JPanel body = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, 0));
 		body.setOpaque(false);
-
-		JPanel leagueColumn = buildLeagueColumn();
-		leagueColumn.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, 10));
-
-		JPanel teamFinanceCard = new BuildBox("DISTRIBUTION PAR CLUB", "Zone principale", "DISTRIBUTION");//! À changer le string par un jpanel quand on aura la fonctionnalité
-
-		JPanel analysisColumn = buildAnalysisColumn();
-		analysisColumn.setPreferredSize(new Dimension(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, 10));
-
-		body.add(leagueColumn, BorderLayout.WEST);
-		body.add(teamFinanceCard, BorderLayout.CENTER);
-		body.add(analysisColumn, BorderLayout.EAST);
-
+		body.add(buildLeftColumn(), BorderLayout.WEST);
+		body.add(buildCenterColumn(), BorderLayout.CENTER);
+		body.add(buildRightColumn(), BorderLayout.EAST);
 		return body;
 	}
 
-	private JPanel buildLeagueColumn() {
+	private JPanel buildLeftColumn() {
 		JPanel column = new JPanel(new GridLayout(3, 1, 0, 12));
 		column.setOpaque(false);
+		column.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, 10));
 
 		column.add(new BuildBox("REVENUS TOTAUX", "Synthèse ligue", "REVENUS"));//! À changer le string par un jpanel quand on aura la fonctionnalité
 		column.add(new BuildBox("DÉPENSES TOTALES", "Synthèse ligue", "DÉPENSES"));//! À changer le string par un jpanel quand on aura la fonctionnalité
@@ -80,9 +79,14 @@ public class FinanceDashboard extends JPanel {
 		return column;
 	}
 
-	private JPanel buildAnalysisColumn() {
+	private JPanel buildCenterColumn() {
+		return new BuildBox("DISTRIBUTION PAR CLUB", "Zone principale", "DISTRIBUTION");//! À changer le string par un jpanel quand on aura la fonctionnalité
+	}
+
+	private JPanel buildRightColumn() {
 		JPanel column = new JPanel(new GridLayout(2, 1, 0, 12));
 		column.setOpaque(false);
+		column.setPreferredSize(new Dimension(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, 10));
 
 		column.add(new BuildBox("DISTRIBUTION - ÉQUIPE", "Équipe sélectionnée", "DISTRIBUTION"));//! À changer le string par un jpanel quand on aura la fonctionnalité
 		column.add(new BuildBox("DÉPENSES", "Équipe sélectionnée", "DÉPENSES"));//! À changer le string par un jpanel quand on aura la fonctionnalité

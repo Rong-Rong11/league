@@ -21,8 +21,8 @@ public class GameRevenueSimulator {
         double popularityRate = calculatePopularityRate(game, date);
         Stadium stadium = homeTeam.getStadium();
         int capacity = stadium.getCapacity();
-        int attendees = calculateAttendees(capacity, popularityRate);
-        calculateAttendanceRate(attendees, capacity);
+        double attendanceRate = calculateAttendanceRate(homeTeam, popularityRate);
+        int attendees = calculateAttendees(capacity, attendanceRate);
         int ticketPrice = calculateTicketPrice(stadium, popularityRate);
         calculateTicketRevenue(attendees, ticketPrice);
         calculateConcessionsRevenue(attendees);
@@ -34,7 +34,7 @@ public class GameRevenueSimulator {
 
     private double calculatePopularityRate(Game game, LocalDate date) {
         double gamePopularity = CalendarUtilitary.popularityScoreGame(game, date);
-        double gameScore = gamePopularity / 1200;
+        double gameScore = gamePopularity / 800;
         double performatingRate = (game.getGameContext().getHomeTeam().getTeamPerformance().getPerformanceRating() +
                 game.getGameContext().getAwayTeam().getTeamPerformance().getPerformanceRating())
                 / 2;
@@ -51,15 +51,18 @@ public class GameRevenueSimulator {
         return newPrice;
     }
 
-    private int calculateAttendees(int capacity, double popularityRate) {
-        int attendees = (int) (capacity * popularityRate);
+    private int calculateAttendees(int capacity, double attendanceRate) {
+        int attendees = (int) (capacity * attendanceRate);
         gameStat.setAttendees(attendees);
         return attendees;
     }
 
-    private void calculateAttendanceRate(int attendees, int capacity) {
-        double attendanceRate = (double) attendees / capacity;
+    private double calculateAttendanceRate(Team homeTeam, double popularityRate) {
+        double normalizedHomePopularity = Math.max(0, Math.min(1, (homeTeam.getPopularity() - 70.0) / 30.0));
+        double attendanceRate = 0.35 + (popularityRate * 0.50) + (normalizedHomePopularity * 0.15);
+        attendanceRate = Math.max(0.40, Math.min(1.0, attendanceRate));
         gameStat.setAttendanceRate(attendanceRate);
+        return attendanceRate;
     }
 
     private void calculateTicketRevenue(int attendees, double ticketPrice) {

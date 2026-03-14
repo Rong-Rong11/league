@@ -90,6 +90,9 @@ public class SimulationManager {
 		data.calendar.GameDay gameDay = leagueManager.getLeague().getReagularSeason().getCalendar().getCalendar().get(date);
 		if (gameDay != null) {
 			gameDay.setDisplayed(true);
+			for (data.sport.setup.Game game : gameDay.getGames()) {
+				game.setDisplayed(true);
+			}
 		}
 	}
 
@@ -106,6 +109,9 @@ public class SimulationManager {
 		java.util.TreeMap<LocalDate, data.calendar.GameDay> calendar = leagueManager.getLeague().getReagularSeason().getCalendar().getCalendar();
 		for (data.calendar.GameDay gameDay : calendar.values()) {
 			gameDay.setDisplayed(true);
+			for (data.sport.setup.Game game : gameDay.getGames()) {
+				game.setDisplayed(true);
+			}
 		}
 	}
 	

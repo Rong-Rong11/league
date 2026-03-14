@@ -89,7 +89,15 @@ public class CalendarSimulationPanel extends JPanel {
 		if (regularSeason == null || currentDate == null) {
 			return;
 		}
+		displayCurrentWeek();
+		moveToNextWeek();
+	}
+
+	private void displayCurrentWeek() {
 		simulationManager.displayWeek(getWeekStart(currentDate));
+	}
+
+	private void moveToNextWeek() {
 		LocalDate nextWeek = currentDate.plusDays(7);
 		if (!nextWeek.isAfter(regularSeason.getEndDate())) {
 			currentDate = nextWeek;
@@ -290,11 +298,8 @@ public class CalendarSimulationPanel extends JPanel {
 			if (regularSeason == null || currentDate == null) {
 				return;
 			}
-			LocalDate nextWeek = currentDate.plusDays(7);
-			if (!nextWeek.isAfter(regularSeason.getEndDate())) {
-				currentDate = nextWeek;
-				updateDisplay();
-			}
+			displayCurrentWeek();
+			moveToNextWeek();
 		}
 	}
 

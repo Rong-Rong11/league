@@ -13,11 +13,12 @@ public class PlayerUtilitary {
 		double efficiency;
 		double note;
 		Asset assets = getWeightedAssets(player);
-		scoringRatio = assets.getPointPerMatch() / SimulationConfiguration.AVERAGE_POINTS_PER_MATCH;
-		assistRatio = assets.getAssistPerMatch() / SimulationConfiguration.AVERAGE_ASSIST_PER_MATCH;
+		scoringRatio = Math.sqrt(Math.max(0, assets.getPointPerMatch() / SimulationConfiguration.AVERAGE_POINTS_PER_MATCH));
+		assistRatio = Math.sqrt(Math.max(0, assets.getAssistPerMatch() / SimulationConfiguration.AVERAGE_ASSIST_PER_MATCH));
 		efficiency = assets.getTrueShootingPercentage();
 
-		note = (scoringRatio * 0.5) + (assistRatio * 0.3) + (efficiency * 0.2);
+		note = (scoringRatio * 0.45) + (assistRatio * 0.25) + (efficiency * 0.30);
+		note = 0.55 + (note * 0.35);
 		return Math.min(note, 1);
 	}
 
@@ -26,10 +27,12 @@ public class PlayerUtilitary {
 		double blockRatio;
 		double note;
 		Asset asset = getWeightedAssets(player);
-		interceptionRatio = asset.getInterceptionPerMatch() / SimulationConfiguration.AVERAGE_INTERCEPTION_PER_MATCH;
-		blockRatio = asset.getBlockPerMatch() / SimulationConfiguration.AVERAGE_BLOCK_PER_MATCH;
+		interceptionRatio = Math.sqrt(Math.max(0,
+				asset.getInterceptionPerMatch() / SimulationConfiguration.AVERAGE_INTERCEPTION_PER_MATCH));
+		blockRatio = Math.sqrt(Math.max(0, asset.getBlockPerMatch() / SimulationConfiguration.AVERAGE_BLOCK_PER_MATCH));
 
-		note = (interceptionRatio * 0.6) + (blockRatio * 0.4);
+		note = (interceptionRatio * 0.55) + (blockRatio * 0.45);
+		note = 0.50 + (note * 0.30);
 		return Math.min(note, 1);
 	}
 
