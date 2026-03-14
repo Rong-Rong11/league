@@ -9,11 +9,11 @@ import data.sport.play.OffensiveTry;
 import process.utilitary.PlayerUtilitary;
 
 public class ActionSimulator {
-	
+
 	public ActionSimulator() {
-		
+
 	}
-	
+
 	public boolean effectiveTurnover(Player attackingPlayer, Player defendingPlayer) {
 		double playerDefenseNote = Math.min(PlayerUtilitary.getPlayerDefenseNote(defendingPlayer), 2);
 		double playerAttackNote = Math.min(PlayerUtilitary.getPlayerAttackNote(attackingPlayer), 2);
@@ -25,8 +25,8 @@ public class ActionSimulator {
 		}
 		return false;
 	}
-	
-	public boolean simulateShot(Player attackingPlayer, OffensiveTry action,TreeMap<Double, Player> defensivePlayers) {
+
+	public boolean simulateShot(Player attackingPlayer, OffensiveTry action, TreeMap<Double, Player> defensivePlayers) {
 		Asset asset = attackingPlayer.getCurrentSeasonAssets().getMinutesPlayedPerMatch() > 0
 				? attackingPlayer.getCurrentSeasonAssets()
 				: attackingPlayer.getPreSeasonAssets();
@@ -49,7 +49,7 @@ public class ActionSimulator {
 		return Math.random() < shotProbability;
 
 	}
-	
+
 	private double defensingPlayersNote(TreeMap<Double, Player> defensivePlayers) {
 		double sumOfNote = 0;
 		double numberOfPlayer = 0;
@@ -61,6 +61,4 @@ public class ActionSimulator {
 		note = sumOfNote / numberOfPlayer;
 		return note;
 	}
-	
-	
 }

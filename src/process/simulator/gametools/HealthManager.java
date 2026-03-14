@@ -10,16 +10,16 @@ import data.team.Team;
 import process.utilitary.PlayerUtilitary;
 
 public class HealthManager {
-	
+
 	public HealthManager() {
-		
+
 	}
-	
+
 	public void initializeHealth(Team homeTeam, Team awayTeam) {
 		initializeHealthTeam(homeTeam);
 		initializeHealthTeam(awayTeam);
 	}
-	
+
 	private void initializeHealthTeam(Team team) {
 		for (Player player : team.getPlayers().values()) {
 			HealthStatus healthStatus = player.getHealthStatus();
@@ -30,8 +30,8 @@ public class HealthManager {
 			}
 		}
 	}
-	
-	public void updateFatigue(ArrayList<Player> homePlayers, ArrayList<Player> awayPlayers,int minutesPlayed) {
+
+	public void updateFatigue(ArrayList<Player> homePlayers, ArrayList<Player> awayPlayers, int minutesPlayed) {
 		for (Player homePlayer : homePlayers) {
 			PlayerUtilitary.updateFatigue(minutesPlayed, homePlayer);
 		}
@@ -49,7 +49,8 @@ public class HealthManager {
 		}
 	}
 
-	public void addMinutesPlayed(ArrayList<Player> homePlayers, ArrayList<Player> awayPlayers,HashMap<Player, Asset> playersNewAssets,int actionTime) {
+	public void addMinutesPlayed(ArrayList<Player> homePlayers, ArrayList<Player> awayPlayers,
+			HashMap<Player, Asset> playersNewAssets, int actionTime) {
 		for (Player player : homePlayers) {
 			Asset asset = playersNewAssets.get(player);
 			asset.setMinutesPlayedPerMatch(asset.getMinutesPlayedPerMatch() + (actionTime / 60));
@@ -60,7 +61,4 @@ public class HealthManager {
 		}
 
 	}
-	
-	
-	
 }

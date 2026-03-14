@@ -17,7 +17,6 @@ public class LeagueManager {
 
 	private LeagueBuilder leagueBuilder = new LeagueBuilder();
 	private CalendarBuilder calendarBuilder;
-	
 
 	private GameManager gameManager = null;
 	private TradeManager tradeManager;
@@ -27,8 +26,8 @@ public class LeagueManager {
 	public LeagueManager() {
 		league = leagueBuilder.build();
 		FinanceUtilitary.updateLeaguePayroll();
-		
-		calendarBuilder = new CalendarBuilder(league) ; 
+
+		calendarBuilder = new CalendarBuilder(league);
 		financeManager = new FinanceManager(league);
 		gameManager = new GameManager(league, financeManager);
 		tradeManager = new TradeManager(league.getLeagueFinance().getSalaryCap());
@@ -53,7 +52,7 @@ public class LeagueManager {
 	public boolean simulateRegularSeasonDay(LocalDate date, int month) {
 		return gameManager.simulateRegularSeasonDay(date, month);
 	}
-	
+
 	public void newMonth(int month) {
 		financeManager.applyRevenueSharing(month);
 	}

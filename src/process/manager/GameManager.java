@@ -10,14 +10,13 @@ import data.league.Ranking;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
 import process.simulator.GameSimulator;
-import process.utilitary.CalendarUtilitary;
 
 public class GameManager {
 
 	private League league;
 	private GameSimulator gameSimulator = new GameSimulator();
 	private FinanceManager financeManager;
-	private RegularSeasonRankingManager regularSeasonRankingManager = new RegularSeasonRankingManager() ; 
+	private RegularSeasonRankingManager regularSeasonRankingManager = new RegularSeasonRankingManager();
 
 	public GameManager(League league, FinanceManager financeManager) {
 		this.league = league;
@@ -28,12 +27,12 @@ public class GameManager {
 		RegularSeason regularSeason = league.getReagularSeason();
 		Playoff playoff = league.getPlayoff();
 		TreeMap<LocalDate, GameDay> regularSeasonCalendar = regularSeason.getCalendar().getCalendar();
-		Ranking ranking = regularSeason.getRanking() ; 
-		if(simulateGameDay(regularSeasonCalendar, date, month)) {
+		Ranking ranking = regularSeason.getRanking();
+		if (simulateGameDay(regularSeasonCalendar, date, month)) {
 			regularSeasonRankingManager.updateRanking(ranking);
-			return true ; 
+			return true;
 		}
-		return false ; 
+		return false;
 	}
 
 	private boolean simulateGameDay(TreeMap<LocalDate, GameDay> calendar, LocalDate date, int month) {

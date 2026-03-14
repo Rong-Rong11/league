@@ -8,12 +8,11 @@ import data.player.Injury;
 import data.player.Player;
 
 public class InjuryManager {
-	
 	public InjuryManager() {
-		
+
 	}
-	
-	public void simulateInjury(HashMap<Player, Asset> playersNewAssets,Player player, String typeAction) {
+
+	public void simulateInjury(HashMap<Player, Asset> playersNewAssets, Player player, String typeAction) {
 		Asset asset = playersNewAssets.get(player);
 		double fatigueFactor = 1.0 + player.getHealthStatus().getFatigue();
 		double minutesFactor = 1.0 + asset.getMinutesPlayedPerMatch();
@@ -37,7 +36,7 @@ public class InjuryManager {
 			injurePlayer(player);
 		}
 	}
-	
+
 	private static void injurePlayer(Player player) {
 		double random = Math.random();
 		Injury injury;
@@ -51,6 +50,4 @@ public class InjuryManager {
 		player.getHealthStatus().setInjured(true);
 		player.getHealthStatus().setInjury(injury);
 	}
-	
-	
 }
