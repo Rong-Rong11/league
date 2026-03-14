@@ -32,14 +32,14 @@ import process.visitor.actionresult.GameResultVisitor;
 public class GameSimulator {
 
 	private PlayerRepositery playerRepositery = PlayerRepositery.getInstance();
-	private EventSimulator eventSimulator = new EventSimulator() ; 
-	private InjuryManager injuryManager = new InjuryManager() ; 
-	private ActionSimulator actionSimulator = new ActionSimulator() ; 
-	private HealthManager healthManager = new HealthManager() ; 
+	private EventSimulator eventSimulator = new EventSimulator();
+	private InjuryManager injuryManager = new InjuryManager();
+	private ActionSimulator actionSimulator = new ActionSimulator();
+	private HealthManager healthManager = new HealthManager();
 	private LineupSelector lineupSelector = new LineupSelector();
-	
+
 	public GameSimulator() {
-		
+
 	}
 
 	private static boolean isAssist() {
@@ -54,7 +54,7 @@ public class GameSimulator {
 			TreeMap<Double, Player> defensivePlayers, int quarterTimeRemaining,
 			HashMap<Player, Asset> attackPlayersAssetsOfMatch, HashMap<Player, Asset> defensivePlayersAssetsOfMatch,
 			HashMap<Player, Asset> playersNewAssets) {
-		
+
 		int actionTime = 14 + (int) (Math.random() * 10);
 		ActionResult actionResult;
 		if (quarterTimeRemaining <= actionTime) {
@@ -67,10 +67,11 @@ public class GameSimulator {
 			if (actionSimulator.effectiveTurnover(attackingPlayer, defendingPlayer)) {
 				actionResult = new Turnover(SimulationConfiguration.TURNOVER_ACTION, attackingPlayer, defendingPlayer);
 			} else {
-				OffensiveTry offensiveTry = eventSimulator.chooseOffensiveAction(attackingPlayer, attackPlayersAssetsOfMatch);
-				
+				OffensiveTry offensiveTry = eventSimulator.chooseOffensiveAction(attackingPlayer,
+						attackPlayersAssetsOfMatch);
+
 				if (offensiveTry.getName().equals(SimulationConfiguration.FOULDRAW)) {
-					injuryManager.simulateInjury(playersNewAssets,attackingPlayer, SimulationConfiguration.FOULDRAW);
+					injuryManager.simulateInjury(playersNewAssets, attackingPlayer, SimulationConfiguration.FOULDRAW);
 				}
 				if (actionSimulator.simulateShot(attackingPlayer, offensiveTry, defensivePlayers)) {
 					Player assistPlayer = null;
@@ -96,17 +97,20 @@ public class GameSimulator {
 						Player blockingPlayer = eventSimulator.chooseBlockingPlayer(defensivePlayersAssetsOfMatch);
 						actionResult = new Block(SimulationConfiguration.BLOCK_ACTION, blockingPlayer);
 					} else {
-						Player reboundPlayer = eventSimulator.chooseRebounder(attackPlayersAssetsOfMatch, defensivePlayersAssetsOfMatch);
+						Player reboundPlayer = eventSimulator.chooseRebounder(attackPlayersAssetsOfMatch,
+								defensivePlayersAssetsOfMatch);
 						if (attackingPlayers.containsValue(reboundPlayer)) {
 							actionResult = new Rebound(SimulationConfiguration.OFFENSIVE_REBOUND_ACTION, reboundPlayer,
 									attackingPlayer);
-							injuryManager.simulateInjury(playersNewAssets,reboundPlayer, SimulationConfiguration.OFFENSIVE_REBOUND_ACTION);
+							injuryManager.simulateInjury(playersNewAssets, reboundPlayer,
+									SimulationConfiguration.OFFENSIVE_REBOUND_ACTION);
 						}
 
 						else {
 							actionResult = new Rebound(SimulationConfiguration.DEFENSIVE_REBOUND_ACTION, reboundPlayer,
 									attackingPlayer);
-							injuryManager.simulateInjury(playersNewAssets,reboundPlayer, SimulationConfiguration.DEFENSIVE_REBOUND_ACTION);
+							injuryManager.simulateInjury(playersNewAssets, reboundPlayer,
+									SimulationConfiguration.DEFENSIVE_REBOUND_ACTION);
 						}
 					}
 				}
@@ -188,7 +192,7 @@ public class GameSimulator {
 
 			}
 			Player attackingPlayer = eventSimulator.chooseAttackingPlayer(attackingPlayers);
-			
+
 			ActionResult actionResult = simulateAction(attackingPlayer, attackingPlayers, defensivePlayers, quarterTime,
 					attackPlayersAssetsOfMatch, defensivePlayersAssetsOfMatch, playersNewAssets);
 
@@ -201,16 +205,17 @@ public class GameSimulator {
 				}
 			}
 			healthManager.updateFatigue(homeTeamPlayers, awayTeamPlayers, actionResult.getActionTime());
-			healthManager.addMinutesPlayed(homeTeamPlayers, awayTeamPlayers, playersNewAssets, actionResult.getActionTime());
-			
+			healthManager.addMinutesPlayed(homeTeamPlayers, awayTeamPlayers, playersNewAssets,
+					actionResult.getActionTime());
+
 			lineupSelector.updatePlayers(awayTeam, awayTeamPlayers);
-			awayPlayersAssetsOfMatch = createMapOfPlayerAsset(awayTeamPlayers) ; 		
+			awayPlayersAssetsOfMatch = createMapOfPlayerAsset(awayTeamPlayers);
 			lineupSelector.updatePlayers(homeTeam, homeTeamPlayers);
-			homePlayersAssetsOfMatch = createMapOfPlayerAsset(homeTeamPlayers) ; 
-			
+			homePlayersAssetsOfMatch = createMapOfPlayerAsset(homeTeamPlayers);
+
 			updateAssestAfterAction(actionResult, playersNewAssets);
 			updateGameResult(gameResult, actionResult, homeTeamPlayers, awayTeamPlayers);
-			
+
 			gameResult.addActions(actionResult);
 
 			if (actionResult.getName().equals(SimulationConfiguration.END_OF_TIME_ACTION)) {
@@ -230,15 +235,12 @@ public class GameSimulator {
 		}
 	}
 
-	
-
 	public void simulateGame(Game game) {
 		GameResult[] quarterResults = new GameResult[4];
 		Team homeTeam = game.getGameContext().getHomeTeam();
 		Team awayTeam = game.getGameContext().getAwayTeam();
 		HashMap<Player, Asset> playersNewAssets = createMapNewAssets(playerRepositery.getAllPlayers());
-		
-		
+
 		healthManager.initializeHealth(homeTeam, awayTeam);
 
 		for (int index = 0; index < 4; index++) {
@@ -246,7 +248,7 @@ public class GameSimulator {
 			if (index == 1) {
 				healthManager.updateRest(15, homeTeam, awayTeam);
 			} else {
-			healthManager.updateRest(2, homeTeam, awayTeam);
+				healthManager.updateRest(2, homeTeam, awayTeam);
 			}
 		}
 		game.setQuarterResults(quarterResults);

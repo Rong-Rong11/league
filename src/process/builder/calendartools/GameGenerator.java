@@ -11,7 +11,7 @@ import data.sport.setup.GameContext;
 import data.team.Team;
 
 public class GameGenerator {
-	
+
 	public static void generateAllGamesRegularSeason(League league) {
 		Conference westernConference = league.getWesternConference();
 		Conference easternConference = league.getEasternConference();
@@ -25,7 +25,7 @@ public class GameGenerator {
 		generateIntraConference(westernConference);
 		generateInterConference(league);
 	}
-	
+
 	private static void generateIntraDivision(Division division) {
 		ArrayList<Team> teams = new ArrayList<Team>(division.getTeams().values());
 		for (int i = 0; i < teams.size(); i++) {
@@ -49,7 +49,7 @@ public class GameGenerator {
 			}
 		}
 	}
-	
+
 	private static void generateIntraConference(Conference conference) {
 		ArrayList<Division> divisions = new ArrayList<Division>(conference.getDivisions().values());
 		for (int division1 = 0; division1 < divisions.size(); division1++) {

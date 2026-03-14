@@ -33,7 +33,7 @@ public class TeamRepositery {
 		ArrayList<Team> allTeams = new ArrayList<Team>(teams.values());
 		return allTeams;
 	}
-	
+
 	public void clear() {
 		teams.clear();
 	}

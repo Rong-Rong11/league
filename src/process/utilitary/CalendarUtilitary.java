@@ -64,14 +64,17 @@ public class CalendarUtilitary {
 			score += 30;
 		}
 		switch (game.getGameContext().getTypeGame()) {
-			case SimulationConfiguration.GAME_INTRA_DIVISION : 
-				score += 15; break ; 
-			
-			case SimulationConfiguration.GAME_INTRA_CONFERENCE : 
-				score += 10; break ; 
-			case SimulationConfiguration.GAME_INTER_CONFERENCE : 
-				score += 5; break ; 
-			
+			case SimulationConfiguration.GAME_INTRA_DIVISION:
+				score += 15;
+				break;
+
+			case SimulationConfiguration.GAME_INTRA_CONFERENCE:
+				score += 10;
+				break;
+			case SimulationConfiguration.GAME_INTER_CONFERENCE:
+				score += 5;
+				break;
+
 		}
 
 		int restHome = homeTeam.getSchedule().daysSinceLastGame(date);
