@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import config.FinanceConfiguration;
-import config.SimulationConfiguration;
+import config.CalendarConfiguration;
 import data.finance.budget.Budget;
 import data.finance.budget.Income;
 import data.league.Division;
@@ -45,8 +45,8 @@ public class LeagueBuilder {
 
 			while ((line = bufferedReader.readLine()) != null) {
 				if (line.startsWith("player_id")) {
-					continue;
-				}
+			        continue;
+			    }
 				String[] data = line.split(",", -1);
 				String teamName = data[2];
 				String conferenceName = data[4];
@@ -109,7 +109,7 @@ public class LeagueBuilder {
 				new Income(FinanceConfiguration.INCOME_TYPE_NATIONAL_MERCHANDISING, initialBudget * 0.10), 0);
 		FinanceUtilitary.addIncome(budget, new Income(FinanceConfiguration.INCOME_TYPE_OTHER, initialBudget * 0.10), 0);
 
-		double salaryCap = (initialBudget * FinanceConfiguration.PLAYER_SHARE) / SimulationConfiguration.NUMBER_OF_TEAM;
+		double salaryCap = (initialBudget * FinanceConfiguration.PLAYER_SHARE) / CalendarConfiguration.NUMBER_OF_TEAM;
 		double luxuryTaxLine = salaryCap * FinanceConfiguration.LUXURYTAX_THRESHOLD_RATE;
 		double minimumTeamSalary = salaryCap * FinanceConfiguration.MINIMUM_TEAM_SALARY_RATE;
 

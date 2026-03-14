@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.border.EmptyBorder;
 
-import config.SimulationConfiguration;
+import config.CalendarConfiguration;
 import data.league.RegularSeason;
 import gui.components.BuildBox;
 import gui.components.SectionTitle;
@@ -108,8 +108,8 @@ public class CalendarDashboard extends JPanel {
 
 	private JPanel buildSeasonProgressPanel() {
 		RegularSeason regularSeason = new RegularSeason(
-				SimulationConfiguration.REGULAR_SEASON_DEBUT_DATE,
-				SimulationConfiguration.REGULAR_SEASON_END_DATE);
+				CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE,
+				CalendarConfiguration.REGULAR_SEASON_END_DATE);
 		LocalDate currentDate = LocalDate.now();
 
 

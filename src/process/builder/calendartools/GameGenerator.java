@@ -2,7 +2,7 @@ package process.builder.calendartools;
 
 import java.util.ArrayList;
 
-import config.SimulationConfiguration;
+import config.GameConfiguration;
 import data.league.Conference;
 import data.league.Division;
 import data.league.League;
@@ -11,7 +11,7 @@ import data.sport.setup.GameContext;
 import data.team.Team;
 
 public class GameGenerator {
-
+	
 	public static void generateAllGamesRegularSeason(League league) {
 		Conference westernConference = league.getWesternConference();
 		Conference easternConference = league.getEasternConference();
@@ -25,7 +25,7 @@ public class GameGenerator {
 		generateIntraConference(westernConference);
 		generateInterConference(league);
 	}
-
+	
 	private static void generateIntraDivision(Division division) {
 		ArrayList<Team> teams = new ArrayList<Team>(division.getTeams().values());
 		for (int i = 0; i < teams.size(); i++) {
@@ -37,10 +37,10 @@ public class GameGenerator {
 					Game game;
 					GameContext gameContext;
 					if (home) {
-						gameContext = new GameContext(team, other, SimulationConfiguration.GAME_INTRA_DIVISION);
+						gameContext = new GameContext(team, other, GameConfiguration.GAME_INTRA_DIVISION);
 						game = new Game(gameContext);
 					} else {
-						gameContext = new GameContext(other, team, SimulationConfiguration.GAME_INTRA_DIVISION);
+						gameContext = new GameContext(other, team, GameConfiguration.GAME_INTRA_DIVISION);
 						game = new Game(gameContext);
 					}
 					addGameToTeam(game, team);
@@ -49,7 +49,7 @@ public class GameGenerator {
 			}
 		}
 	}
-
+	
 	private static void generateIntraConference(Conference conference) {
 		ArrayList<Division> divisions = new ArrayList<Division>(conference.getDivisions().values());
 		for (int division1 = 0; division1 < divisions.size(); division1++) {
@@ -65,10 +65,10 @@ public class GameGenerator {
 							Game game;
 							GameContext gameContext;
 							if (home) {
-								gameContext = new GameContext(team, other, SimulationConfiguration.GAME_INTRA_CONFERENCE);
+									gameContext = new GameContext(team, other, GameConfiguration.GAME_INTRA_CONFERENCE);
 								game = new Game(gameContext);
 							} else {
-								gameContext = new GameContext(other, team, SimulationConfiguration.GAME_INTRA_CONFERENCE);
+									gameContext = new GameContext(other, team, GameConfiguration.GAME_INTRA_CONFERENCE);
 								game = new Game(gameContext);
 							}
 							addGameToTeam(game, team);
@@ -91,10 +91,10 @@ public class GameGenerator {
 					Game game;
 					GameContext gameContext;
 					if (home) {
-						gameContext = new GameContext(team, other, SimulationConfiguration.GAME_INTER_CONFERENCE);
+							gameContext = new GameContext(team, other, GameConfiguration.GAME_INTER_CONFERENCE);
 						game = new Game(gameContext);
 					} else {
-						gameContext = new GameContext(other, team, SimulationConfiguration.GAME_INTER_CONFERENCE);
+							gameContext = new GameContext(other, team, GameConfiguration.GAME_INTER_CONFERENCE);
 						game = new Game(gameContext);
 					}
 					addGameToTeam(game, team);

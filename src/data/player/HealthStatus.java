@@ -1,6 +1,6 @@
 package data.player;
 
-import config.SimulationConfiguration;
+import config.HealthConfiguration;
 
 public class HealthStatus {
 	private double fatigue ; 
@@ -9,7 +9,7 @@ public class HealthStatus {
 	
 	public HealthStatus() {
 		fatigue = 0 ; 
-		injury = new Injury(SimulationConfiguration.NO_INJURY, 0) ; 
+		injury = new Injury(HealthConfiguration.NO_INJURY, 0) ; 
 		isInjured = false ; 
 	}
 	public double getFatigue() {

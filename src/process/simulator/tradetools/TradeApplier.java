@@ -7,10 +7,10 @@ import data.player.Player;
 import data.team.Team;
 
 public class TradeApplier {
+	
 	public TradeApplier() {
-
+		
 	}
-
 	public void applyTrade(Team team, ArrayList<Player> teamIncoming) {
 		HashMap<String, Player> oldTeam = team.getPlayers();
 		HashMap<String, Player> updatedTeam = new HashMap<String, Player>();

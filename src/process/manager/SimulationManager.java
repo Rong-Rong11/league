@@ -3,7 +3,7 @@ package process.manager;
 import java.time.LocalDate;
 import java.time.Month;
 
-import config.SimulationConfiguration;
+import config.CalendarConfiguration;
 import data.league.League;
 import process.utilitary.CalendarUtilitary;
 
@@ -11,9 +11,9 @@ import process.utilitary.CalendarUtilitary;
 public class SimulationManager {
 	private LeagueManager leagueManager = new LeagueManager();
 	private int month = 1;
-	private Month debutMonthDate = SimulationConfiguration.REGULAR_SEASON_DEBUT_DATE.getMonth();
-	private Month currentMonthDate = SimulationConfiguration.REGULAR_SEASON_DEBUT_DATE.getMonth();
-	private LocalDate date = SimulationConfiguration.REGULAR_SEASON_DEBUT_DATE;
+	private Month debutMonthDate = CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE.getMonth();
+	private Month currentMonthDate = CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE.getMonth();
+	private LocalDate date = CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE;
 
 	public SimulationManager() {
 
@@ -54,12 +54,12 @@ public class SimulationManager {
 
 	// simuler jour par jour
 	private void simulateDay() {
-		if (CalendarUtilitary.checkDate(date, SimulationConfiguration.REGULAR_SEASON_DEBUT_DATE,
-				SimulationConfiguration.REGULAR_SEASON_END_DATE)) {
+		if (CalendarUtilitary.checkDate(date, CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE,
+				CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
 			leagueManager.simulateRegularSeasonDay(date, month);
 		}
-		if (CalendarUtilitary.checkDate(date, SimulationConfiguration.PLAYOFF_DEBUT_DATE,
-				SimulationConfiguration.PLAYOFF_END_DATE)) {
+		if (CalendarUtilitary.checkDate(date, CalendarConfiguration.PLAYOFF_DEBUT_DATE,
+				CalendarConfiguration.PLAYOFF_END_DATE)) {
 
 		}
 
@@ -67,15 +67,15 @@ public class SimulationManager {
 
 	// simuler la fin de saison régulière ou fin playoff
 	public void simulateCurrentSeason() {
-		if (CalendarUtilitary.checkDate(date, SimulationConfiguration.REGULAR_SEASON_DEBUT_DATE,
-				SimulationConfiguration.REGULAR_SEASON_END_DATE)) {
-			while (!date.equals(SimulationConfiguration.REGULAR_SEASON_END_DATE)) {
+		if (CalendarUtilitary.checkDate(date, CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE,
+				CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
+			while (!date.equals(CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
 				simulateDay();
 				nextDay();
 			}
-		} else if (CalendarUtilitary.checkDate(date, SimulationConfiguration.PLAYOFF_DEBUT_DATE,
-				SimulationConfiguration.PLAYOFF_END_DATE)) {
-			while (!date.equals(SimulationConfiguration.PLAYOFF_END_DATE)) {
+		} else if (CalendarUtilitary.checkDate(date, CalendarConfiguration.PLAYOFF_DEBUT_DATE,
+				CalendarConfiguration.PLAYOFF_END_DATE)) {
+			while (!date.equals(CalendarConfiguration.PLAYOFF_END_DATE)) {
 				simulateDay();
 				nextDay();
 			}

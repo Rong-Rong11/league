@@ -4,7 +4,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 
-import config.SimulationConfiguration;
+import config.CalendarConfiguration;
+import config.GameConfiguration;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
 import data.sport.setup.GameContext;
@@ -21,7 +22,7 @@ public class CalendarUtilitary {
 	}
 
 	public static boolean isSpecialEvent(RegularSeason regularSeason, LocalDate date) {
-		return date.isEqual(SimulationConfiguration.CHRISTMAS_DAY) ||
+		return date.isEqual(CalendarConfiguration.CHRISTMAS_DAY) ||
 				date.isEqual(regularSeason.getDebutDate()) ||
 				date.isEqual(regularSeason.getEndDate()) ||
 				date.isEqual(getMLKDay());
@@ -32,7 +33,7 @@ public class CalendarUtilitary {
 	}
 
 	public static LocalDate getMLKDay() {
-		LocalDate date = LocalDate.of(SimulationConfiguration.SEASON_YEAR, Month.JANUARY, 1);
+		LocalDate date = LocalDate.of(CalendarConfiguration.SEASON_YEAR, Month.JANUARY, 1);
 
 		int mondays = 0;
 		while (date.getMonth() == Month.JANUARY) {
@@ -64,16 +65,14 @@ public class CalendarUtilitary {
 			score += 30;
 		}
 		switch (game.getGameContext().getTypeGame()) {
-			case SimulationConfiguration.GAME_INTRA_DIVISION:
-				score += 15;
-				break;
-
-			case SimulationConfiguration.GAME_INTRA_CONFERENCE:
-				score += 10;
-				break;
-			case SimulationConfiguration.GAME_INTER_CONFERENCE:
-				score += 5;
-				break;
+				case GameConfiguration.GAME_INTRA_DIVISION : 
+				score += 15; break ; 
+			
+				case GameConfiguration.GAME_INTRA_CONFERENCE : 
+				score += 10; break ; 
+				case GameConfiguration.GAME_INTER_CONFERENCE : 
+				score += 5; break ; 
+			
 		}
 
 		int restHome = homeTeam.getSchedule().daysSinceLastGame(date);

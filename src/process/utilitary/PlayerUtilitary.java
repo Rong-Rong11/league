@@ -1,6 +1,6 @@
 package process.utilitary;
 
-import config.SimulationConfiguration;
+import config.GameConfiguration;
 import data.player.Asset;
 import data.player.HealthStatus;
 import data.player.Player;
@@ -13,8 +13,8 @@ public class PlayerUtilitary {
 		double efficiency;
 		double note;
 		Asset assets = getWeightedAssets(player);
-		scoringRatio = assets.getPointPerMatch() / SimulationConfiguration.AVERAGE_POINTS_PER_MATCH;
-		assistRatio = assets.getAssistPerMatch() / SimulationConfiguration.AVERAGE_ASSIST_PER_MATCH;
+		scoringRatio = assets.getPointPerMatch() / GameConfiguration.AVERAGE_POINTS_PER_MATCH;
+		assistRatio = assets.getAssistPerMatch() / GameConfiguration.AVERAGE_ASSIST_PER_MATCH;
 		efficiency = assets.getTrueShootingPercentage();
 
 		note = (scoringRatio * 0.5) + (assistRatio * 0.3) + (efficiency * 0.2);
@@ -26,8 +26,8 @@ public class PlayerUtilitary {
 		double blockRatio;
 		double note;
 		Asset asset = getWeightedAssets(player);
-		interceptionRatio = asset.getInterceptionPerMatch() / SimulationConfiguration.AVERAGE_INTERCEPTION_PER_MATCH;
-		blockRatio = asset.getBlockPerMatch() / SimulationConfiguration.AVERAGE_BLOCK_PER_MATCH;
+		interceptionRatio = asset.getInterceptionPerMatch() / GameConfiguration.AVERAGE_INTERCEPTION_PER_MATCH;
+		blockRatio = asset.getBlockPerMatch() / GameConfiguration.AVERAGE_BLOCK_PER_MATCH;
 
 		note = (interceptionRatio * 0.6) + (blockRatio * 0.4);
 		return Math.min(note, 1);

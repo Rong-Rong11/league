@@ -2,7 +2,7 @@ package data.league;
 
 import java.util.ArrayList;
 
-import config.SimulationConfiguration;
+import config.CalendarConfiguration;
 import data.player.Player;
 import data.team.Team;
 
@@ -16,9 +16,9 @@ public class League {
 	public League() {
 		westernConference = new Conference("West");
 		easternConference = new Conference("East") ; 
-		regularSeason = new RegularSeason(SimulationConfiguration.REGULAR_SEASON_DEBUT_DATE,
-				SimulationConfiguration.REGULAR_SEASON_END_DATE);
-		playoff = new Playoff(SimulationConfiguration.PLAYOFF_DEBUT_DATE, SimulationConfiguration.PLAYOFF_END_DATE);
+		regularSeason = new RegularSeason(CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE,
+				CalendarConfiguration.REGULAR_SEASON_END_DATE);
+		playoff = new Playoff(CalendarConfiguration.PLAYOFF_DEBUT_DATE, CalendarConfiguration.PLAYOFF_END_DATE);
 	}
 
 	public Conference getWesternConference() {
