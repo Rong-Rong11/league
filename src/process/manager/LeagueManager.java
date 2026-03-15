@@ -1,8 +1,11 @@
 package process.manager;
+import config.CalendarConfiguration;
 
 import java.time.LocalDate;
+import java.time.Month;
 
 import data.league.League;
+import data.sport.setup.Game;
 import data.team.Team;
 import data.team.finance.financialprofil.FinancialProfil;
 import process.builder.CalendarBuilder;
@@ -39,7 +42,6 @@ public class LeagueManager {
 		simulatePreSeasonTrade();
 		buildRegularSeasonCalendar();
 		league.getLeagueFinance().getBudget().getInitialAmount();
-		financeManager.applyMonthlyFinance(0);
 	}
 
 	private void simulatePreSeasonTrade() {
@@ -69,5 +71,27 @@ public class LeagueManager {
 
 	public League getLeague() {
 		return league;
+	}
+
+	public FinanceManager getFinanceManager() {
+		return financeManager;
+	}
+
+	public boolean simulateGameDay(LocalDate date, int month) {
+		return gameManager.simulateGameDay(date, month);
+	}
+
+	public boolean simulateGame(Game game, LocalDate date) {
+		return gameManager.simulateGame(game, date, computeMonth(date));
+	}
+
+	private int computeMonth(LocalDate date) {
+		Month debutMonth = CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE.getMonth();
+		Month currentMonth = date.getMonth();
+		int monthsBetween = currentMonth.getValue() - debutMonth.getValue();
+		if (monthsBetween < 0) {
+			monthsBetween += 12;
+		}
+		return monthsBetween + 1;
 	}
 }

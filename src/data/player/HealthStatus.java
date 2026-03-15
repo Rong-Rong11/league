@@ -1,6 +1,6 @@
 package data.player;
-
 import config.HealthConfiguration;
+
 
 public class HealthStatus {
 	private double fatigue ; 

@@ -1,6 +1,6 @@
 package process.utilitary;
-
 import config.GameConfiguration;
+
 import data.player.Asset;
 import data.player.HealthStatus;
 import data.player.Player;
@@ -13,11 +13,12 @@ public class PlayerUtilitary {
 		double efficiency;
 		double note;
 		Asset assets = getWeightedAssets(player);
-		scoringRatio = assets.getPointPerMatch() / GameConfiguration.AVERAGE_POINTS_PER_MATCH;
-		assistRatio = assets.getAssistPerMatch() / GameConfiguration.AVERAGE_ASSIST_PER_MATCH;
+		scoringRatio = Math.sqrt(Math.max(0, assets.getPointPerMatch() / GameConfiguration.AVERAGE_POINTS_PER_MATCH));
+		assistRatio = Math.sqrt(Math.max(0, assets.getAssistPerMatch() / GameConfiguration.AVERAGE_ASSIST_PER_MATCH));
 		efficiency = assets.getTrueShootingPercentage();
 
-		note = (scoringRatio * 0.5) + (assistRatio * 0.3) + (efficiency * 0.2);
+		note = (scoringRatio * 0.45) + (assistRatio * 0.25) + (efficiency * 0.30);
+		note = 0.55 + (note * 0.35);
 		return Math.min(note, 1);
 	}
 
@@ -26,10 +27,12 @@ public class PlayerUtilitary {
 		double blockRatio;
 		double note;
 		Asset asset = getWeightedAssets(player);
-		interceptionRatio = asset.getInterceptionPerMatch() / GameConfiguration.AVERAGE_INTERCEPTION_PER_MATCH;
-		blockRatio = asset.getBlockPerMatch() / GameConfiguration.AVERAGE_BLOCK_PER_MATCH;
+		interceptionRatio = Math.sqrt(Math.max(0,
+				asset.getInterceptionPerMatch() / GameConfiguration.AVERAGE_INTERCEPTION_PER_MATCH));
+		blockRatio = Math.sqrt(Math.max(0, asset.getBlockPerMatch() / GameConfiguration.AVERAGE_BLOCK_PER_MATCH));
 
-		note = (interceptionRatio * 0.6) + (blockRatio * 0.4);
+		note = (interceptionRatio * 0.55) + (blockRatio * 0.45);
+		note = 0.50 + (note * 0.30);
 		return Math.min(note, 1);
 	}
 
@@ -89,7 +92,7 @@ public class PlayerUtilitary {
 		return (performanceNote * 0.7) + (lastSeasonNote * 0.3);
 	}
 
-	public static void updateFatigue(int minutesPlayed, Player player) {
+	public static void updateFatigue(double minutesPlayed, Player player) {
 		HealthStatus healthStatus = player.getHealthStatus();
 		double fatigue = healthStatus.getFatigue();
 		fatigue += (0.02 * minutesPlayed);
@@ -100,7 +103,7 @@ public class PlayerUtilitary {
 		player.setHealthStatus(healthStatus);
 	}
 
-	public static void updateRest(int restMinutes, Player player) {
+	public static void updateRest(double restMinutes, Player player) {
 		HealthStatus healthStatus = player.getHealthStatus();
 		double fatigue = healthStatus.getFatigue();
 		fatigue -= 0.02 * restMinutes;

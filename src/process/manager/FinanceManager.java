@@ -2,6 +2,7 @@ package process.manager;
 
 import java.time.LocalDate;
 
+import data.finance.GameStat;
 import data.league.League;
 import data.sport.setup.Game;
 import data.team.Team;
@@ -51,6 +52,9 @@ public class FinanceManager {
 		for (Team team : teamRepositery.getAllTeams()) {
 			applyMonthlyFinanceForTeam(team, month);
 		}
+	}
+	public GameStat getGameStat(Game game) {
+		return gameFinanceProcessor.getGameStat(game) ; 
 	}
 
 }

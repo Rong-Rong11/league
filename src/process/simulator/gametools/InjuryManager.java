@@ -1,9 +1,9 @@
 package process.simulator.gametools;
+import config.GameConfiguration;
+import config.HealthConfiguration;
 
 import java.util.HashMap;
 
-import config.GameConfiguration;
-import config.HealthConfiguration;
 import data.player.Asset;
 import data.player.Injury;
 import data.player.Player;

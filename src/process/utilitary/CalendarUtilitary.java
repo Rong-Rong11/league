@@ -1,11 +1,11 @@
 package process.utilitary;
+import config.CalendarConfiguration;
+import config.GameConfiguration;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 
-import config.CalendarConfiguration;
-import config.GameConfiguration;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
 import data.sport.setup.GameContext;
@@ -65,12 +65,12 @@ public class CalendarUtilitary {
 			score += 30;
 		}
 		switch (game.getGameContext().getTypeGame()) {
-				case GameConfiguration.GAME_INTRA_DIVISION : 
+			case GameConfiguration.GAME_INTRA_DIVISION : 
 				score += 15; break ; 
 			
-				case GameConfiguration.GAME_INTRA_CONFERENCE : 
+			case GameConfiguration.GAME_INTRA_CONFERENCE : 
 				score += 10; break ; 
-				case GameConfiguration.GAME_INTER_CONFERENCE : 
+			case GameConfiguration.GAME_INTER_CONFERENCE : 
 				score += 5; break ; 
 			
 		}

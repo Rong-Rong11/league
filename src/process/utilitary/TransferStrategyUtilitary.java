@@ -1,7 +1,7 @@
 package process.utilitary;
+import config.TeamConfiguration;
 
 import config.FinancialPolicy;
-import config.TeamConfiguration;
 import data.team.finance.financialprofil.FinancialProfil;
 import data.team.finance.transfer.AllIn;
 import data.team.finance.transfer.Balanced;

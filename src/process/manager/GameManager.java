@@ -49,6 +49,21 @@ public class GameManager {
 		return false;
 	}
 
+	public boolean simulateGameDay(LocalDate date, int month) {
+		RegularSeason regularSeason = league.getReagularSeason();
+		TreeMap<LocalDate, GameDay> regularSeasonCalendar = regularSeason.getCalendar().getCalendar();
+		return simulateGameDay(regularSeasonCalendar, date, month);
+	}
+
+	public boolean simulateGame(Game game, LocalDate date, int month) {
+		if (game == null) {
+			return false;
+		}
+		gameSimulator.simulateGame(game);
+		financeManager.calculateGame(game, date, month);
+		return true;
+	}
+
 	public void setLeague(League league) {
 		this.league = league;
 	}

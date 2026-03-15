@@ -1,8 +1,8 @@
 package data.league;
+import config.CalendarConfiguration;
 
 import java.util.ArrayList;
 
-import config.CalendarConfiguration;
 import data.player.Player;
 import data.team.Team;
 

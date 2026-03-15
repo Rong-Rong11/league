@@ -1,6 +1,6 @@
 package process.builder.calendartools;
-
 import config.CalendarConfiguration;
+
 import data.calendar.SpecialEvent;
 import data.league.RegularSeason;
 import process.utilitary.CalendarUtilitary;

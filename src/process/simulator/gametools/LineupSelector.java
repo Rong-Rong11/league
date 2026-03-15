@@ -1,11 +1,11 @@
 package process.simulator.gametools;
+import config.GameConfiguration;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import config.GameConfiguration;
 import data.player.Asset;
 import data.player.Player;
 import data.team.Team;

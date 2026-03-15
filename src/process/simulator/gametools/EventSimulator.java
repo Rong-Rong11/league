@@ -1,20 +1,21 @@
 package process.simulator.gametools;
+import config.GameConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import config.GameConfiguration;
 import data.player.Asset;
 import data.player.Player;
 import data.sport.play.OffensiveTry;
+import process.utilitary.PlayerUtilitary;
 
-public class EventSimulator {
-
-	public EventSimulator() {
-
+public class EventSimulator { 
+	
+	public EventSimulator () {
+		
 	}
-
+	
 	public Player chooseAttackingPlayer(TreeMap<Double, Player> attackingPlayers) {
 		double random = Math.random();
 		for (Double key : attackingPlayers.keySet()) {
@@ -24,14 +25,14 @@ public class EventSimulator {
 		}
 		return attackingPlayers.lastEntry().getValue();
 	}
-
+	
 	public Player chooseDefendingPlayer(TreeMap<Double, Player> defensivePlayers) {
 		ArrayList<Player> players = new ArrayList<Player>(defensivePlayers.values());
 		int randomIndex = (int) (Math.random() * players.size());
 		return players.get(randomIndex);
 	}
-
-	public OffensiveTry chooseOffensiveAction(Player attackingPlayer, HashMap<Player, Asset> attackPlayersAssetsOfMatch) {
+	
+	public OffensiveTry chooseOffensiveAction(Player attackingPlayer,HashMap<Player, Asset> attackPlayersAssetsOfMatch) {
 		Asset asset = attackPlayersAssetsOfMatch.get(attackingPlayer);
 		double pointsPerMinute = asset.getMinutesPlayedPerMatch() > 0
 				? asset.getPointPerMatch() / asset.getMinutesPlayedPerMatch()
@@ -86,7 +87,7 @@ public class EventSimulator {
 		return new OffensiveTry(GameConfiguration.TWOPOINT);
 
 	}
-
+	
 	public Player chooseAssistPlayer(Player scorerPlayer, HashMap<Player, Asset> attackPlayersAssetsOfMatch) {
 		HashMap<Player, Double> assistPlayers = new HashMap<Player, Double>();
 		double totalWeight = 0;
@@ -134,7 +135,7 @@ public class EventSimulator {
 		}
 		return lastPlayer;
 	}
-
+	
 	public Player chooseBlockingPlayer(HashMap<Player, Asset> defensivePlayersAssetsOfMatch) {
 		HashMap<Player, Double> blockingPlayers = new HashMap<Player, Double>();
 		double total = 0;
@@ -179,16 +180,15 @@ public class EventSimulator {
 
 		return lastPlayer;
 	}
-
-	public Player chooseRebounder(HashMap<Player, Asset> attackPlayersAssetsOfMatch,
-			HashMap<Player, Asset> defensivePlayersAssetsOfMatch) {
+	
+	public Player chooseRebounder(HashMap<Player, Asset> attackPlayersAssetsOfMatch,HashMap<Player, Asset> defensivePlayersAssetsOfMatch) {
 		boolean offensiveRebound = Math.random() < GameConfiguration.OFFENSIVE_REBOUND_PROBABILITY;
 		if (offensiveRebound) {
 			return chooseOffensiveRebounder(attackPlayersAssetsOfMatch);
 		}
 		return chooseDefensiveRebounder(defensivePlayersAssetsOfMatch);
 	}
-
+	
 	private Player chooseOffensiveRebounder(HashMap<Player, Asset> attackPlayersAssetsOfMatch) {
 		HashMap<Player, Double> offensiveRebounderPLayers = new HashMap<Player, Double>();
 		double total = 0;
@@ -280,5 +280,6 @@ public class EventSimulator {
 		}
 		return lastPlayer;
 	}
-
+	
+	
 }

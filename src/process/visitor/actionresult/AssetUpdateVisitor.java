@@ -6,6 +6,7 @@ import data.player.Asset;
 import data.player.Player;
 import data.sport.play.action.Block;
 import data.sport.play.action.EndOfTime;
+import data.sport.play.action.MissedShot;
 import data.sport.play.action.PointScored;
 import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
@@ -29,6 +30,11 @@ public class AssetUpdateVisitor implements ActionResultVisitor<Void> {
             playersNewAssets.get(assist)
                     .setAssistPerMatch(playersNewAssets.get(assist).getAssistPerMatch() + 1);
         }
+        return null;
+    }
+
+    @Override
+    public Void visit(MissedShot missedShot) {
         return null;
     }
 

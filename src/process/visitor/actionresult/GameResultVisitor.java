@@ -1,11 +1,12 @@
 package process.visitor.actionresult;
+import config.GameConfiguration;
 
 import java.util.ArrayList;
 
-import config.GameConfiguration;
 import data.player.Player;
 import data.sport.play.action.Block;
 import data.sport.play.action.EndOfTime;
+import data.sport.play.action.MissedShot;
 import data.sport.play.action.PointScored;
 import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
@@ -23,6 +24,7 @@ public class GameResultVisitor implements ActionResultVisitor<Void> {
         this.awayTeamPlayers = awayTeamPlayers;
     }
 
+    @Override
     public Void visit(PointScored pointScored) {
         Player scorer = pointScored.getScorerPlayer();
         boolean home = homeTeamPlayers.contains(scorer);
@@ -55,6 +57,11 @@ public class GameResultVisitor implements ActionResultVisitor<Void> {
         return null;
     }
 
+    public Void visit(MissedShot missedShot) {
+        return null;
+    }
+
+    @Override
     public Void visit(Turnover turnover) {
         Player defensePlayer = turnover.getDefensePlayer();
         if (homeTeamPlayers.contains(defensePlayer)) {
@@ -65,6 +72,7 @@ public class GameResultVisitor implements ActionResultVisitor<Void> {
         return null;
     }
 
+    @Override
     public Void visit(Block block) {
         Player blockerPlayer = block.getBlockingPlayer();
         if (homeTeamPlayers.contains(blockerPlayer)) {
@@ -75,6 +83,7 @@ public class GameResultVisitor implements ActionResultVisitor<Void> {
         return null;
     }
 
+    @Override
     public Void visit(Rebound rebound) {
         Player reboundPlayer = rebound.getReboundPlayer();
         if (homeTeamPlayers.contains(reboundPlayer)) {
@@ -85,6 +94,7 @@ public class GameResultVisitor implements ActionResultVisitor<Void> {
         return null;
     }
 
+    @Override
     public Void visit(EndOfTime end) {
         return null;
     }

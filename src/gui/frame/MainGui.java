@@ -12,11 +12,13 @@ import javax.swing.JPanel;
 
 import gui.dashboard.CalendarDashboard;
 import gui.dashboard.FinanceDashboard;
+import gui.dashboard.LiveMatchDashboard;
 import gui.dashboard.MapDashboard;
 import gui.dashboard.MatchDashboard;
 import gui.dashboard.OpeningDashboard;
 import gui.dashboard.RankingDashboard;
 import gui.layout.SidebarPanel;
+import process.manager.SimulationManager;
 
 public class MainGui extends JFrame {
 
@@ -24,8 +26,21 @@ public class MainGui extends JFrame {
 	private JPanel rootPanel;
 	private CardLayout dashboardLayout;
 	private JPanel dashboardPanel;
+	private OpeningDashboard openingPanel;
+	private JPanel mainPanel;
+	private CalendarDashboard calendarDashboard;
+	private MatchDashboard matchDashboard;
+	private LiveMatchDashboard liveMatchDashboard;
+	private SimulationManager simulationManager;
+	private SidebarPanel sidebar;
 
 	public MainGui() {
+		create();
+		organize();
+		actions();
+	}
+
+	private void create() {
 		setTitle("NBA League");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -35,13 +50,13 @@ public class MainGui extends JFrame {
 		dashboardLayout = new CardLayout();
 		dashboardPanel = new JPanel(dashboardLayout);
 
-		OpeningDashboard openingPanel = new OpeningDashboard();
-		JPanel mainPanel = buildApplicationPanel();
+		openingPanel = new OpeningDashboard();
+		mainPanel = buildApplicationPanel();
+	}
 
+	private void organize() {
 		rootPanel.add(openingPanel, "opening");
 		rootPanel.add(mainPanel, "main");
-
-		openingPanel.getContinueButton().addActionListener(new OpenApplicationAction(openingPanel));
 
 		setLayout(new BorderLayout());
 		add(rootPanel, BorderLayout.CENTER);
@@ -55,15 +70,27 @@ public class MainGui extends JFrame {
 		setVisible(true);
 	}
 
+	private void actions() {
+		openingPanel.getContinueButton().addActionListener(new OpenApplicationAction(openingPanel));
+	}
+
 	private JPanel buildApplicationPanel() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
-		SidebarPanel sidebar = new SidebarPanel();
+		sidebar = new SidebarPanel();
+		simulationManager = new SimulationManager();
 
-		dashboardPanel.add(new MatchDashboard(), "match");
-		dashboardPanel.add(new CalendarDashboard(), "calendar");
+		matchDashboard = new MatchDashboard(simulationManager.getLeagueManager());
+		liveMatchDashboard = new LiveMatchDashboard();
+		dashboardPanel.add(matchDashboard, "match");
+		dashboardPanel.add(liveMatchDashboard, "liveMatch");
+		calendarDashboard = new CalendarDashboard(simulationManager, matchDashboard, new ShowMatchDashboardAction());
+		dashboardPanel.add(calendarDashboard, "calendar");
 		dashboardPanel.add(new RankingDashboard(), "ranking");
 		dashboardPanel.add(new FinanceDashboard(), "finance");
 		dashboardPanel.add(new MapDashboard(), "map");
+
+		matchDashboard.setOpenLiveMatchAction(new ShowLiveMatchDashboardAction());
+		liveMatchDashboard.setBackToMatchAction(new ShowMatchDashboardAction());
 
 		sidebar.getMatchButton().addActionListener(new SwitchDashboardAction("match"));
 		sidebar.getCalendarButton().addActionListener(new SwitchDashboardAction("calendar"));
@@ -87,6 +114,13 @@ public class MainGui extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if ("calendar".equals(cardName)) {
+				calendarDashboard.refreshSeasonState();
+			}
+			if ("match".equals(cardName)) {
+				matchDashboard.refreshSelectedGame();
+			}
+			sidebar.setActiveSection(cardName);
 			dashboardLayout.show(dashboardPanel, cardName);
 		}
 	}
@@ -105,6 +139,9 @@ public class MainGui extends JFrame {
 				return;
 			}
 
+			calendarDashboard.startSeason();
+			matchDashboard.loadGamesOfDay(simulationManager.getCurrentDate());
+			sidebar.setActiveSection("match");
 			dashboardLayout.show(dashboardPanel, "match");
 			rootLayout.show(rootPanel, "main");
 		}
@@ -116,4 +153,24 @@ public class MainGui extends JFrame {
 			System.exit(0);
 		}
 	}
+
+	private class ShowMatchDashboardAction implements Runnable {
+		@Override
+		public void run() {
+			calendarDashboard.refreshSeasonState();
+			matchDashboard.refreshSelectedGame();
+			sidebar.setActiveSection("match");
+			dashboardLayout.show(dashboardPanel, "match");
+		}
+	}
+
+	private class ShowLiveMatchDashboardAction implements Runnable {
+		@Override
+		public void run() {
+			liveMatchDashboard.setSimulationContext(matchDashboard.getLeagueManager(), matchDashboard.getSelectedDate());
+			liveMatchDashboard.setGame(matchDashboard.getSelectedGame());
+			dashboardLayout.show(dashboardPanel, "liveMatch");
+		}
+	}
+
 }

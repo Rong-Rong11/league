@@ -1,8 +1,8 @@
 package process.utilitary;
+import config.GameConfiguration;
 
 import config.FinanceConfiguration;
 import config.FinancialPolicy;
-import config.GameConfiguration;
 import data.player.Player;
 import data.team.Team;
 import data.team.finance.financialprofil.AmbitiousProfil;
@@ -47,11 +47,11 @@ public class TeamUtilitary {
 		if (defenseNote <= 0)
 			defenseNote = 1;
 		if ((attackNote / defenseNote) > 1.1) {
-				return GameConfiguration.TEAM_OFFENSIVE_MATCH_PROFIL;
+			return GameConfiguration.TEAM_OFFENSIVE_MATCH_PROFIL;
 		} else if ((attackNote / defenseNote) < 0.9) {
-				return GameConfiguration.TEAM_DEFENSIVE_MATCH_PROFIL;
+			return GameConfiguration.TEAM_DEFENSIVE_MATCH_PROFIL;
 		} else {
-				return GameConfiguration.TEAM_BALANCED_MATCH_PROFIL;
+			return GameConfiguration.TEAM_BALANCED_MATCH_PROFIL;
 		}
 	}
 

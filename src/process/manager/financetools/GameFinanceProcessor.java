@@ -23,4 +23,8 @@ public class GameFinanceProcessor {
 
 		gameStats.put(game, gameStat);
 	}
+	
+	public GameStat getGameStat(Game game) {
+		return gameStats.get(game) ; 
+	}
 }

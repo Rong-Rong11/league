@@ -18,7 +18,7 @@ public class GameConfiguration {
 	public static final String PLAYER_POSITION_POINT_GUARD = "PG" ; 
 	public static final String PLAYER_POSITION_SHOOTING_GUARD = "SG"; 
 	public static final String PLAYER_POSITION_SMALL_FORWARD = "SF"; 
-	public static final String PLAYER_POSITION_POWER_FORWARD = "PW" ; 
+	public static final String PLAYER_POSITION_POWER_FORWARD = "PF" ; 
 	public static final String PLAYER_POSITION_CENTER = "C";
 
 	// Average stats
@@ -36,18 +36,18 @@ public class GameConfiguration {
 	public static final int MAX_TURNOVER_PER_MATCH = 5;
 
 	// Offensive event probabilities
-	public static final double FOULDRAW_PROBABILITY = 0.20 ; 
-	public static final double THREEPOINT_PROBABILITY = 0.40 ; 
-	public static final double TWOPOINT_PROBABILITY = 0.40 ; 
+	public static final double FOULDRAW_PROBABILITY = 0.24 ; 
+	public static final double THREEPOINT_PROBABILITY = 0.38 ; 
+	public static final double TWOPOINT_PROBABILITY = 0.38 ; 
 	public static final double ASSIST_PROBABILITY = 0.6 ; 
 	public static final double BLOCK_PROBABILTY  = 0.08 ; 
-	public static final double OFFENSIVE_REBOUND_PROBABILITY = 0.3 ; 
-	public static final double DEFENSIVE_REBOUND_PROBABILITY = 0.7 ; 
+	public static final double OFFENSIVE_REBOUND_PROBABILITY = 0.24 ; 
+	public static final double DEFENSIVE_REBOUND_PROBABILITY = 0.76 ; 
 
 	// Success probabilities
-	public static final double THREEPOINT_PROBABILITY_SUCCESS = 0.35 ; 
-	public static final double TWO_PROBABILITY_SUCCESS = 0.5 ; 
-	public static final double FOULDRAW_PROBABILITY_SUCESS = 0.75 ;
+	public static final double THREEPOINT_PROBABILITY_SUCCESS = 0.38 ; 
+	public static final double TWO_PROBABILITY_SUCCESS = 0.56 ; 
+	public static final double FOULDRAW_PROBABILITY_SUCESS = 0.82 ;
 
 	// Action names
 	public static final String THREEPOINT = "threepoint" ; 

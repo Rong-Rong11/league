@@ -7,6 +7,8 @@ import data.sport.setup.Game;
 import data.sport.setup.GameContext;
 import data.team.calendar.Schedule;
 import data.team.finance.TeamFinance;
+import data.team.finance.financialprofil.FinancialProfil;
+import data.team.finance.transfer.TeamTransferStrategy;
 
 public class Team {
 	private String name ; 

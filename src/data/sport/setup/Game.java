@@ -5,6 +5,7 @@ public class Game {
 	private GameResult[] quarterResults ; 
 	private int homeFinalScore ; 
 	private int awayFinalScore ; 
+	private boolean displayed;
 	
 	
 	public Game(GameContext gameContext) {
@@ -12,6 +13,7 @@ public class Game {
 		quarterResults = new GameResult[4] ; 
 		homeFinalScore = 0 ;
 		awayFinalScore = 0 ; 
+		displayed = false;
 	}
 	public GameContext getGameContext() {
 		return gameContext;
@@ -38,7 +40,15 @@ public class Game {
 	}
 	public void setAwayFinalScore(int awayFinalScore) {
 		this.awayFinalScore = awayFinalScore;
-	} 
+	}
+
+	public boolean isDisplayed() {
+		return displayed;
+	}
+
+	public void setDisplayed(boolean displayed) {
+		this.displayed = displayed;
+	}
 	
 	
 	

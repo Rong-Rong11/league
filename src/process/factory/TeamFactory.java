@@ -1,8 +1,8 @@
 package process.factory;
+import config.TeamConfiguration;
 
 import config.FinanceConfiguration;
 import config.FinancialPolicy;
-import config.TeamConfiguration;
 import data.finance.budget.Budget;
 import data.team.Stadium;
 import data.team.Team;

@@ -1,8 +1,8 @@
 package process.builder.calendartools;
+import config.GameConfiguration;
 
 import java.util.ArrayList;
 
-import config.GameConfiguration;
 import data.league.Conference;
 import data.league.Division;
 import data.league.League;
@@ -65,10 +65,10 @@ public class GameGenerator {
 							Game game;
 							GameContext gameContext;
 							if (home) {
-									gameContext = new GameContext(team, other, GameConfiguration.GAME_INTRA_CONFERENCE);
+								gameContext = new GameContext(team, other, GameConfiguration.GAME_INTRA_CONFERENCE);
 								game = new Game(gameContext);
 							} else {
-									gameContext = new GameContext(other, team, GameConfiguration.GAME_INTRA_CONFERENCE);
+								gameContext = new GameContext(other, team, GameConfiguration.GAME_INTRA_CONFERENCE);
 								game = new Game(gameContext);
 							}
 							addGameToTeam(game, team);
@@ -91,10 +91,10 @@ public class GameGenerator {
 					Game game;
 					GameContext gameContext;
 					if (home) {
-							gameContext = new GameContext(team, other, GameConfiguration.GAME_INTER_CONFERENCE);
+						gameContext = new GameContext(team, other, GameConfiguration.GAME_INTER_CONFERENCE);
 						game = new Game(gameContext);
 					} else {
-							gameContext = new GameContext(other, team, GameConfiguration.GAME_INTER_CONFERENCE);
+						gameContext = new GameContext(other, team, GameConfiguration.GAME_INTER_CONFERENCE);
 						game = new Game(gameContext);
 					}
 					addGameToTeam(game, team);
