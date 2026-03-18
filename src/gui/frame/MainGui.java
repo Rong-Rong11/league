@@ -17,6 +17,7 @@ import gui.dashboard.MapDashboard;
 import gui.dashboard.MatchDashboard;
 import gui.dashboard.OpeningDashboard;
 import gui.dashboard.RankingDashboard;
+import gui.dashboard.RosterDashboard;
 import gui.layout.SidebarPanel;
 import process.manager.SimulationManager;
 
@@ -31,6 +32,8 @@ public class MainGui extends JFrame {
 	private CalendarDashboard calendarDashboard;
 	private MatchDashboard matchDashboard;
 	private LiveMatchDashboard liveMatchDashboard;
+	private MapDashboard mapDashboard;
+	private RosterDashboard rosterDashboard;
 	private SimulationManager simulationManager;
 	private SidebarPanel sidebar;
 
@@ -81,16 +84,21 @@ public class MainGui extends JFrame {
 
 		matchDashboard = new MatchDashboard(simulationManager.getLeagueManager());
 		liveMatchDashboard = new LiveMatchDashboard();
+		mapDashboard = new MapDashboard(simulationManager.getLeagueManager());
+		rosterDashboard = new RosterDashboard();
 		dashboardPanel.add(matchDashboard, "match");
 		dashboardPanel.add(liveMatchDashboard, "liveMatch");
 		calendarDashboard = new CalendarDashboard(simulationManager, matchDashboard, new ShowMatchDashboardAction());
 		dashboardPanel.add(calendarDashboard, "calendar");
 		dashboardPanel.add(new RankingDashboard(), "ranking");
 		dashboardPanel.add(new FinanceDashboard(), "finance");
-		dashboardPanel.add(new MapDashboard(), "map");
+		dashboardPanel.add(mapDashboard, "map");
+		dashboardPanel.add(rosterDashboard, "roster");
 
 		matchDashboard.setOpenLiveMatchAction(new ShowLiveMatchDashboardAction());
 		liveMatchDashboard.setBackToMatchAction(new ShowMatchDashboardAction());
+		mapDashboard.setOpenRosterAction(new ShowRosterDashboardAction());
+		rosterDashboard.setBackToMapAction(new ShowMapDashboardAction());
 
 		sidebar.getMatchButton().addActionListener(new SwitchDashboardAction("match"));
 		sidebar.getCalendarButton().addActionListener(new SwitchDashboardAction("calendar"));
@@ -170,6 +178,23 @@ public class MainGui extends JFrame {
 			liveMatchDashboard.setSimulationContext(matchDashboard.getLeagueManager(), matchDashboard.getSelectedDate());
 			liveMatchDashboard.setGame(matchDashboard.getSelectedGame());
 			dashboardLayout.show(dashboardPanel, "liveMatch");
+		}
+	}
+
+	private class ShowRosterDashboardAction implements Runnable {
+		@Override
+		public void run() {
+			rosterDashboard.setSelectedTeam(mapDashboard.getSelectedTeam());
+			sidebar.setActiveSection("map");
+			dashboardLayout.show(dashboardPanel, "roster");
+		}
+	}
+
+	private class ShowMapDashboardAction implements Runnable {
+		@Override
+		public void run() {
+			sidebar.setActiveSection("map");
+			dashboardLayout.show(dashboardPanel, "map");
 		}
 	}
 
