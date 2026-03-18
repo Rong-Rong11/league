@@ -12,10 +12,10 @@ import javax.swing.JPanel;
 
 import data.team.Team;
 import gui.panel.common.BuildBox;
-import gui.panel.mapPanel.MapPanel;
 import gui.panel.common.SectionTitle;
-import gui.panel.teamPanel.MapTeamPlayersPanel;
-import gui.panel.teamPanel.MapTeamSummaryPanel;
+import gui.panel.mapPanel.MapPanel;
+import gui.panel.mapPanel.effectifPanel.MapTeamPlayersPanel;
+import gui.panel.mapPanel.effectifPanel.MapTeamSummaryPanel;
 import process.manager.LeagueManager;
 /**
  * Dashboard dédié à la page Carte.

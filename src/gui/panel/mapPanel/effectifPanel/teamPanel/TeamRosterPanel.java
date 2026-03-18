@@ -1,4 +1,4 @@
-package gui.panel.teamPanel;
+package gui.panel.mapPanel.effectifPanel.teamPanel;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 import data.player.Player;
 import data.team.Team;
-import gui.panel.playerPanel.PlayerRosterEntryPanel;
+import gui.panel.mapPanel.effectifPanel.playerPanel.PlayerRosterEntryPanel;
 
 public class TeamRosterPanel extends JPanel {
 

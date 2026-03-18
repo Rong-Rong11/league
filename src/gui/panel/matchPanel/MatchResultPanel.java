@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 
 import data.sport.setup.Game;
 import data.sport.setup.GameResult;
-import gui.panel.teamPanel.TeamLogoPanel;
+import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 
 public class MatchResultPanel extends JPanel {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);

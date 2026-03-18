@@ -16,8 +16,8 @@ import data.player.Player;
 import data.team.Team;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardCard;
-import gui.panel.teamPanel.TeamLogoPanel;
-import gui.panel.teamPanel.TeamRosterPanel;
+import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
+import gui.panel.mapPanel.effectifPanel.teamPanel.TeamRosterPanel;
 import process.utilitary.FinanceUtilitary;
 
 public class RosterDashboard extends JPanel {

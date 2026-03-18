@@ -1,4 +1,4 @@
-package gui.panel.teamPanel;
+package gui.panel.mapPanel.effectifPanel;
 
 import java.awt.Color;
 import java.awt.Font;

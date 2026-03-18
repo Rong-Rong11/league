@@ -1,4 +1,4 @@
-package gui.panel.teamPanel;
+package gui.panel.mapPanel.effectifPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import data.player.Player;
 import data.team.Team;
+import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import process.utilitary.FinanceUtilitary;
 
 public class MapTeamSummaryPanel extends JPanel {

@@ -1,4 +1,4 @@
-package gui.panel.liveMatchPanel;
+package gui.panel.matchPanel.liveMatchPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 import gui.management.LiveMatchStatistics.PlayerLiveSummary;
 import gui.panel.common.SectionTitle;
-import gui.panel.playerPanel.PlayerSummaryPanel;
+import gui.panel.mapPanel.effectifPanel.playerPanel.PlayerSummaryPanel;
 
 public class LiveTeamStatsPanel extends JPanel {
 	private javax.swing.JLabel pointsLabel;
