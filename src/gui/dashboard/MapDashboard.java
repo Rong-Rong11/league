@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import data.team.Team;
 import gui.panel.common.BuildBox;
+import gui.panel.mapPanel.MapPanel;
 import gui.panel.common.SectionTitle;
 import gui.panel.teamPanel.MapTeamPlayersPanel;
 import gui.panel.teamPanel.MapTeamSummaryPanel;
@@ -29,6 +30,7 @@ public class MapDashboard extends JPanel {
 	private LeagueManager leagueManager;
 	private ArrayList<Team> teams;
 	private Team selectedTeam;
+	private MapPanel mapPanel;
 	private MapTeamSummaryPanel teamSummaryPanel;
 	private MapTeamPlayersPanel teamPlayersPanel;
 	private Runnable openRosterAction;
@@ -53,9 +55,9 @@ public class MapDashboard extends JPanel {
 				return a.getName().compareTo(b.getName());
 			}
 		});
+		mapPanel = new MapPanel();
 		teamSummaryPanel = new MapTeamSummaryPanel();
 		teamPlayersPanel = new MapTeamPlayersPanel();
-		teamSummaryPanel.setTeamNames(buildTeamNames());
 	}
 
 	private void organize() {
@@ -90,7 +92,7 @@ public class MapDashboard extends JPanel {
 	}
 
 	private JPanel buildCenterColumn() {
-		return new BuildBox("LOCALISATION DES FRANCHISES", "", "CARTE");//! À changer le string par un jpanel quand on aura la fonctionnalité
+		return new BuildBox("LOCALISATION DES FRANCHISES", "", mapPanel);
 	}
 
 	private JPanel buildRightColumn(){
@@ -113,7 +115,7 @@ public class MapDashboard extends JPanel {
 				}
 			}
 		});
-		teamSummaryPanel.setTeamSelectionListener(new MapTeamSummaryPanel.TeamSelectionListener() {
+		mapPanel.setTeamSelectionListener(new MapPanel.TeamSelectionListener() {
 			@Override
 			public void onTeamSelected(String teamName) {
 				setSelectedTeam(findTeamByName(teamName));
@@ -133,6 +135,11 @@ public class MapDashboard extends JPanel {
 		this.selectedTeam = selectedTeam;
 		teamSummaryPanel.updateTeam(selectedTeam);
 		teamPlayersPanel.updateTeam(selectedTeam);
+		if (selectedTeam == null) {
+			mapPanel.setSelectedTeamName(null);
+		} else {
+			mapPanel.setSelectedTeamName(selectedTeam.getName());
+		}
 	}
 
 	public Team getSelectedTeam() {
@@ -141,14 +148,6 @@ public class MapDashboard extends JPanel {
 
 	public void setOpenRosterAction(Runnable openRosterAction) {
 		this.openRosterAction = openRosterAction;
-	}
-
-	private String[] buildTeamNames() {
-		String[] teamNames = new String[teams.size()];
-		for (int i = 0; i < teams.size(); i++) {
-			teamNames[i] = teams.get(i).getName();
-		}
-		return teamNames;
 	}
 
 	private Team findTeamByName(String teamName) {

@@ -11,6 +11,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class MapPanel extends JPanel {
+	public interface TeamSelectionListener {
+		void onTeamSelected(String teamName);
+	}
 
 	private static final String MAP_IMAGE_PATH = "src/test/map.png";
 	private static final Color POINT_COLOR = new Color(210, 48, 48);
@@ -22,6 +25,8 @@ public class MapPanel extends JPanel {
 
 	private java.awt.Image mapImage;
 	private HashMap<String, TeamZone> zones;
+	private String selectedTeamName;
+	private TeamSelectionListener teamSelectionListener;
 
 	public MapPanel() {
 		create();
@@ -118,7 +123,11 @@ public class MapPanel extends JPanel {
 			TeamZone zone = zones.get(teamName);
 
 			if (zone.contains(mouseX, mouseY, drawWidth, drawHeight)) {
-				System.out.println("Equipe cliquee : " + teamName);
+				selectedTeamName = teamName;
+				repaint();
+				if (teamSelectionListener != null) {
+					teamSelectionListener.onTeamSelected(teamName);
+				}
 				return;
 			}
 		}
@@ -145,15 +154,28 @@ public class MapPanel extends JPanel {
 
 		g.drawImage(mapImage, 0, 0, drawWidth, drawHeight, panel);
 
-		g.setColor(POINT_COLOR);
-
-		for (TeamZone zone : zones.values()) {
+		for (String teamName : zones.keySet()) {
+			TeamZone zone = zones.get(teamName);
 			int centerX = zone.getX(drawWidth);
 			int centerY = zone.getY(drawHeight);
 			int radius = zone.getRadius();
 			int diameter = radius * 2;
 
+			if (teamName.equals(selectedTeamName)) {
+				g.setColor(new Color(55, 132, 179));
+			} else {
+				g.setColor(POINT_COLOR);
+			}
 			g.fillOval(centerX - radius, centerY - radius, diameter, diameter);
 		}
+	}
+
+	public void setTeamSelectionListener(TeamSelectionListener teamSelectionListener) {
+		this.teamSelectionListener = teamSelectionListener;
+	}
+
+	public void setSelectedTeamName(String selectedTeamName) {
+		this.selectedTeamName = selectedTeamName;
+		repaint();
 	}
 }

@@ -9,7 +9,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -18,19 +17,12 @@ import data.team.Team;
 import process.utilitary.FinanceUtilitary;
 
 public class MapTeamSummaryPanel extends JPanel {
-	public interface TeamSelectionListener {
-		void onTeamSelected(String teamName);
-	}
-
-	private JComboBox<String> teamSelector;
 	private JLabel teamNameLabel;
 	private JLabel payrollLabel;
 	private JLabel capacityLabel;
 	private JLabel averageNoteLabel;
 	private JButton openRosterButton;
 	private TeamLogoPanel teamLogoPanel;
-	private TeamSelectionListener teamSelectionListener;
-	private boolean updatingSelector;
 
 	public MapTeamSummaryPanel() {
 		create();
@@ -39,7 +31,6 @@ public class MapTeamSummaryPanel extends JPanel {
 	}
 
 	private void create() {
-		teamSelector = new JComboBox<String>();
 		teamNameLabel = new JLabel();
 		payrollLabel = new JLabel();
 		capacityLabel = new JLabel();
@@ -50,7 +41,6 @@ public class MapTeamSummaryPanel extends JPanel {
 		teamNameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 		teamNameLabel.setForeground(new Color(0x17, 0x31, 0x74));
 		openRosterButton.setFocusPainted(false);
-		teamSelector.setMaximumSize(new Dimension(Integer.MAX_VALUE, 28));
 	}
 
 	private void organize() {
@@ -65,8 +55,6 @@ public class MapTeamSummaryPanel extends JPanel {
 		JPanel infoPanel = new JPanel();
 		infoPanel.setOpaque(false);
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-		infoPanel.add(teamSelector);
-		infoPanel.add(Box.createVerticalStrut(10));
 		infoPanel.add(buildInfoLabel("Budget annuel", payrollLabel));
 		infoPanel.add(Box.createVerticalStrut(8));
 		infoPanel.add(buildInfoLabel("Capacité salle", capacityLabel));
@@ -107,9 +95,6 @@ public class MapTeamSummaryPanel extends JPanel {
 			return;
 		}
 
-		updatingSelector = true;
-		teamSelector.setSelectedItem(team.getName());
-		updatingSelector = false;
 		FinanceUtilitary.updateTeamPayroll(team);
 		teamLogoPanel.setTeamName(team.getName());
 		teamNameLabel.setText(team.getName());
@@ -152,30 +137,5 @@ public class MapTeamSummaryPanel extends JPanel {
 
 	public JButton getOpenRosterButton() {
 		return openRosterButton;
-	}
-
-	public void setTeamNames(String[] teamNames) {
-		updatingSelector = true;
-		teamSelector.removeAllItems();
-		for (int i = 0; i < teamNames.length; i++) {
-			teamSelector.addItem(teamNames[i]);
-		}
-		updatingSelector = false;
-	}
-
-	public void setTeamSelectionListener(TeamSelectionListener teamSelectionListener) {
-		this.teamSelectionListener = teamSelectionListener;
-		teamSelector.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				if (updatingSelector) {
-					return;
-				}
-				Object selectedItem = teamSelector.getSelectedItem();
-				if (selectedItem != null && MapTeamSummaryPanel.this.teamSelectionListener != null) {
-					MapTeamSummaryPanel.this.teamSelectionListener.onTeamSelected(selectedItem.toString());
-				}
-			}
-		});
 	}
 }
