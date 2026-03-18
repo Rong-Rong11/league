@@ -37,14 +37,10 @@ public class ActionSimulator {
 			shotProbability = GameConfiguration.FOULDRAW_PROBABILITY_SUCESS;
 		}
 		shotProbability += (trueShootingPercentage * 0.30);
-
 		double defenseNote = defensingPlayersNote(defensivePlayers);
 		shotProbability -= defenseNote * 0.006;
-
 		shotProbability -= attackingPlayer.getHealthStatus().getFatigue() * 0.05;
-
 		shotProbability = Math.max(0.18, Math.min(0.82, shotProbability));
-
 		return Math.random() < shotProbability;
 
 	}
@@ -60,6 +56,4 @@ public class ActionSimulator {
 		note = sumOfNote / numberOfPlayer;
 		return note;
 	}
-	
-	
 }

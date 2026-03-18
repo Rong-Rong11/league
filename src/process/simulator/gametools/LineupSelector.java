@@ -42,10 +42,8 @@ public class LineupSelector {
 
 		for (Player player : team.getPlayers().values()) {
 			double economicFactor = player.getSalary() / averageSalary;
-
 			double playerAttackNote = PlayerUtilitary.getPlayerAttackNote(player);
 			double playerDefenseNote = PlayerUtilitary.getPlayerDefenseNote(player);
-
 			double matchProfileScore;
 			switch (opponentProfile) {
 				case GameConfiguration.TEAM_DEFENSIVE_MATCH_PROFIL:

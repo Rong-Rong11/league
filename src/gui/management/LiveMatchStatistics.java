@@ -12,14 +12,13 @@ import data.sport.play.action.MissedShot;
 import data.sport.play.action.PointScored;
 import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
+import data.sport.setup.Game;
 import process.visitor.actionresult.ActionResultVisitor;
+import process.visitor.actionresult.StatsVisitor;
 
 public class LiveMatchStatistics {
-
-	public interface HomePlayerChecker {
-		boolean isHomePlayer(Player player);
-	}
-
+	
+	private Game game ; 
 	private int homePoints;
 	private int awayPoints;
 	private int homeRebounds;
@@ -73,8 +72,8 @@ public class LiveMatchStatistics {
 		awayPlayers.clear();
 	}
 
-	public void applyAction(ActionResult action, HomePlayerChecker homePlayerChecker) {
-		action.accept(new StatsVisitor(homePlayerChecker));
+	public void applyAction(ActionResult action) {
+		action.accept(new StatsVisitor(this));
 	}
 
 	public SavedLiveState toSavedState(int liveActionIndex) {
@@ -271,136 +270,15 @@ public class LiveMatchStatistics {
 				+ " pts)</html>";
 	}
 
-	private class StatsVisitor implements ActionResultVisitor<Void> {
-		private HomePlayerChecker homePlayerChecker;
-
-		public StatsVisitor(HomePlayerChecker homePlayerChecker) {
-			this.homePlayerChecker = homePlayerChecker;
-		}
-
-		@Override
-		public Void visit(PointScored pointScored) {
-			Player scorer = pointScored.getScorerPlayer();
-			boolean homeScorer = homePlayerChecker.isHomePlayer(scorer);
-			String shotType = "";
-			if (pointScored.getOffensiveAction() != null) {
-				shotType = pointScored.getOffensiveAction().getName();
-			}
-
-			int points;
-			if (GameConfiguration.THREEPOINT.equals(shotType)) {
-				points = 3;
-			} else if (GameConfiguration.TWOPOINT.equals(shotType)) {
-				points = 2;
-			} else {
-				points = 1;
-			}
-
-			if (homeScorer) {
-				homePoints += points;
-				homePlayerPoints.put(scorer.getName(), getPlayerPoints(homePlayerPoints, scorer.getName()) + points);
-				homePlayers.put(scorer.getName(), scorer);
-			} else {
-				awayPoints += points;
-				awayPlayerPoints.put(scorer.getName(), getPlayerPoints(awayPlayerPoints, scorer.getName()) + points);
-				awayPlayers.put(scorer.getName(), scorer);
-			}
-
-			if (GameConfiguration.THREEPOINT.equals(shotType)) {
-				if (homeScorer) {
-					homeThreeMade++;
-					homeThreeAttempts++;
-					homeFgAttempts++;
-				} else {
-					awayThreeMade++;
-					awayThreeAttempts++;
-					awayFgAttempts++;
-				}
-			} else if (GameConfiguration.TWOPOINT.equals(shotType)) {
-				if (homeScorer) {
-					homeTwoMade++;
-					homeFgAttempts++;
-				} else {
-					awayTwoMade++;
-					awayFgAttempts++;
-				}
-			}
-
-			Player assist = pointScored.getAssistPlayer();
-			if (assist != null) {
-				if (homePlayerChecker.isHomePlayer(assist)) {
-					homeAssists++;
-				} else {
-					awayAssists++;
-				}
-			}
-			return null;
-		}
-
-		@Override
-		public Void visit(MissedShot missedShot) {
-			Player shooter = missedShot.getShooter();
-			boolean homeShooter = homePlayerChecker.isHomePlayer(shooter);
-			String shotType = "";
-			if (missedShot.getOffensiveAction() != null) {
-				shotType = missedShot.getOffensiveAction().getName();
-			}
-			if (GameConfiguration.THREEPOINT.equals(shotType)) {
-				if (homeShooter) {
-					homeThreeAttempts++;
-					homeFgAttempts++;
-				} else {
-					awayThreeAttempts++;
-					awayFgAttempts++;
-				}
-			} else if (GameConfiguration.TWOPOINT.equals(shotType)) {
-				if (homeShooter) {
-					homeFgAttempts++;
-				} else {
-					awayFgAttempts++;
-				}
-			}
-			return null;
-		}
-
-		@Override
-		public Void visit(Turnover turnover) {
-			if (homePlayerChecker.isHomePlayer(turnover.getDefensePlayer())) {
-				homeTurnovers++;
-			} else {
-				awayTurnovers++;
-			}
-			return null;
-		}
-
-		@Override
-		public Void visit(Block block) {
-			return null;
-		}
-
-		@Override
-		public Void visit(Rebound rebound) {
-			if (homePlayerChecker.isHomePlayer(rebound.getReboundPlayer())) {
-				homeRebounds++;
-			} else {
-				awayRebounds++;
-			}
-			return null;
-		}
-
-		@Override
-		public Void visit(EndOfTime endOfTime) {
-			return null;
-		}
-	}
-
 	public static class LiveAction {
 		private int quarter;
 		private ActionResult action;
+		private int remainingTimeSeconds;
 
-		public LiveAction(int quarter, ActionResult action) {
+		public LiveAction(int quarter, ActionResult action, int remainingTimeSeconds) {
 			this.quarter = quarter;
 			this.action = action;
+			this.remainingTimeSeconds = remainingTimeSeconds;
 		}
 
 		public int getQuarter() {
@@ -409,6 +287,10 @@ public class LiveMatchStatistics {
 
 		public ActionResult getAction() {
 			return action;
+		}
+
+		public int getRemainingTimeSeconds() {
+			return remainingTimeSeconds;
 		}
 	}
 
@@ -461,4 +343,143 @@ public class LiveMatchStatistics {
 			return points;
 		}
 	}
+
+	public int getHomeTwoMade() {
+		return homeTwoMade;
+	}
+
+	public void setHomeTwoMade(int homeTwoMade) {
+		this.homeTwoMade = homeTwoMade;
+	}
+
+	public int getAwayTwoMade() {
+		return awayTwoMade;
+	}
+
+	public void setAwayTwoMade(int awayTwoMade) {
+		this.awayTwoMade = awayTwoMade;
+	}
+
+	public int getHomeThreeMade() {
+		return homeThreeMade;
+	}
+
+	public void setHomeThreeMade(int homeThreeMade) {
+		this.homeThreeMade = homeThreeMade;
+	}
+
+	public int getAwayThreeMade() {
+		return awayThreeMade;
+	}
+
+	public void setAwayThreeMade(int awayThreeMade) {
+		this.awayThreeMade = awayThreeMade;
+	}
+
+	public int getHomeFgAttempts() {
+		return homeFgAttempts;
+	}
+
+	public void setHomeFgAttempts(int homeFgAttempts) {
+		this.homeFgAttempts = homeFgAttempts;
+	}
+
+	public int getAwayFgAttempts() {
+		return awayFgAttempts;
+	}
+
+	public void setAwayFgAttempts(int awayFgAttempts) {
+		this.awayFgAttempts = awayFgAttempts;
+	}
+
+	public int getHomeThreeAttempts() {
+		return homeThreeAttempts;
+	}
+
+	public void setHomeThreeAttempts(int homeThreeAttempts) {
+		this.homeThreeAttempts = homeThreeAttempts;
+	}
+
+	public int getAwayThreeAttempts() {
+		return awayThreeAttempts;
+	}
+
+	public void setAwayThreeAttempts(int awayThreeAttempts) {
+		this.awayThreeAttempts = awayThreeAttempts;
+	}
+
+	public HashMap<String, Integer> getHomePlayerPoints() {
+		return homePlayerPoints;
+	}
+
+	public void setHomePlayerPoints(HashMap<String, Integer> homePlayerPoints) {
+		this.homePlayerPoints = homePlayerPoints;
+	}
+
+	public HashMap<String, Integer> getAwayPlayerPoints() {
+		return awayPlayerPoints;
+	}
+
+	public void setAwayPlayerPoints(HashMap<String, Integer> awayPlayerPoints) {
+		this.awayPlayerPoints = awayPlayerPoints;
+	}
+
+	public HashMap<String, Player> getHomePlayers() {
+		return homePlayers;
+	}
+
+	public void setHomePlayers(HashMap<String, Player> homePlayers) {
+		this.homePlayers = homePlayers;
+	}
+
+	public HashMap<String, Player> getAwayPlayers() {
+		return awayPlayers;
+	}
+
+	public void setAwayPlayers(HashMap<String, Player> awayPlayers) {
+		this.awayPlayers = awayPlayers;
+	}
+
+	public void setHomePoints(int homePoints) {
+		this.homePoints = homePoints;
+	}
+
+	public void setAwayPoints(int awayPoints) {
+		this.awayPoints = awayPoints;
+	}
+
+	public void setHomeRebounds(int homeRebounds) {
+		this.homeRebounds = homeRebounds;
+	}
+
+	public void setAwayRebounds(int awayRebounds) {
+		this.awayRebounds = awayRebounds;
+	}
+
+	public void setHomeAssists(int homeAssists) {
+		this.homeAssists = homeAssists;
+	}
+
+	public void setAwayAssists(int awayAssists) {
+		this.awayAssists = awayAssists;
+	}
+
+	public void setHomeTurnovers(int homeTurnovers) {
+		this.homeTurnovers = homeTurnovers;
+	}
+
+	public void setAwayTurnovers(int awayTurnovers) {
+		this.awayTurnovers = awayTurnovers;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+	
+	
+	
 }

@@ -42,7 +42,7 @@ public class CalendarDashboard extends JPanel {
 
 	private void create(MatchDashboard matchDashboard, Runnable showMatchDashboardAction) {
 		calendarSimulationPanel = new CalendarSimulationPanel(simulationManager);
-		calendarSimulationPanel.setMatchDaySelectionListener(new OpenMatchDayListener(matchDashboard, showMatchDashboardAction));
+		calendarSimulationPanel.setOpenMatchDayAction(new OpenMatchDayAction(matchDashboard, showMatchDashboardAction));
 		seasonProgressBarPanel = new SeasonProgressBarPanel(
 				CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE,
 				CalendarConfiguration.REGULAR_SEASON_END_DATE,
@@ -131,26 +131,25 @@ public class CalendarDashboard extends JPanel {
 		return calendarSimulationPanel;
 	}
 
-	private class OpenMatchDayListener implements CalendarSimulationPanel.MatchDaySelectionListener {
-		private final MatchDashboard matchDashboard;
-		private final Runnable showMatchDashboardAction;
-
-		private OpenMatchDayListener(MatchDashboard matchDashboard, Runnable showMatchDashboardAction) {
-			this.matchDashboard = matchDashboard;
-			this.showMatchDashboardAction = showMatchDashboardAction;
-		}
-
-		@Override
-		public void openMatchDay(data.calendar.GameDay gameDay, java.time.LocalDate date) {
-			matchDashboard.showGameDay(gameDay, date);
-			showMatchDashboardAction.run();
-		}
-	}
-
 	private class SimulateDayAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			calendarSimulationPanel.advanceDay();
+		}
+	}
+
+	private class OpenMatchDayAction extends CalendarSimulationPanel.OpenMatchDayAction {
+		private MatchDashboard matchDashboard;
+		private Runnable showMatchDashboardAction;
+
+		private OpenMatchDayAction(MatchDashboard matchDashboard, Runnable showMatchDashboardAction) {
+			this.matchDashboard = matchDashboard;
+			this.showMatchDashboardAction = showMatchDashboardAction;
+		}
+
+		public void open(data.calendar.GameDay gameDay, java.time.LocalDate date) {
+			matchDashboard.showGameDay(gameDay, date);
+			showMatchDashboardAction.run();
 		}
 	}
 

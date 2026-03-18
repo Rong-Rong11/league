@@ -20,10 +20,6 @@ import data.league.RegularSeason;
 import process.manager.SimulationManager;
 
 public class CalendarSimulationPanel extends JPanel {
-	public interface MatchDaySelectionListener {
-		void openMatchDay(GameDay gameDay, LocalDate date);
-	}
-
 	private static final long serialVersionUID = 1L;
 	private static final Font DISPLAY_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 	private static final Font TITLE_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 12);
@@ -40,7 +36,7 @@ public class CalendarSimulationPanel extends JPanel {
 	private RegularSeason regularSeason;
 	private LocalDate currentDate;
 	private SeasonProgressBarPanel seasonProgressBarPanel;
-	private MatchDaySelectionListener matchDaySelectionListener;
+	private OpenMatchDayAction openMatchDayAction;
 
 	public CalendarSimulationPanel(SimulationManager simulationManager) {
 		setLayout(new BorderLayout());
@@ -140,8 +136,8 @@ public class CalendarSimulationPanel extends JPanel {
 		this.seasonProgressBarPanel = seasonProgressBarPanel;
 	}
 
-	public void setMatchDaySelectionListener(MatchDaySelectionListener matchDaySelectionListener) {
-		this.matchDaySelectionListener = matchDaySelectionListener;
+	public void setOpenMatchDayAction(OpenMatchDayAction openMatchDayAction) {
+		this.openMatchDayAction = openMatchDayAction;
 	}
 
 	private void updateProgressBar() {
@@ -273,8 +269,13 @@ public class CalendarSimulationPanel extends JPanel {
 	}
 
 	private void openMatchDashboard(GameDay gameDay, LocalDate date) {
-		if (matchDaySelectionListener != null) {
-			matchDaySelectionListener.openMatchDay(gameDay, date);
+		if (openMatchDayAction != null) {
+			openMatchDayAction.open(gameDay, date);
+		}
+	}
+
+	public static class OpenMatchDayAction {
+		public void open(GameDay gameDay, LocalDate date) {
 		}
 	}
 
