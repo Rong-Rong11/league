@@ -1,5 +1,7 @@
 package process.manager.financetools;
 
+import java.time.LocalDate;
+
 import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.team.Stadium;
@@ -7,7 +9,6 @@ import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
-import java.time.LocalDate;
 import process.utilitary.CalendarUtilitary;
 import process.visitor.marketsize.CalculateBaseTicketVisitor;
 
