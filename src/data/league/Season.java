@@ -1,64 +1,63 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.league;
-
-import java.time.LocalDate;
-import java.util.HashMap;
 
 import data.calendar.NBACalendar;
 import data.calendar.SpecialEvent;
+import data.league.Ranking;
+import java.time.LocalDate;
+import java.util.HashMap;
 
 public abstract class Season {
-	private NBACalendar calendar;
-	private LocalDate debutDate;
-	private LocalDate endDate;
-	private HashMap<LocalDate, SpecialEvent> specialEvents;
-	private Ranking ranking;
+    private NBACalendar calendar = new NBACalendar();
+    private LocalDate debutDate;
+    private LocalDate endDate;
+    private HashMap<LocalDate, SpecialEvent> specialEvents;
+    private Ranking ranking;
 
-	public Season(LocalDate debutDate, LocalDate endDate) {
-		calendar = new NBACalendar();
-		this.debutDate = debutDate;
-		this.endDate = endDate;
-		specialEvents = new HashMap<LocalDate, SpecialEvent>();
-		ranking = new Ranking();
-	}
+    public Season(LocalDate localDate, LocalDate localDate2) {
+        this.debutDate = localDate;
+        this.endDate = localDate2;
+        this.specialEvents = new HashMap();
+        this.ranking = new Ranking();
+    }
 
-	public LocalDate getDebutDate() {
-		return debutDate;
-	}
+    public LocalDate getDebutDate() {
+        return this.debutDate;
+    }
 
-	public void setDebutDate(LocalDate debutDate) {
-		this.debutDate = debutDate;
-	}
+    public void setDebutDate(LocalDate localDate) {
+        this.debutDate = localDate;
+    }
 
-	public LocalDate getEndDate() {
-		return endDate;
-	}
+    public LocalDate getEndDate() {
+        return this.endDate;
+    }
 
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
+    public void setEndDate(LocalDate localDate) {
+        this.endDate = localDate;
+    }
 
-	public NBACalendar getCalendar() {
-		return calendar;
-	}
+    public NBACalendar getCalendar() {
+        return this.calendar;
+    }
 
-	public void setCalendar(NBACalendar calendar) {
-		this.calendar = calendar;
-	}
+    public void setCalendar(NBACalendar nBACalendar) {
+        this.calendar = nBACalendar;
+    }
 
-	public void addSpecialEvents(SpecialEvent specialEvent) {
-		if (!specialEvents.containsKey(specialEvent.getDate())) {
-			specialEvents.put(specialEvent.getDate(), specialEvent);
-		}
-	}
+    public void addSpecialEvents(SpecialEvent specialEvent) {
+        if (!this.specialEvents.containsKey(specialEvent.getDate())) {
+            this.specialEvents.put(specialEvent.getDate(), specialEvent);
+        }
+    }
 
-	public Ranking getRanking() {
-		return ranking;
-	}
+    public Ranking getRanking() {
+        return this.ranking;
+    }
 
-	public void setRanking(Ranking ranking) {
-		this.ranking = ranking;
-	}
-	
-	
-
+    public void setRanking(Ranking ranking) {
+        this.ranking = ranking;
+    }
 }

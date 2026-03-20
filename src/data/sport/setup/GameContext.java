@@ -1,66 +1,57 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.sport.setup;
-
-import java.text.Normalizer;
 
 import data.team.Team;
 import process.utilitary.CalendarUtilitary;
 
 public class GameContext {
-	private Team homeTeam ; 
-	private Team awayTeam ; 
-	private int typeGame ; 
-	private boolean isScheduled ; 
-	private boolean isRivalry ; 
-	
-	public GameContext (Team homeTeam, Team awayTeam, int typeGame) {
-		setAwayTeam(awayTeam);
-		setHomeTeam(homeTeam);
-		isRivalry = CalendarUtilitary.isRivalry(this) ; 
-	}
-	
+    private Team homeTeam;
+    private Team awayTeam;
+    private int typeGame;
+    private boolean isScheduled;
+    private boolean isRivalry;
 
-	public boolean isScheduled() {
-		return isScheduled;
-	}
+    public GameContext(Team team, Team team2, int n) {
+        this.setAwayTeam(team2);
+        this.setHomeTeam(team);
+        this.isRivalry = CalendarUtilitary.isRivalry(this);
+    }
 
-	public void setScheduled(boolean scheduled) {
-		this.isScheduled = scheduled;
-	}
+    public boolean isScheduled() {
+        return this.isScheduled;
+    }
 
-	public Team getHomeTeam() {
-		return homeTeam;
-	}
+    public void setScheduled(boolean bl) {
+        this.isScheduled = bl;
+    }
 
-	public void setHomeTeam(Team homeTeam) {
-		this.homeTeam = homeTeam;
-	}
+    public Team getHomeTeam() {
+        return this.homeTeam;
+    }
 
-	public Team getAwayTeam() {
-		return awayTeam;
-	}
+    public void setHomeTeam(Team team) {
+        this.homeTeam = team;
+    }
 
-	public void setAwayTeam(Team awayTeam) {
-		this.awayTeam = awayTeam;
-	}
+    public Team getAwayTeam() {
+        return this.awayTeam;
+    }
 
-	public int getTypeGame() {
-		return typeGame;
-	}
+    public void setAwayTeam(Team team) {
+        this.awayTeam = team;
+    }
 
-	public void setTypeGame(int typeGame) {
-		this.typeGame = typeGame;
-	}
+    public int getTypeGame() {
+        return this.typeGame;
+    }
 
+    public void setTypeGame(int n) {
+        this.typeGame = n;
+    }
 
-	public boolean isRivalry() {
-		return isRivalry;
-	}
-
-	
-	
-	
-	
-	
-	
-	
+    public boolean isRivalry() {
+        return this.isRivalry;
+    }
 }

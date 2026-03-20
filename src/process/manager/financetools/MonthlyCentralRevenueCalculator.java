@@ -1,53 +1,47 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package process.manager.financetools;
 
 import data.team.Team;
 import process.repositery.TeamRepositery;
 
 public class MonthlyCentralRevenueCalculator {
-	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+    private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 
-	public double calculateNationalTvRevenue() {
-		double totalPopularity = 0;
-		double totalPerformance = 0;
+    public double calculateNationalTvRevenue() {
+        double d = 0.0;
+        double d2 = 0.0;
+        for (Team team : this.teamRepositery.getAllTeams()) {
+            d += team.getPopularity();
+            d2 += team.getTeamPerformance().getPerformanceRating();
+        }
+        double d3 = d / (double)this.teamRepositery.getAllTeams().size();
+        double d4 = d2 / (double)this.teamRepositery.getAllTeams().size();
+        return 0.18 * (double)this.teamRepositery.getAllTeams().size() + d3 * 0.03 + d4 * 2.0;
+    }
 
-		for (Team team : teamRepositery.getAllTeams()) {
-			totalPopularity += team.getPopularity();
-			totalPerformance += team.getTeamPerformance().getPerformanceRating();
-		}
+    public double calculateNationalSponsoringRevenue() {
+        double d = 0.0;
+        int n = 0;
+        for (Team team : this.teamRepositery.getAllTeams()) {
+            d += team.getPopularity();
+            if (team.getStarPlayer() == null) continue;
+            ++n;
+        }
+        double d2 = d / (double)this.teamRepositery.getAllTeams().size();
+        return 0.1 * (double)this.teamRepositery.getAllTeams().size() + d2 * 0.02 + (double)n * 0.08;
+    }
 
-		double averagePopularity = totalPopularity / teamRepositery.getAllTeams().size();
-		double averagePerformance = totalPerformance / teamRepositery.getAllTeams().size();
-
-		return (0.18 * teamRepositery.getAllTeams().size()) + (averagePopularity * 0.03) + (averagePerformance * 2.0);
-	}
-
-	public double calculateNationalSponsoringRevenue() {
-		double totalPopularity = 0;
-		int numberOfStarTeams = 0;
-
-		for (Team team : teamRepositery.getAllTeams()) {
-			totalPopularity += team.getPopularity();
-			if (team.getStarPlayer() != null) {
-				numberOfStarTeams++;
-			}
-		}
-
-		double averagePopularity = totalPopularity / teamRepositery.getAllTeams().size();
-		return (0.10 * teamRepositery.getAllTeams().size()) + (averagePopularity * 0.02) + (numberOfStarTeams * 0.08);
-	}
-
-	public double calculateNationalMerchandisingRevenue() {
-		double totalPopularity = 0;
-		double totalPayroll = 0;
-
-		for (Team team : teamRepositery.getAllTeams()) {
-			totalPopularity += team.getPopularity();
-			totalPayroll += team.getTeamFinance().getPayroll();
-		}
-
-		double averagePopularity = totalPopularity / teamRepositery.getAllTeams().size();
-		double averagePayroll = totalPayroll / teamRepositery.getAllTeams().size();
-
-		return (0.06 * teamRepositery.getAllTeams().size()) + (averagePopularity * 0.015) + (averagePayroll * 0.02);
-	}
+    public double calculateNationalMerchandisingRevenue() {
+        double d = 0.0;
+        double d2 = 0.0;
+        for (Team team : this.teamRepositery.getAllTeams()) {
+            d += team.getPopularity();
+            d2 += team.getTeamFinance().getPayroll();
+        }
+        double d3 = d / (double)this.teamRepositery.getAllTeams().size();
+        double d4 = d2 / (double)this.teamRepositery.getAllTeams().size();
+        return 0.06 * (double)this.teamRepositery.getAllTeams().size() + d3 * 0.015 + d4 * 0.02;
+    }
 }

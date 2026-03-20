@@ -1,14 +1,15 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.team.finance.financialprofil;
 
+import process.visitor.financialprofil.FinancialProfilVisitor;
+
 public abstract class FinancialProfil {
-	
-	String name ; 
-	public FinancialProfil(String name) {
-		this.name = name ; 
-	}
-	public String getName() {
-		return name;
-	}
-	
-	
+
+    public FinancialProfil() {
+
+    }
+
+    public abstract <F> F accept(FinancialProfilVisitor<F> var1);
 }

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package process.visitor.marketsize;
 
 import data.team.finance.marketsize.LargeSize;
@@ -5,9 +8,9 @@ import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
 
 public interface MarketSizeVisitor<M> {
-	M visit(LargeSize largeSize);
+    public M visit(LargeSize var1);
 
-	M visit(MediumSize mediumSize);
+    public M visit(MediumSize var1);
 
-	M visit(SmallSize smallSize);
+    public M visit(SmallSize var1);
 }

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package process.visitor.teamtransfer;
 
 import data.team.finance.transfer.AllIn;
@@ -6,36 +9,43 @@ import data.team.finance.transfer.Rebuild;
 import data.team.finance.transfer.SalaryDump;
 import data.team.finance.transfer.SmallAdjust;
 import data.team.finance.transfer.SuperstarBuild;
+import process.visitor.teamtransfer.TeamTransferVisitor;
 
-public class PreSeasonTradeSatisfactionVisitor implements TeamTransferVisitor<Boolean> {
+public class PreSeasonTradeSatisfactionVisitor
+implements TeamTransferVisitor<Boolean> {
+    private int transferMade;
 
-  private int transferMade;
+    public PreSeasonTradeSatisfactionVisitor(int n) {
+        this.transferMade = n;
+    }
 
-  public PreSeasonTradeSatisfactionVisitor(int transferMade) {
-    this.transferMade = transferMade;
-  }
+    @Override
+    public Boolean visit(AllIn allIn) {
+        return this.transferMade >= 2;
+    }
 
-  public Boolean visit(AllIn allIn) {
-    return transferMade >= 2;
-  }
+    @Override
+    public Boolean visit(SuperstarBuild superstarBuild) {
+        return this.transferMade >= 1;
+    }
 
-  public Boolean visit(SuperstarBuild superstarBuild) {
-    return transferMade >= 1;
-  }
+    @Override
+    public Boolean visit(SmallAdjust smallAdjust) {
+        return this.transferMade >= 1;
+    }
 
-  public Boolean visit(SmallAdjust smallAdjust) {
-    return transferMade >= 1;
-  }
+    @Override
+    public Boolean visit(Balanced balanced) {
+        return this.transferMade >= 1;
+    }
 
-  public Boolean visit(Balanced balanced) {
-    return transferMade >= 1;
-  }
+    @Override
+    public Boolean visit(Rebuild rebuild) {
+        return this.transferMade >= 2;
+    }
 
-  public Boolean visit(Rebuild rebuild) {
-    return transferMade >= 2;
-  }
-
-  public Boolean visit(SalaryDump salaryDump) {
-    return transferMade >= 1;
-  }
+    @Override
+    public Boolean visit(SalaryDump salaryDump) {
+        return this.transferMade >= 1;
+    }
 }

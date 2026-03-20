@@ -31,7 +31,8 @@ public class HealthManager {
 		}
 	}
 	
-	public void updateFatigue(ArrayList<Player> homePlayers, ArrayList<Player> awayPlayers,int minutesPlayed) {
+	public void updateFatigue(ArrayList<Player> homePlayers, ArrayList<Player> awayPlayers, int actionTimeSeconds) {
+		double minutesPlayed = actionTimeSeconds / 60.0;
 		for (Player homePlayer : homePlayers) {
 			PlayerUtilitary.updateFatigue(minutesPlayed, homePlayer);
 		}
@@ -40,7 +41,7 @@ public class HealthManager {
 		}
 	}
 
-	public void updateRest(int restMinutes, Team homeTeam, Team awayTeam) {
+	public void updateRest(double restMinutes, Team homeTeam, Team awayTeam) {
 		for (Player player : homeTeam.getPlayers().values()) {
 			PlayerUtilitary.updateRest(restMinutes, player);
 		}
@@ -50,13 +51,14 @@ public class HealthManager {
 	}
 
 	public void addMinutesPlayed(ArrayList<Player> homePlayers, ArrayList<Player> awayPlayers,HashMap<Player, Asset> playersNewAssets,int actionTime) {
+		double playedMinutes = actionTime / 60.0;
 		for (Player player : homePlayers) {
 			Asset asset = playersNewAssets.get(player);
-			asset.setMinutesPlayedPerMatch(asset.getMinutesPlayedPerMatch() + (actionTime / 60));
+			asset.setMinutesPlayedPerMatch(asset.getMinutesPlayedPerMatch() + playedMinutes);
 		}
 		for (Player player : awayPlayers) {
 			Asset asset = playersNewAssets.get(player);
-			asset.setMinutesPlayedPerMatch(asset.getMinutesPlayedPerMatch() + (actionTime / 60));
+			asset.setMinutesPlayedPerMatch(asset.getMinutesPlayedPerMatch() + playedMinutes);
 		}
 
 	}

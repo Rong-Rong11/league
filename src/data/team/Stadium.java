@@ -1,42 +1,40 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.team;
 
 public class Stadium {
-	String name ; 
-	double ticketPrice ; 
-	int capacity ;
-	
-	public Stadium(String name, double ticketPrice, int capacity) {
-		super();
-		this.name = name;
-		this.ticketPrice = ticketPrice;
-		this.capacity = capacity;
-	}
+    String name;
+    double ticketPrice;
+    int capacity;
 
-	public String getName() {
-		return name;
-	}
+    public Stadium(String string, double d, int n) {
+        this.name = string;
+        this.ticketPrice = d;
+        this.capacity = n;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public double getTicketPrice() {
-		return ticketPrice;
-	}
+    public void setName(String string) {
+        this.name = string;
+    }
 
-	public void setTicketPrice(double ticketPrice) {
-		this.ticketPrice = ticketPrice;
-	}
+    public double getTicketPrice() {
+        return this.ticketPrice;
+    }
 
-	public int getCapacity() {
-		return capacity;
-	}
+    public void setTicketPrice(double d) {
+        this.ticketPrice = d;
+    }
 
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
-	} 
-	
-	
-	
-	
+    public int getCapacity() {
+        return this.capacity;
+    }
+
+    public void setCapacity(int n) {
+        this.capacity = n;
+    }
 }

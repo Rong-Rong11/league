@@ -1,38 +1,41 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.sport.play.action;
 
 import data.player.Player;
+import data.sport.play.action.ActionResult;
 import process.visitor.actionresult.ActionResultVisitor;
 
-public class Rebound extends ActionResult {
-	
-	private Player reboundPlayer ; 
-	private Player missedPlayer ; 
-	
-	public Rebound(String name, Player reboundPlayer, Player missedPlayer) {
-		super(name) ; 
-		this.reboundPlayer = reboundPlayer ; 
-		this.missedPlayer = missedPlayer ; 
-	}
+public class Rebound
+extends ActionResult {
+    private Player reboundPlayer;
+    private Player missedPlayer;
 
-	public Player getReboundPlayer() {
-		return reboundPlayer;
-	}
+    public Rebound(String string, Player player, Player player2) {
+        super(string);
+        this.reboundPlayer = player;
+        this.missedPlayer = player2;
+    }
 
-	public void setReboundPlayer(Player reboundPlayer) {
-		this.reboundPlayer = reboundPlayer;
-	}
+    public Player getReboundPlayer() {
+        return this.reboundPlayer;
+    }
 
-	public Player getMissedPlayer() {
-		return missedPlayer;
-	}
+    public void setReboundPlayer(Player player) {
+        this.reboundPlayer = player;
+    }
 
-	public void setMissedPlayer(Player missedPlayer) {
-		this.missedPlayer = missedPlayer;
-	}
-	public <A> A accept(ActionResultVisitor<A> visitor) {
-	    return visitor.visit(this);
-	}
-	
-	
+    public Player getMissedPlayer() {
+        return this.missedPlayer;
+    }
 
+    public void setMissedPlayer(Player player) {
+        this.missedPlayer = player;
+    }
+
+    @Override
+    public <A> A accept(ActionResultVisitor<A> actionResultVisitor) {
+        return actionResultVisitor.visit(this);
+    }
 }

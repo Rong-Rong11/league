@@ -1,45 +1,36 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.league;
 
 import data.finance.budget.Budget;
 
-
 public class LeagueFinance {
-	private Budget budget ; 
-	public static double salaryCap ; 
-	public static double luxuryTaxLine ; 
-	public static double minimumTeamSalary ;
-	
-	public LeagueFinance(Budget budget, double salaryCap, double luxuryTaxLine, double minimumTeamSalary) {
-		super();
-		this.budget = budget;
-		this.salaryCap = salaryCap;
-		this.luxuryTaxLine = luxuryTaxLine;
-		this.minimumTeamSalary = minimumTeamSalary;
-	}
+    private Budget budget;
+    public static double salaryCap;
+    public static double luxuryTaxLine;
+    public static double minimumTeamSalary;
 
-	public Budget getBudget() {
-		return budget;
-	}
+    public LeagueFinance(Budget budget, double d, double d2, double d3) {
+        this.budget = budget;
+        salaryCap = d;
+        luxuryTaxLine = d2;
+        minimumTeamSalary = d3;
+    }
 
-	public double getSalaryCap() {
-		return salaryCap;
-	}
+    public Budget getBudget() {
+        return this.budget;
+    }
 
-	public double getLuxuryTaxLine() {
-		return luxuryTaxLine;
-	}
+    public double getSalaryCap() {
+        return salaryCap;
+    }
 
-	public double getMinimumTeamSalary() {
-		return minimumTeamSalary;
-	} 
-	
-	
-	
-	
-	
-	//les sommes en millions 
-	
-	
-	
-	
+    public double getLuxuryTaxLine() {
+        return luxuryTaxLine;
+    }
+
+    public double getMinimumTeamSalary() {
+        return minimumTeamSalary;
+    }
 }

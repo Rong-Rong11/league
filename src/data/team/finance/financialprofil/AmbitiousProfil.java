@@ -1,11 +1,15 @@
 package data.team.finance.financialprofil;
 
-public class AmbitiousProfil extends FinancialProfil {
+import process.visitor.financialprofil.FinancialProfilVisitor;
 
-	public AmbitiousProfil(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
-	}
-	
-	
+public class AmbitiousProfil
+        extends FinancialProfil {
+    public AmbitiousProfil() {
+        super();
+    }
+
+    @Override
+    public <F> F accept(FinancialProfilVisitor<F> financialProfilVisitor) {
+        return financialProfilVisitor.visit(this);
+    }
 }

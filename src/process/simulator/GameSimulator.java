@@ -1,16 +1,17 @@
 package process.simulator;
+import config.GameConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import config.GameConfiguration;
 import data.player.Asset;
 import data.player.Player;
 import data.sport.play.OffensiveTry;
 import data.sport.play.action.ActionResult;
 import data.sport.play.action.Block;
 import data.sport.play.action.EndOfTime;
+import data.sport.play.action.MissedShot;
 import data.sport.play.action.PointScored;
 import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
@@ -32,14 +33,14 @@ import process.visitor.actionresult.GameResultVisitor;
 public class GameSimulator {
 
 	private PlayerRepositery playerRepositery = PlayerRepositery.getInstance();
-	private EventSimulator eventSimulator = new EventSimulator();
-	private InjuryManager injuryManager = new InjuryManager();
-	private ActionSimulator actionSimulator = new ActionSimulator();
-	private HealthManager healthManager = new HealthManager();
+	private EventSimulator eventSimulator = new EventSimulator() ; 
+	private InjuryManager injuryManager = new InjuryManager() ; 
+	private ActionSimulator actionSimulator = new ActionSimulator() ; 
+	private HealthManager healthManager = new HealthManager() ; 
 	private LineupSelector lineupSelector = new LineupSelector();
-
+	
 	public GameSimulator() {
-
+		
 	}
 
 	private static boolean isAssist() {
@@ -50,25 +51,27 @@ public class GameSimulator {
 		return Math.random() < GameConfiguration.BLOCK_PROBABILTY;
 	}
 
-	private ActionResult simulateAction(Player attackingPlayer, TreeMap<Double, Player> attackingPlayers,
+	private ArrayList<ActionResult> simulateAction(Player attackingPlayer, TreeMap<Double, Player> attackingPlayers,
 			TreeMap<Double, Player> defensivePlayers, int quarterTimeRemaining,
 			HashMap<Player, Asset> attackPlayersAssetsOfMatch, HashMap<Player, Asset> defensivePlayersAssetsOfMatch,
 			HashMap<Player, Asset> playersNewAssets) {
-
+		
 		int actionTime = 14 + (int) (Math.random() * 10);
-		ActionResult actionResult;
+		ArrayList<ActionResult> actionResults = new ArrayList<ActionResult>();
 		if (quarterTimeRemaining <= actionTime) {
-			actionResult = new EndOfTime(GameConfiguration.END_OF_TIME_ACTION);
-		} else {
+			actionResults.add(new EndOfTime(GameConfiguration.END_OF_TIME_ACTION));
+		}
+
+		else {
 			Player defendingPlayer = eventSimulator.chooseDefendingPlayer(defensivePlayers);
 
 			if (actionSimulator.effectiveTurnover(attackingPlayer, defendingPlayer)) {
-				actionResult = new Turnover(GameConfiguration.TURNOVER_ACTION, attackingPlayer, defendingPlayer);
+				actionResults.add(new Turnover(GameConfiguration.TURNOVER_ACTION, attackingPlayer, defendingPlayer));
 			} else {
 				OffensiveTry offensiveTry = eventSimulator.chooseOffensiveAction(attackingPlayer, attackPlayersAssetsOfMatch);
-
+				
 				if (offensiveTry.getName().equals(GameConfiguration.FOULDRAW)) {
-					injuryManager.simulateInjury(playersNewAssets, attackingPlayer, GameConfiguration.FOULDRAW);
+					injuryManager.simulateInjury(playersNewAssets,attackingPlayer, GameConfiguration.FOULDRAW);
 				}
 				if (actionSimulator.simulateShot(attackingPlayer, offensiveTry, defensivePlayers)) {
 					Player assistPlayer = null;
@@ -80,46 +83,53 @@ public class GameSimulator {
 					}
 
 					if (offensiveTry.getName().equals(GameConfiguration.THREEPOINT)) {
-						actionResult = new PointScored(GameConfiguration.SCORED_ACTION, 3, attackingPlayer, assistPlayer);
+						actionResults.add(new PointScored(GameConfiguration.SCORED_ACTION, 3, attackingPlayer,
+								assistPlayer));
 					} else {
-						actionResult = new PointScored(GameConfiguration.SCORED_ACTION, 2, attackingPlayer, assistPlayer);
+						actionResults.add(new PointScored(GameConfiguration.SCORED_ACTION, 2, attackingPlayer,
+								assistPlayer));
 					}
 
-				} else {
+				}
+
+				else {
+					actionResults.add(new MissedShot("missed shot", attackingPlayer));
 					if (isBlock()) {
 						Player blockingPlayer = eventSimulator.chooseBlockingPlayer(defensivePlayersAssetsOfMatch);
-						actionResult = new Block(GameConfiguration.BLOCK_ACTION, blockingPlayer);
+						actionResults.add(new Block(GameConfiguration.BLOCK_ACTION, blockingPlayer));
 					} else {
-						Player reboundPlayer = eventSimulator.chooseRebounder(attackPlayersAssetsOfMatch,
-								defensivePlayersAssetsOfMatch);
+						Player reboundPlayer = eventSimulator.chooseRebounder(attackPlayersAssetsOfMatch, defensivePlayersAssetsOfMatch);
 						if (attackingPlayers.containsValue(reboundPlayer)) {
-							actionResult = new Rebound(GameConfiguration.OFFENSIVE_REBOUND_ACTION, reboundPlayer,
-									attackingPlayer);
-							injuryManager.simulateInjury(playersNewAssets, reboundPlayer,
-									GameConfiguration.OFFENSIVE_REBOUND_ACTION);
-						} else {
-							actionResult = new Rebound(GameConfiguration.DEFENSIVE_REBOUND_ACTION, reboundPlayer,
-									attackingPlayer);
-							injuryManager.simulateInjury(playersNewAssets, reboundPlayer,
-									GameConfiguration.DEFENSIVE_REBOUND_ACTION);
+							actionResults.add(new Rebound(GameConfiguration.OFFENSIVE_REBOUND_ACTION, reboundPlayer,
+									attackingPlayer));
+							injuryManager.simulateInjury(playersNewAssets,reboundPlayer, GameConfiguration.OFFENSIVE_REBOUND_ACTION);
+						}
+
+						else {
+							actionResults.add(new Rebound(GameConfiguration.DEFENSIVE_REBOUND_ACTION, reboundPlayer,
+									attackingPlayer));
+							injuryManager.simulateInjury(playersNewAssets,reboundPlayer, GameConfiguration.DEFENSIVE_REBOUND_ACTION);
 						}
 					}
 				}
 
-				actionResult.setOffensiveAction(offensiveTry);
+				for (ActionResult actionResult : actionResults) {
+					actionResult.setOffensiveAction(offensiveTry);
+				}
 			}
 		}
 
-		actionResult.setActionTime(actionTime);
+		for (ActionResult actionResult : actionResults) {
+			actionResult.setActionTime(actionTime);
+		}
 
-		return actionResult;
+		return actionResults;
 	}
 
 	private static HashMap<Player, Asset> createMapOfPlayerAsset(ArrayList<Player> players) {
 		HashMap<Player, Asset> assets = new HashMap<Player, Asset>();
 		for (Player player : players) {
-			Asset asset = player.getCurrentSeasonAssets().getMinutesPlayedPerMatch() != 0
-					? player.getCurrentSeasonAssets()
+			Asset asset = player.getCurrentSeasonAssets().getMinutesPlayedPerMatch() != 0 ? player.getCurrentSeasonAssets()
 					: player.getPreSeasonAssets();
 			assets.put(player, asset);
 		}
@@ -184,35 +194,38 @@ public class GameSimulator {
 
 			}
 			Player attackingPlayer = eventSimulator.chooseAttackingPlayer(attackingPlayers);
-
-			ActionResult actionResult = simulateAction(attackingPlayer, attackingPlayers, defensivePlayers, quarterTime,
+			
+			ArrayList<ActionResult> actionResults = simulateAction(attackingPlayer, attackingPlayers, defensivePlayers, quarterTime,
 					attackPlayersAssetsOfMatch, defensivePlayersAssetsOfMatch, playersNewAssets);
+			ActionResult terminalAction = actionResults.get(actionResults.size() - 1);
 
-			if (actionResult.getName().equals(GameConfiguration.DEFENSIVE_REBOUND_ACTION)
-					|| actionResult.getName().equals(GameConfiguration.TURNOVER_ACTION)) {
+			if (terminalAction.getName().equals(GameConfiguration.SCORED_ACTION)
+					|| terminalAction.getName().equals(GameConfiguration.DEFENSIVE_REBOUND_ACTION)
+					|| terminalAction.getName().equals(GameConfiguration.TURNOVER_ACTION)) {
 				if (possession.equals("home")) {
 					possession = "away";
 				} else {
 					possession = "home";
 				}
 			}
-			healthManager.updateFatigue(homeTeamPlayers, awayTeamPlayers, actionResult.getActionTime());
-			healthManager.addMinutesPlayed(homeTeamPlayers, awayTeamPlayers, playersNewAssets, actionResult.getActionTime());
-
+			healthManager.updateFatigue(homeTeamPlayers, awayTeamPlayers, terminalAction.getActionTime());
+			healthManager.addMinutesPlayed(homeTeamPlayers, awayTeamPlayers, playersNewAssets, terminalAction.getActionTime());
+			
 			lineupSelector.updatePlayers(awayTeam, awayTeamPlayers);
-			awayPlayersAssetsOfMatch = createMapOfPlayerAsset(awayTeamPlayers);
+			awayPlayersAssetsOfMatch = createMapOfPlayerAsset(awayTeamPlayers) ; 		
 			lineupSelector.updatePlayers(homeTeam, homeTeamPlayers);
-			homePlayersAssetsOfMatch = createMapOfPlayerAsset(homeTeamPlayers);
+			homePlayersAssetsOfMatch = createMapOfPlayerAsset(homeTeamPlayers) ; 
+			
+			for (ActionResult actionResult : actionResults) {
+				updateAssestAfterAction(actionResult, playersNewAssets);
+				updateGameResult(gameResult, actionResult, homeTeamPlayers, awayTeamPlayers);
+				gameResult.addActions(actionResult);
+			}
 
-			updateAssestAfterAction(actionResult, playersNewAssets);
-			updateGameResult(gameResult, actionResult, homeTeamPlayers, awayTeamPlayers);
-
-			gameResult.addActions(actionResult);
-
-			if (actionResult.getName().equals(GameConfiguration.END_OF_TIME_ACTION)) {
+			if (terminalAction.getName().equals(GameConfiguration.END_OF_TIME_ACTION)) {
 				quarterTime = 0;
 			} else {
-				quarterTime -= actionResult.getActionTime();
+				quarterTime -= terminalAction.getActionTime();
 			}
 
 		}
@@ -222,15 +235,19 @@ public class GameSimulator {
 	private void updateCurrentSeasonAsset(Team team, HashMap<Player, Asset> playersNewAssets) {
 		for (Player player : team.getPlayers().values()) {
 			PlayerUtilitary.updateAsset(player, playersNewAssets.get(player));
+			// faire màj note du joeur
 		}
 	}
+
+	
 
 	public void simulateGame(Game game) {
 		GameResult[] quarterResults = new GameResult[4];
 		Team homeTeam = game.getGameContext().getHomeTeam();
 		Team awayTeam = game.getGameContext().getAwayTeam();
 		HashMap<Player, Asset> playersNewAssets = createMapNewAssets(playerRepositery.getAllPlayers());
-
+		
+		
 		healthManager.initializeHealth(homeTeam, awayTeam);
 
 		for (int index = 0; index < 4; index++) {
@@ -238,7 +255,7 @@ public class GameSimulator {
 			if (index == 1) {
 				healthManager.updateRest(15, homeTeam, awayTeam);
 			} else {
-				healthManager.updateRest(2, homeTeam, awayTeam);
+			healthManager.updateRest(2, homeTeam, awayTeam);
 			}
 		}
 		game.setQuarterResults(quarterResults);
@@ -273,21 +290,18 @@ public class GameSimulator {
 
 	private static int totalHome(Game game) {
 		int totalHome = 0;
-		for (GameResult gameResult : game.getQuarterResults()) {
-			if (gameResult != null) {
+		for (GameResult gameResult : game.getQuarterResults())
+			if (gameResult != null)
 				totalHome += gameResult.getScorehomeTeam();
-			}
-		}
 		return totalHome;
 	}
 
 	private static int totalAway(Game game) {
 		int totalAway = 0;
-		for (GameResult gameResult : game.getQuarterResults()) {
-			if (gameResult != null) {
+		for (GameResult gameResult : game.getQuarterResults())
+			if (gameResult != null)
 				totalAway += gameResult.getScoreAwayTeam();
-			}
-		}
 		return totalAway;
 	}
+
 }

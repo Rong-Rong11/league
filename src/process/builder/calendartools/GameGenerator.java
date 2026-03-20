@@ -1,17 +1,16 @@
 package process.builder.calendartools;
 
-import java.util.ArrayList;
-
-import config.GameConfiguration;
 import data.league.Conference;
 import data.league.Division;
 import data.league.League;
 import data.sport.setup.Game;
 import data.sport.setup.GameContext;
 import data.team.Team;
+import java.util.ArrayList;
+
+import config.GameConfiguration;
 
 public class GameGenerator {
-	
 	public static void generateAllGamesRegularSeason(League league) {
 		Conference westernConference = league.getWesternConference();
 		Conference easternConference = league.getEasternConference();
@@ -65,10 +64,10 @@ public class GameGenerator {
 							Game game;
 							GameContext gameContext;
 							if (home) {
-									gameContext = new GameContext(team, other, GameConfiguration.GAME_INTRA_CONFERENCE);
+								gameContext = new GameContext(team, other, GameConfiguration.GAME_INTRA_CONFERENCE);
 								game = new Game(gameContext);
 							} else {
-									gameContext = new GameContext(other, team, GameConfiguration.GAME_INTRA_CONFERENCE);
+								gameContext = new GameContext(other, team, GameConfiguration.GAME_INTRA_CONFERENCE);
 								game = new Game(gameContext);
 							}
 							addGameToTeam(game, team);
@@ -91,10 +90,10 @@ public class GameGenerator {
 					Game game;
 					GameContext gameContext;
 					if (home) {
-							gameContext = new GameContext(team, other, GameConfiguration.GAME_INTER_CONFERENCE);
+						gameContext = new GameContext(team, other, GameConfiguration.GAME_INTER_CONFERENCE);
 						game = new Game(gameContext);
 					} else {
-							gameContext = new GameContext(other, team, GameConfiguration.GAME_INTER_CONFERENCE);
+						gameContext = new GameContext(other, team, GameConfiguration.GAME_INTER_CONFERENCE);
 						game = new Game(gameContext);
 					}
 					addGameToTeam(game, team);
@@ -120,5 +119,4 @@ public class GameGenerator {
 		}
 		return teams;
 	}
-
 }

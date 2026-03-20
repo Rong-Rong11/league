@@ -1,27 +1,54 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package process.visitor.marketsize;
 
+import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.financialprofil.FinancialProfil;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
+import process.visitor.marketsize.MarketSizeVisitor;
 
-public class CalculateInitialTeamBudgetVisitor implements MarketSizeVisitor<Double> {
+public class CalculateInitialTeamBudgetVisitor
+implements MarketSizeVisitor<Double> {
+    private double baseBudget;
+    private double popularity;
+    private EconomicProfil economicProfil;
 
-	private double baseBudget;
+    public CalculateInitialTeamBudgetVisitor(double baseBudget, double popularity, EconomicProfil economicProfil) {
+        this.baseBudget = baseBudget;
+        this.popularity = popularity;
+        this.economicProfil = economicProfil; 
+    }
 
-	public CalculateInitialTeamBudgetVisitor(double baseBudget) {
-		super();
-		this.baseBudget = baseBudget;
-	}
+    @Override
+    public Double visit(LargeSize largeSize) {
+        return this.computeBudget(1.2);
+    }
 
-	public Double visit(LargeSize largeSize) {
-		return baseBudget * 1.2;
-	}
+    @Override
+    public Double visit(MediumSize mediumSize) {
+        return this.computeBudget(1.0);
+    }
 
-	public Double visit(MediumSize mediumSize) {
-		return baseBudget;
-	}
+    @Override
+    public Double visit(SmallSize smallSize) {
+        return this.computeBudget(0.8);
+    }
 
-	public Double visit(SmallSize smallSize) {
-		return baseBudget * 0.8;
-	}
+    private double computeBudget(double marketMultiplier) {
+        double budget = this.baseBudget;
+        budget *= marketMultiplier;
+        double popularityFactor = 0.85 + popularity / 100.0 * 0.3;
+        budget *= popularityFactor;
+        double prestigeFactor = 0.85 + economicProfil.getHistoricalPrestige() * 0.3;
+        budget *= prestigeFactor;
+        double mediaFactor = 1.25;
+        budget *= mediaFactor;
+        double commercialFactor = 0.9 + economicProfil.getCommercialAggressiveness() * 0.2;
+        budget *= commercialFactor;
+        double ownerFactor = 0.7 + economicProfil.getOwnerDeficitTolerance() * 0.6;
+        return budget *= ownerFactor;
+    }
 }

@@ -1,62 +1,63 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package process.visitor.actionresult;
-
-import java.util.HashMap;
 
 import data.player.Asset;
 import data.player.Player;
 import data.sport.play.action.Block;
 import data.sport.play.action.EndOfTime;
+import data.sport.play.action.MissedShot;
 import data.sport.play.action.PointScored;
 import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
+import java.util.HashMap;
+import process.visitor.actionresult.ActionResultVisitor;
 
-public class AssetUpdateVisitor implements ActionResultVisitor<Void> {
+public class AssetUpdateVisitor
+implements ActionResultVisitor<Void> {
     private HashMap<Player, Asset> playersNewAssets;
 
-    public AssetUpdateVisitor(HashMap<Player, Asset> playersNewAssets) {
-        this.playersNewAssets = playersNewAssets;
+    public AssetUpdateVisitor(HashMap<Player, Asset> hashMap) {
+        this.playersNewAssets = hashMap;
     }
 
     @Override
     public Void visit(PointScored pointScored) {
-        Player scorer = pointScored.getScorerPlayer();
-        playersNewAssets.get(scorer)
-                .setPointPerMatch(playersNewAssets.get(scorer).getPointPerMatch()
-                        + pointScored.getPointsScored());
-
-        Player assist = pointScored.getAssistPlayer();
-        if (assist != null) {
-            playersNewAssets.get(assist)
-                    .setAssistPerMatch(playersNewAssets.get(assist).getAssistPerMatch() + 1);
+        Player player = pointScored.getScorerPlayer();
+        this.playersNewAssets.get(player).setPointPerMatch(this.playersNewAssets.get(player).getPointPerMatch() + (double)pointScored.getPointsScored());
+        Player player2 = pointScored.getAssistPlayer();
+        if (player2 != null) {
+            this.playersNewAssets.get(player2).setAssistPerMatch(this.playersNewAssets.get(player2).getAssistPerMatch() + 1.0);
         }
         return null;
     }
 
     @Override
-    public Void visit(Turnover turnover) {
-        Player intercepted = turnover.getInterceptedPlayer();
-        playersNewAssets.get(intercepted)
-                .setLostBallPerMatch(playersNewAssets.get(intercepted).getLostBallPerMatch() + 1);
+    public Void visit(MissedShot missedShot) {
+        return null;
+    }
 
-        Player defender = turnover.getDefensePlayer();
-        playersNewAssets.get(defender)
-                .setInterceptionPerMatch(playersNewAssets.get(defender).getInterceptionPerMatch() + 1);
+    @Override
+    public Void visit(Turnover turnover) {
+        Player player = turnover.getInterceptedPlayer();
+        this.playersNewAssets.get(player).setLostBallPerMatch(this.playersNewAssets.get(player).getLostBallPerMatch() + 1.0);
+        Player player2 = turnover.getDefensePlayer();
+        this.playersNewAssets.get(player2).setInterceptionPerMatch(this.playersNewAssets.get(player2).getInterceptionPerMatch() + 1.0);
         return null;
     }
 
     @Override
     public Void visit(Block block) {
-        Player blocker = block.getBlockingPlayer();
-        playersNewAssets.get(blocker)
-                .setBlockPerMatch(playersNewAssets.get(blocker).getBlockPerMatch() + 1);
+        Player player = block.getBlockingPlayer();
+        this.playersNewAssets.get(player).setBlockPerMatch(this.playersNewAssets.get(player).getBlockPerMatch() + 1.0);
         return null;
     }
 
     @Override
     public Void visit(Rebound rebound) {
-        Player rebounder = rebound.getReboundPlayer();
-        playersNewAssets.get(rebounder)
-                .setReboundPerMatch(playersNewAssets.get(rebounder).getReboundPerMatch() + 1);
+        Player player = rebound.getReboundPlayer();
+        this.playersNewAssets.get(player).setReboundPerMatch(this.playersNewAssets.get(player).getReboundPerMatch() + 1.0);
         return null;
     }
 

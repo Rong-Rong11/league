@@ -1,105 +1,97 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.league;
 
-import java.util.ArrayList;
-
 import config.CalendarConfiguration;
+import data.league.Conference;
+import data.league.Division;
+import data.league.LeagueFinance;
+import data.league.Playoff;
+import data.league.RegularSeason;
 import data.player.Player;
 import data.team.Team;
+import java.util.ArrayList;
 
 public class League {
-	private Conference westernConference;
-	private Conference easternConference;
-	private LeagueFinance leagueFinance = null ; 
-	private RegularSeason regularSeason;
-	private Playoff playoff;
+    private Conference westernConference = new Conference("West");
+    private Conference easternConference = new Conference("East");
+    private LeagueFinance leagueFinance = null;
+    private RegularSeason regularSeason = new RegularSeason(CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE, CalendarConfiguration.REGULAR_SEASON_END_DATE);
+    private Playoff playoff = new Playoff(CalendarConfiguration.PLAYOFF_DEBUT_DATE, CalendarConfiguration.PLAYOFF_END_DATE);
 
-	public League() {
-		westernConference = new Conference("West");
-		easternConference = new Conference("East") ; 
-		regularSeason = new RegularSeason(CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE,
-				CalendarConfiguration.REGULAR_SEASON_END_DATE);
-		playoff = new Playoff(CalendarConfiguration.PLAYOFF_DEBUT_DATE, CalendarConfiguration.PLAYOFF_END_DATE);
-	}
+    public Conference getWesternConference() {
+        return this.westernConference;
+    }
 
-	public Conference getWesternConference() {
-		return westernConference;
-	}
+    public void setWesternConference(Conference conference) {
+        this.westernConference = conference;
+    }
 
-	public void setWesternConference(Conference westernConference) {
-		this.westernConference = westernConference;
-	}
+    public Conference getEasternConference() {
+        return this.easternConference;
+    }
 
-	public Conference getEasternConference() {
-		return easternConference;
-	}
+    public void setEasternConfernce(Conference conference) {
+        this.easternConference = conference;
+    }
 
-	public void setEasternConfernce(Conference easternConfernce) {
-		this.easternConference = easternConfernce;
-	}
+    public RegularSeason getReagularSeason() {
+        return this.regularSeason;
+    }
 
+    public void setReagularSeason(RegularSeason regularSeason) {
+        this.regularSeason = regularSeason;
+    }
 
-	public RegularSeason getReagularSeason() {
-		return regularSeason;
-	}
+    public Playoff getPlayoff() {
+        return this.playoff;
+    }
 
-	public void setReagularSeason(RegularSeason reagularSeason) {
-		this.regularSeason = reagularSeason;
-	}
+    public void setPlayoff(Playoff playoff) {
+        this.playoff = playoff;
+    }
 
-	public Playoff getPlayoff() {
-		return playoff;
-	}
+    public void addTeamWesternConference(Team team, String string) {
+        this.westernConference.addTeam(team, string);
+    }
 
-	public void setPlayoff(Playoff playoff) {
-		this.playoff = playoff;
-	}
+    public void addTeamEasternConference(Team team, String string) {
+        this.easternConference.addTeam(team, string);
+    }
 
-	public void addTeamWesternConference(Team team, String divisionName) {
-		westernConference.addTeam(team, divisionName);
-	}
+    public void addDivisionWesternConference(Division division) {
+        this.westernConference.addDivision(division);
+    }
 
-	public void addTeamEasternConference(Team team, String divisionName) {
-		easternConference.addTeam(team, divisionName);
-	}
+    public void addDivisionEasternConference(Division division) {
+        this.easternConference.addDivision(division);
+    }
 
-	public void addDivisionWesternConference(Division division) {
-		westernConference.addDivision(division);
-	}
+    public void addPlayerWesternConference(Player player, String string, String string2) {
+        this.westernConference.getDivisions().get(string).getTeams().get(string2).addPlayer(player);
+    }
 
-	public void addDivisionEasternConference(Division division) {
-		easternConference.addDivision(division);
-	}
+    public void addPlayerEasternConference(Player player, String string, String string2) {
+        this.easternConference.getDivisions().get(string).getTeams().get(string2).addPlayer(player);
+    }
 
-	public void addPlayerWesternConference(Player player, String divisionName, String teamName) {
-		westernConference.getDivisions().get(divisionName).getTeams().get(teamName).addPlayer(player);
-	}
+    public ArrayList<Team> getAllTeam() {
+        ArrayList<Team> arrayList = new ArrayList<Team>();
+        for (Division division : this.westernConference.getDivisions().values()) {
+            arrayList.addAll(division.getTeams().values());
+        }
+        for (Division division : this.easternConference.getDivisions().values()) {
+            arrayList.addAll(division.getTeams().values());
+        }
+        return arrayList;
+    }
 
-	public void addPlayerEasternConference(Player player, String divisionName, String teamName) {
-		easternConference.getDivisions().get(divisionName).getTeams().get(teamName).addPlayer(player);
-	}
+    public void setLeagueFinance(LeagueFinance leagueFinance) {
+        this.leagueFinance = leagueFinance;
+    }
 
-	public ArrayList<Team> getAllTeam() {
-		ArrayList<Team> teams = new ArrayList<Team>();
-		for (Division division : westernConference.getDivisions().values()) {
-			teams.addAll(division.getTeams().values());
-		}
-		for (Division division : easternConference.getDivisions().values()) {
-			teams.addAll(division.getTeams().values());
-		}
-		return teams;
-
-	}
-
-	public void setLeagueFinance(LeagueFinance leagueFinance) {
-		this.leagueFinance = leagueFinance;
-	}
-
-	public LeagueFinance getLeagueFinance() {
-		return leagueFinance;
-	}
-	
-	
-	
-	
-
+    public LeagueFinance getLeagueFinance() {
+        return this.leagueFinance;
+    }
 }

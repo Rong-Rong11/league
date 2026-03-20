@@ -1,7 +1,8 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package process.manager.financetools;
 
-import config.FinanceConfiguration;
-import config.GameConfiguration;
 import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.team.Team;
@@ -10,78 +11,64 @@ import process.utilitary.CalendarUtilitary;
 import process.visitor.marketsize.CalculateStadiumCostVisitor;
 
 public class GameExpenseSimulator {
-	private GameStat gameStat;
+    private GameStat gameStat;
 
-	public GameExpenseSimulator(GameStat gameStat) {
-		super();
-		this.gameStat = gameStat;
-	}
+    public GameExpenseSimulator(GameStat gameStat) {
+        this.gameStat = gameStat;
+    }
 
-	public void calculateGameExpenses(Game game) {
-		Team homeTeam = game.getGameContext().getHomeTeam();
-		double gamePopularity = gameStat.getPopularity();
+    public void calculateGameExpenses(Game game) {
+        Team team = game.getGameContext().getHomeTeam();
+        double d = this.gameStat.getPopularity();
+        int n = this.gameStat.getAttendees();
+        this.calculateStadiumCosts(team, n, d);
+        this.calculateStaffCosts();
+        this.calculateSecurityCosts(n);
+        this.calculateLogisticCosts(game);
+        this.calculateAwayTravelCost(game);
+    }
 
-		int attendees = gameStat.getAttendees();
+    private void calculateStadiumCosts(Team team, int n, double d) {
+        MarketSize marketSize = team.getTeamFinance().getMarketSize();
+        double d2 = marketSize.accept(new CalculateStadiumCostVisitor());
+        double d3 = n / 200000;
+        d2 *= 1.0 + d3 * 0.25;
+        this.gameStat.getHomeFinance().setArenaCosts(d2 *= 1.0 + d * 0.15);
+    }
 
-		calculateStadiumCosts(homeTeam, attendees, gamePopularity);
-		calculateStaffCosts();
-		calculateSecurityCosts(attendees);
-		calculateLogisticCosts(game);
-		calculateAwayTravelCost(game);
+    private void calculateSecurityCosts(int n) {
+        double d = 5.0;
+        double d2 = n > 15000 ? 1.3 : 1.0;
+        double d3 = (double)n * d * d2 / 1000000.0;
+        this.gameStat.getHomeFinance().setSecurityCosts(d3);
+    }
 
-	}
+    private void calculateStaffCosts() {
+        double d = 0.15;
+        double d2 = 1.0;
+        if (this.gameStat.getAttendanceRate() > 0.9) {
+            d2 = 1.2;
+        }
+        if (this.gameStat.getAttendanceRate() < 0.4) {
+            d2 = 0.9;
+        }
+        double d3 = d * d2;
+        this.gameStat.getHomeFinance().setStaffCosts(d3);
+    }
 
-	private void calculateStadiumCosts(Team homeTeam, int attendees, double gamePopularity) {
-		MarketSize marketSize = homeTeam.getTeamFinance().getMarketSize();
-		double baseCosts = marketSize.accept(new CalculateStadiumCostVisitor());
-		double attendanceFactor = attendees / 200000;
-		baseCosts *= (1 + (attendanceFactor * 0.25));
-		baseCosts *= (1 + (gamePopularity * 0.15));
-		gameStat.getHomeFinance().setArenaCosts(baseCosts);
-	}
+    private void calculateAwayTravelCost(Game game) {
+        double d = 0.0;
+        int n = game.getGameContext().getTypeGame();
+        d = n == 2 ? 0.02 : (n == 1 ? 0.05 : 0.09);
+        this.gameStat.getAwayFinance().setTravelCosts(d);
+    }
 
-	private void calculateSecurityCosts(int attendees) {
-		double costPerFan = 5;
-		double riskFactor = attendees > 15000 ? 1.3 : 1.0;
-		double securityCost = (attendees * costPerFan * riskFactor) / 1000000;
-
-		gameStat.getHomeFinance().setSecurityCosts(securityCost);
-	}
-
-	private void calculateStaffCosts() {
-		double baseStaffCost = 0.15;
-		double attendanceFactor = 1.0;
-		if (gameStat.getAttendanceRate() > 0.9) {
-			attendanceFactor = 1.2;
-		}
-		if (gameStat.getAttendanceRate() < 0.4) {
-			attendanceFactor = 0.9;
-		}
-		double staffCost = baseStaffCost * attendanceFactor;
-		gameStat.getHomeFinance().setStaffCosts(staffCost);
-
-	}
-
-	private void calculateAwayTravelCost(Game game) {
-		double travelCost = 0;
-		int typeGame = game.getGameContext().getTypeGame();
-		if (typeGame == GameConfiguration.GAME_INTRA_DIVISION) {
-			travelCost = FinanceConfiguration.BASE_TRAVEL_INTRA_DIVISION_COST;
-		} else if (typeGame == GameConfiguration.GAME_INTRA_CONFERENCE) {
-			travelCost = FinanceConfiguration.BASE_TRAVEL_INTRA_CONFERENCE_COST;
-		} else {
-			travelCost = FinanceConfiguration.BASE_TRAVEL_INTER_CONFERENCE_COST;
-		}
-		gameStat.getAwayFinance().setTravelCosts(travelCost);
-	}
-
-	private void calculateLogisticCosts(Game game) {
-		double baseTransport = 0.05;
-		double mediaSetup = 0.04;
-		double equipment = 0.03;
-		double rivalryFactor = (CalendarUtilitary.isRivalry(game.getGameContext()) ? 1.15 : 1.0);
-		double logisticCost = (baseTransport + mediaSetup + equipment) * rivalryFactor;
-		gameStat.getHomeFinance().setLogisticsCosts(logisticCost);
-	}
-
+    private void calculateLogisticCosts(Game game) {
+        double d = 0.05;
+        double d2 = 0.04;
+        double d3 = 0.03;
+        double d4 = CalendarUtilitary.isRivalry(game.getGameContext()) ? 1.15 : 1.0;
+        double d5 = (d + d2 + d3) * d4;
+        this.gameStat.getHomeFinance().setLogisticsCosts(d5);
+    }
 }

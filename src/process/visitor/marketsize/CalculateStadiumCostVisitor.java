@@ -1,27 +1,25 @@
 package process.visitor.marketsize;
 
-import config.FinanceConfiguration;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
 
-public class CalculateStadiumCostVisitor implements MarketSizeVisitor<Double> {
+public class CalculateStadiumCostVisitor
+        implements MarketSizeVisitor<Double> {
+    private double baseCosts = 0.2;
 
-	private double baseCosts = FinanceConfiguration.BASE_STADIUM_COSTS;
+    @Override
+    public Double visit(LargeSize largeSize) {
+        return this.baseCosts *= 1.3;
+    }
 
-	public CalculateStadiumCostVisitor() {
+    @Override
+    public Double visit(MediumSize mediumSize) {
+        return this.baseCosts *= 1.0;
+    }
 
-	}
-
-	public Double visit(LargeSize largeSize) {
-		return baseCosts *= FinanceConfiguration.MARKET_SIZE_LARGE_MULTIPLIER;
-	}
-
-	public Double visit(MediumSize mediumSize) {
-		return baseCosts *= FinanceConfiguration.MARKET_SIZE_MEDIUM_MULTIPLIER;
-	}
-
-	public Double visit(SmallSize smallSize) {
-		return baseCosts *= FinanceConfiguration.MARKET_SIZE_SMALL_MULTIPLIER;
-	}
+    @Override
+    public Double visit(SmallSize smallSize) {
+        return this.baseCosts *= 0.7;
+    }
 }

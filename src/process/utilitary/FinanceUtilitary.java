@@ -19,11 +19,11 @@ public class FinanceUtilitary {
 
 	public static void initiateBudget(Budget budget) {
 		HashMap<Integer, HashMap<String, Income>> monthlyIncomes = budget.getMonthlyIncomes();
-		for (int i = 0; i < FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS; i++) {
+		for (int i = 0; i < 10; i++) {
 			monthlyIncomes.put(i, new HashMap<String, Income>());
 		}
 		HashMap<Integer, HashMap<String, Expense>> monthlyExpenses = budget.getMonthlyExpenses();
-		for (int i = 0; i < FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS; i++) {
+		for (int i = 0; i < 10; i++) {
 			monthlyExpenses.put(i, new HashMap<String, Expense>());
 		}
 	}
@@ -165,7 +165,7 @@ public class FinanceUtilitary {
 	}
 
 	public static void addExpense(Budget budget, Expense expense, int month) {
-		HashMap<String, Expense> expensesOfMonth = budget.getExpenses(month);
+		HashMap<String, Expense> expensesOfMonth = budget.getExpensesForMonth(month);
 
 		if (expensesOfMonth.containsKey(expense.getName())) {
 			Expense existingExpense = expensesOfMonth.get(expense.getName());

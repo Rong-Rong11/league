@@ -1,41 +1,34 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.player;
 
-import java.time.LocalDate;
-
 public class Injury {
-	private String injuryType; 
-	private int injuryDuration ;
-	
-	public Injury(String injuryType, int injuryDuration) {
-		this.injuryType = injuryType;
-		this.injuryDuration = injuryDuration;
-	}
+    private String injuryType;
+    private int injuryDuration;
 
-	public String getInjuryType() {
-		return injuryType;
-	}
+    public Injury(String string, int n) {
+        this.injuryType = string;
+        this.injuryDuration = n;
+    }
 
-	public void setInjuryType(String injuryType) {
-		this.injuryType = injuryType;
-	}
+    public String getInjuryType() {
+        return this.injuryType;
+    }
 
-	public int getInjuryDuration() {
-		return injuryDuration;
-	}
+    public void setInjuryType(String string) {
+        this.injuryType = string;
+    }
 
-	public void setInjuryDuration(int injuryDuration) {
-		this.injuryDuration = injuryDuration;
-	}
+    public int getInjuryDuration() {
+        return this.injuryDuration;
+    }
 
-	@Override
-	public String toString() {
-		return "Injury [injuryType=" + injuryType + ", injuryDuration=" + injuryDuration + "]";
-	} 
-	
-	
-	
-	
-	
-	
-	
+    public void setInjuryDuration(int n) {
+        this.injuryDuration = n;
+    }
+
+    public String toString() {
+        return "Injury [injuryType=" + this.injuryType + ", injuryDuration=" + this.injuryDuration + "]";
+    }
 }

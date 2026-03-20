@@ -1,58 +1,52 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.finance.budget;
 
+import data.finance.budget.Expense;
+import data.finance.budget.Income;
 import java.util.HashMap;
 
 public class Budget {
-	private double initialAmount ; 
-	private double remainingAmount ; 
-	private HashMap<Integer, HashMap<String, Income>> monthlyIncomes = new HashMap<Integer, HashMap<String,Income>>(); 
-	private HashMap<Integer, HashMap<String, Expense>> monthlyExpenses = new HashMap<Integer, HashMap<String,Expense>>() ; 
-	
-	public Budget(double amount) {
-		this.initialAmount = amount ; 
-		this.remainingAmount = amount ; 
-	}
+    private double initialAmount;
+    private double remainingAmount;
+    private HashMap<Integer, HashMap<String, Income>> monthlyIncomes = new HashMap();
+    private HashMap<Integer, HashMap<String, Expense>> monthlyExpenses = new HashMap();
 
-	public double getInitialAmount() {
-		return initialAmount;
-	}
+    public Budget(double d) {
+        this.initialAmount = d;
+        this.remainingAmount = d;
+    }
 
-	public void setInitialAmount(double initialAmount) {
-		this.initialAmount = initialAmount;
-	}
-	
+    public double getInitialAmount() {
+        return this.initialAmount;
+    }
 
-	public double getRemainingAmount() {
-		return remainingAmount;
-	}
+    public void setInitialAmount(double d) {
+        this.initialAmount = d;
+    }
 
-	public void setRemainingAmount(double remainingAmount) {
-		this.remainingAmount = remainingAmount;
-	}
+    public double getRemainingAmount() {
+        return this.remainingAmount;
+    }
 
-	public HashMap<String, Income> getIncomesForMonth(int month) {
-		return monthlyIncomes.get(month);
-	}
+    public void setRemainingAmount(double d) {
+        this.remainingAmount = d;
+    }
 
-	public HashMap<String, Expense> getExpenses(int month) {
-		return monthlyExpenses.get(month);
-	}
+    public HashMap<String, Income> getIncomesForMonth(int n) {
+        return this.monthlyIncomes.get(n);
+    }
 
-	public HashMap<Integer, HashMap<String, Income>> getMonthlyIncomes() {
-		return monthlyIncomes;
-	}
+    public HashMap<String, Expense> getExpensesForMonth(int n) {
+        return this.monthlyExpenses.get(n);
+    }
 
+    public HashMap<Integer, HashMap<String, Income>> getMonthlyIncomes() {
+        return this.monthlyIncomes;
+    }
 
-	public HashMap<Integer, HashMap<String, Expense>> getMonthlyExpenses() {
-		return monthlyExpenses;
-	}
-
-
-	
-	
-	
-
-	
-	
-	
+    public HashMap<Integer, HashMap<String, Expense>> getMonthlyExpenses() {
+        return this.monthlyExpenses;
+    }
 }

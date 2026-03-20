@@ -1,191 +1,174 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.sport.setup;
 
-import java.util.ArrayList;
-import java.util.TreeMap;
-
-import data.player.Player;
 import data.sport.play.action.ActionResult;
 import data.team.Team;
+import java.util.ArrayList;
 
 public class GameResult {
-	private Team winner = null ; 
-	private Team loser = null ; 
-	private int scorehomeTeam ; 
-	private int scoreAwayTeam; 
-	
-	private int twoPointsHomeTeam ; 
-	private int twoPointsAwayTeam ; 
-	
-	private int threePointsHomeTeam;
-	private int threePointsAwayTeam ; 
-	
-	private int reboundHomeTeam ; 
-	private int reboundAwayTeam ; 
-	
-	private int turnoverHomeTeam ; 
-	private int turnoverAwayTeam ; 
-	
-	private int blockHomeTeam ; 
-	private int blockAwayTeam ; 
-	
-	private int freeThrowHomeTeam ; 
-	private int freeThrowAwayTeam ; 
-	 
-	private ArrayList<ActionResult> actions ; 
-	
-	public GameResult(int scorehomeTeam, int scoreAwayTeam, int twoPointsHomeTeam, int twoPointsAwayTeam,
-			int threePointsHomeTeam, int threePointsAwayTeam, int reboundHomeTeam, int reboundAwayTeam,
-			int turnoverHomeTeam, int turnoverAwayTeam, int blockHomeTeam, int blockAwayTeam, int freeThrowHomeTeam,
-			int freeThrowAwayTeam) {
-		
-		this.scorehomeTeam = scorehomeTeam;
-		this.scoreAwayTeam = scoreAwayTeam;
-		this.twoPointsHomeTeam = twoPointsHomeTeam;
-		this.twoPointsAwayTeam = twoPointsAwayTeam;
-		this.threePointsHomeTeam = threePointsHomeTeam;
-		this.threePointsAwayTeam = threePointsAwayTeam;
-		this.reboundHomeTeam = reboundHomeTeam;
-		this.reboundAwayTeam = reboundAwayTeam;
-		this.turnoverHomeTeam = turnoverHomeTeam;
-		this.turnoverAwayTeam = turnoverAwayTeam;
-		this.blockHomeTeam = blockHomeTeam;
-		this.blockAwayTeam = blockAwayTeam;
-		this.freeThrowHomeTeam = freeThrowHomeTeam;
-		this.freeThrowAwayTeam = freeThrowAwayTeam;
-		actions = new ArrayList<ActionResult>() ; 
-	}
-	
-	public GameResult() {
-		this(0,0,0,0,0,0,0,0,0,0,0,0,0,0) ; 
-	}
-	
-	public void addActions(ActionResult action) {
-		actions.add(action) ; 
-	}
+    private Team winner = null;
+    private Team loser = null;
+    private int scorehomeTeam;
+    private int scoreAwayTeam;
+    private int twoPointsHomeTeam;
+    private int twoPointsAwayTeam;
+    private int threePointsHomeTeam;
+    private int threePointsAwayTeam;
+    private int reboundHomeTeam;
+    private int reboundAwayTeam;
+    private int turnoverHomeTeam;
+    private int turnoverAwayTeam;
+    private int blockHomeTeam;
+    private int blockAwayTeam;
+    private int freeThrowHomeTeam;
+    private int freeThrowAwayTeam;
+    private ArrayList<ActionResult> actions;
 
-	public int getScorehomeTeam() {
-		return scorehomeTeam;
-	}
+    public GameResult(int n, int n2, int n3, int n4, int n5, int n6, int n7, int n8, int n9, int n10, int n11, int n12, int n13, int n14) {
+        this.scorehomeTeam = n;
+        this.scoreAwayTeam = n2;
+        this.twoPointsHomeTeam = n3;
+        this.twoPointsAwayTeam = n4;
+        this.threePointsHomeTeam = n5;
+        this.threePointsAwayTeam = n6;
+        this.reboundHomeTeam = n7;
+        this.reboundAwayTeam = n8;
+        this.turnoverHomeTeam = n9;
+        this.turnoverAwayTeam = n10;
+        this.blockHomeTeam = n11;
+        this.blockAwayTeam = n12;
+        this.freeThrowHomeTeam = n13;
+        this.freeThrowAwayTeam = n14;
+        this.actions = new ArrayList();
+    }
 
-	public void setScorehomeTeam(int scorehomeTeam) {
-		this.scorehomeTeam = scorehomeTeam;
-	}
+    public GameResult() {
+        this(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    }
 
-	public int getScoreAwayTeam() {
-		return scoreAwayTeam;
-	}
+    public void addActions(ActionResult actionResult) {
+        this.actions.add(actionResult);
+    }
 
-	public void setScoreAwayTeam(int scoreAwayTeam) {
-		this.scoreAwayTeam = scoreAwayTeam;
-	}
+    public int getScorehomeTeam() {
+        return this.scorehomeTeam;
+    }
 
-	public int getTwoPointsHomeTeam() {
-		return twoPointsHomeTeam;
-	}
+    public void setScorehomeTeam(int n) {
+        this.scorehomeTeam = n;
+    }
 
-	public void setTwoPointsHomeTeam(int twoPointsHomeTeam) {
-		this.twoPointsHomeTeam = twoPointsHomeTeam;
-	}
+    public int getScoreAwayTeam() {
+        return this.scoreAwayTeam;
+    }
 
-	public int getTwoPointsAwayTeam() {
-		return twoPointsAwayTeam;
-	}
+    public void setScoreAwayTeam(int n) {
+        this.scoreAwayTeam = n;
+    }
 
-	public void setTwoPointsAwayTeam(int twoPointsAwayTeam) {
-		this.twoPointsAwayTeam = twoPointsAwayTeam;
-	}
+    public int getTwoPointsHomeTeam() {
+        return this.twoPointsHomeTeam;
+    }
 
-	public int getThreePointsHomeTeam() {
-		return threePointsHomeTeam;
-	}
+    public void setTwoPointsHomeTeam(int n) {
+        this.twoPointsHomeTeam = n;
+    }
 
-	public void setThreePointsHomeTeam(int threePointsHomeTeam) {
-		this.threePointsHomeTeam = threePointsHomeTeam;
-	}
+    public int getTwoPointsAwayTeam() {
+        return this.twoPointsAwayTeam;
+    }
 
-	public int getThreePointsAwayTeam() {
-		return threePointsAwayTeam;
-	}
+    public void setTwoPointsAwayTeam(int n) {
+        this.twoPointsAwayTeam = n;
+    }
 
-	public void setThreePointsAwayTeam(int threePointsAwayTeam) {
-		this.threePointsAwayTeam = threePointsAwayTeam;
-	}
+    public int getThreePointsHomeTeam() {
+        return this.threePointsHomeTeam;
+    }
 
-	public int getReboundHomeTeam() {
-		return reboundHomeTeam;
-	}
+    public void setThreePointsHomeTeam(int n) {
+        this.threePointsHomeTeam = n;
+    }
 
-	public void setReboundHomeTeam(int reboundHomeTeam) {
-		this.reboundHomeTeam = reboundHomeTeam;
-	}
+    public int getThreePointsAwayTeam() {
+        return this.threePointsAwayTeam;
+    }
 
-	public int getReboundAwayTeam() {
-		return reboundAwayTeam;
-	}
+    public void setThreePointsAwayTeam(int n) {
+        this.threePointsAwayTeam = n;
+    }
 
-	public void setReboundAwayTeam(int reboundAwayTeam) {
-		this.reboundAwayTeam = reboundAwayTeam;
-	}
+    public int getReboundHomeTeam() {
+        return this.reboundHomeTeam;
+    }
 
-	public int getTurnoverHomeTeam() {
-		return turnoverHomeTeam;
-	}
+    public void setReboundHomeTeam(int n) {
+        this.reboundHomeTeam = n;
+    }
 
-	public void setTurnoverHomeTeam(int turnoverHomeTeam) {
-		this.turnoverHomeTeam = turnoverHomeTeam;
-	}
+    public int getReboundAwayTeam() {
+        return this.reboundAwayTeam;
+    }
 
-	public int getTurnoverAwayTeam() {
-		return turnoverAwayTeam;
-	}
+    public void setReboundAwayTeam(int n) {
+        this.reboundAwayTeam = n;
+    }
 
-	public void setTurnoverAwayTeam(int turnoverAwayTeam) {
-		this.turnoverAwayTeam = turnoverAwayTeam;
-	}
+    public int getTurnoverHomeTeam() {
+        return this.turnoverHomeTeam;
+    }
 
-	public ArrayList<ActionResult> getActions() {
-		return actions;
-	}
+    public void setTurnoverHomeTeam(int n) {
+        this.turnoverHomeTeam = n;
+    }
 
-	public void setActions(ArrayList<ActionResult> actions) {
-		this.actions = actions;
-	}
+    public int getTurnoverAwayTeam() {
+        return this.turnoverAwayTeam;
+    }
 
-	public int getBlockHomeTeam() {
-		return blockHomeTeam;
-	}
+    public void setTurnoverAwayTeam(int n) {
+        this.turnoverAwayTeam = n;
+    }
 
-	public void setBlockHomeTeam(int blockHomeTeam) {
-		this.blockHomeTeam = blockHomeTeam;
-	}
+    public ArrayList<ActionResult> getActions() {
+        return this.actions;
+    }
 
-	public int getBlockAwayTeam() {
-		return blockAwayTeam;
-	}
+    public void setActions(ArrayList<ActionResult> arrayList) {
+        this.actions = arrayList;
+    }
 
-	public void setBlockAwayTeam(int blockAwayTeam) {
-		this.blockAwayTeam = blockAwayTeam;
-	}
+    public int getBlockHomeTeam() {
+        return this.blockHomeTeam;
+    }
 
-	public int getFreeThrowHomeTeam() {
-		return freeThrowHomeTeam;
-	}
+    public void setBlockHomeTeam(int n) {
+        this.blockHomeTeam = n;
+    }
 
-	public void setFreeThrowHomeTeam(int freeThrowHomeTeam) {
-		this.freeThrowHomeTeam = freeThrowHomeTeam;
-	}
+    public int getBlockAwayTeam() {
+        return this.blockAwayTeam;
+    }
 
-	public int getFreeThrowAwayTeam() {
-		return freeThrowAwayTeam;
-	}
+    public void setBlockAwayTeam(int n) {
+        this.blockAwayTeam = n;
+    }
 
-	public void setFreeThrowAwayTeam(int freeThrowAwayTeam) {
-		this.freeThrowAwayTeam = freeThrowAwayTeam;
-	}
-	
-	
-	
-	
-	
-	
+    public int getFreeThrowHomeTeam() {
+        return this.freeThrowHomeTeam;
+    }
+
+    public void setFreeThrowHomeTeam(int n) {
+        this.freeThrowHomeTeam = n;
+    }
+
+    public int getFreeThrowAwayTeam() {
+        return this.freeThrowAwayTeam;
+    }
+
+    public void setFreeThrowAwayTeam(int n) {
+        this.freeThrowAwayTeam = n;
+    }
 }

@@ -1,11 +1,11 @@
 package process.builder.calendartools;
+import config.CalendarConfiguration;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import config.CalendarConfiguration;
 import data.league.League;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
@@ -56,7 +56,7 @@ public class GameSelector {
 
 		for (Double score : scoreMap.descendingKeySet()) {
 			for (Game game : scoreMap.get(score)) {
-					if (selectedGames.size() >= CalendarConfiguration.MAX_GAMES_PER_DAY) {
+				if (selectedGames.size() >= CalendarConfiguration.MAX_GAMES_PER_DAY) {
 					break;
 				}
 				if (conflictWithSelected(game, selectedGames)) {

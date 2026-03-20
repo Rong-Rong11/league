@@ -1,61 +1,64 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.finance.transfer;
-
-import java.time.LocalDate;
 
 import data.player.Player;
 import data.team.Team;
+import java.time.LocalDate;
 
 public class Trade {
-	
-	private Player playerA ; 
-	private Team teamPlayerA ; 
-	
-	private Player playerB ; 
-	private Team teamPlayerB ; 
-	private LocalDate dateOfTransfer ;
-	public Trade(Player playerA, Team teamPlayerA, Player playerB, Team teamPlayerB, LocalDate dateOfTransfer) {
-		super();
-		this.playerA = playerA;
-		this.teamPlayerA = teamPlayerA;
-		this.playerB = playerB;
-		this.teamPlayerB = teamPlayerB;
-		this.dateOfTransfer = dateOfTransfer;
-	}
-	public Player getPlayerA() {
-		return playerA;
-	}
-	public void setPlayerA(Player playerA) {
-		this.playerA = playerA;
-	}
-	public Team getTeamPlayerA() {
-		return teamPlayerA;
-	}
-	public void setTeamPlayerA(Team teamPlayerA) {
-		this.teamPlayerA = teamPlayerA;
-	}
-	public Player getPlayerB() {
-		return playerB;
-	}
-	public void setPlayerB(Player playerB) {
-		this.playerB = playerB;
-	}
-	public Team getTeamPlayerB() {
-		return teamPlayerB;
-	}
-	public void setTeamPlayerB(Team teamPlayerB) {
-		this.teamPlayerB = teamPlayerB;
-	}
-	public LocalDate getDateOfTransfer() {
-		return dateOfTransfer;
-	}
-	public void setDateOfTransfer(LocalDate dateOfTransfer) {
-		this.dateOfTransfer = dateOfTransfer;
-	}
-	
-	
-	
-	
-	
-	
-	
+    private Player playerA;
+    private Team teamPlayerA;
+    private Player playerB;
+    private Team teamPlayerB;
+    private LocalDate dateOfTransfer;
+
+    public Trade(Player player, Team team, Player player2, Team team2, LocalDate localDate) {
+        this.playerA = player;
+        this.teamPlayerA = team;
+        this.playerB = player2;
+        this.teamPlayerB = team2;
+        this.dateOfTransfer = localDate;
+    }
+
+    public Player getPlayerA() {
+        return this.playerA;
+    }
+
+    public void setPlayerA(Player player) {
+        this.playerA = player;
+    }
+
+    public Team getTeamPlayerA() {
+        return this.teamPlayerA;
+    }
+
+    public void setTeamPlayerA(Team team) {
+        this.teamPlayerA = team;
+    }
+
+    public Player getPlayerB() {
+        return this.playerB;
+    }
+
+    public void setPlayerB(Player player) {
+        this.playerB = player;
+    }
+
+    public Team getTeamPlayerB() {
+        return this.teamPlayerB;
+    }
+
+    public void setTeamPlayerB(Team team) {
+        this.teamPlayerB = team;
+    }
+
+    public LocalDate getDateOfTransfer() {
+        return this.dateOfTransfer;
+    }
+
+    public void setDateOfTransfer(LocalDate localDate) {
+        this.dateOfTransfer = localDate;
+    }
 }
