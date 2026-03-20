@@ -173,28 +173,9 @@ public class RosterDashboard extends JPanel {
 	}
 
 	private void actions() {
-		backButton.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				if (backToMapAction != null) {
-					backToMapAction.run();
-				}
-			}
-		});
-		currentSeasonButton.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				currentSeasonSelected = true;
-				updateDashboard();
-			}
-		});
-		previousSeasonButton.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				currentSeasonSelected = false;
-				updateDashboard();
-			}
-		});
+		backButton.addActionListener(new BackToMapListener());
+		currentSeasonButton.addActionListener(new CurrentSeasonListener());
+		previousSeasonButton.addActionListener(new PreviousSeasonListener());
 	}
 
 	public void setSelectedTeam(Team team) {
@@ -297,6 +278,31 @@ public class RosterDashboard extends JPanel {
 			currentSeasonButton.setForeground(inactiveForeground);
 			previousSeasonButton.setBackground(activeBackground);
 			previousSeasonButton.setForeground(activeForeground);
+		}
+	}
+
+	private class BackToMapListener implements java.awt.event.ActionListener {
+		@Override
+		public void actionPerformed(java.awt.event.ActionEvent e) {
+			if (backToMapAction != null) {
+				backToMapAction.run();
+			}
+		}
+	}
+
+	private class CurrentSeasonListener implements java.awt.event.ActionListener {
+		@Override
+		public void actionPerformed(java.awt.event.ActionEvent e) {
+			currentSeasonSelected = true;
+			updateDashboard();
+		}
+	}
+
+	private class PreviousSeasonListener implements java.awt.event.ActionListener {
+		@Override
+		public void actionPerformed(java.awt.event.ActionEvent e) {
+			currentSeasonSelected = false;
+			updateDashboard();
 		}
 	}
 }

@@ -106,20 +106,7 @@ public class MatchDashboard extends JPanel {
 	}
 
 	private void actions() {
-		matchDayListPanel.setMatchSelectionListener(new MatchSelectionListener() {
-			@Override
-			public void onMatchSelected(Game game) {
-				updateSelectedGame(game);
-			}
-
-			@Override
-			public void onMatchDetail(Game game) {
-				updateSelectedGame(game);
-				if (openLiveMatchAction != null) {
-					openLiveMatchAction.run();
-				}
-			}
-		});
+		matchDayListPanel.setMatchSelectionListener(new DashboardMatchSelectionListener());
 	}
 
 	public LeagueManager getLeagueManager() {
@@ -156,7 +143,6 @@ public class MatchDashboard extends JPanel {
 		}
 
 		updateSelectedGame(gameDay.getGames().get(0));
-		revalidate();
 		repaint();
 	}
 
@@ -195,5 +181,20 @@ public class MatchDashboard extends JPanel {
 		}
 		long dayNumber = ChronoUnit.DAYS.between(CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE, selectedDate) + 1;
 		return "Jour " + dayNumber;
+	}
+
+	private class DashboardMatchSelectionListener implements MatchSelectionListener {
+		@Override
+		public void onMatchSelected(Game game) {
+			updateSelectedGame(game);
+		}
+
+		@Override
+		public void onMatchDetail(Game game) {
+			updateSelectedGame(game);
+			if (openLiveMatchAction != null) {
+				openLiveMatchAction.run();
+			}
+		}
 	}
 }

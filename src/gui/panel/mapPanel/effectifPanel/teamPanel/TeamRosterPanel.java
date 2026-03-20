@@ -21,7 +21,6 @@ public class TeamRosterPanel extends JPanel {
 	public void updateTeam(Team team, boolean currentSeasonSelected) {
 		removeAll();
 		if (team == null) {
-			revalidate();
 			repaint();
 			return;
 		}
@@ -47,7 +46,6 @@ public class TeamRosterPanel extends JPanel {
 			add(entryPanel);
 		}
 
-		revalidate();
 		repaint();
 	}
 

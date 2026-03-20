@@ -11,6 +11,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import gui.panel.common.TeamDisplayUtil;
+
 public class TeamLogoPanel extends JPanel {
 	private static final String LOGO_FOLDER_PATH = "src/test/nba_logos/";
 	private static final int DEFAULT_LOGO_SIZE = 64;
@@ -75,26 +77,10 @@ public class TeamLogoPanel extends JPanel {
 		if (teamName == null || teamName.isEmpty()) {
 			return "";
 		}
-		if ("Los Angeles Clippers".equals(teamName)) {
-			return "LA_Clippers.png";
-		}
 		return teamName.replace(" ", "_") + ".png";
 	}
 
 	private String buildAbbreviation(String teamName) {
-		if (teamName == null || teamName.isEmpty()) {
-			return "---";
-		}
-		String[] words = teamName.split(" ");
-		String abbreviation = "";
-		for (int i = 0; i < words.length && abbreviation.length() < 3; i++) {
-			if (!words[i].isEmpty()) {
-				abbreviation += words[i].substring(0, 1).toUpperCase();
-			}
-		}
-		while (abbreviation.length() < 3) {
-			abbreviation += "X";
-		}
-		return abbreviation;
+		return TeamDisplayUtil.getAbbreviation(teamName);
 	}
 }

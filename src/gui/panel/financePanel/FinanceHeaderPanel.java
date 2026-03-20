@@ -13,6 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import gui.panel.common.ButtonStyleUtil;
+
 public class FinanceHeaderPanel extends JPanel {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
@@ -34,8 +36,8 @@ public class FinanceHeaderPanel extends JPanel {
 		leagueButton = new JButton("Ligue");
 		teamsButton = new JButton("Equipes");
 
-		styleToggleButton(leagueButton);
-		styleToggleButton(teamsButton);
+		ButtonStyleUtil.styleToggleButton(leagueButton);
+		ButtonStyleUtil.styleToggleButton(teamsButton);
 
 		add(buildTitlePanel(), BorderLayout.WEST);
 		add(buildActionsPanel(), BorderLayout.EAST);
@@ -82,15 +84,6 @@ public class FinanceHeaderPanel extends JPanel {
 		panel.add(leagueButton);
 		panel.add(teamsButton);
 		return panel;
-	}
-
-	private void styleToggleButton(JButton button) {
-		button.setFocusPainted(false);
-		button.setOpaque(true);
-		button.setContentAreaFilled(true);
-		button.setBorderPainted(false);
-		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		button.setPreferredSize(new Dimension(96, 32));
 	}
 
 	private void applySelectedState(JButton button, boolean selected) {

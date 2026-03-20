@@ -107,14 +107,7 @@ public class MapDashboard extends JPanel {
 	}
 
 	private void actions() {
-		teamSummaryPanel.getOpenRosterButton().addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				if (openRosterAction != null) {
-					openRosterAction.run();
-				}
-			}
-		});
+		teamSummaryPanel.getOpenRosterButton().addActionListener(new OpenRosterListener());
 		mapPanel.setTeamSelectionListener(new MapPanel.TeamSelectionListener() {
 			@Override
 			public void onTeamSelected(String teamName) {
@@ -157,5 +150,14 @@ public class MapDashboard extends JPanel {
 			}
 		}
 		return null;
+	}
+
+	private class OpenRosterListener implements java.awt.event.ActionListener {
+		@Override
+		public void actionPerformed(java.awt.event.ActionEvent e) {
+			if (openRosterAction != null) {
+				openRosterAction.run();
+			}
+		}
 	}
 }

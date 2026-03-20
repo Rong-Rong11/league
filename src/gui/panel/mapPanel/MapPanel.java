@@ -47,12 +47,7 @@ public class MapPanel extends JPanel {
 	}
 
 	private void actions() {
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent event) {
-				handleClick(event.getX(), event.getY());
-			}
-		});
+		addMouseListener(new MapMouseListener());
 	}
 
 	private void loadImage() {
@@ -177,5 +172,12 @@ public class MapPanel extends JPanel {
 	public void setSelectedTeamName(String selectedTeamName) {
 		this.selectedTeamName = selectedTeamName;
 		repaint();
+	}
+
+	private class MapMouseListener extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent event) {
+			handleClick(event.getX(), event.getY());
+		}
 	}
 }
