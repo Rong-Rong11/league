@@ -175,4 +175,25 @@ public class FinanceUtilitary {
 		}
 	}
 
+	public static double calculateMerchandisingScore(Team team) {
+		double popularity = team.getPopularity() / 100.0;
+
+		double historicalPrestige = team.getTeamFinance()
+				.getEconomicProfil()
+				.getHistoricalPrestige();
+
+		double fanLoyalty = team.getTeamFinance()
+				.getEconomicProfil()
+				.getFanLoyalty();
+
+		double mediaPrestige = team.getTeamFinance()
+				.getMediaMarket()
+				.getPrestigeModifier();
+
+		return (0.4 * popularity)
+				+ (0.3 * historicalPrestige)
+				+ (0.2 * fanLoyalty)
+				+ (0.1 * mediaPrestige);
+	}
+
 }

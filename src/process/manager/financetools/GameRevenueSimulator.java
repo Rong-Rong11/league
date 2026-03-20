@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package process.manager.financetools;
 
 import data.finance.GameStat;
@@ -11,92 +8,107 @@ import java.time.LocalDate;
 import process.utilitary.CalendarUtilitary;
 
 public class GameRevenueSimulator {
+
     private GameStat gameStat;
 
     public GameRevenueSimulator(GameStat gameStat) {
         this.gameStat = gameStat;
     }
 
-    public void calculateGameRevenue(Game game, LocalDate localDate) {
-        Team team = game.getGameContext().getHomeTeam();
-        double d = this.calculatePopularityRate(game, localDate);
-        Stadium stadium = team.getStadium();
-        int n = stadium.getCapacity();
-        double d2 = this.calculateAttendanceRate(localDate, team, d);
-        int n2 = this.calculateAttendees(n, d2);
-        int n3 = this.calculateTicketPrice(stadium, d);
-        this.calculateTicketRevenue(n2, n3);
-        this.calculateConcessionsRevenue(n2);
-        this.calculateParkingRevenue(n2);
-        this.calculateTVRevenue();
-        this.calculateMerchRevenue(d, n2);
+    public void calculateGameRevenue(Game game, LocalDate date) {
+        Team homeTeam = game.getGameContext().getHomeTeam();
+        double popularityRate = calculatePopularityRate(game, date);
+        Stadium stadium = homeTeam.getStadium();
+        int capacity = stadium.getCapacity();
+        double attendanceRate = calculateAttendanceRate(date, homeTeam, popularityRate);
+        int attendees = calculateAttendees(capacity, attendanceRate);
+        int ticketPrice = calculateTicketPrice(stadium, popularityRate);
+        calculateTicketRevenue(attendees, ticketPrice);
+        calculateConcessionsRevenue(attendees);
+        calculateParkingRevenue(attendees);
+        calculateTVRevenue();
+        calculateMerchRevenue(popularityRate, attendees);
+
     }
 
-    private double calculatePopularityRate(Game game, LocalDate localDate) {
-        double d = CalendarUtilitary.popularityScoreGame(game, localDate);
-        double d2 = d / 800.0;
-        double d3 = (game.getGameContext().getHomeTeam().getTeamPerformance().getPerformanceRating() + game.getGameContext().getAwayTeam().getTeamPerformance().getPerformanceRating()) / 2.0;
-        double d4 = d2 * 0.6 + d3 * 0.4;
-        this.gameStat.setPopularity(d4);
-        return Math.max(0.2, Math.min(1.0, d4));
+    private double calculatePopularityRate(Game game, LocalDate date) {
+        double gamePopularity = CalendarUtilitary.popularityScoreGame(game, date);
+        double gameScore = gamePopularity / 800;
+        double performatingRate = (game.getGameContext().getHomeTeam().getTeamPerformance().getPerformanceRating() +
+                game.getGameContext().getAwayTeam().getTeamPerformance().getPerformanceRating())
+                / 2;
+        double popularityRate = (gameScore * 0.6) + (performatingRate * 0.4);
+        gameStat.setPopularity(popularityRate);
+        return Math.max(0.2, Math.min(1.0, popularityRate));
     }
 
-    private int calculateTicketPrice(Stadium stadium, double d) {
-        double d2 = stadium.getTicketPrice();
-        double d3 = 0.5;
-        int n = (int)(d2 * (1.0 + (d - 0.5) * d3));
-        this.gameStat.setTicketPrice(n);
-        return n;
+    private int calculateTicketPrice(Stadium stadium, double popularityRate) {
+        double base = stadium.getTicketPrice();
+        double coefficient = 0.5;
+        int newPrice = (int) (base * (1 + (popularityRate - 0.5) * coefficient));
+        gameStat.setTicketPrice(newPrice);
+        return newPrice;
     }
 
-    private int calculateAttendees(int n, double d) {
-        int n2 = (int)((double)n * d);
-        this.gameStat.setAttendees(n2);
-        return n2;
+    private int calculateAttendees(int capacity, double attendanceRate) {
+        int attendees = (int) (capacity * attendanceRate);
+        gameStat.setAttendees(attendees);
+        return attendees;
     }
 
-    private double calculateAttendanceRate(LocalDate localDate, Team team, double d) {
-        double d2 = CalendarUtilitary.isImportantDay(localDate) ? 0.04 : 0.0;
-        double d3 = Math.random() * 0.05 - 0.025;
-        double d4 = 0.5 + d * 0.35 + d2 + d3;
-        d4 = Math.max(0.55, Math.min(0.98, d4));
-        this.gameStat.setAttendanceRate(d4);
-        return d4;
+    private double calculateAttendanceRate(LocalDate date, Team homeTeam, double popularityRate) {
+        double importantDayBonus = CalendarUtilitary.isImportantDay(date) ? 0.04 : 0.0;
+        double randomVariation = (Math.random() * 0.05) - 0.025;
+
+        double attendanceRate = 0.50
+                + (popularityRate * 0.35)
+                + importantDayBonus
+                + randomVariation;
+        attendanceRate = Math.max(0.55, Math.min(0.98, attendanceRate));
+        gameStat.setAttendanceRate(attendanceRate);
+        return attendanceRate;
     }
 
-    private void calculateTicketRevenue(int n, double d) {
-        double d2 = (double)n * d / 1000000.0;
-        this.gameStat.getHomeFinance().setTicketRevenue(d2);
+    private void calculateTicketRevenue(int attendees, double ticketPrice) {
+        double ticketRevenue = (attendees * ticketPrice) / 1000000;
+        gameStat.getHomeFinance().setTicketRevenue(ticketRevenue);
     }
 
-    private void calculateConcessionsRevenue(int n) {
-        double d = 0.7;
-        double d2 = 18.0;
-        double d3 = (double)n * d * d2 / 1000000.0;
-        this.gameStat.getHomeFinance().setConcessionsRevenue(d3);
+    private void calculateConcessionsRevenue(int attendees) {
+        double purchaseRate = 0.7;
+        double averageSpend = 18;
+
+        double revenue = (attendees * purchaseRate * averageSpend) / 1000000;
+
+        gameStat.getHomeFinance().setConcessionsRevenue(revenue);
     }
 
-    private void calculateParkingRevenue(int n) {
-        double d = 0.35;
-        double d2 = 25.0;
-        double d3 = 2.3;
-        double d4 = (double)n / d3;
-        double d5 = d4 * d * d2 / 1000000.0;
-        this.gameStat.getHomeFinance().setParkingRevenue(d5);
+    private void calculateParkingRevenue(int attendees) {
+        double parkingRate = 0.35;
+        double parkingPrice = 25;
+        double peoplePerCar = 2.3;
+
+        double cars = attendees / peoplePerCar;
+        double revenue = (cars * parkingRate * parkingPrice) / 1000000;
+
+        gameStat.getHomeFinance().setParkingRevenue(revenue);
     }
 
     private void calculateTVRevenue() {
-        double d = 1.2;
-        double d2 = d * 0.6;
-        double d3 = d * 0.4;
-        this.gameStat.getHomeFinance().setTvRevenue(d2);
-        this.gameStat.getAwayFinance().setTvRevenue(d3);
+        double leagueTVPerGame = 1.2;
+
+        double homeShare = leagueTVPerGame * 0.6;
+        double awayShare = leagueTVPerGame * 0.4;
+
+        gameStat.getHomeFinance().setTvRevenue(homeShare);
+        gameStat.getAwayFinance().setTvRevenue(awayShare);
     }
 
-    private void calculateMerchRevenue(double d, int n) {
-        double d2 = 0.03 + d * 0.04;
-        double d3 = 40.0;
-        double d4 = (double)n * d2 * d3 / 1000000.0;
-        this.gameStat.getHomeFinance().setMerchRevenue(d4);
+    private void calculateMerchRevenue(double popularityRate, int attendees) {
+        double purchaseRate = 0.03 + (popularityRate * 0.04);
+        double averageSpend = 40;
+        double revenue = (attendees * purchaseRate * averageSpend) / 1000000;
+        gameStat.getHomeFinance().setMerchRevenue(revenue);
     }
+
 }

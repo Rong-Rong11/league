@@ -10,10 +10,9 @@ import data.sport.play.action.Turnover;
 import data.sport.setup.Game;
 import gui.management.LiveMatchStatistics;
 import java.util.HashMap;
-import process.visitor.actionresult.ActionResultVisitor;
 
 public class StatsVisitor
-implements ActionResultVisitor<Void> {
+        implements ActionResultVisitor<Void> {
     private LiveMatchStatistics liveMatchStatistics;
 
     public StatsVisitor(LiveMatchStatistics liveMatchStatistics) {
@@ -33,11 +32,13 @@ implements ActionResultVisitor<Void> {
         }
         if (bl) {
             this.liveMatchStatistics.setHomePoints(this.liveMatchStatistics.getHomePoints() + n);
-            this.liveMatchStatistics.getHomePlayerPoints().put(player.getName(), this.getPlayerPoints(this.liveMatchStatistics.getHomePlayerPoints(), player.getName()) + n);
+            this.liveMatchStatistics.getHomePlayerPoints().put(player.getName(),
+                    this.getPlayerPoints(this.liveMatchStatistics.getHomePlayerPoints(), player.getName()) + n);
             this.liveMatchStatistics.getHomePlayers().put(player.getName(), player);
         } else {
             this.liveMatchStatistics.setAwayPoints(this.liveMatchStatistics.getAwayPoints() + n);
-            this.liveMatchStatistics.getAwayPlayerPoints().put(player.getName(), this.getPlayerPoints(this.liveMatchStatistics.getAwayPlayerPoints(), player.getName()) + n);
+            this.liveMatchStatistics.getAwayPlayerPoints().put(player.getName(),
+                    this.getPlayerPoints(this.liveMatchStatistics.getAwayPlayerPoints(), player.getName()) + n);
             this.liveMatchStatistics.getAwayPlayers().put(player.getName(), player);
         }
         if ("threepoint".equals(string)) {
@@ -75,7 +76,8 @@ implements ActionResultVisitor<Void> {
         String string;
         Player player = missedShot.getShooter();
         boolean bl = this.isHomePlayer(player, this.liveMatchStatistics.getGame());
-        String string2 = string = missedShot.getOffensiveAction() == null ? "" : missedShot.getOffensiveAction().getName();
+        String string2 = string = missedShot.getOffensiveAction() == null ? ""
+                : missedShot.getOffensiveAction().getName();
         if ("threepoint".equals(string)) {
             if (bl) {
                 this.liveMatchStatistics.setHomeThreeAttempts(this.liveMatchStatistics.getHomeThreeAttempts() + 1);
