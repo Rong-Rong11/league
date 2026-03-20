@@ -3,24 +3,22 @@
  */
 package data.league;
 
-import data.calendar.NBACalendar;
-import data.calendar.SpecialEvent;
-import data.league.Ranking;
 import java.time.LocalDate;
 import java.util.HashMap;
+
+import data.calendar.NBACalendar;
+import data.calendar.SpecialEvent;
 
 public abstract class Season {
     private NBACalendar calendar = new NBACalendar();
     private LocalDate debutDate;
     private LocalDate endDate;
     private HashMap<LocalDate, SpecialEvent> specialEvents;
-    private Ranking ranking;
 
     public Season(LocalDate localDate, LocalDate localDate2) {
         this.debutDate = localDate;
         this.endDate = localDate2;
         this.specialEvents = new HashMap();
-        this.ranking = new Ranking();
     }
 
     public LocalDate getDebutDate() {
@@ -51,13 +49,5 @@ public abstract class Season {
         if (!this.specialEvents.containsKey(specialEvent.getDate())) {
             this.specialEvents.put(specialEvent.getDate(), specialEvent);
         }
-    }
-
-    public Ranking getRanking() {
-        return this.ranking;
-    }
-
-    public void setRanking(Ranking ranking) {
-        this.ranking = ranking;
     }
 }

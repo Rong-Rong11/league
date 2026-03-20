@@ -1,15 +1,13 @@
 package gui.panel.mapPanel.effectifPanel;
 
+import data.player.Player;
+import data.team.Team;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import data.player.Player;
-import data.team.Team;
 import process.utilitary.PlayerStatUtil;
 
 public class MapTeamPlayersPanel extends JPanel {
@@ -46,13 +44,14 @@ public class MapTeamPlayersPanel extends JPanel {
 			return;
 		}
 
-		ArrayList<Player> players = new ArrayList<Player>(team.getPlayers().values());
+		ArrayList<Player> players = new ArrayList<Player>(team.getCurrentPlayers().values());
 		PlayerStatUtil.sortPlayersByDisplayedNote(players);
 
 		for (int i = 0; i < playerLabels.length; i++) {
 			if (i < players.size()) {
 				Player player = players.get(i);
-				playerLabels[i].setText((int) Math.round(PlayerStatUtil.getDisplayedNote(player)) + "  " + player.getName());
+				playerLabels[i]
+						.setText((int) Math.round(PlayerStatUtil.getDisplayedNote(player)) + "  " + player.getName());
 			} else {
 				playerLabels[i].setText("-");
 			}

@@ -17,7 +17,8 @@ public class TeamFinance {
     private MarketSize marketSize;
 
     private Budget budget;
-    private double payroll;
+    private double formerPayroll;
+    private double currentPayroll;
     private double luxuryTaxPaid;
     private int transferMade = 0;
     private TeamTransferStrategy teamTransferStrategy;
@@ -26,7 +27,8 @@ public class TeamFinance {
             TeamTransferStrategy teamTransferStrategy) {
         this.financialProfil = financialProfil;
         this.budget = budget;
-        this.payroll = 0.0;
+        this.formerPayroll = 0.0;
+        this.currentPayroll = 0;
         this.marketSize = marketSize;
         this.luxuryTaxPaid = 0.0;
         this.transferMade = 0;
@@ -37,16 +39,8 @@ public class TeamFinance {
         return this.financialProfil;
     }
 
-    public double getPayroll() {
-        return this.payroll;
-    }
-
-    public void setPayroll(double payroll) {
-        this.payroll = payroll;
-    }
-
     public void incrementTransferMade() {
-        ++this.transferMade;
+        transferMade++;
     }
 
     public Budget getBudget() {
@@ -103,6 +97,26 @@ public class TeamFinance {
 
     public MediaMarket getMediaMarket() {
         return mediaMarket;
+    }
+
+    public void setMediaMarket(MediaMarket mediaMarket) {
+        this.mediaMarket = mediaMarket;
+    }
+
+    public double getFormerPayroll() {
+        return formerPayroll;
+    }
+
+    public void setFormerPayroll(double formerPayroll) {
+        this.formerPayroll = formerPayroll;
+    }
+
+    public double getCurrentPayroll() {
+        return currentPayroll;
+    }
+
+    public void setCurrentPayroll(double currentPayroll) {
+        this.currentPayroll = currentPayroll;
     }
 
 }

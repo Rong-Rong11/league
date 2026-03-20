@@ -17,7 +17,7 @@ import process.visitor.marketsize.CalculateInitialTeamBudgetVisitor;
 import process.visitor.marketsize.CreateMediaMarketVisitor;
 import process.visitor.marketsize.GenerateStadiumCapacityVisitor;
 
-public class SimulationBuilder {
+public class FinanceBuilder {
     private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 
     public void build() {
@@ -40,7 +40,7 @@ public class SimulationBuilder {
         MediaMarket mediaMarket = teamFinance.getMediaMarket();
         FinancialPolicy financialProfil = teamFinance.getFinancialProfil();
 
-        double popularity = team.getPopularity();
+        double popularity = team.getFormerPopularity();
         Stadium stadium = team.getStadium();
 
         createMediaMarket(mediaMarket, marketSize);
@@ -58,19 +58,21 @@ public class SimulationBuilder {
         calculateBaseBudget(budget, popularity);
         CalculateInitialTeamBudgetVisitor calculateInitialTeamBudgetVisitor = new CalculateInitialTeamBudgetVisitor(
                 budget.getInitialAmount(), popularity, economicProfil);
-        budget.setInitialAmount(marketSize.accept(calculateInitialTeamBudgetVisitor));
+        double initialAmount = marketSize.accept(calculateInitialTeamBudgetVisitor);
+        budget.setInitialAmount(initialAmount);
+        budget.setRemainingAmount(initialAmount);
     }
 
     private void calculateBaseBudget(Budget budget, double popularity) {
         double initialAmount = FinanceConfiguration.BASE_TEAM_BUDGET;
         if (popularity <= 70) {
-            initialAmount *= 0.9;
-        } else if (popularity <= 80) {
             initialAmount *= 1.1;
-        } else if (popularity <= 90) {
+        } else if (popularity <= 80) {
             initialAmount *= 1.3;
+        } else if (popularity <= 90) {
+            initialAmount *= 1.45;
         } else {
-            initialAmount *= 1.5;
+            initialAmount *= 1.6;
         }
         budget.setInitialAmount(initialAmount);
     }

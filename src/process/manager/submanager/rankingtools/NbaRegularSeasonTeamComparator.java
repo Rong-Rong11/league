@@ -1,12 +1,12 @@
 package process.manager.submanager.rankingtools;
 
-import data.league.Conference;
 import data.league.Division;
 import data.league.League;
 import data.sport.setup.Game;
 import data.team.Team;
 import java.util.ArrayList;
 import java.util.Comparator;
+import process.utilitary.TeamUtilitary;
 
 public class NbaRegularSeasonTeamComparator implements Comparator<Team> {
 
@@ -111,7 +111,7 @@ public class NbaRegularSeasonTeamComparator implements Comparator<Team> {
    }
 
    private boolean isDivisionChampion(Team team) {
-      Division division = getDivisionOfTeam(team);
+      Division division = TeamUtilitary.getDivisionOfTeam(league, team);
 
       if (division == null) {
          return false;
@@ -142,70 +142,14 @@ public class NbaRegularSeasonTeamComparator implements Comparator<Team> {
    }
 
    private boolean isSameDivision(Team teamA, Team teamB) {
-      Division divisionA = getDivisionOfTeam(teamA);
-      Division divisionB = getDivisionOfTeam(teamB);
+      Division divisionA = TeamUtilitary.getDivisionOfTeam(league, teamA);
+      Division divisionB = TeamUtilitary.getDivisionOfTeam(league, teamB);
 
       if (divisionA == null || divisionB == null) {
          return false;
       }
 
       return divisionA.equals(divisionB);
-   }
-
-   private boolean isSameConference(Team teamA, Team teamB) {
-      Conference conferenceA = getConferenceOfTeam(teamA);
-      Conference conferenceB = getConferenceOfTeam(teamB);
-
-      if (conferenceA == null || conferenceB == null) {
-         return false;
-      }
-
-      return conferenceA.equals(conferenceB);
-   }
-
-   private Division getDivisionOfTeam(Team team) {
-      Conference easternConference = league.getEasternConference();
-      Conference westernConference = league.getWesternConference();
-
-      for (Division division : easternConference.getDivisions().values()) {
-         for (Team divisionTeam : division.getTeams().values()) {
-            if (divisionTeam.equals(team)) {
-               return division;
-            }
-         }
-      }
-
-      for (Division division : westernConference.getDivisions().values()) {
-         for (Team divisionTeam : division.getTeams().values()) {
-            if (divisionTeam.equals(team)) {
-               return division;
-            }
-         }
-      }
-
-      return null;
-   }
-
-   private Conference getConferenceOfTeam(Team team) {
-      Conference easternConference = league.getEasternConference();
-      for (Division division : easternConference.getDivisions().values()) {
-         for (Team divisionTeam : division.getTeams().values()) {
-            if (divisionTeam.equals(team)) {
-               return easternConference;
-            }
-         }
-      }
-
-      Conference westernConference = league.getWesternConference();
-      for (Division division : westernConference.getDivisions().values()) {
-         for (Team divisionTeam : division.getTeams().values()) {
-            if (divisionTeam.equals(team)) {
-               return westernConference;
-            }
-         }
-      }
-
-      return null;
    }
 
    private double getDivisionWinRate(Team team) {
@@ -255,7 +199,7 @@ public class NbaRegularSeasonTeamComparator implements Comparator<Team> {
          }
 
          Team opponent = getOpponent(game, team);
-         if (opponent == null || !isSameConference(team, opponent)) {
+         if (opponent == null) {
             continue;
          }
 
@@ -267,7 +211,9 @@ public class NbaRegularSeasonTeamComparator implements Comparator<Team> {
          }
       }
 
-      if (games == 0) {
+      if (games == 0)
+
+      {
          return 0.0;
       }
 

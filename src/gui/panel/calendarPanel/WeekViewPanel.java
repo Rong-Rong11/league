@@ -1,7 +1,7 @@
 package gui.panel.calendarPanel;
 
-import config.CalendarConfiguration;
-
+import data.calendar.GameDay;
+import data.league.RegularSeason;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -9,15 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import data.calendar.GameDay;
-import data.league.RegularSeason;
 import process.manager.SimulationManager;
 
 public class WeekViewPanel extends JPanel {
@@ -183,8 +179,7 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	private void simulateDisplayedDay(LocalDate day) {
-		int month = computeMonth(day);
-		simulationManager.getLeagueManager().simulateGameDay(day, month);
+		simulationManager.simulateRegularSeasonDay(day);
 		simulationManager.displayGameDay(day);
 	}
 
@@ -198,14 +193,6 @@ public class WeekViewPanel extends JPanel {
 			return null;
 		}
 		return regularSeason.getCalendar().getCalendar().get(day);
-	}
-
-	private int computeMonth(LocalDate date) {
-		int monthsBetween = date.getMonthValue() - CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE.getMonthValue();
-		if (monthsBetween < 0) {
-			monthsBetween += 12;
-		}
-		return monthsBetween + 1;
 	}
 
 	private void updateWeekRows() {

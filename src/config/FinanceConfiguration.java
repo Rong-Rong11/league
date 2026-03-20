@@ -22,6 +22,7 @@ public class FinanceConfiguration {
     public static final String INCOME_TYPE_LOCAL_SPONSORING = "local sponsoring";
     public static final String INCOME_TYPE_NATIONAL_MERCHANDISING = "national merchandising";
     public static final String INCOME_TYPE_LOCAL_MERCHANDISING = "local merchandising";
+    public static final String INCOME_TYPE_GAME_LOCAL_MERCHANDISING = "local merchandising";
     public static final String INCOME_TYPE_TICKET_OFFICE = "ticket office";
     public static final String INCOME_TYPE_REVENUE_SHARING = "income revenue sharing";
     public static final String INCOME_TYPE_EQUAL_SHARE = "equal share";
@@ -37,6 +38,7 @@ public class FinanceConfiguration {
     public static final String EXPENSE_TYPE_REVENUE_SHARING_CONTRIBUTION = "expense revenue sharing contribution";
     public static final String EXPENSE_TYPE_PLAYER_SALARY = "expense player salary";
     public static final String EXPENSE_TYPE_STADIUM_COST = "expense stadium cost";
+    public static final String EXPENSE_TYPE_MAINTENACE_STADIUM_COST = "expense maintenance cost";
     public static final String EXPENSE_TYPE_STAFF_COST = "expense stAff cost";
     public static final String EXPENSE_TYPE_ADMINISTRATIVE_COST = "expense administrative cost";
     public static final String EXPENSE_TYPE_MEDIA_COST = "media cost";
@@ -55,7 +57,7 @@ public class FinanceConfiguration {
     public static final double MARKET_SIZE_MEDIUM_MULTIPLIER = 1;
     public static final double MARKET_SIZE_LARGE_MULTIPLIER = 1.3;
 
-    public static final double BASE_TEAM_BUDGET = 100;
+    public static final double BASE_TEAM_BUDGET = 200;
     public static final double MAX_BUDGET_TEAM = 350;
     public static final double BASE_STADIUM_COSTS = 0.2;
     public static final double BASE_TICKET_PRICE = 45; // pas en millions

@@ -11,10 +11,9 @@ import data.team.finance.transfer.SalaryDump;
 import data.team.finance.transfer.SmallAdjust;
 import data.team.finance.transfer.SuperstarBuild;
 import process.visitor.financialprofil.ValidateTradeVisitor;
-import process.visitor.teamtransfer.TeamTransferVisitor;
 
 public class EvaluateSeasonIntentVisitor
-implements TeamTransferVisitor<String> {
+        implements TeamTransferVisitor<String> {
     private Team team;
     private double teamPerformatingRate;
     private double salaryCap;
@@ -76,7 +75,8 @@ implements TeamTransferVisitor<String> {
 
     @Override
     public String visit(SalaryDump salaryDump) {
-        ValidateTradeVisitor validateTradeVisitor = new ValidateTradeVisitor(this.team.getTeamFinance().getPayroll(), this.salaryCap);
+        ValidateTradeVisitor validateTradeVisitor = new ValidateTradeVisitor(
+                this.team.getTeamFinance().getCurrentPayroll(), this.salaryCap);
         if (this.team.getTeamFinance().getFinancialProfil().accept(validateTradeVisitor).booleanValue()) {
             return "seller";
         }

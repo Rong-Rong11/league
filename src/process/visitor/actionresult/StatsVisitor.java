@@ -1,5 +1,7 @@
 package process.visitor.actionresult;
 
+import java.util.HashMap;
+
 import config.GameConfiguration;
 import data.player.Player;
 import data.sport.play.action.Block;
@@ -9,8 +11,6 @@ import data.sport.play.action.PointScored;
 import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
 import data.sport.setup.Game;
-import java.util.HashMap;
-
 import process.manager.LiveMatchStatistics;
 
 public class StatsVisitor implements ActionResultVisitor<Void> {
@@ -136,7 +136,7 @@ public class StatsVisitor implements ActionResultVisitor<Void> {
     }
 
     private boolean isHomePlayer(Player player, Game game) {
-        return game.getGameContext().getHomeTeam().getPlayers().containsKey(player.getName());
+        return game.getGameContext().getHomeTeam().getCurrentPlayers().containsKey(player.getName());
     }
 
 }

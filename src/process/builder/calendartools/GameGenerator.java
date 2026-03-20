@@ -1,14 +1,16 @@
 package process.builder.calendartools;
 
-import data.league.Conference;
-import data.league.Division;
-import data.league.League;
-import data.sport.setup.Game;
-import data.sport.setup.GameContext;
-import data.team.Team;
 import java.util.ArrayList;
 
 import config.GameConfiguration;
+import data.league.Conference;
+import data.league.Division;
+import data.league.League;
+import data.league.Playoff;
+import data.sport.setup.Game;
+import data.sport.setup.GameContext;
+import data.sport.setup.PlayoffSeries;
+import data.team.Team;
 
 public class GameGenerator {
 	public static void generateAllGamesRegularSeason(League league) {
@@ -24,7 +26,7 @@ public class GameGenerator {
 		generateIntraConference(westernConference);
 		generateInterConference(league);
 	}
-	
+
 	private static void generateIntraDivision(Division division) {
 		ArrayList<Team> teams = new ArrayList<Team>(division.getTeams().values());
 		for (int i = 0; i < teams.size(); i++) {
@@ -48,7 +50,7 @@ public class GameGenerator {
 			}
 		}
 	}
-	
+
 	private static void generateIntraConference(Conference conference) {
 		ArrayList<Division> divisions = new ArrayList<Division>(conference.getDivisions().values());
 		for (int division1 = 0; division1 < divisions.size(); division1++) {
@@ -79,7 +81,7 @@ public class GameGenerator {
 		}
 	}
 
-	public static void generateInterConference(League league) {
+	private static void generateInterConference(League league) {
 		Conference westernConference = league.getWesternConference();
 		Conference easternConference = league.getEasternConference();
 
@@ -103,6 +105,33 @@ public class GameGenerator {
 		}
 	}
 
+	public static void generateFirstRoundPlayoffGames(Playoff playoff) {
+		ArrayList<PlayoffSeries> eastFirstRound = playoff.getEastFirstRound();
+		ArrayList<PlayoffSeries> westFirstRound = playoff.getWestFirstRound();
+		for (PlayoffSeries playoffSeries : eastFirstRound) {
+			createGameForSeries(playoffSeries);
+		}
+		for (PlayoffSeries playoffSeries : westFirstRound) {
+			createGameForSeries(playoffSeries);
+		}
+	}
+
+	private static void createGameForSeries(PlayoffSeries playoffSeries) {
+		for (int i = 1; i <= 7; i++) {
+			Team higherTeam = playoffSeries.getHigherTeam();
+			Team lowerTeam = playoffSeries.getLowerTeam();
+			Game game;
+			if (i == 1 || i == 2 || i == 5 || i == 7) {
+				game = new Game(new GameContext(higherTeam, lowerTeam, GameConfiguration.GAME_INTRA_CONFERENCE));
+			} else {
+				game = new Game(new GameContext(lowerTeam, higherTeam, GameConfiguration.GAME_INTRA_CONFERENCE));
+			}
+			addGameToTeam(game, lowerTeam);
+			addGameToTeam(game, higherTeam);
+			playoffSeries.addExpectedGame(game, i - 1);
+		}
+	}
+
 	private static void addGameToTeam(Game game, Team team) {
 		if (game.getGameContext().getHomeTeam().getName().equals(team.getName())) {
 			team.getSchedule().incrementNumberOfHomeGames();
@@ -119,4 +148,5 @@ public class GameGenerator {
 		}
 		return teams;
 	}
+
 }

@@ -63,7 +63,7 @@ public class MonthlyCentralRevenueCalculator {
     private double calculateAveragePopularity(List<Team> teams) {
         double total = 0.0;
         for (Team team : teams) {
-            total += team.getPopularity();
+            total += team.getCurrentPopularity();
         }
         return total / teams.size();
     }

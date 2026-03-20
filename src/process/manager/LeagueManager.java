@@ -11,8 +11,9 @@ import data.team.Team;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import process.builder.CalendarBuilder;
+import process.builder.FinanceBuilder;
 import process.builder.LeagueBuilder;
-import process.builder.SimulationBuilder;
+import process.builder.PlayoffBuilder;
 import process.manager.leaguetools.TeamPopularityUpdater;
 import process.manager.submanager.FinanceManager;
 import process.manager.submanager.GameManager;
@@ -26,21 +27,23 @@ public class LeagueManager {
     private League league;
     private LeagueBuilder leagueBuilder = new LeagueBuilder();
     private CalendarBuilder calendarBuilder;
-    private SimulationBuilder simulationBuilder = new SimulationBuilder();
+    private FinanceBuilder simulationBuilder = new FinanceBuilder();
     private GameManager gameManager = null;
     private TradeManager tradeManager;
     private FinanceManager financeManager;
     private TeamPopularityUpdater teamPopularityUpdater = new TeamPopularityUpdater();
+    private PlayoffBuilder playoffBuilder;
 
     public LeagueManager() {
         league = leagueBuilder.build();
-        FinanceUtilitary.updateLeaguePayroll();
+        FinanceUtilitary.updateFormerLeaguePayroll();
 
         calendarBuilder = new CalendarBuilder(league);
         financeManager = new FinanceManager(league);
         gameManager = new GameManager(league, financeManager);
         LeagueFinancialRules leagueFinancialRules = league.getLeagueFinance().getLeagueFinancialRules();
         tradeManager = new TradeManager(leagueFinancialRules.getSalaryCap(), leagueFinancialRules.getLuxuryTaxLine());
+        playoffBuilder = new PlayoffBuilder(league);
 
     }
 
@@ -52,9 +55,8 @@ public class LeagueManager {
         league.getLeagueFinance().getBudget().getInitialAmount();
     }
 
-    public void prepareOpeningData() {
-        simulationBuilder.build();
-        FinanceUtilitary.updateLeaguePayroll();
+    public void startPlayoff() {
+        playoffBuilder.build();
     }
 
     private void simulatePreSeasonTrade() {
@@ -74,6 +76,7 @@ public class LeagueManager {
     }
 
     public void newMonth(int month) {
+        System.out.println("month = " + month);
         teamPopularityUpdater.updateMonthlyPopularity();
         financeManager.applyMonthlyFinance(month);
     }
@@ -112,10 +115,6 @@ public class LeagueManager {
 
     public FinanceManager getFinanceManager() {
         return financeManager;
-    }
-
-    public boolean simulateGameDay(LocalDate date, int month) {
-        return gameManager.simulateGameDay(date, month);
     }
 
     public boolean simulateGame(Game game, LocalDate date) {

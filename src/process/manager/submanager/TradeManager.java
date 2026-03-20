@@ -67,8 +67,8 @@ public class TradeManager {
                     continue;
                 }
 
-                ArrayList<Player> playersA = new ArrayList<Player>(teamA.getPlayers().values());
-                ArrayList<Player> playersB = new ArrayList<Player>(teamB.getPlayers().values());
+                ArrayList<Player> playersA = new ArrayList<Player>(teamA.getCurrentPlayers().values());
+                ArrayList<Player> playersB = new ArrayList<Player>(teamB.getCurrentPlayers().values());
 
                 Player playerBToTrade = generatePlayersToTrade(teamB, season);
                 Player playerAToTrade = generatePlayersToTrade(teamA, season);
@@ -83,6 +83,21 @@ public class TradeManager {
                 playersB.add(playerAToTrade);
 
                 if (tradeSimulator.validateTrade(teamA, teamB, playersA, playersB, month, salaryCap, luxuryTaxLine)) {
+                    System.out.println("TRADE OK");
+                    System.out.println("Team A: " + teamA.getName());
+                    System.out.println(
+                            "  contient joueur recu ? "
+                                    + teamA.getCurrentPlayers().containsKey(playerBToTrade.getName()));
+                    System.out.println("  contient encore joueur envoye ? "
+                            + teamA.getCurrentPlayers().containsKey(playerAToTrade.getName()));
+
+                    System.out.println("Team B: " + teamB.getName());
+                    System.out.println(
+                            "  contient joueur recu ? "
+                                    + teamB.getCurrentPlayers().containsKey(playerAToTrade.getName()));
+                    System.out.println("  contient encore joueur envoye ? "
+                            + teamB.getCurrentPlayers().containsKey(playerBToTrade.getName()));
+
                     if (season) {
                         seasonTrades.put(date, new Trade(playerAToTrade, teamA, playerBToTrade, teamB, date));
                     } else {

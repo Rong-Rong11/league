@@ -1,16 +1,5 @@
 package gui.frame;
 
-//! a relire 
-
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
 import gui.dashboard.CalendarDashboard;
 import gui.dashboard.FinanceDashboard;
 import gui.dashboard.LiveMatchDashboard;
@@ -20,6 +9,13 @@ import gui.dashboard.OpeningDashboard;
 import gui.dashboard.RankingDashboard;
 import gui.dashboard.RosterDashboard;
 import gui.layout.SidebarPanel;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import process.manager.SimulationManager;
 
 public class MainGui extends JFrame {
@@ -55,7 +51,7 @@ public class MainGui extends JFrame {
 		dashboardPanel = new JPanel(dashboardLayout);
 
 		simulationManager = new SimulationManager();
-		openingPanel = new OpeningDashboard(simulationManager.getLeagueManager());
+		openingPanel = new OpeningDashboard(simulationManager);
 		mainPanel = buildApplicationPanel();
 	}
 
@@ -161,7 +157,8 @@ public class MainGui extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			MainGui frame = MainGui.this;
 			String question = "Voulez-vous vraiment quitter la simulation ?";
-			int choice = JOptionPane.showConfirmDialog(frame, question, "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			int choice = JOptionPane.showConfirmDialog(frame, question, "Confirmation", JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
 
 			if (choice == JOptionPane.YES_OPTION) {
 				System.exit(0);

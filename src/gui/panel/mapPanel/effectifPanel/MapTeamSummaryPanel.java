@@ -106,7 +106,7 @@ public class MapTeamSummaryPanel extends JPanel {
 		teamLogoPanel.setTeamName(team.getName());
 		teamNameLabel.setText(team.getName());
 		FinanceUtilitary.updateTeamPayroll(team);
-		payrollLabel.setText(PlayerDisplayUtil.formatSalary(team.getTeamFinance().getPayroll()));
+		payrollLabel.setText(PlayerDisplayUtil.formatSalary(team.getTeamFinance().getCurrentPayroll()));
 		capacityLabel.setText(String.valueOf(team.getStadium().getCapacity()));
 		averageNoteLabel.setText(PlayerDisplayUtil.formatOneDecimal(TeamStatUtil.getAverageNote(team)) + "/100");
 		openRosterButton.setEnabled(true);

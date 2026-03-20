@@ -3,12 +3,23 @@
  */
 package data.league;
 
-import data.league.Season;
 import java.time.LocalDate;
 
 public class RegularSeason
-extends Season {
+        extends Season {
+    private Ranking ranking;
+
     public RegularSeason(LocalDate localDate, LocalDate localDate2) {
         super(localDate, localDate2);
+        this.ranking = new Ranking();
     }
+
+    public Ranking getRanking() {
+        return ranking;
+    }
+
+    public void setRanking(Ranking ranking) {
+        this.ranking = ranking;
+    }
+
 }

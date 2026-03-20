@@ -10,18 +10,18 @@ import data.team.Team;
 import process.utilitary.PlayerUtilitary;
 
 public class HealthManager {
-	
+
 	public HealthManager() {
-		
+
 	}
-	
+
 	public void initializeHealth(Team homeTeam, Team awayTeam) {
 		initializeHealthTeam(homeTeam);
 		initializeHealthTeam(awayTeam);
 	}
-	
+
 	private void initializeHealthTeam(Team team) {
-		for (Player player : team.getPlayers().values()) {
+		for (Player player : team.getCurrentPlayers().values()) {
 			HealthStatus healthStatus = player.getHealthStatus();
 			healthStatus.setFatigue(0);
 			healthStatus.getInjury().setInjuryDuration(healthStatus.getInjury().getInjuryDuration() - 1);
@@ -30,7 +30,7 @@ public class HealthManager {
 			}
 		}
 	}
-	
+
 	public void updateFatigue(ArrayList<Player> homePlayers, ArrayList<Player> awayPlayers, int actionTimeSeconds) {
 		double minutesPlayed = actionTimeSeconds / 60.0;
 		for (Player homePlayer : homePlayers) {
@@ -42,15 +42,16 @@ public class HealthManager {
 	}
 
 	public void updateRest(double restMinutes, Team homeTeam, Team awayTeam) {
-		for (Player player : homeTeam.getPlayers().values()) {
+		for (Player player : homeTeam.getCurrentPlayers().values()) {
 			PlayerUtilitary.updateRest(restMinutes, player);
 		}
-		for (Player player : awayTeam.getPlayers().values()) {
+		for (Player player : awayTeam.getCurrentPlayers().values()) {
 			PlayerUtilitary.updateRest(restMinutes, player);
 		}
 	}
 
-	public void addMinutesPlayed(ArrayList<Player> homePlayers, ArrayList<Player> awayPlayers,HashMap<Player, Asset> playersNewAssets,int actionTime) {
+	public void addMinutesPlayed(ArrayList<Player> homePlayers, ArrayList<Player> awayPlayers,
+			HashMap<Player, Asset> playersNewAssets, int actionTime) {
 		double playedMinutes = actionTime / 60.0;
 		for (Player player : homePlayers) {
 			Asset asset = playersNewAssets.get(player);
@@ -62,7 +63,5 @@ public class HealthManager {
 		}
 
 	}
-	
-	
-	
+
 }
