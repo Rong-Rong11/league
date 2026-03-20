@@ -1,9 +1,5 @@
 package process.simulator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeMap;
-
 import config.GameConfiguration;
 import data.player.Asset;
 import data.player.Player;
@@ -19,6 +15,9 @@ import data.sport.setup.Game;
 import data.sport.setup.GameResult;
 import data.team.Team;
 import data.team.TeamPerformance;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
 import process.repositery.PlayerRepositery;
 import process.simulator.gametools.ActionSimulator;
 import process.simulator.gametools.EventSimulator;
@@ -316,5 +315,4 @@ public class GameSimulator {
 				totalAway += gameResult.getScoreAwayTeam();
 		return totalAway;
 	}
-
 }
