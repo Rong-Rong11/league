@@ -64,10 +64,12 @@ public class RosterDashboard extends JPanel {
 		backButton.setFocusPainted(false);
 		currentSeasonButton.setFocusPainted(false);
 		previousSeasonButton.setFocusPainted(false);
+		backButton.setAlignmentX(LEFT_ALIGNMENT);
 		teamNameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 28));
 		teamNameLabel.setForeground(new Color(0x17, 0x31, 0x74));
 		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
 		subtitleLabel.setForeground(new Color(110, 117, 131));
+		subtitleLabel.setAlignmentX(LEFT_ALIGNMENT);
 	}
 
 	private void organize() {
@@ -91,11 +93,13 @@ public class RosterDashboard extends JPanel {
 		JPanel titlePanel = new JPanel();
 		titlePanel.setOpaque(false);
 		titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+		titlePanel.setAlignmentX(LEFT_ALIGNMENT);
 		titlePanel.add(backButton);
 		titlePanel.add(Box.createVerticalStrut(10));
 
 		JPanel teamLine = new JPanel(new BorderLayout(12, 0));
 		teamLine.setOpaque(false);
+		teamLine.setAlignmentX(LEFT_ALIGNMENT);
 		teamLine.add(teamLogoPanel, BorderLayout.WEST);
 		teamLine.add(teamNameLabel, BorderLayout.CENTER);
 
