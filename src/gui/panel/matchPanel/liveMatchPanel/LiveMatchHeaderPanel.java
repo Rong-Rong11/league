@@ -1,4 +1,4 @@
-package gui.panel.liveMatchPanel;
+package gui.panel.matchPanel.liveMatchPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,7 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import gui.panel.teamPanel.TeamLogoPanel;
+import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 
 public class LiveMatchHeaderPanel extends JPanel {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);

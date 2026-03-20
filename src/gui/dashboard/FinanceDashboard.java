@@ -8,18 +8,32 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 
 import gui.panel.common.BuildBox;
-import gui.panel.common.SectionTitle;
+import gui.panel.financePanel.FinanceHeaderPanel;
 
 public class FinanceDashboard extends JPanel {
 
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
-	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
-	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 270;
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final String LEAGUE_VIEW = "league";
+	private static final String TEAM_VIEW = "team";
+
+	private FinanceHeaderPanel headerPanel;
+	private JPanel centerContentPanel;
+	private String selectedView;
 
 	public FinanceDashboard() {
+		selectedView = LEAGUE_VIEW;
+		create();
 		organize();
+		actions();
+		refreshView();
+	}
+
+	private void create() {
+		headerPanel = new FinanceHeaderPanel();
+		centerContentPanel = new JPanel(new BorderLayout());
+		centerContentPanel.setOpaque(false);
 	}
 
 	private void organize() {
@@ -40,47 +54,22 @@ public class FinanceDashboard extends JPanel {
 	}
 
 	private JPanel buildHeader() {
-		JPanel header = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, 0));
-		header.setOpaque(false);
-
-		JPanel leftHeader = new SectionTitle("FINANCE DE LA LIGUE", "Vue d'ensemble consolidée");
-		leftHeader.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, IDEAL_DASHBOARD_HEADER_HEIGHT));
-
-		JPanel centerHeader = new SectionTitle("FINANCE PAR ÉQUIPE", "Distribution par club");
-
-		JPanel rightHeader = new SectionTitle("ANALYSE DÉTAILLÉE", "Équipe sélectionnée");
-		rightHeader.setPreferredSize(new Dimension(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, IDEAL_DASHBOARD_HEADER_HEIGHT));
-
-		header.add(leftHeader, BorderLayout.WEST);
-		header.add(centerHeader, BorderLayout.CENTER);
-		header.add(rightHeader, BorderLayout.EAST);
-
-		return header;
+		return headerPanel;
 	}
 
 	private JPanel buildBody() {
 		JPanel body = new JPanel(new BorderLayout(IDEAL_DASHBOARD_SPACING, 0));
 		body.setOpaque(false);
-		body.add(buildLeftColumn(), BorderLayout.WEST);
 		body.add(buildCenterColumn(), BorderLayout.CENTER);
 		body.add(buildRightColumn(), BorderLayout.EAST);
 		return body;
 	}
 
-	private JPanel buildLeftColumn() {
-		JPanel column = new JPanel(new GridLayout(3, 1, 0, 12));
-		column.setOpaque(false);
-		column.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, 10));
-
-		column.add(new BuildBox("REVENUS TOTAUX", "Synthèse ligue", "REVENUS"));//! À changer le string par un jpanel quand on aura la fonctionnalité
-		column.add(new BuildBox("DÉPENSES TOTALES", "Synthèse ligue", "DÉPENSES"));//! À changer le string par un jpanel quand on aura la fonctionnalité
-		column.add(new BuildBox("RÉSULTAT NET", "Synthèse ligue", "RÉSULTAT"));//! À changer le string par un jpanel quand on aura la fonctionnalité
-
-		return column;
-	}
-
 	private JPanel buildCenterColumn() {
-		return new BuildBox("DISTRIBUTION PAR CLUB", "Zone principale", "DISTRIBUTION");//! À changer le string par un jpanel quand on aura la fonctionnalité
+		JPanel centerColumn = new JPanel(new BorderLayout());
+		centerColumn.setOpaque(false);
+		centerColumn.add(centerContentPanel, BorderLayout.CENTER);
+		return centerColumn;
 	}
 
 	private JPanel buildRightColumn() {
@@ -92,5 +81,35 @@ public class FinanceDashboard extends JPanel {
 		column.add(new BuildBox("DÉPENSES", "Équipe sélectionnée", "DÉPENSES"));//! À changer le string par un jpanel quand on aura la fonctionnalité
 
 		return column;
+	}
+
+	private void actions() {
+		headerPanel.getLeagueButton().addActionListener(e -> switchView(LEAGUE_VIEW));
+		headerPanel.getTeamsButton().addActionListener(e -> switchView(TEAM_VIEW));
+	}
+
+	private void switchView(String view) {
+		if (view == null || view.equals(selectedView)) {
+			return;
+		}
+		selectedView = view;
+		refreshView();
+	}
+
+	private void refreshView() {
+		headerPanel.setSelectedView(selectedView);
+		centerContentPanel.removeAll();
+		centerContentPanel.add(buildMainContentPanel(), BorderLayout.CENTER);
+		centerContentPanel.revalidate();
+		centerContentPanel.repaint();
+		revalidate();
+		repaint();
+	}
+
+	private JPanel buildMainContentPanel() {
+		if (LEAGUE_VIEW.equals(selectedView)) {
+			return new BuildBox("FINANCE DE LA LIGUE", "Vue consolidee", "LIGUE");
+		}
+		return new BuildBox("DISTRIBUTION PAR CLUB", "Vue par equipe", "DISTRIBUTION");
 	}
 }

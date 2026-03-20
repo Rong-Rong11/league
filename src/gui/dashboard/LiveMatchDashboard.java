@@ -19,9 +19,9 @@ import data.sport.setup.Game;
 import data.sport.setup.GameResult;
 import gui.management.LiveMatchStatistics;
 import gui.panel.common.BuildBox;
-import gui.panel.liveMatchPanel.LiveActionsPanel;
-import gui.panel.liveMatchPanel.LiveMatchHeaderPanel;
-import gui.panel.liveMatchPanel.LiveTeamStatsPanel;
+import gui.panel.matchPanel.liveMatchPanel.LiveActionsPanel;
+import gui.panel.matchPanel.liveMatchPanel.LiveMatchHeaderPanel;
+import gui.panel.matchPanel.liveMatchPanel.LiveTeamStatsPanel;
 import process.manager.LeagueManager;
 import process.visitor.actionresult.LiveActionTextVisitor;
 

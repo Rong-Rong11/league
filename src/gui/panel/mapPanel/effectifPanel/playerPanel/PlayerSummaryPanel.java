@@ -1,4 +1,4 @@
-package gui.panel.playerPanel;
+package gui.panel.mapPanel.effectifPanel.playerPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

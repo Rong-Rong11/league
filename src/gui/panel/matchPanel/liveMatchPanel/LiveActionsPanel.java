@@ -1,4 +1,4 @@
-package gui.panel.liveMatchPanel;
+package gui.panel.matchPanel.liveMatchPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

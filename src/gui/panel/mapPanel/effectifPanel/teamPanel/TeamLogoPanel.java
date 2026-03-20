@@ -1,4 +1,4 @@
-package gui.panel.teamPanel;
+package gui.panel.mapPanel.effectifPanel.teamPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
