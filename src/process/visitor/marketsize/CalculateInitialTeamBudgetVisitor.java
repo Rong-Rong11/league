@@ -4,14 +4,12 @@
 package process.visitor.marketsize;
 
 import data.team.finance.economicprofil.EconomicProfil;
-import data.team.finance.financialprofil.FinancialProfil;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
-import process.visitor.marketsize.MarketSizeVisitor;
 
 public class CalculateInitialTeamBudgetVisitor
-implements MarketSizeVisitor<Double> {
+        implements MarketSizeVisitor<Double> {
     private double baseBudget;
     private double popularity;
     private EconomicProfil economicProfil;
@@ -19,7 +17,7 @@ implements MarketSizeVisitor<Double> {
     public CalculateInitialTeamBudgetVisitor(double baseBudget, double popularity, EconomicProfil economicProfil) {
         this.baseBudget = baseBudget;
         this.popularity = popularity;
-        this.economicProfil = economicProfil; 
+        this.economicProfil = economicProfil;
     }
 
     @Override

@@ -3,14 +3,14 @@
  */
 package process.visitor.financialprofil;
 
-import data.team.finance.financialprofil.AmbitiousProfil;
-import data.team.finance.financialprofil.BalancedProfil;
-import data.team.finance.financialprofil.ThriftyProfil;
+import data.team.finance.financialpolicy.AmbitiousPolicy;
+import data.team.finance.financialpolicy.BalancedPolicy;
+import data.team.finance.financialpolicy.ThriftyPolicy;
 
 public interface FinancialProfilVisitor<F> {
-    public F visit(ThriftyProfil var1);
+    public F visit(ThriftyPolicy var1);
 
-    public F visit(BalancedProfil var1);
+    public F visit(BalancedPolicy var1);
 
-    public F visit(AmbitiousProfil var1);
+    public F visit(AmbitiousPolicy var1);
 }

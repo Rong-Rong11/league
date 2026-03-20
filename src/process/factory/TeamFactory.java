@@ -4,7 +4,7 @@ import data.finance.budget.Budget;
 import data.team.Stadium;
 import data.team.Team;
 import data.team.finance.TeamFinance;
-import data.team.finance.financialprofil.FinancialProfil;
+import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.transfer.TeamTransferStrategy;
 import process.utilitary.TeamUtilitary;
@@ -23,10 +23,11 @@ public class TeamFactory {
         String teamName = data[2];
         String rivalTeamName = TeamFactory.checkRivalTeam(data[11]);
         double teamPopularity = Float.valueOf(data[12]).floatValue();
-        FinancialProfil financialProfil = TeamUtilitary.randomFinancialProfil();
+        FinancialPolicy financialProfil = TeamUtilitary.randomFinancialProfil();
         MarketSize marketSize = TeamUtilitary.randomMarketSize();
         Budget budget = new Budget(0.0);
-        TeamTransferStrategy teamTransferStrategy = financialProfil.accept(new ChooseTransferStrategyVisitor(rivalTeamName));
+        TeamTransferStrategy teamTransferStrategy = financialProfil
+                .accept(new ChooseTransferStrategyVisitor(rivalTeamName));
         TeamFinance teamFinance = new TeamFinance(financialProfil, budget, marketSize, teamTransferStrategy);
         String stadiumName = data[33];
         Stadium stadium = new Stadium(stadiumName, 0.0, 0);

@@ -1,14 +1,14 @@
 package process.factory;
 
 import data.team.finance.economicprofil.EconomicProfil;
-import data.team.finance.financialprofil.FinancialProfil;
+import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.mediamarket.MediaMarket;
 import data.team.finance.transfer.TeamTransferStrategy;
 
 public class EconomicProfileFactory {
       public static void create(EconomicProfil economicProfil, double teamPopularity,
                   MediaMarket mediaMarket,
-                  FinancialProfil financialProfil,
+                  FinancialPolicy financialProfil,
                   TeamTransferStrategy transferStrategy) {
 
             double historicalPrestige = clamp(0.2 + teamPopularity / 100.0 * 0.5);
@@ -31,7 +31,7 @@ public class EconomicProfileFactory {
             economicProfil.setOwnerDeficitTolerance(ownerDeficitTolerance);
       }
 
-      private static double getFinancialModifier(FinancialProfil financialProfil) {
+      private static double getFinancialModifier(FinancialPolicy financialProfil) {
             return 0.2; // simple version (à améliorer plus tard)
       }
 

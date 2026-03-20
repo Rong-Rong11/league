@@ -1,13 +1,15 @@
 package process.manager;
 
-import config.CalendarConfiguration;
-import data.league.League;
-import data.sport.setup.Game;
-import data.team.Team;
-import data.team.finance.financialprofil.FinancialProfil;
-import data.team.finance.marketsize.MarketSize;
 import java.time.LocalDate;
 import java.time.Month;
+
+import config.CalendarConfiguration;
+import data.league.League;
+import data.league.finance.LeagueFinancialRules;
+import data.sport.setup.Game;
+import data.team.Team;
+import data.team.finance.financialpolicy.FinancialPolicy;
+import data.team.finance.marketsize.MarketSize;
 import process.builder.CalendarBuilder;
 import process.builder.LeagueBuilder;
 import process.builder.SimulationBuilder;
@@ -23,31 +25,36 @@ public class LeagueManager {
     private League league;
     private LeagueBuilder leagueBuilder = new LeagueBuilder();
     private CalendarBuilder calendarBuilder;
-    private SimulationBuilder simulationBuilder = new SimulationBuilder(); 
+    private SimulationBuilder simulationBuilder = new SimulationBuilder();
     private GameManager gameManager = null;
     private TradeManager tradeManager;
     private FinanceManager financeManager;
 
     public LeagueManager() {
-		league = leagueBuilder.build();
-		FinanceUtilitary.updateLeaguePayroll();
-		
-		calendarBuilder = new CalendarBuilder(league) ; 
-		financeManager = new FinanceManager(league);
-		gameManager = new GameManager(league, financeManager);
-		tradeManager = new TradeManager(league.getLeagueFinance().getSalaryCap());
+        league = leagueBuilder.build();
+        FinanceUtilitary.updateLeaguePayroll();
 
-	}
+        calendarBuilder = new CalendarBuilder(league);
+        financeManager = new FinanceManager(league);
+        gameManager = new GameManager(league, financeManager);
+        LeagueFinancialRules leagueFinancialRules = league.getLeagueFinance().getLeagueFinancialRules();
+        tradeManager = new TradeManager(leagueFinancialRules.getSalaryCap(), leagueFinancialRules.getLuxuryTaxLine());
+
+    }
 
     public void startSeason() {
         simulationBuilder.build();
         simulatePreSeasonTrade();
-		buildRegularSeasonCalendar();
-		league.getLeagueFinance().getBudget().getInitialAmount();
+        buildRegularSeasonCalendar();
+        league.getLeagueFinance().getBudget().getInitialAmount();
     }
 
     private void simulatePreSeasonTrade() {
-        tradeManager.simulatePreSeasonTrade();
+        tradeManager.simulatePreSeasonTrade(0);
+    }
+
+    public void simulateTrade(LocalDate date, int month) {
+        tradeManager.simulateSeasonTrade(date, month);
     }
 
     private void buildRegularSeasonCalendar() {
@@ -64,14 +71,15 @@ public class LeagueManager {
 
     public void randomFinancialProfil() {
         for (Team team : TeamRepositery.getInstance().getAllTeams()) {
-            FinancialProfil financialProfil = TeamUtilitary.randomFinancialProfil();
+            FinancialPolicy financialProfil = TeamUtilitary.randomFinancialProfil();
             chooseFinancialProfil(team, financialProfil);
         }
     }
 
-    public void chooseFinancialProfil(Team team, FinancialProfil financialProfil) {
+    public void chooseFinancialProfil(Team team, FinancialPolicy financialProfil) {
         team.getTeamFinance().setFinancialProfil(financialProfil);
-        team.getTeamFinance().setTeamTransferStrategy(financialProfil.accept(new ChooseTransferStrategyVisitor(team.getRival())));
+        team.getTeamFinance()
+                .setTeamTransferStrategy(financialProfil.accept(new ChooseTransferStrategyVisitor(team.getRival())));
     }
 
     public void chooseMarketSize(Team team, MarketSize marketSize) {

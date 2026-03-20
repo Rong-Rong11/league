@@ -26,23 +26,25 @@ public class TradeManager {
     private LocalDate deadLine = LocalDate.of(2026, 04, 20);
     private final int MAX_ATTEMPTS = 5;
     private double salaryCap;
+    private double luxuryTaxLine;
     private TradeSimulator tradeSimulator = new TradeSimulator();
     private TradeFinder tradeFinder;
 
-    public TradeManager(double salaryCap) {
+    public TradeManager(double salaryCap, double luxuryTaxLine) {
         this.salaryCap = salaryCap;
+        this.luxuryTaxLine = luxuryTaxLine;
         tradeFinder = new TradeFinder(salaryCap);
     }
 
-    public void simulatePreSeasonTrade() {
-        simulateTrade(false, FinanceConfiguration.PRESEASON_TRADE);
+    public void simulatePreSeasonTrade(int month) {
+        simulateTrade(false, FinanceConfiguration.PRESEASON_TRADE, month);
     }
 
-    public void simulateSeasonTrade(LocalDate date) {
-        simulateTrade(true, date);
+    public void simulateSeasonTrade(LocalDate date, int month) {
+        simulateTrade(true, date, month);
     }
 
-    private void simulateTrade(boolean season, LocalDate date) {
+    private void simulateTrade(boolean season, LocalDate date, int month) {
         if (season) {
             if (date.isAfter(deadLine)) {
                 return;
@@ -78,7 +80,7 @@ public class TradeManager {
             playersB.remove(playerBToTrade);
             playersB.add(playerAToTrade);
 
-            if (tradeSimulator.validateTrade(teamA, teamB, playersA, playersB, 0)) {
+            if (tradeSimulator.validateTrade(teamA, teamB, playersA, playersB, month, salaryCap, luxuryTaxLine)) {
                 if (season) {
                     seasonTrades.put(date, new Trade(playerAToTrade, teamA, playerBToTrade, teamB, date));
                 } else {

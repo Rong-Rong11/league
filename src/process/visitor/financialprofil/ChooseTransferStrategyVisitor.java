@@ -1,9 +1,9 @@
 package process.visitor.financialprofil;
 
 import config.TeamConfiguration;
-import data.team.finance.financialprofil.AmbitiousProfil;
-import data.team.finance.financialprofil.BalancedProfil;
-import data.team.finance.financialprofil.ThriftyProfil;
+import data.team.finance.financialpolicy.AmbitiousPolicy;
+import data.team.finance.financialpolicy.BalancedPolicy;
+import data.team.finance.financialpolicy.ThriftyPolicy;
 import data.team.finance.transfer.AllIn;
 import data.team.finance.transfer.Balanced;
 import data.team.finance.transfer.Rebuild;
@@ -21,7 +21,7 @@ public class ChooseTransferStrategyVisitor implements FinancialProfilVisitor<Tea
     }
 
     @Override
-    public TeamTransferStrategy visit(ThriftyProfil thriftyProfil) {
+    public TeamTransferStrategy visit(ThriftyPolicy thriftyProfil) {
         // TODO Auto-generated method stub
         double random = Math.random();
         if (!rivalTeamName.equals(TeamConfiguration.NO_RIVAL)) {
@@ -43,7 +43,7 @@ public class ChooseTransferStrategyVisitor implements FinancialProfilVisitor<Tea
     }
 
     @Override
-    public TeamTransferStrategy visit(BalancedProfil balancedProfil) {
+    public TeamTransferStrategy visit(BalancedPolicy balancedProfil) {
         // TODO Auto-generated method stub
         double random = Math.random();
         if (!rivalTeamName.equals(TeamConfiguration.NO_RIVAL)) {
@@ -65,7 +65,7 @@ public class ChooseTransferStrategyVisitor implements FinancialProfilVisitor<Tea
     }
 
     @Override
-    public TeamTransferStrategy visit(AmbitiousProfil ambitiousProfil) {
+    public TeamTransferStrategy visit(AmbitiousPolicy ambitiousProfil) {
         // TODO Auto-generated method stub
         double random = Math.random();
         if (!rivalTeamName.equals(TeamConfiguration.NO_RIVAL)) {

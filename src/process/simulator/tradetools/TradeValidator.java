@@ -3,22 +3,25 @@
  */
 package process.simulator.tradetools;
 
+import java.util.ArrayList;
+
 import data.finance.budget.Budget;
 import data.player.Player;
 import data.team.Team;
-import data.team.finance.financialprofil.FinancialProfil;
-import java.util.ArrayList;
+import data.team.finance.financialpolicy.FinancialPolicy;
 import process.utilitary.FinanceUtilitary;
 import process.visitor.financialprofil.RiskBudgetVisitor;
 import process.visitor.financialprofil.ValidateTradeVisitor;
 
 public class TradeValidator {
-    public boolean validateTrade(Team teamA, Team teamB, ArrayList<Player> teamAIncoming, ArrayList<Player> teamBIncoming, double salaryCap) {
+    public boolean validateTrade(Team teamA, Team teamB, ArrayList<Player> teamAIncoming,
+            ArrayList<Player> teamBIncoming, double salaryCap) {
         double teamBIncomingPayroll;
         double teamAOutgoingPayroll = teamA.getTeamFinance().getPayroll();
         double teamAIncomingPayroll = FinanceUtilitary.calculatePayroll(teamAIncoming);
         double teamBOutgoingPayroll = teamB.getTeamFinance().getPayroll();
-        if (!TradeValidator.respectPayroll(teamB, teamBOutgoingPayroll, teamBIncomingPayroll = FinanceUtilitary.calculatePayroll(teamBIncoming), salaryCap)) {
+        if (!TradeValidator.respectPayroll(teamB, teamBOutgoingPayroll,
+                teamBIncomingPayroll = FinanceUtilitary.calculatePayroll(teamBIncoming), salaryCap)) {
             return false;
         }
         if (!TradeValidator.respectPayroll(teamA, teamAOutgoingPayroll, teamAIncomingPayroll, salaryCap)) {
@@ -28,7 +31,7 @@ public class TradeValidator {
     }
 
     public static boolean respectPayroll(Team team, double outgoingPayroll, double incomingPayroll, double salaryCap) {
-        FinancialProfil financialProfil = team.getTeamFinance().getFinancialProfil();
+        FinancialPolicy financialProfil = team.getTeamFinance().getFinancialProfil();
         if (incomingPayroll < salaryCap) {
             return true;
         }
@@ -40,8 +43,8 @@ public class TradeValidator {
     }
 
     private static boolean riskBudget(Team team) {
-        FinancialProfil financialProfil = team.getTeamFinance().getFinancialProfil();
+        FinancialPolicy financialProfil = team.getTeamFinance().getFinancialProfil();
         Budget budget = team.getTeamFinance().getBudget();
-        return financialProfil.accept(new RiskBudgetVisitor(budget)) ; 
+        return financialProfil.accept(new RiskBudgetVisitor(budget));
     }
 }

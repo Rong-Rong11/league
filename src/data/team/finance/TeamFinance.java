@@ -5,13 +5,13 @@ package data.team.finance;
 
 import data.finance.budget.Budget;
 import data.team.finance.economicprofil.EconomicProfil;
-import data.team.finance.financialprofil.FinancialProfil;
+import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import data.team.finance.transfer.TeamTransferStrategy;
 
 public class TeamFinance {
-    private FinancialProfil financialProfil;
+    private FinancialPolicy financialProfil;
     private EconomicProfil economicProfil = new EconomicProfil();
     private MediaMarket mediaMarket = new MediaMarket();
     private MarketSize marketSize;
@@ -22,7 +22,7 @@ public class TeamFinance {
     private int transferMade = 0;
     private TeamTransferStrategy teamTransferStrategy;
 
-    public TeamFinance(FinancialProfil financialProfil, Budget budget, MarketSize marketSize,
+    public TeamFinance(FinancialPolicy financialProfil, Budget budget, MarketSize marketSize,
             TeamTransferStrategy teamTransferStrategy) {
         this.financialProfil = financialProfil;
         this.budget = budget;
@@ -33,7 +33,7 @@ public class TeamFinance {
         this.teamTransferStrategy = teamTransferStrategy;
     }
 
-    public FinancialProfil getFinancialProfil() {
+    public FinancialPolicy getFinancialProfil() {
         return this.financialProfil;
     }
 
@@ -85,7 +85,7 @@ public class TeamFinance {
         this.luxuryTaxPaid = luxuryTaxPaid;
     }
 
-    public void setFinancialProfil(FinancialProfil financialProfil) {
+    public void setFinancialProfil(FinancialPolicy financialProfil) {
         this.financialProfil = financialProfil;
     }
 

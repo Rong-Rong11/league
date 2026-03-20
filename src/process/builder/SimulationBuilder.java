@@ -6,7 +6,7 @@ import data.team.Stadium;
 import data.team.Team;
 import data.team.finance.TeamFinance;
 import data.team.finance.economicprofil.EconomicProfil;
-import data.team.finance.financialprofil.FinancialProfil;
+import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import process.factory.EconomicProfileFactory;
@@ -38,7 +38,7 @@ public class SimulationBuilder {
         EconomicProfil economicProfil = teamFinance.getEconomicProfil();
         MarketSize marketSize = teamFinance.getMarketSize();
         MediaMarket mediaMarket = teamFinance.getMediaMarket();
-        FinancialProfil financialProfil = teamFinance.getFinancialProfil();
+        FinancialPolicy financialProfil = teamFinance.getFinancialProfil();
 
         double popularity = team.getPopularity();
         Stadium stadium = team.getStadium();

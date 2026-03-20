@@ -1,13 +1,10 @@
-/*
- * Decompiled with CFR 0.152.
- */
-package data.team.finance.financialprofil;
+package data.team.finance.financialpolicy;
 
 import process.visitor.financialprofil.FinancialProfilVisitor;
 
-public class BalancedProfil
-        extends FinancialProfil {
-    public BalancedProfil() {
+public class AmbitiousPolicy
+        extends FinancialPolicy {
+    public AmbitiousPolicy() {
         super();
     }
 

@@ -1,29 +1,27 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package process.visitor.marketsize;
 
+import config.FinanceConfiguration;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
-import process.visitor.marketsize.MarketSizeVisitor;
 
-public class CalculateBaseTicketVisitor
-implements MarketSizeVisitor<Double> {
-    private double baseTicketPrice = 100.0;
+public class CalculateBaseTicketVisitor implements MarketSizeVisitor<Double> {
 
-    @Override
+    private double baseTicketPrice = FinanceConfiguration.BASE_TICKET_PRICE;
+
+    public CalculateBaseTicketVisitor() {
+
+    }
+
     public Double visit(LargeSize largeSize) {
-        return this.baseTicketPrice * 1.3;
+        return baseTicketPrice * FinanceConfiguration.MARKET_SIZE_LARGE_MULTIPLIER;
     }
 
-    @Override
     public Double visit(MediumSize mediumSize) {
-        return this.baseTicketPrice * 1.0;
+        return baseTicketPrice * FinanceConfiguration.MARKET_SIZE_MEDIUM_MULTIPLIER;
     }
 
-    @Override
     public Double visit(SmallSize smallSize) {
-        return this.baseTicketPrice * 0.7;
+        return baseTicketPrice * FinanceConfiguration.MARKET_SIZE_SMALL_MULTIPLIER;
     }
 }

@@ -3,22 +3,21 @@
  */
 package data.league;
 
+import java.util.ArrayList;
+
 import config.CalendarConfiguration;
-import data.league.Conference;
-import data.league.Division;
-import data.league.LeagueFinance;
-import data.league.Playoff;
-import data.league.RegularSeason;
+import data.league.finance.LeagueFinance;
 import data.player.Player;
 import data.team.Team;
-import java.util.ArrayList;
 
 public class League {
     private Conference westernConference = new Conference("West");
     private Conference easternConference = new Conference("East");
     private LeagueFinance leagueFinance = null;
-    private RegularSeason regularSeason = new RegularSeason(CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE, CalendarConfiguration.REGULAR_SEASON_END_DATE);
-    private Playoff playoff = new Playoff(CalendarConfiguration.PLAYOFF_DEBUT_DATE, CalendarConfiguration.PLAYOFF_END_DATE);
+    private RegularSeason regularSeason = new RegularSeason(CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE,
+            CalendarConfiguration.REGULAR_SEASON_END_DATE);
+    private Playoff playoff = new Playoff(CalendarConfiguration.PLAYOFF_DEBUT_DATE,
+            CalendarConfiguration.PLAYOFF_END_DATE);
 
     public Conference getWesternConference() {
         return this.westernConference;

@@ -6,10 +6,9 @@ package process.visitor.marketsize;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
-import process.visitor.marketsize.MarketSizeVisitor;
 
 public class CalculateMonthlyTeamFinanceVisitor
-implements MarketSizeVisitor<Double> {
+        implements MarketSizeVisitor<Double> {
     private double baseMarketMultiplier = 1.0;
 
     @Override

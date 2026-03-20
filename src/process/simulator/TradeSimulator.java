@@ -3,7 +3,6 @@
  */
 package process.simulator;
 
-import data.league.LeagueFinance;
 import data.player.Player;
 import data.team.Team;
 import java.util.ArrayList;
@@ -16,9 +15,8 @@ public class TradeSimulator {
     private TradeApplier tradeApplier = new TradeApplier();
     private TradeImpact tradeImpact = new TradeImpact();
 
-    public boolean validateTrade(Team teamA, Team teamB, ArrayList<Player> teamAIncoming, ArrayList<Player> teamBIncoming, int month) {
-        double salaryCap = LeagueFinance.salaryCap;
-        double luxuryTaxLine = LeagueFinance.luxuryTaxLine;
+    public boolean validateTrade(Team teamA, Team teamB, ArrayList<Player> teamAIncoming,
+            ArrayList<Player> teamBIncoming, int month, double salaryCap, double luxuryTaxLine) {
         if (!this.tradeValidator.validateTrade(teamA, teamB, teamAIncoming, teamBIncoming, salaryCap)) {
             return false;
         }

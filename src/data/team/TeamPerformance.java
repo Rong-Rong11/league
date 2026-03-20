@@ -2,69 +2,104 @@ package data.team;
 
 public class TeamPerformance {
     private double performanceRating = 0.5;
-    private double winStreak = 0.0;
-    private double loseStreak;
-    private double numberWin = 0.0;
-    private double numberLose = 0.0;
-    private double numberPlayedGames = 0.0;
+    private int currentWinStreak = 0;
+    private int currentLoseStreak = 0;
+    private int maxWinsStreak = 0;
+    private int maxLoseStreak = 0;
+    private int numberWin = 0;
+    private int numberLose = 0;
+    private int numberPlayedGames = 0;
+
+    public TeamPerformance() {
+
+    }
 
     public double getPerformanceRating() {
-        return this.performanceRating;
+        return performanceRating;
     }
 
-    public void setPerformanceRating(double d) {
-        this.performanceRating = d;
+    public void setPerformanceRating(int performanceRating) {
+        this.performanceRating = performanceRating;
     }
 
-    public double getWinStreak() {
-        return this.winStreak;
+    public int getCurrentWinStreak() {
+        return currentWinStreak;
     }
 
-    public void setWinStreak(double d) {
-        this.winStreak = d;
+    public void setCurrentWinStreak(int winStreak) {
+        this.currentWinStreak = winStreak;
     }
 
-    public double getLoseStreak() {
-        return this.loseStreak;
+    public int getCurrentLoseStreak() {
+        return currentLoseStreak;
     }
 
-    public void setLoseStreak(double d) {
-        this.loseStreak = d;
+    public void setCurrentLoseStreak(int loseStreak) {
+        this.currentLoseStreak = loseStreak;
     }
 
-    public double getNumberWin() {
-        return this.numberWin;
+    public int getNumberWin() {
+        return numberWin;
     }
 
-    public void setNumberWin(double d) {
-        this.numberWin = d;
+    public void setNumberWin(int numberWin) {
+        this.numberWin = numberWin;
     }
 
-    public double getNumberLose() {
-        return this.numberLose;
+    public int getNumberLose() {
+        return numberLose;
     }
 
-    public void setNumberLose(double d) {
-        this.numberLose = d;
+    public void setNumberLose(int numberLose) {
+        this.numberLose = numberLose;
     }
 
     public void incrementNumberWin() {
-        this.numberWin += 1.0;
+        numberWin++;
     }
 
     public void incrementNumberLose() {
-        this.numberLose += 1.0;
+        numberLose++;
     }
 
-    public double getNumberPlayedGames() {
-        return this.numberPlayedGames;
+    public int getNumberPlayedGames() {
+        return numberPlayedGames;
     }
 
-    public void setNumberPlayedGames(double d) {
-        this.numberPlayedGames = d;
+    public void setNumberPlayedGames(int numberPlayedGames) {
+        this.numberPlayedGames = numberPlayedGames;
     }
 
     public void incrementNmberPlayedGames() {
-        this.numberPlayedGames += 1.0;
+        numberPlayedGames++;
     }
+
+    public void incrementCurrentWinStreak() {
+        currentWinStreak++;
+    }
+
+    public void incrementCurrentLoseStreak() {
+        currentLoseStreak++;
+    }
+
+    public void setPerformanceRating(double performanceRating) {
+        this.performanceRating = performanceRating;
+    }
+
+    public int getMaxWinsStreak() {
+        return maxWinsStreak;
+    }
+
+    public void setMaxWinsStreak(int maxWinsStreak) {
+        this.maxWinsStreak = maxWinsStreak;
+    }
+
+    public int getMaxLoseStreak() {
+        return maxLoseStreak;
+    }
+
+    public void setMaxLoseStreak(int maxLoseStreak) {
+        this.maxLoseStreak = maxLoseStreak;
+    }
+
 }

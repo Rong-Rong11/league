@@ -3,7 +3,7 @@
  */
 package config;
 
-public class FinancialPolicy {
+public class FinancialPolicyConfig {
     public static final String FINANCE_PROFIL_ECONOMIC = "economic";
     public static final String FINANCE_PROFIL_AMBITIOUS = "ambitious";
     public static final String FINANCE_PROFIL_BALANCED = "balanced";
