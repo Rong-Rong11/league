@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import data.player.Player;
 import data.team.Team;
+import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import process.utilitary.FinanceUtilitary;
 
@@ -99,9 +100,9 @@ public class MapTeamSummaryPanel extends JPanel {
 		FinanceUtilitary.updateTeamPayroll(team);
 		teamLogoPanel.setTeamName(team.getName());
 		teamNameLabel.setText(team.getName());
-		payrollLabel.setText(formatSalary(team.getTeamFinance().getPayroll()));
+		payrollLabel.setText(PlayerDisplayUtil.formatSalary(team.getTeamFinance().getPayroll()));
 		capacityLabel.setText(String.valueOf(team.getStadium().getCapacity()));
-		averageNoteLabel.setText(formatOneDecimal(computeAverageNote(team)) + "/100");
+		averageNoteLabel.setText(PlayerDisplayUtil.formatOneDecimal(computeAverageNote(team)) + "/100");
 		openRosterButton.setEnabled(true);
 	}
 
@@ -109,31 +110,13 @@ public class MapTeamSummaryPanel extends JPanel {
 		double total = 0;
 		int count = 0;
 		for (Player player : team.getPlayers().values()) {
-			total += getDisplayedNote(player);
+			total += PlayerDisplayUtil.getDisplayedNote(player);
 			count++;
 		}
 		if (count == 0) {
 			return 0;
 		}
 		return total / count;
-	}
-
-	private double getDisplayedNote(Player player) {
-		if (player.getCurrentSeasonAssets().getNote() > 0) {
-			return player.getCurrentSeasonAssets().getNote();
-		}
-		return player.getPreSeasonAssets().getNote();
-	}
-
-	private String formatOneDecimal(double value) {
-		return String.format("%.1f", value);
-	}
-
-	private String formatSalary(double salary) {
-		if (salary >= 1) {
-			return "$" + formatOneDecimal(salary) + "M";
-		}
-		return "$" + Math.round(salary * 1000.0) + "K";
 	}
 
 	public JButton getOpenRosterButton() {

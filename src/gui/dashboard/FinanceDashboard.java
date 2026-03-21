@@ -102,6 +102,7 @@ public class FinanceDashboard extends JPanel {
 		headerPanel.setSelectedView(selectedView);
 		centerContentPanel.removeAll();
 		centerContentPanel.add(buildMainContentPanel(), BorderLayout.CENTER);
+		centerContentPanel.revalidate();
 		centerContentPanel.repaint();
 		repaint();
 	}

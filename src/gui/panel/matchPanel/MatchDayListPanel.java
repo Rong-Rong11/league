@@ -40,6 +40,7 @@ public class MatchDayListPanel extends JPanel {
 
 		if (gameDay == null || gameDay.getGames().isEmpty()) {
 			gamesColumn.add(new JLabel("Aucun match aujourd'hui"));
+			gamesColumn.revalidate();
 			repaint();
 			return;
 		}
@@ -52,6 +53,7 @@ public class MatchDayListPanel extends JPanel {
 			gamesColumn.add(buildEmptyRow(i));
 		}
 
+		gamesColumn.revalidate();
 		repaint();
 	}
 

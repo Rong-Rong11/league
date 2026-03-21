@@ -35,6 +35,7 @@ public class WeekViewPanel extends JPanel {
 	private final SimulationManager simulationManager;
 	private RegularSeason regularSeason;
 	private LocalDate currentDate;
+	private LocalDate simulationDate;
 	private OpenMatchDayAction openMatchDayAction;
 
 	public WeekViewPanel(SimulationManager simulationManager) {
@@ -70,7 +71,8 @@ public class WeekViewPanel extends JPanel {
 
 	public void loadSeasonState() {
 		regularSeason = simulationManager.getLeague().getReagularSeason();
-		currentDate = normalizeDisplayedDate(simulationManager.getCurrentDate());
+		simulationDate = simulationManager.getCurrentDate();
+		currentDate = normalizeDisplayedDate(simulationDate);
 		updateDisplay();
 	}
 
@@ -82,7 +84,8 @@ public class WeekViewPanel extends JPanel {
 		if (simulationManager.getCurrentDate().isBefore(regularSeason.getEndDate())) {
 			simulationManager.nextDay();
 		}
-		currentDate = normalizeDisplayedDate(simulationManager.getCurrentDate());
+		simulationDate = simulationManager.getCurrentDate();
+		currentDate = normalizeDisplayedDate(simulationDate);
 		updateDisplay();
 	}
 
@@ -90,11 +93,15 @@ public class WeekViewPanel extends JPanel {
 		if (regularSeason == null || currentDate == null) {
 			return;
 		}
-		simulationManager.displayWeek(getWeekStart(currentDate));
-		LocalDate nextWeek = currentDate.plusDays(7);
+		LocalDate weekStart = getWeekStart(currentDate);
+		simulationManager.displayWeek(weekStart);
+		LocalDate nextWeek = weekStart.plusDays(7);
 		if (!nextWeek.isAfter(regularSeason.getEndDate())) {
-			currentDate = nextWeek;
+			simulationDate = nextWeek;
+		} else {
+			simulationDate = regularSeason.getEndDate();
 		}
+		currentDate = normalizeDisplayedDate(simulationDate);
 		updateDisplay();
 	}
 
@@ -121,11 +128,26 @@ public class WeekViewPanel extends JPanel {
 		waitingLabel.setFont(TEXT_FONT);
 		waitingLabel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 		matchDisplayPanel.add(waitingLabel);
+		matchDisplayPanel.revalidate();
 		matchDisplayPanel.repaint();
 	}
 
 	public void setOpenMatchDayAction(OpenMatchDayAction openMatchDayAction) {
 		this.openMatchDayAction = openMatchDayAction;
+	}
+
+	public LocalDate getCurrentDate() {
+		return currentDate;
+	}
+
+	public LocalDate getSimulationDate() {
+		return simulationDate;
+	}
+
+	public void setSimulationDate(LocalDate simulationDate) {
+		this.simulationDate = simulationDate;
+		currentDate = normalizeDisplayedDate(simulationDate);
+		updateDisplay();
 	}
 
 	private void updateWeekRows() {
@@ -148,6 +170,7 @@ public class WeekViewPanel extends JPanel {
 			emptyLabel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 			matchDisplayPanel.add(emptyLabel);
 		}
+		matchDisplayPanel.revalidate();
 		matchDisplayPanel.repaint();
 	}
 

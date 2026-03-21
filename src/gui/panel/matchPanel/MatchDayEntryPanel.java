@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import data.sport.setup.Game;
+import gui.panel.common.TeamDisplayUtil;
 
 public class MatchDayEntryPanel extends JPanel {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
@@ -40,8 +41,8 @@ public class MatchDayEntryPanel extends JPanel {
 		textPanel.setBackground(Color.WHITE);
 		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 
-		textPanel.add(createTeamLabel(extractShortName(game.getGameContext().getHomeTeam().getName())));
-		textPanel.add(createOpponentLabel(extractShortName(game.getGameContext().getAwayTeam().getName())));
+		textPanel.add(createTeamLabel(TeamDisplayUtil.getShortName(game.getGameContext().getHomeTeam().getName())));
+		textPanel.add(createOpponentLabel(TeamDisplayUtil.getShortName(game.getGameContext().getAwayTeam().getName())));
 		textPanel.add(createStatusLabel(displayed ? "Terminé" : "À venir", displayed));
 		centerPanel.add(textPanel, BorderLayout.CENTER);
 
@@ -107,14 +108,6 @@ public class MatchDayEntryPanel extends JPanel {
 		label.setMaximumSize(new Dimension(40, 14));
 		label.setAlignmentX(RIGHT_ALIGNMENT);
 		return label;
-	}
-
-	private String extractShortName(String teamName) {
-		String[] words = teamName.split(" ");
-		if (words.length == 0) {
-			return teamName;
-		}
-		return words[words.length - 1];
 	}
 
 	private class SelectMatchMouseListener implements MouseListener {

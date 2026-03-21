@@ -24,8 +24,6 @@ public class HeaderPanel extends JPanel {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
 	private static final Color PROGRESS_COLOR = new Color(0x2F, 0x80, 0xA9);
-	private static final Color SELECTED_BUTTON_COLOR = new Color(0xE3, 0xEC, 0xF8);
-	private static final Color NORMAL_BUTTON_COLOR = Color.WHITE;
 
 	private JLabel progressTitleLabel;
 	private JLabel progressSubtitleLabel;
@@ -160,13 +158,8 @@ public class HeaderPanel extends JPanel {
 	}
 
 	public void setMonthViewSelected(boolean selected) {
-		if (selected) {
-			monthButton.setBackground(SELECTED_BUTTON_COLOR);
-			weekButton.setBackground(NORMAL_BUTTON_COLOR);
-		} else {
-			monthButton.setBackground(NORMAL_BUTTON_COLOR);
-			weekButton.setBackground(SELECTED_BUTTON_COLOR);
-		}
+		ButtonStyleUtil.setToggleButtonSelected(monthButton, selected);
+		ButtonStyleUtil.setToggleButtonSelected(weekButton, !selected);
 	}
 
 	public void setSimulateDayAction(ActionListener actionListener) {

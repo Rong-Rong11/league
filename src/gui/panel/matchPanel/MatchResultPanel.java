@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import data.sport.setup.Game;
 import data.sport.setup.GameResult;
+import gui.panel.common.TeamDisplayUtil;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 
 public class MatchResultPanel extends JPanel {
@@ -52,8 +53,8 @@ public class MatchResultPanel extends JPanel {
 		matchStatusLabel.setText("À venir");
 		mainScoreLabel.setText("--");
 		quarterTitleLabel.setText("Résultats masqués");
-		homeQuarterTeamLabel.setText(extractShortName(homeName));
-		awayQuarterTeamLabel.setText(extractShortName(awayName));
+		homeQuarterTeamLabel.setText(TeamDisplayUtil.getShortName(homeName));
+		awayQuarterTeamLabel.setText(TeamDisplayUtil.getShortName(awayName));
 		resetQuarterTable();
 	}
 
@@ -225,15 +226,15 @@ public class MatchResultPanel extends JPanel {
 		titleLabel.setText("SAISON RÉGULIÈRE - " + dayLabel.toUpperCase());
 		homeLogoPanel.setTeamName(homeName);
 		awayLogoPanel.setTeamName(awayName);
-		homeNameLabel.setText(extractShortName(homeName));
-		awayNameLabel.setText(extractShortName(awayName));
+		homeNameLabel.setText(TeamDisplayUtil.getShortName(homeName));
+		awayNameLabel.setText(TeamDisplayUtil.getShortName(awayName));
 		homeCityLabel.setText(extractCity(homeName));
 		awayCityLabel.setText(extractCity(awayName));
 	}
 
 	private void updateQuarterTable(GameResult[] quarterResults, String homeName, String awayName) {
-		homeQuarterTeamLabel.setText(extractShortName(homeName));
-		awayQuarterTeamLabel.setText(extractShortName(awayName));
+		homeQuarterTeamLabel.setText(TeamDisplayUtil.getShortName(homeName));
+		awayQuarterTeamLabel.setText(TeamDisplayUtil.getShortName(awayName));
 		int homeTotal = 0;
 		int awayTotal = 0;
 		for (int i = 0; i < 4; i++) {
@@ -259,14 +260,6 @@ public class MatchResultPanel extends JPanel {
 		}
 		homeQuarterTotalLabel.setText("-");
 		awayQuarterTotalLabel.setText("-");
-	}
-
-	private String extractShortName(String teamName) {
-		String[] words = teamName.split(" ");
-		if (words.length == 0) {
-			return teamName;
-		}
-		return words[words.length - 1];
 	}
 
 	private String extractCity(String teamName) {

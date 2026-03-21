@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import data.player.Player;
 import data.player.Asset;
 import gui.panel.common.DashboardCard;
+import gui.panel.common.PlayerDisplayUtil;
 
 public class PlayerRosterEntryPanel extends DashboardCard {
 	private PlayerPortraitPanel portraitPanel;
@@ -85,36 +86,16 @@ public class PlayerRosterEntryPanel extends DashboardCard {
 		nameLabel.setText(player.getName());
 		positionLabel.setText(player.getPosition());
 		statsLabel.setText(buildStatsText(player, currentSeasonSelected));
-		salaryLabel.setText(formatSalary(player.getSalary()));
+		salaryLabel.setText(PlayerDisplayUtil.formatSalary(player.getSalary()));
 	}
 
 	private String buildStatsText(Player player, boolean currentSeasonSelected) {
-		Asset assets = getDisplayedAssets(player, currentSeasonSelected);
+		Asset assets = PlayerDisplayUtil.getDisplayedAssets(player, currentSeasonSelected);
 		double points = assets.getPointPerMatch();
 		double assists = assets.getAssistPerMatch();
 		double rebounds = assets.getReboundPerMatch();
-		return formatOneDecimal(points) + " PPG  " + formatOneDecimal(assists) + " APG  "
-				+ formatOneDecimal(rebounds) + " RPG";
-	}
-
-	private Asset getDisplayedAssets(Player player, boolean currentSeasonSelected) {
-		if (!currentSeasonSelected) {
-			return player.getPreSeasonAssets();
-		}
-		if (player.getCurrentSeasonAssets().getMinutesPlayedPerMatch() > 0) {
-			return player.getCurrentSeasonAssets();
-		}
-		return player.getPreSeasonAssets();
-	}
-
-	private String formatOneDecimal(double value) {
-		return String.format("%.1f", value);
-	}
-
-	private String formatSalary(double salary) {
-		if (salary >= 1) {
-			return "$" + formatOneDecimal(salary) + "M";
-		}
-		return "$" + Math.round(salary * 1000.0) + "K";
+		return PlayerDisplayUtil.formatOneDecimal(points) + " PPG  "
+				+ PlayerDisplayUtil.formatOneDecimal(assists) + " APG  "
+				+ PlayerDisplayUtil.formatOneDecimal(rebounds) + " RPG";
 	}
 }
