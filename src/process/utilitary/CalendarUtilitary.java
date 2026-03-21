@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package process.utilitary;
 
 import java.time.DayOfWeek;
@@ -14,89 +11,99 @@ import data.sport.setup.GameContext;
 import data.team.Team;
 
 public class CalendarUtilitary {
+
     public static boolean isWeekend(LocalDate localDate) {
-        return localDate.getDayOfWeek() == DayOfWeek.SATURDAY || localDate.getDayOfWeek() == DayOfWeek.SUNDAY;
+        return localDate.getDayOfWeek() == DayOfWeek.SATURDAY
+                || localDate.getDayOfWeek() == DayOfWeek.SUNDAY;
     }
 
     public static boolean isImportantDay(LocalDate localDate) {
-        return CalendarUtilitary.isWeekend(localDate) || localDate.getDayOfWeek() == DayOfWeek.WEDNESDAY;
+        return isWeekend(localDate)
+                || localDate.getDayOfWeek() == DayOfWeek.WEDNESDAY;
     }
 
     public static boolean isSpecialEvent(RegularSeason regularSeason, LocalDate localDate) {
-        return localDate.isEqual(CalendarConfiguration.CHRISTMAS_DAY) || localDate.isEqual(regularSeason.getDebutDate())
-                || localDate.isEqual(regularSeason.getEndDate()) || localDate.isEqual(CalendarUtilitary.getMLKDay());
+        return localDate.isEqual(CalendarConfiguration.CHRISTMAS_DAY)
+                || localDate.isEqual(regularSeason.getDebutDate())
+                || localDate.isEqual(regularSeason.getEndDate())
+                || localDate.isEqual(getMLKDay());
     }
 
     public static boolean playedYesterday(Team team, LocalDate localDate) {
-        return team.getSchedule().isPlayingOn(localDate.minusDays(1L));
+        return team.getSchedule().isPlayingOn(localDate.minusDays(1));
     }
 
     public static LocalDate getMLKDay() {
         LocalDate localDate = LocalDate.of(2026, Month.JANUARY, 1);
-        int n = 0;
+        int mondayCount = 0;
+
         while (localDate.getMonth() == Month.JANUARY) {
-            if (localDate.getDayOfWeek() == DayOfWeek.MONDAY && ++n == 3) {
-                return localDate;
+            if (localDate.getDayOfWeek() == DayOfWeek.MONDAY) {
+                mondayCount++;
+                if (mondayCount == 3) {
+                    return localDate;
+                }
             }
-            localDate = localDate.plusDays(1L);
+            localDate = localDate.plusDays(1);
         }
         return null;
     }
 
     public static double popularityScoreGame(Game game, LocalDate localDate) {
-        double d = 0.0;
-        Team team = game.getGameContext().getHomeTeam();
-        Team team2 = game.getGameContext().getAwayTeam();
-        d += (team.getPopularity() + team2.getPopularity()) * 5.0;
+        double score = 0.0;
+
+        Team home = game.getGameContext().getHomeTeam();
+        Team away = game.getGameContext().getAwayTeam();
+
+        // Popularité des équipes
+        score += (home.getPopularity() + away.getPopularity()) * 5.0;
+
+        // Rivalité
         if (game.getGameContext().isRivalry()) {
-            d += 40.0;
+            score += 40.0;
         }
-        if (team.hasStarPlayer()) {
-            d += 30.0;
+
+        // Star players
+        if (home.hasStarPlayer()) {
+            score += 30.0;
         }
-        if (team2.hasStarPlayer()) {
-            d += 30.0;
+        if (away.hasStarPlayer()) {
+            score += 30.0;
         }
+
+        // Type de match
         switch (game.getGameContext().getTypeGame()) {
-            case 2: {
-                d += 15.0;
+            case 2:
+                score += 15.0;
                 break;
-            }
-            case 1: {
-                d += 10.0;
+            case 1:
+                score += 10.0;
                 break;
-            }
-            case 0: {
-                d += 5.0;
-            }
+            case 0:
+                score += 5.0;
+                break;
+            default:
+                break;
         }
-        int n = team.getSchedule().daysSinceLastGame(localDate);
-        int n2 = team2.getSchedule().daysSinceLastGame(localDate);
-        if (n < 3) {
-            d -= 5.0;
-        }
-        if (n2 < 3) {
-            d -= 5.0;
-        }
-        if (CalendarUtilitary.playedYesterday(game.getGameContext().getHomeTeam(), localDate)
-                || CalendarUtilitary.playedYesterday(game.getGameContext().getAwayTeam(), localDate)) {
-            d -= 100.0;
-        }
-        return d;
+
+        return score;
     }
 
     public static boolean isRivalry(GameContext gameContext) {
-        if (gameContext.getHomeTeam().getRival() == null || gameContext.getAwayTeam().getRival() == null) {
+        if (gameContext.getHomeTeam().getRival() == null
+                || gameContext.getAwayTeam().getRival() == null) {
             return false;
         }
-        String string = gameContext.getHomeTeam().getRival();
-        String string2 = gameContext.getAwayTeam().getRival();
-        return string.equals(string2);
+
+        String homeRival = gameContext.getHomeTeam().getRival();
+        String awayRival = gameContext.getAwayTeam().getRival();
+
+        return homeRival.equals(awayRival);
     }
 
-    public static boolean checkDate(LocalDate localDate, LocalDate localDate2, LocalDate localDate3) {
-        return !(!localDate.isEqual(localDate2) && !localDate.isAfter(localDate2)
-                || !localDate.isBefore(localDate3) && !localDate.isEqual(localDate3));
+    public static boolean checkDate(LocalDate date, LocalDate start, LocalDate end) {
+        return (date.isEqual(start) || date.isAfter(start))
+                && (date.isEqual(end) || date.isBefore(end));
     }
 
     public static boolean isImportantMonth(int month) {

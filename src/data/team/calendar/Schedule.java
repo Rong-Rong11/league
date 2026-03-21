@@ -3,11 +3,12 @@
  */
 package data.team.calendar;
 
-import data.sport.setup.Game;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.TreeMap;
+
+import data.sport.setup.Game;
 
 public class Schedule {
     private int numberOfPlayedGames;
@@ -75,11 +76,15 @@ public class Schedule {
     }
 
     public int daysSinceLastGame(LocalDate localDate) {
-        if (this.playedGames.isEmpty()) {
+        if (this.scheduledGames.isEmpty()) {
             return Integer.MAX_VALUE;
         }
-        LocalDate localDate2 = this.playedGames.lowerKey(localDate);
-        return (int)ChronoUnit.DAYS.between(localDate2, localDate);
+        LocalDate lastGameDate = this.scheduledGames.lowerKey(localDate);
+
+        if (lastGameDate == null) {
+            return Integer.MAX_VALUE;
+        }
+        return (int) ChronoUnit.DAYS.between(lastGameDate, localDate);
     }
 
     public void scheduleGame(LocalDate localDate, Game game) {

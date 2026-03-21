@@ -1,13 +1,14 @@
 package process.builder;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.TreeMap;
+
 import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.league.League;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.TreeMap;
 import process.builder.calendartools.GameGenerator;
 import process.builder.calendartools.GameSelector;
 import process.builder.calendartools.ScheduleReset;
@@ -40,25 +41,25 @@ public class CalendarBuilder {
         this.specialEventsPlacement();
         this.generateAllGames();
         RegularSeason regularSeason = this.league.getReagularSeason();
-        TreeMap<LocalDate, GameDay> treeMap = new TreeMap<LocalDate, GameDay>();
-        LocalDate localDate = regularSeason.getDebutDate();
-        LocalDate localDate2 = regularSeason.getEndDate();
-        LocalDate localDate3 = localDate;
-        while (!localDate3.isAfter(localDate2)) {
-            GameDay gameDay = new GameDay(localDate3);
-            gameSelector.setDate(localDate3);
+        TreeMap<LocalDate, GameDay> calendar = new TreeMap<LocalDate, GameDay>();
+        LocalDate debutDate = regularSeason.getDebutDate();
+        LocalDate endDate = regularSeason.getEndDate();
+        LocalDate currentDate = debutDate;
+        while (!currentDate.isAfter(endDate)) {
+            GameDay gameDay = new GameDay(currentDate);
+            gameSelector.setDate(currentDate);
             ArrayList<Game> arrayList = gameSelector.selectGamesForDay();
             gameDay.setGames(arrayList);
             for (Game game : arrayList) {
                 game.getGameContext().setScheduled(true);
-                game.getGameContext().getHomeTeam().getSchedule().scheduleGame(localDate3, game);
-                game.getGameContext().getAwayTeam().getSchedule().scheduleGame(localDate3, game);
+                game.getGameContext().getHomeTeam().getSchedule().scheduleGame(currentDate, game);
+                game.getGameContext().getAwayTeam().getSchedule().scheduleGame(currentDate, game);
             }
             if (!gameDay.isEmpty()) {
-                treeMap.put(localDate3, gameDay);
+                calendar.put(currentDate, gameDay);
             }
-            localDate3 = localDate3.plusDays(1L);
+            currentDate = currentDate.plusDays(1L);
         }
-        this.league.getReagularSeason().getCalendar().setCalendar(treeMap);
+        this.league.getReagularSeason().getCalendar().setCalendar(calendar);
     }
 }

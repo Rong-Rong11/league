@@ -155,6 +155,10 @@ public class FinanceUtilitary {
 
 	public static void addIncome(Budget budget, Income income, int month) {
 		HashMap<String, Income> incomesOfMonth = budget.getIncomesForMonth(month);
+		if (incomesOfMonth == null) {
+			incomesOfMonth = new HashMap<>();
+			budget.getMonthlyIncomes().put(month, incomesOfMonth);
+		}
 
 		if (incomesOfMonth.containsKey(income.getName())) {
 			Income existingIncome = incomesOfMonth.get(income.getName());
@@ -166,6 +170,10 @@ public class FinanceUtilitary {
 
 	public static void addExpense(Budget budget, Expense expense, int month) {
 		HashMap<String, Expense> expensesOfMonth = budget.getExpensesForMonth(month);
+		if (expensesOfMonth == null) {
+			expensesOfMonth = new HashMap<>();
+			budget.getMonthlyExpenses().put(month, expensesOfMonth);
+		}
 
 		if (expensesOfMonth.containsKey(expense.getName())) {
 			Expense existingExpense = expensesOfMonth.get(expense.getName());

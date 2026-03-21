@@ -1,11 +1,11 @@
 package process.builder.calendartools;
-import config.CalendarConfiguration;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import config.CalendarConfiguration;
 import data.league.League;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
@@ -15,19 +15,17 @@ import process.repositery.TeamRepositery;
 import process.utilitary.CalendarUtilitary;
 
 public class GameSelector {
-	
-	private LocalDate date ; 
-	private TeamRepositery teamRepositery = TeamRepositery.getInstance() ; 
-	private League league ; 
-	private RegularSeason regularSeason ; 
-	
-	
-	
+
+	private LocalDate date;
+	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+	private League league;
+	private RegularSeason regularSeason;
+
 	public GameSelector(LocalDate date, League league) {
 		super();
 		this.date = date;
-		this.league = league ; 
-		regularSeason = league.getReagularSeason(); 
+		this.league = league;
+		regularSeason = league.getReagularSeason();
 	}
 
 	public ArrayList<Game> selectGamesForDay() {
@@ -39,12 +37,13 @@ public class GameSelector {
 			double homeLoad = loadGameRatio(game.getGameContext().getHomeTeam(), regularSeason.getEndDate());
 			double awayLoad = loadGameRatio(game.getGameContext().getAwayTeam(), regularSeason.getEndDate());
 			double loadScore = homeLoad + awayLoad;
+			double scheduleScore = scheduleScore(game, date);
 
 			double popularityScore = 0;
 			if (CalendarUtilitary.isSpecialEvent(regularSeason, date) || CalendarUtilitary.isImportantDay(date)) {
 				popularityScore = CalendarUtilitary.popularityScoreGame(game, date);
 			}
-			double totalScore = loadScore + popularityScore;
+			double totalScore = loadScore + popularityScore + scheduleScore;
 			if (scoreMap.containsKey(totalScore)) {
 				scoreMap.get(totalScore).add(game);
 			} else {
@@ -68,7 +67,7 @@ public class GameSelector {
 		}
 		return selectedGames;
 	}
-	
+
 	private double loadGameRatio(Team team, LocalDate endOfSeasonDate) {
 		int remainingGames = getNumberOfRemainingUnscheduledGames(team.getSchedule());
 		long remainingDays = ChronoUnit.DAYS.between(date, endOfSeasonDate);
@@ -77,14 +76,56 @@ public class GameSelector {
 		}
 		return (double) remainingGames / remainingDays;
 	}
-	
+
+	private double scheduleScore(Game game, LocalDate localDate) {
+		Team homeTeam = game.getGameContext().getHomeTeam();
+		Team awayTeam = game.getGameContext().getAwayTeam();
+		int homeDays = homeTeam.getSchedule().daysSinceLastGame(localDate);
+		int awayDays = awayTeam.getSchedule().daysSinceLastGame(localDate);
+		double score = 0;
+
+		score += restPenalty(homeDays);
+		score += restPenalty(awayDays);
+
+		if (isScheduleTight(homeTeam) || isScheduleTight(awayTeam)) {
+			score += 120.0;
+		}
+
+		return score;
+	}
+
+	private double restPenalty(int daysSinceLastGame) {
+		if (daysSinceLastGame <= 0) {
+			return -1000.0;
+		}
+		if (daysSinceLastGame == 1) {
+			return -1000.0;
+		}
+		if (daysSinceLastGame == 2) {
+			return -200.0;
+		}
+		return 0.0;
+	}
+
+	private boolean isScheduleTight(Team team) {
+		int remainingGames = getNumberOfRemainingUnscheduledGames(team.getSchedule());
+		long remainingDays = ChronoUnit.DAYS.between(date, regularSeason.getEndDate());
+		return remainingDays > 0 && remainingGames >= remainingDays;
+	}
+
 	private boolean canBeScheduled(Game game, LocalDate date) {
 		Team homeTeam = game.getGameContext().getHomeTeam();
 		Team awayTeam = game.getGameContext().getAwayTeam();
-		if (homeTeam.getSchedule().isPlayingOn(date))
+
+		if (homeTeam.getSchedule().isPlayingOn(date) || awayTeam.getSchedule().isPlayingOn(date)) {
 			return false;
-		if (awayTeam.getSchedule().isPlayingOn(date))
+		}
+
+		int homeDays = homeTeam.getSchedule().daysSinceLastGame(date);
+		int awayDays = awayTeam.getSchedule().daysSinceLastGame(date);
+		if (homeDays <= 0 || awayDays <= 0) {
 			return false;
+		}
 
 		return true;
 	}
@@ -115,7 +156,7 @@ public class GameSelector {
 		}
 		return candidates;
 	}
-	
+
 	private static ArrayList<Game> getUnscheduledGames(Schedule schedule) {
 		ArrayList<Game> unscheduledGames = new ArrayList<Game>();
 		for (Game game : schedule.getGames()) {
@@ -139,6 +180,5 @@ public class GameSelector {
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
-	
-	
+
 }
