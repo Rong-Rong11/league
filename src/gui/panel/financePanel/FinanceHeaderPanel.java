@@ -13,12 +13,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import gui.panel.common.ButtonStyleUtil;
+
 public class FinanceHeaderPanel extends JPanel {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
-	private static final Color ACTIVE_BUTTON_COLOR = new Color(0x2F, 0x80, 0xA9);
-	private static final Color INACTIVE_BUTTON_COLOR = new Color(0xEC, 0xF0, 0xF4);
-	private static final Color INACTIVE_TEXT_COLOR = new Color(0x4F, 0x5D, 0x75);
 
 	private JButton leagueButton;
 	private JButton teamsButton;
@@ -34,8 +33,8 @@ public class FinanceHeaderPanel extends JPanel {
 		leagueButton = new JButton("Ligue");
 		teamsButton = new JButton("Equipes");
 
-		styleToggleButton(leagueButton);
-		styleToggleButton(teamsButton);
+		ButtonStyleUtil.styleToggleButton(leagueButton);
+		ButtonStyleUtil.styleToggleButton(teamsButton);
 
 		add(buildTitlePanel(), BorderLayout.WEST);
 		add(buildActionsPanel(), BorderLayout.EAST);
@@ -51,8 +50,8 @@ public class FinanceHeaderPanel extends JPanel {
 
 	public void setSelectedView(String selectedView) {
 		boolean leagueSelected = "league".equals(selectedView);
-		applySelectedState(leagueButton, leagueSelected);
-		applySelectedState(teamsButton, !leagueSelected);
+		ButtonStyleUtil.setToggleButtonSelected(leagueButton, leagueSelected);
+		ButtonStyleUtil.setToggleButtonSelected(teamsButton, !leagueSelected);
 	}
 
 	private JPanel buildTitlePanel() {
@@ -82,24 +81,5 @@ public class FinanceHeaderPanel extends JPanel {
 		panel.add(leagueButton);
 		panel.add(teamsButton);
 		return panel;
-	}
-
-	private void styleToggleButton(JButton button) {
-		button.setFocusPainted(false);
-		button.setOpaque(true);
-		button.setContentAreaFilled(true);
-		button.setBorderPainted(false);
-		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		button.setPreferredSize(new Dimension(96, 32));
-	}
-
-	private void applySelectedState(JButton button, boolean selected) {
-		if (selected) {
-			button.setBackground(ACTIVE_BUTTON_COLOR);
-			button.setForeground(Color.WHITE);
-			return;
-		}
-		button.setBackground(INACTIVE_BUTTON_COLOR);
-		button.setForeground(INACTIVE_TEXT_COLOR);
 	}
 }

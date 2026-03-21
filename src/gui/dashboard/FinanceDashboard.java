@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
@@ -84,8 +86,8 @@ public class FinanceDashboard extends JPanel {
 	}
 
 	private void actions() {
-		headerPanel.getLeagueButton().addActionListener(e -> switchView(LEAGUE_VIEW));
-		headerPanel.getTeamsButton().addActionListener(e -> switchView(TEAM_VIEW));
+		headerPanel.getLeagueButton().addActionListener(new ShowLeagueViewAction());
+		headerPanel.getTeamsButton().addActionListener(new ShowTeamViewAction());
 	}
 
 	private void switchView(String view) {
@@ -102,7 +104,6 @@ public class FinanceDashboard extends JPanel {
 		centerContentPanel.add(buildMainContentPanel(), BorderLayout.CENTER);
 		centerContentPanel.revalidate();
 		centerContentPanel.repaint();
-		revalidate();
 		repaint();
 	}
 
@@ -111,5 +112,19 @@ public class FinanceDashboard extends JPanel {
 			return new BuildBox("FINANCE DE LA LIGUE", "Vue consolidee", "LIGUE");
 		}
 		return new BuildBox("DISTRIBUTION PAR CLUB", "Vue par equipe", "DISTRIBUTION");
+	}
+
+	private class ShowLeagueViewAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			switchView(LEAGUE_VIEW);
+		}
+	}
+
+	private class ShowTeamViewAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			switchView(TEAM_VIEW);
+		}
 	}
 }

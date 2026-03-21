@@ -19,7 +19,7 @@ import data.calendar.GameDay;
 import data.league.RegularSeason;
 import process.manager.SimulationManager;
 
-public class CalendarSimulationPanel extends JPanel {
+public class WeekViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static final Font DISPLAY_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 	private static final Font TITLE_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 12);
@@ -35,37 +35,44 @@ public class CalendarSimulationPanel extends JPanel {
 	private final SimulationManager simulationManager;
 	private RegularSeason regularSeason;
 	private LocalDate currentDate;
-	private SeasonProgressBarPanel seasonProgressBarPanel;
+	private LocalDate simulationDate;
 	private OpenMatchDayAction openMatchDayAction;
 
-	public CalendarSimulationPanel(SimulationManager simulationManager) {
-		setLayout(new BorderLayout());
-
+	public WeekViewPanel(SimulationManager simulationManager) {
 		this.simulationManager = simulationManager;
+		create();
+		organize();
+		actions();
+		showWaitingState();
+	}
 
-		JPanel topBarPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+	private void create() {
 		currentDateLabel.setFont(DISPLAY_FONT);
 		currentDateLabel.setText("Date : -");
+		matchDisplayPanel.setLayout(new BoxLayout(matchDisplayPanel, BoxLayout.Y_AXIS));
+		matchDisplayPanel.setOpaque(false);
+	}
 
-		previousDayButton.addActionListener(new PreviousDayListener());
-		nextDayButton.addActionListener(new NextDayListener());
-
+	private void organize() {
+		setLayout(new BorderLayout());
+		JPanel topBarPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		topBarPanel.add(previousDayButton);
 		topBarPanel.add(currentDateLabel);
 		topBarPanel.add(nextDayButton);
 
-		matchDisplayPanel.setLayout(new BoxLayout(matchDisplayPanel, BoxLayout.Y_AXIS));
-		matchDisplayPanel.setOpaque(false);
-
 		add(topBarPanel, BorderLayout.NORTH);
 		add(matchDisplayPanel, BorderLayout.CENTER);
+	}
 
-		showWaitingState();
+	private void actions() {
+		previousDayButton.addActionListener(new PreviousWeekListener());
+		nextDayButton.addActionListener(new NextWeekListener());
 	}
 
 	public void loadSeasonState() {
 		regularSeason = simulationManager.getLeague().getReagularSeason();
-		currentDate = normalizeDisplayedDate(simulationManager.getCurrentDate());
+		simulationDate = simulationManager.getCurrentDate();
+		currentDate = normalizeDisplayedDate(simulationDate);
 		updateDisplay();
 	}
 
@@ -77,7 +84,8 @@ public class CalendarSimulationPanel extends JPanel {
 		if (simulationManager.getCurrentDate().isBefore(regularSeason.getEndDate())) {
 			simulationManager.nextDay();
 		}
-		currentDate = normalizeDisplayedDate(simulationManager.getCurrentDate());
+		simulationDate = simulationManager.getCurrentDate();
+		currentDate = normalizeDisplayedDate(simulationDate);
 		updateDisplay();
 	}
 
@@ -85,19 +93,15 @@ public class CalendarSimulationPanel extends JPanel {
 		if (regularSeason == null || currentDate == null) {
 			return;
 		}
-		displayCurrentWeek();
-		moveToNextWeek();
-	}
-
-	private void displayCurrentWeek() {
-		simulationManager.displayWeek(getWeekStart(currentDate));
-	}
-
-	private void moveToNextWeek() {
-		LocalDate nextWeek = currentDate.plusDays(7);
+		LocalDate weekStart = getWeekStart(currentDate);
+		simulationManager.displayWeek(weekStart);
+		LocalDate nextWeek = weekStart.plusDays(7);
 		if (!nextWeek.isAfter(regularSeason.getEndDate())) {
-			currentDate = nextWeek;
+			simulationDate = nextWeek;
+		} else {
+			simulationDate = regularSeason.getEndDate();
 		}
+		currentDate = normalizeDisplayedDate(simulationDate);
 		updateDisplay();
 	}
 
@@ -108,11 +112,7 @@ public class CalendarSimulationPanel extends JPanel {
 		}
 		currentDate = normalizeDisplayedDate(currentDate);
 		currentDateLabel.setText(buildWeekLabel());
-		if (seasonProgressBarPanel != null) {
-			seasonProgressBarPanel.setCurrentDate(simulationManager.getCurrentDate());
-		}
 		updateWeekRows();
-		updateProgressBar();
 		repaint();
 	}
 
@@ -132,26 +132,22 @@ public class CalendarSimulationPanel extends JPanel {
 		matchDisplayPanel.repaint();
 	}
 
-	public void setSeasonProgressBarPanel(SeasonProgressBarPanel seasonProgressBarPanel) {
-		this.seasonProgressBarPanel = seasonProgressBarPanel;
-	}
-
 	public void setOpenMatchDayAction(OpenMatchDayAction openMatchDayAction) {
 		this.openMatchDayAction = openMatchDayAction;
 	}
 
-	private void updateProgressBar() {
-		if (seasonProgressBarPanel == null || regularSeason == null || regularSeason.getCalendar() == null) {
-			return;
-		}
-		int totalGameDays = regularSeason.getCalendar().getCalendar().size();
-		int displayedGameDays = 0;
-		for (GameDay gameDay : regularSeason.getCalendar().getCalendar().values()) {
-			if (gameDay.isDisplayed()) {
-				displayedGameDays++;
-			}
-		}
-		seasonProgressBarPanel.setProgress(displayedGameDays, totalGameDays);
+	public LocalDate getCurrentDate() {
+		return currentDate;
+	}
+
+	public LocalDate getSimulationDate() {
+		return simulationDate;
+	}
+
+	public void setSimulationDate(LocalDate simulationDate) {
+		this.simulationDate = simulationDate;
+		currentDate = normalizeDisplayedDate(simulationDate);
+		updateDisplay();
 	}
 
 	private void updateWeekRows() {
@@ -274,33 +270,33 @@ public class CalendarSimulationPanel extends JPanel {
 		}
 	}
 
+	private void showPreviousWeek() {
+		if (regularSeason == null || currentDate == null) {
+			return;
+		}
+		LocalDate previousWeek = currentDate.minusDays(7);
+		if (!previousWeek.isBefore(regularSeason.getDebutDate())) {
+			currentDate = previousWeek;
+			updateDisplay();
+		}
+	}
+
 	public static class OpenMatchDayAction {
 		public void open(GameDay gameDay, LocalDate date) {
 		}
 	}
 
-	private class PreviousDayListener implements ActionListener {
+	private class PreviousWeekListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (regularSeason == null || currentDate == null) {
-				return;
-			}
-			LocalDate previousWeek = currentDate.minusDays(7);
-			if (!previousWeek.isBefore(regularSeason.getDebutDate())) {
-				currentDate = previousWeek;
-				updateDisplay();
-			}
+			showPreviousWeek();
 		}
 	}
 
-	private class NextDayListener implements ActionListener {
+	private class NextWeekListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (regularSeason == null || currentDate == null) {
-				return;
-			}
-			displayCurrentWeek();
-			moveToNextWeek();
+			advanceWeek();
 		}
 	}
 

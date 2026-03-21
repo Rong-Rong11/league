@@ -258,11 +258,7 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 			}
 			decrementChronometer();
 			if (!stop) {
-				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						updateValues();
-					}
-				});
+				SwingUtilities.invokeLater(new UpdateValuesRunnable());
 			}
 		}
 	}
@@ -326,6 +322,13 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 			rowIndex++;
 		}
 		return rows;
+	}
+
+	private class UpdateValuesRunnable implements Runnable {
+		@Override
+		public void run() {
+			updateValues();
+		}
 	}
 
 	private String buildCenterMessage() {
@@ -440,7 +443,4 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 		updateLiveDashboard();
 	}
 	
-	private boolean isHomePlayer(Player player) {
-		return game.getGameContext().getHomeTeam().getPlayers().containsKey(player.getName());
-	}
 }

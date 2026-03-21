@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import data.player.Player;
 import data.team.Team;
+import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.mapPanel.effectifPanel.playerPanel.PlayerRosterEntryPanel;
 
 public class TeamRosterPanel extends JPanel {
@@ -30,7 +31,7 @@ public class TeamRosterPanel extends JPanel {
 		Collections.sort(players, new Comparator<Player>() {
 			@Override
 			public int compare(Player a, Player b) {
-				return Double.compare(getDisplayedNote(b), getDisplayedNote(a));
+				return Double.compare(PlayerDisplayUtil.getDisplayedNote(b), PlayerDisplayUtil.getDisplayedNote(a));
 			}
 		});
 
@@ -49,12 +50,5 @@ public class TeamRosterPanel extends JPanel {
 
 		revalidate();
 		repaint();
-	}
-
-	private double getDisplayedNote(Player player) {
-		if (player.getCurrentSeasonAssets().getNote() > 0) {
-			return player.getCurrentSeasonAssets().getNote();
-		}
-		return player.getPreSeasonAssets().getNote();
 	}
 }
