@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import gui.dashboard.CalendarDashboard;
@@ -158,7 +159,13 @@ public class MainGui extends JFrame {
 	private class QuitAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.exit(0);
+			MainGui frame = MainGui.this;
+			String question = "Voulez-vous vraiment quitter la simulation ?";
+			int choice = JOptionPane.showConfirmDialog(frame, question, "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+			if (choice == JOptionPane.YES_OPTION) {
+				System.exit(0);
+			}
 		}
 	}
 
@@ -197,5 +204,4 @@ public class MainGui extends JFrame {
 			dashboardLayout.show(dashboardPanel, "map");
 		}
 	}
-
 }
