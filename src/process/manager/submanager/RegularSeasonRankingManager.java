@@ -1,38 +1,49 @@
 package process.manager.submanager;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.TreeMap;
 
+import data.calendar.GameDay;
+import data.league.League;
 import data.league.Ranking;
+import data.sport.setup.Game;
 import data.team.Team;
+import process.manager.submanager.rankingtools.NbaRegularSeasonTeamComparator;
 import process.repositery.TeamRepositery;
 
 public class RegularSeasonRankingManager {
     private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+    private ArrayList<GameDay> simulatedGameDay = new ArrayList<>();
 
-    public void updateRanking(Ranking ranking) {
-        TreeMap<Integer, Team> treeMap = new TreeMap<Integer, Team>();
-        ArrayList<Team> arrayList = new ArrayList<Team>(this.teamRepositery.getAllTeams());
-        Collections.sort(arrayList, new Comparator<Team>() {
-            @Override
-            public int compare(Team team1, Team team2) {
-                int games1 = team1.getTeamPerformance().getNumberPlayedGames();
-                int games2 = team2.getTeamPerformance().getNumberPlayedGames();
+    public RegularSeasonRankingManager() {
 
-                double pct1 = games1 == 0 ? 0.0 : (double) team1.getTeamPerformance().getNumberWin() / games1;
+    }
 
-                double pct2 = games2 == 0 ? 0.0 : (double) team2.getTeamPerformance().getNumberWin() / games2;
+    public void updateRanking(League league, Ranking ranking, TreeMap<LocalDate, GameDay> regularSeasonCalendar,
+            LocalDate date) {
+        TreeMap<Integer, Team> newRanking = new TreeMap<Integer, Team>();
+        ArrayList<Team> teams = new ArrayList<Team>(teamRepositery.getAllTeams());
+        Collections.sort(teams, new NbaRegularSeasonTeamComparator(getSimulatedGames(), league));
 
-                return Double.compare(pct2, pct1);
-            }
-        });
-        int n = 1;
-        for (Team team : arrayList) {
-            treeMap.put(n, team);
-            n++;
+        int rank = 1;
+        for (Team team : teams) {
+            newRanking.put(rank, team);
+            rank++;
         }
-        ranking.setRanking(treeMap);
+        ranking.setRanking(newRanking);
+    }
+
+    public void addSimulatedGameDay(GameDay gameDay) {
+        simulatedGameDay.add(gameDay);
+    }
+
+    private ArrayList<Game> getSimulatedGames() {
+        ArrayList<Game> games = new ArrayList<>();
+        for (GameDay gameDay : simulatedGameDay) {
+            games.addAll(gameDay.getGames());
+        }
+        return games;
     }
 }
