@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -49,12 +47,7 @@ public class MapTeamPlayersPanel extends JPanel {
 		}
 
 		ArrayList<Player> players = new ArrayList<Player>(team.getPlayers().values());
-		Collections.sort(players, new Comparator<Player>() {
-			@Override
-			public int compare(Player a, Player b) {
-				return Double.compare(PlayerDisplayUtil.getDisplayedNote(b), PlayerDisplayUtil.getDisplayedNote(a));
-			}
-		});
+		sortPlayersByNote(players);
 
 		for (int i = 0; i < playerLabels.length; i++) {
 			if (i < players.size()) {
@@ -62,6 +55,20 @@ public class MapTeamPlayersPanel extends JPanel {
 				playerLabels[i].setText((int) Math.round(PlayerDisplayUtil.getDisplayedNote(player)) + "  " + player.getName());
 			} else {
 				playerLabels[i].setText("-");
+			}
+		}
+	}
+
+	private void sortPlayersByNote(ArrayList<Player> players) {
+		for (int i = 0; i < players.size() - 1; i++) {
+			for (int j = i + 1; j < players.size(); j++) {
+				double firstNote = PlayerDisplayUtil.getDisplayedNote(players.get(i));
+				double secondNote = PlayerDisplayUtil.getDisplayedNote(players.get(j));
+				if (secondNote > firstNote) {
+					Player currentPlayer = players.get(i);
+					players.set(i, players.get(j));
+					players.set(j, currentPlayer);
+				}
 			}
 		}
 	}

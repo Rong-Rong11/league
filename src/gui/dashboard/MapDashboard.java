@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import javax.swing.JPanel;
 
@@ -49,12 +47,6 @@ public class MapDashboard extends JPanel {
 
 	private void create() {
 		teams = new ArrayList<Team>(leagueManager.getLeague().getAllTeam());
-		Collections.sort(teams, new Comparator<Team>() {
-			@Override
-			public int compare(Team a, Team b) {
-				return a.getName().compareTo(b.getName());
-			}
-		});
 		mapPanel = new MapPanel();
 		teamSummaryPanel = new MapTeamSummaryPanel();
 		teamPlayersPanel = new MapTeamPlayersPanel();

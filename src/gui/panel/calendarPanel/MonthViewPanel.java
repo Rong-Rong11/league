@@ -2,14 +2,14 @@ package gui.panel.calendarPanel;
 
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -33,7 +33,7 @@ public class MonthViewPanel extends JPanel {
 		setBackground(Color.WHITE);
 	}
 
-	public void showMonth(YearMonth displayedMonth, LocalDate currentDate, TreeMap<LocalDate, GameDay> calendar) {
+	public void showMonth(YearMonth displayedMonth, LocalDate currentDate, HashMap<LocalDate, GameDay> calendar) {
 		removeAll();
 
 		for (int i = 0; i < DAY_NAMES.length; i++) {
@@ -72,8 +72,9 @@ public class MonthViewPanel extends JPanel {
 		dayPanel.setOpaque(true);
 		dayPanel.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
 		dayPanel.setBackground(Color.WHITE);
+		boolean sameMonth = isSameMonth(date, displayedMonth);
 
-		if (YearMonth.from(date).equals(displayedMonth) && gameDay != null && !gameDay.isEmpty()) {
+		if (sameMonth && gameDay != null && !gameDay.isEmpty()) {
 			dayPanel.addMouseListener(new DayClickListener(gameDay, date));
 		}
 
@@ -82,7 +83,7 @@ public class MonthViewPanel extends JPanel {
 		}
 
 		JLabel dayNumberLabel = new JLabel(String.valueOf(date.getDayOfMonth()));
-		if (!YearMonth.from(date).equals(displayedMonth)) {
+		if (!sameMonth) {
 			dayNumberLabel.setForeground(Color.LIGHT_GRAY);
 		}
 		if (date.equals(currentDate)) {
@@ -92,7 +93,7 @@ public class MonthViewPanel extends JPanel {
 		}
 		dayPanel.add(dayNumberLabel);
 
-		if (gameDay != null && !gameDay.isEmpty() && YearMonth.from(date).equals(displayedMonth)) {
+		if (gameDay != null && !gameDay.isEmpty() && sameMonth) {
 			ArrayList<Game> displayedGames = getBestGames(gameDay.getGames(), date);
 			int matchCount = Math.min(3, displayedGames.size());
 			for (int i = 0; i < matchCount; i++) {
@@ -108,6 +109,11 @@ public class MonthViewPanel extends JPanel {
 		}
 
 		return dayPanel;
+	}
+
+	private boolean isSameMonth(LocalDate date, YearMonth displayedMonth) {
+		return date.getYear() == displayedMonth.getYear()
+				&& date.getMonthValue() == displayedMonth.getMonthValue();
 	}
 
 	public static String buildMonthText(YearMonth yearMonth) {
@@ -143,7 +149,7 @@ public class MonthViewPanel extends JPanel {
 		return bestGames;
 	}
 
-	private class DayClickListener extends MouseAdapter {
+	private class DayClickListener implements MouseListener {
 		private GameDay gameDay;
 		private LocalDate date;
 
@@ -160,6 +166,22 @@ public class MonthViewPanel extends JPanel {
 			if (showMatchDashboardAction != null) {
 				showMatchDashboardAction.run();
 			}
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
 		}
 	}
 

@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -81,17 +82,19 @@ public class CalendarDashboard extends JPanel {
 
 	public void startSeason() {
 		simulationManager.randomFinance();
-		simulationManager.startSeason();
+		simulationManager.getLeagueManager().startSeason();
 		weekViewPanel.loadSeasonState();
-		currentCalendarDate = simulationManager.getCurrentDate();
+		currentCalendarDate = weekViewPanel.getCurrentDate();
 		updateDisplayedMonth(currentCalendarDate);
 		updateDashboardState();
 	}
 
 	public void refreshSeasonState() {
-		weekViewPanel.loadSeasonState();
-		if (weekViewPanel.getSimulationDate() != null) {
-			currentCalendarDate = weekViewPanel.getSimulationDate();
+		if (weekViewPanel.getCurrentDate() == null) {
+			weekViewPanel.loadSeasonState();
+		}
+		if (weekViewPanel.getCurrentDate() != null) {
+			currentCalendarDate = weekViewPanel.getCurrentDate();
 		}
 		updateDisplayedMonth(currentCalendarDate);
 		updateDashboardState();
@@ -121,9 +124,11 @@ public class CalendarDashboard extends JPanel {
 			return;
 		}
 
-		int totalGameDays = simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar().size();
+		HashMap<LocalDate, GameDay> seasonCalendar =
+				new HashMap<LocalDate, GameDay>(simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar());
+		int totalGameDays = seasonCalendar.size();
 		int displayedGameDays = 0;
-		for (data.calendar.GameDay gameDay : simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar().values()) {
+		for (GameDay gameDay : seasonCalendar.values()) {
 			if (gameDay.isDisplayed()) {
 				displayedGameDays++;
 			}
@@ -138,10 +143,9 @@ public class CalendarDashboard extends JPanel {
 			return;
 		}
 
-		monthViewPanel.showMonth(
-				displayedMonth,
-				currentDate,
-				simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar());
+		HashMap<LocalDate, GameDay> seasonCalendar =
+				new HashMap<LocalDate, GameDay>(simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar());
+		monthViewPanel.showMonth(displayedMonth, currentDate, seasonCalendar);
 	}
 
 	private void updateCurrentCard() {
@@ -183,7 +187,7 @@ public class CalendarDashboard extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			weekViewPanel.advanceDay();
-			currentCalendarDate = simulationManager.getCurrentDate();
+			currentCalendarDate = weekViewPanel.getCurrentDate();
 			updateDisplayedMonth(currentCalendarDate);
 			updateDashboardState();
 		}
@@ -193,8 +197,8 @@ public class CalendarDashboard extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			weekViewPanel.advanceWeek();
-			if (weekViewPanel.getSimulationDate() != null) {
-				currentCalendarDate = weekViewPanel.getSimulationDate();
+			if (weekViewPanel.getCurrentDate() != null) {
+				currentCalendarDate = weekViewPanel.getCurrentDate();
 			}
 			updateDisplayedMonth(currentCalendarDate);
 			updateDashboardState();
@@ -204,26 +208,11 @@ public class CalendarDashboard extends JPanel {
 	private class SimulateSeasonAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			simulationManager.displayCurrentSeason();
-			currentCalendarDate = findLastSeasonGameDay();
-			weekViewPanel.setSimulationDate(currentCalendarDate);
+			weekViewPanel.advanceSeason();
+			currentCalendarDate = weekViewPanel.getSimulationDate();
 			updateDisplayedMonth(currentCalendarDate);
 			updateDashboardState();
 		}
-	}
-
-	private LocalDate findLastSeasonGameDay() {
-		if (simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar().isEmpty()) {
-			return CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE;
-		}
-
-		LocalDate lastGameDay = CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE;
-		for (LocalDate date : simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar().keySet()) {
-			if (date.isAfter(lastGameDay)) {
-				lastGameDay = date;
-			}
-		}
-		return lastGameDay;
 	}
 
 	private class PreviousMonthAction implements ActionListener {

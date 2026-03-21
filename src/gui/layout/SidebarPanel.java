@@ -61,7 +61,7 @@ public class SidebarPanel extends JPanel {
 		panel.setBackground(SIDEBAR_BACKGROUND_COLOR);
 		panel.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-		ImageIcon logoIcon = new ImageIcon("img/logo.pn");
+		ImageIcon logoIcon = new ImageIcon("img/logo.png");
 		JLabel logoLabel = new JLabel(logoIcon);
 		logoLabel.setAlignmentX(CENTER_ALIGNMENT);
 
