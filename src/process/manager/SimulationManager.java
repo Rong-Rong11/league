@@ -1,5 +1,9 @@
 package process.manager;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.TreeMap;
+
 import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.league.League;
@@ -11,9 +15,6 @@ import data.team.finance.financialpolicy.ThriftyPolicy;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.TreeMap;
 
 //cerveau de la simulation 
 public class SimulationManager {

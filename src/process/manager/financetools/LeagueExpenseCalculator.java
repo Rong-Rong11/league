@@ -46,7 +46,7 @@ public class LeagueExpenseCalculator {
       FinanceUtilitary.updateBudget(budget);
    }
 
-   // complexifier
+   // à complexifier
    private double calculateAdministrativeCost() {
       return FinanceConfiguration.LEAGUE_ADMINISTRATIVE_COST;
    }
