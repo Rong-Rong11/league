@@ -165,7 +165,7 @@ public class FinanceUtilitary {
 	}
 
 	public static void addExpense(Budget budget, Expense expense, int month) {
-		HashMap<String, Expense> expensesOfMonth = budget.getExpenses(month);
+		HashMap<String, Expense> expensesOfMonth = budget.getExpensesForMonth(month);
 
 		if (expensesOfMonth.containsKey(expense.getName())) {
 			Expense existingExpense = expensesOfMonth.get(expense.getName());
@@ -173,6 +173,27 @@ public class FinanceUtilitary {
 		} else {
 			expensesOfMonth.put(expense.getName(), expense);
 		}
+	}
+
+	public static double calculateMerchandisingScore(Team team) {
+		double popularity = team.getPopularity() / 100.0;
+
+		double historicalPrestige = team.getTeamFinance()
+				.getEconomicProfil()
+				.getHistoricalPrestige();
+
+		double fanLoyalty = team.getTeamFinance()
+				.getEconomicProfil()
+				.getFanLoyalty();
+
+		double mediaPrestige = team.getTeamFinance()
+				.getMediaMarket()
+				.getPrestigeModifier();
+
+		return (0.4 * popularity)
+				+ (0.3 * historicalPrestige)
+				+ (0.2 * fanLoyalty)
+				+ (0.1 * mediaPrestige);
 	}
 
 }

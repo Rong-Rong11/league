@@ -1,105 +1,108 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.player;
 
 public class Asset {
-	private double note ;  
-	private double minutesPlayedPerMatch ; 
-	private double pointPerMatch ; 
-	private double reboundPerMatch ; 
-	private double assistPerMatch ; 
-	private double interceptionPerMatch ; 
-	private double blockPerMatch ; 
-	private double lostBallPerMatch ; 
-	private double trueShootingPercentage ; 
-	
-	
-	
-	
-	public Asset(double note, double minutesPlayedPerMatch, double pointPerMatch, double reboundPerMatch,
-			double assistPerMatch, double interceptionPerMatch, double blockPerMatch, double lostBallPerMatch, double trueShootingPercentage) {
-		super();
-		this.note = note;
-		this.minutesPlayedPerMatch = minutesPlayedPerMatch;
-		this.pointPerMatch = pointPerMatch;
-		this.reboundPerMatch = reboundPerMatch;
-		this.assistPerMatch = assistPerMatch;
-		this.interceptionPerMatch = interceptionPerMatch;
-		this.blockPerMatch = blockPerMatch;
-		this.lostBallPerMatch = lostBallPerMatch;
-		this.trueShootingPercentage = trueShootingPercentage;
-	}
-	
-	public Asset() {
-		this(0,0,0,0,0,0,0,0,0) ; 
-	}
-	
-	public double getNote() {
-		return note;
-	}
-	public void setNote(double note) {
-		this.note = note;
-	}
-	
-	public double getMinutesPlayedPerMatch() {
-		return minutesPlayedPerMatch;
-	}
-	public void setMinutesPlayedPerMatch(double minutesPlayedPerMatch) {
-		this.minutesPlayedPerMatch = minutesPlayedPerMatch;
-	}
-	public double getPointPerMatch() {
-		return pointPerMatch;
-	}
-	public void setPointPerMatch(double pointPerMatch) {
-		this.pointPerMatch = pointPerMatch;
-	}
-	public double getReboundPerMatch() {
-		return reboundPerMatch;
-	}
-	public void setReboundPerMatch(double reboundPerMatch) {
-		this.reboundPerMatch = reboundPerMatch;
-	}
-	public double getAssistPerMatch() {
-		return assistPerMatch;
-	}
-	public void setAssistPerMatch(double assistPerMatch) {
-		this.assistPerMatch = assistPerMatch;
-	}
-	public double getInterceptionPerMatch() {
-		return interceptionPerMatch;
-	}
-	public void setInterceptionPerMatch(double interceptionPerMatch) {
-		this.interceptionPerMatch = interceptionPerMatch;
-	}
-	public double getBlockPerMatch() {
-		return blockPerMatch;
-	}
-	public void setBlockPerMatch(double blockPerMatch) {
-		this.blockPerMatch = blockPerMatch;
-	}
-	public double getLostBallPerMatch() {
-		return lostBallPerMatch;
-	}
-	public void setLostBallPerMatch(double lostBallPerMatch) {
-		this.lostBallPerMatch = lostBallPerMatch;
-	}
-	public double getTrueShootingPercentage() {
-		return trueShootingPercentage;
-	}
-	public void setTrueShootingPercentage(double trueShootingPercentage) {
-		this.trueShootingPercentage = trueShootingPercentage;
-	}
-	
+    private double note;
+    private double minutesPlayedPerMatch;
+    private double pointPerMatch;
+    private double reboundPerMatch;
+    private double assistPerMatch;
+    private double interceptionPerMatch;
+    private double blockPerMatch;
+    private double lostBallPerMatch;
+    private double trueShootingPercentage;
 
+    public Asset(double d, double d2, double d3, double d4, double d5, double d6, double d7, double d8, double d9) {
+        this.note = d;
+        this.minutesPlayedPerMatch = d2;
+        this.pointPerMatch = d3;
+        this.reboundPerMatch = d4;
+        this.assistPerMatch = d5;
+        this.interceptionPerMatch = d6;
+        this.blockPerMatch = d7;
+        this.lostBallPerMatch = d8;
+        this.trueShootingPercentage = d9;
+    }
 
-	@Override
-	public String toString() {
-		return "Asset [note=" + note + ", minutesPlayedPerMatch=" + minutesPlayedPerMatch + ", pointPerMatch=" + pointPerMatch
-				+ ", reboundPerMatch=" + reboundPerMatch + ", assistPerMatch=" + assistPerMatch
-				+ ", interceptionPerMatch=" + interceptionPerMatch + ", blockPerMatch=" + blockPerMatch
-				+ ", lostBallPerMatch=" + lostBallPerMatch + ", trueShootingPercentage=" + trueShootingPercentage + "]";
-	}
-	
-	
-	
-	
-	
+    public Asset() {
+        this(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    }
+
+    public double getNote() {
+        return this.note;
+    }
+
+    public void setNote(double d) {
+        this.note = d;
+    }
+
+    public double getMinutesPlayedPerMatch() {
+        return this.minutesPlayedPerMatch;
+    }
+
+    public void setMinutesPlayedPerMatch(double d) {
+        this.minutesPlayedPerMatch = d;
+    }
+
+    public double getPointPerMatch() {
+        return this.pointPerMatch;
+    }
+
+    public void setPointPerMatch(double d) {
+        this.pointPerMatch = d;
+    }
+
+    public double getReboundPerMatch() {
+        return this.reboundPerMatch;
+    }
+
+    public void setReboundPerMatch(double d) {
+        this.reboundPerMatch = d;
+    }
+
+    public double getAssistPerMatch() {
+        return this.assistPerMatch;
+    }
+
+    public void setAssistPerMatch(double d) {
+        this.assistPerMatch = d;
+    }
+
+    public double getInterceptionPerMatch() {
+        return this.interceptionPerMatch;
+    }
+
+    public void setInterceptionPerMatch(double d) {
+        this.interceptionPerMatch = d;
+    }
+
+    public double getBlockPerMatch() {
+        return this.blockPerMatch;
+    }
+
+    public void setBlockPerMatch(double d) {
+        this.blockPerMatch = d;
+    }
+
+    public double getLostBallPerMatch() {
+        return this.lostBallPerMatch;
+    }
+
+    public void setLostBallPerMatch(double d) {
+        this.lostBallPerMatch = d;
+    }
+
+    public double getTrueShootingPercentage() {
+        return this.trueShootingPercentage;
+    }
+
+    public void setTrueShootingPercentage(double d) {
+        this.trueShootingPercentage = d;
+    }
+
+    public String toString() {
+        return "Asset [note=" + this.note + ", minutesPlayedPerMatch=" + this.minutesPlayedPerMatch + ", pointPerMatch=" + this.pointPerMatch + ", reboundPerMatch=" + this.reboundPerMatch + ", assistPerMatch=" + this.assistPerMatch + ", interceptionPerMatch=" + this.interceptionPerMatch + ", blockPerMatch=" + this.blockPerMatch + ", lostBallPerMatch=" + this.lostBallPerMatch + ", trueShootingPercentage=" + this.trueShootingPercentage + "]";
+    }
 }

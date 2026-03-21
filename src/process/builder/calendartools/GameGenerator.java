@@ -1,7 +1,4 @@
 package process.builder.calendartools;
-import config.GameConfiguration;
-
-import java.util.ArrayList;
 
 import data.league.Conference;
 import data.league.Division;
@@ -9,9 +6,11 @@ import data.league.League;
 import data.sport.setup.Game;
 import data.sport.setup.GameContext;
 import data.team.Team;
+import java.util.ArrayList;
+
+import config.GameConfiguration;
 
 public class GameGenerator {
-	
 	public static void generateAllGamesRegularSeason(League league) {
 		Conference westernConference = league.getWesternConference();
 		Conference easternConference = league.getEasternConference();
@@ -120,5 +119,4 @@ public class GameGenerator {
 		}
 		return teams;
 	}
-
 }

@@ -1,41 +1,40 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.player;
-import config.HealthConfiguration;
 
+import data.player.Injury;
 
 public class HealthStatus {
-	private double fatigue ; 
-	private Injury injury ; 
-	private boolean isInjured ;
-	
-	public HealthStatus() {
-		fatigue = 0 ; 
-		injury = new Injury(HealthConfiguration.NO_INJURY, 0) ; 
-		isInjured = false ; 
-	}
-	public double getFatigue() {
-		return fatigue;
-	}
-	public void setFatigue(double fatigue) {
-		this.fatigue = fatigue;
-	}
-	public boolean isInjured() {
-		return isInjured;
-	}
-	public void setInjured(boolean isInjured) {
-		this.isInjured = isInjured;
-	}
-	public Injury getInjury() {
-		return injury;
-	}
-	public void setInjury(Injury injury) {
-		this.injury = injury;
-	}
-	@Override
-	public String toString() {
-		return "HealthStatus [fatigue=" + fatigue + ", injury=" + injury.toString() + ", isInjured=" + isInjured + "]";
-	}
-	
-	
-	
-	
+    private double fatigue = 0.0;
+    private Injury injury = new Injury("none", 0);
+    private boolean isInjured = false;
+
+    public double getFatigue() {
+        return this.fatigue;
+    }
+
+    public void setFatigue(double d) {
+        this.fatigue = d;
+    }
+
+    public boolean isInjured() {
+        return this.isInjured;
+    }
+
+    public void setInjured(boolean bl) {
+        this.isInjured = bl;
+    }
+
+    public Injury getInjury() {
+        return this.injury;
+    }
+
+    public void setInjury(Injury injury) {
+        this.injury = injury;
+    }
+
+    public String toString() {
+        return "HealthStatus [fatigue=" + this.fatigue + ", injury=" + this.injury.toString() + ", isInjured=" + this.isInjured + "]";
+    }
 }

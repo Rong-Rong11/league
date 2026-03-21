@@ -1,7 +1,7 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package process.visitor.actionresult;
-import config.GameConfiguration;
-
-import java.util.ArrayList;
 
 import data.player.Player;
 import data.sport.play.action.Block;
@@ -11,92 +11,91 @@ import data.sport.play.action.PointScored;
 import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
 import data.sport.setup.GameResult;
+import java.util.ArrayList;
+import process.visitor.actionresult.ActionResultVisitor;
 
-public class GameResultVisitor implements ActionResultVisitor<Void> {
+public class GameResultVisitor
+implements ActionResultVisitor<Void> {
     private GameResult gameResult;
     private ArrayList<Player> homeTeamPlayers;
     private ArrayList<Player> awayTeamPlayers;
 
-    public GameResultVisitor(GameResult gameResult, ArrayList<Player> homeTeamPlayers,
-            ArrayList<Player> awayTeamPlayers) {
+    public GameResultVisitor(GameResult gameResult, ArrayList<Player> arrayList, ArrayList<Player> arrayList2) {
         this.gameResult = gameResult;
-        this.homeTeamPlayers = homeTeamPlayers;
-        this.awayTeamPlayers = awayTeamPlayers;
+        this.homeTeamPlayers = arrayList;
+        this.awayTeamPlayers = arrayList2;
     }
 
     @Override
     public Void visit(PointScored pointScored) {
-        Player scorer = pointScored.getScorerPlayer();
-        boolean home = homeTeamPlayers.contains(scorer);
-
-        if (pointScored.getOffensiveAction().getName().equals(GameConfiguration.THREEPOINT)) {
-            if (home) {
-                gameResult.setThreePointsHomeTeam(gameResult.getThreePointsHomeTeam() + 1);
-                gameResult.setScorehomeTeam(gameResult.getScorehomeTeam() + 3);
+        Player player = pointScored.getScorerPlayer();
+        boolean bl = this.homeTeamPlayers.contains(player);
+        if (pointScored.getOffensiveAction().getName().equals("threepoint")) {
+            if (bl) {
+                this.gameResult.setThreePointsHomeTeam(this.gameResult.getThreePointsHomeTeam() + 1);
+                this.gameResult.setScorehomeTeam(this.gameResult.getScorehomeTeam() + 3);
             } else {
-                gameResult.setThreePointsAwayTeam(gameResult.getThreePointsAwayTeam() + 1);
-                gameResult.setScoreAwayTeam(gameResult.getScoreAwayTeam() + 3);
+                this.gameResult.setThreePointsAwayTeam(this.gameResult.getThreePointsAwayTeam() + 1);
+                this.gameResult.setScoreAwayTeam(this.gameResult.getScoreAwayTeam() + 3);
             }
-        } else if (pointScored.getOffensiveAction().getName().equals(GameConfiguration.TWOPOINT)) {
-            if (home) {
-                gameResult.setTwoPointsHomeTeam(gameResult.getTwoPointsHomeTeam() + 1);
-                gameResult.setScorehomeTeam(gameResult.getScorehomeTeam() + 2);
+        } else if (pointScored.getOffensiveAction().getName().equals("twopoint")) {
+            if (bl) {
+                this.gameResult.setTwoPointsHomeTeam(this.gameResult.getTwoPointsHomeTeam() + 1);
+                this.gameResult.setScorehomeTeam(this.gameResult.getScorehomeTeam() + 2);
             } else {
-                gameResult.setTwoPointsAwayTeam(gameResult.getTwoPointsAwayTeam() + 1);
-                gameResult.setScoreAwayTeam(gameResult.getScoreAwayTeam() + 2);
+                this.gameResult.setTwoPointsAwayTeam(this.gameResult.getTwoPointsAwayTeam() + 1);
+                this.gameResult.setScoreAwayTeam(this.gameResult.getScoreAwayTeam() + 2);
             }
+        } else if (bl) {
+            this.gameResult.setFreeThrowHomeTeam(this.gameResult.getFreeThrowHomeTeam() + 1);
+            this.gameResult.setScorehomeTeam(this.gameResult.getScorehomeTeam() + 1);
         } else {
-            if (home) {
-                gameResult.setFreeThrowHomeTeam(gameResult.getFreeThrowHomeTeam() + 1);
-                gameResult.setScorehomeTeam(gameResult.getScorehomeTeam() + 1);
-            } else {
-                gameResult.setFreeThrowAwayTeam(gameResult.getFreeThrowAwayTeam() + 1);
-                gameResult.setScoreAwayTeam(gameResult.getScoreAwayTeam() + 1);
-            }
+            this.gameResult.setFreeThrowAwayTeam(this.gameResult.getFreeThrowAwayTeam() + 1);
+            this.gameResult.setScoreAwayTeam(this.gameResult.getScoreAwayTeam() + 1);
         }
         return null;
     }
 
+    @Override
     public Void visit(MissedShot missedShot) {
         return null;
     }
 
     @Override
     public Void visit(Turnover turnover) {
-        Player defensePlayer = turnover.getDefensePlayer();
-        if (homeTeamPlayers.contains(defensePlayer)) {
-            gameResult.setTurnoverHomeTeam(gameResult.getTurnoverHomeTeam() + 1);
+        Player player = turnover.getDefensePlayer();
+        if (this.homeTeamPlayers.contains(player)) {
+            this.gameResult.setTurnoverHomeTeam(this.gameResult.getTurnoverHomeTeam() + 1);
         } else {
-            gameResult.setTurnoverAwayTeam(gameResult.getTurnoverAwayTeam() + 1);
+            this.gameResult.setTurnoverAwayTeam(this.gameResult.getTurnoverAwayTeam() + 1);
         }
         return null;
     }
 
     @Override
     public Void visit(Block block) {
-        Player blockerPlayer = block.getBlockingPlayer();
-        if (homeTeamPlayers.contains(blockerPlayer)) {
-            gameResult.setBlockHomeTeam(gameResult.getBlockHomeTeam() + 1);
+        Player player = block.getBlockingPlayer();
+        if (this.homeTeamPlayers.contains(player)) {
+            this.gameResult.setBlockHomeTeam(this.gameResult.getBlockHomeTeam() + 1);
         } else {
-            gameResult.setBlockAwayTeam(gameResult.getBlockAwayTeam() + 1);
+            this.gameResult.setBlockAwayTeam(this.gameResult.getBlockAwayTeam() + 1);
         }
         return null;
     }
 
     @Override
     public Void visit(Rebound rebound) {
-        Player reboundPlayer = rebound.getReboundPlayer();
-        if (homeTeamPlayers.contains(reboundPlayer)) {
-            gameResult.setReboundHomeTeam(gameResult.getReboundHomeTeam() + 1);
+        Player player = rebound.getReboundPlayer();
+        if (this.homeTeamPlayers.contains(player)) {
+            this.gameResult.setReboundHomeTeam(this.gameResult.getReboundHomeTeam() + 1);
         } else {
-            gameResult.setReboundAwayTeam(gameResult.getReboundAwayTeam() + 1);
+            this.gameResult.setReboundAwayTeam(this.gameResult.getReboundAwayTeam() + 1);
         }
         return null;
     }
 
     @Override
-    public Void visit(EndOfTime end) {
+    public Void visit(EndOfTime endOfTime) {
         return null;
     }
-
 }

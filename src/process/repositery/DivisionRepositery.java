@@ -1,40 +1,40 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package process.repositery;
 
+import data.league.Division;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import data.league.Division;
-
 public class DivisionRepositery {
-	private HashMap<String, Division> divisions = new HashMap<String, Division>();
-	private static DivisionRepositery instance = new DivisionRepositery();
+    private HashMap<String, Division> divisions = new HashMap();
+    private static DivisionRepositery instance = new DivisionRepositery();
 
-	private DivisionRepositery() {
+    private DivisionRepositery() {
+    }
 
-	}
+    public static DivisionRepositery getInstance() {
+        return instance;
+    }
 
-	public static DivisionRepositery getInstance() {
-		return instance;
-	}
+    public void register(String string, Division division) {
+        this.divisions.put(string, division);
+    }
 
-	public void register(String name, Division division) {
-		divisions.put(name, division);
-	}
+    public Division getDivision(String string) {
+        if (this.divisions.containsKey(string)) {
+            return this.divisions.get(string);
+        }
+        return null;
+    }
 
-	public Division getDivision(String name) {
-		if (divisions.containsKey(name)) {
-			return divisions.get(name);
-		}
+    public ArrayList<Division> getAllDivisions() {
+        ArrayList<Division> arrayList = new ArrayList<Division>(this.divisions.values());
+        return arrayList;
+    }
 
-		return null;
-	}
-
-	public ArrayList<Division> getAllDivisions() {
-		ArrayList<Division> allDivisions = new ArrayList<Division>(divisions.values());
-		return allDivisions;
-	}
-	
-	public void clear() {
-		divisions.clear(); 
-	}
+    public void clear() {
+        this.divisions.clear();
+    }
 }

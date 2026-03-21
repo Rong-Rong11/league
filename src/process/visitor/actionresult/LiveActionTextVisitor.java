@@ -1,6 +1,8 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package process.visitor.actionresult;
 
-import config.GameConfiguration;
 import data.player.Player;
 import data.sport.play.action.Block;
 import data.sport.play.action.EndOfTime;
@@ -9,88 +11,86 @@ import data.sport.play.action.PointScored;
 import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
 import data.sport.setup.Game;
+import process.visitor.actionresult.ActionResultVisitor;
 
-public class LiveActionTextVisitor implements ActionResultVisitor<String>{
-	
-	private Game game ; 
-	private String homeTeamName ; 
-	private String awayTeamName; 
-	
-	
-	public LiveActionTextVisitor(Game game, String homeTeamName, String awayTeamName) {
-		super();
-		this.game = game;
-		this.homeTeamName = homeTeamName;
-		this.awayTeamName = awayTeamName;
-	}
+public class LiveActionTextVisitor
+implements ActionResultVisitor<String> {
+    private Game game;
+    private String homeTeamName;
+    private String awayTeamName;
 
-	@Override
-	public String visit(PointScored pointScored) {
-		Player scorer = pointScored.getScorerPlayer();
-		String team = isHomePlayer(scorer) ? homeTeamName : awayTeamName;
-		return team + " - " + scorer.getName() + " +" + computeDisplayedPoints(pointScored);
-	}
+    public LiveActionTextVisitor(Game game, String string, String string2) {
+        this.game = game;
+        this.homeTeamName = string;
+        this.awayTeamName = string2;
+    }
 
-	@Override
-	public String visit(MissedShot missedShot) {
-		Player shooter = missedShot.getShooter();
-		String team = isHomePlayer(shooter) ? homeTeamName : awayTeamName;
-			String shotLabel = "tir";
-			if (missedShot.getOffensiveAction() != null) {
-				String shotType = missedShot.getOffensiveAction().getName();
-				if (GameConfiguration.THREEPOINT.equals(shotType)) {
-					shotLabel = "3 points";
-				} else if (GameConfiguration.TWOPOINT.equals(shotType)) {
-					shotLabel = "2 points";
-				} else if (GameConfiguration.FOULDRAW.equals(shotType)) {
-					shotLabel = "lancer franc";
-				}
-			}
-			return team + " - " + shooter.getName() + " rate un " + shotLabel;
-		}
+    @Override
+    public String visit(PointScored pointScored) {
+        Player player = pointScored.getScorerPlayer();
+        String string = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
+        return string + " - " + player.getName() + " +" + this.computeDisplayedPoints(pointScored);
+    }
 
-		@Override
-		public String visit(Turnover turnover) {
-			Player intercepted = turnover.getInterceptedPlayer();
-			String team = isHomePlayer(intercepted) ? homeTeamName : awayTeamName;
-			return team + " - Ballon perdu " + intercepted.getName();
-		}
+    @Override
+    public String visit(MissedShot missedShot) {
+        Player player = missedShot.getShooter();
+        String string = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
+        String string2 = "tir";
+        if (missedShot.getOffensiveAction() != null) {
+            String string3 = missedShot.getOffensiveAction().getName();
+            if ("threepoint".equals(string3)) {
+                string2 = "3 points";
+            } else if ("twopoint".equals(string3)) {
+                string2 = "2 points";
+            } else if ("fouldraw".equals(string3)) {
+                string2 = "lancer franc";
+            }
+        }
+        return string + " - " + player.getName() + " rate un " + string2;
+    }
 
-		@Override
-		public String visit(Block block) {
-			Player blocker = block.getBlockingPlayer();
-			String team = isHomePlayer(blocker) ? homeTeamName : awayTeamName;
-			return team + " - Contre " + blocker.getName();
-		}
+    @Override
+    public String visit(Turnover turnover) {
+        Player player = turnover.getInterceptedPlayer();
+        String string = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
+        return string + " - Ballon perdu " + player.getName();
+    }
 
-		@Override
-	public String visit(Rebound rebound) {
-		Player reboundPlayer = rebound.getReboundPlayer();
-		String team = isHomePlayer(reboundPlayer) ? homeTeamName : awayTeamName;
-		return team + " - Rebond " + reboundPlayer.getName();
-	}
+    @Override
+    public String visit(Block block) {
+        Player player = block.getBlockingPlayer();
+        String string = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
+        return string + " - Contre " + player.getName();
+    }
 
-	@Override
-	public String visit(EndOfTime endOfTime) {
-		return "Fin de période";
-	}
-	
-	private boolean isHomePlayer(Player player) {
-		return game.getGameContext().getHomeTeam().getPlayers().containsKey(player.getName());
-	}
-	
-	private int computeDisplayedPoints(PointScored pointScored) {
-		if (pointScored.getOffensiveAction() == null) {
-			return pointScored.getPointsScored();
-		}
-		String offensiveName = pointScored.getOffensiveAction().getName();
-		if (GameConfiguration.THREEPOINT.equals(offensiveName)) {
-			return 3;
-		}
-		if (GameConfiguration.TWOPOINT.equals(offensiveName)) {
-			return 2;
-		}
-		return 1;
-	}
+    @Override
+    public String visit(Rebound rebound) {
+        Player player = rebound.getReboundPlayer();
+        String string = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
+        return string + " - Rebond " + player.getName();
+    }
 
+    @Override
+    public String visit(EndOfTime endOfTime) {
+        return "Fin de p\u00e9riode";
+    }
+
+    private boolean isHomePlayer(Player player) {
+        return this.game.getGameContext().getHomeTeam().getPlayers().containsKey(player.getName());
+    }
+
+    private int computeDisplayedPoints(PointScored pointScored) {
+        if (pointScored.getOffensiveAction() == null) {
+            return pointScored.getPointsScored();
+        }
+        String string = pointScored.getOffensiveAction().getName();
+        if ("threepoint".equals(string)) {
+            return 3;
+        }
+        if ("twopoint".equals(string)) {
+            return 2;
+        }
+        return 1;
+    }
 }

@@ -1,3 +1,6 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package process.visitor.teamtransfer;
 
 import data.team.finance.transfer.AllIn;
@@ -8,16 +11,15 @@ import data.team.finance.transfer.SmallAdjust;
 import data.team.finance.transfer.SuperstarBuild;
 
 public interface TeamTransferVisitor<T> {
-	T visit(AllIn allIn);
+    public T visit(AllIn var1);
 
-	T visit(SuperstarBuild superstarBuild);
+    public T visit(SuperstarBuild var1);
 
-	T visit(SmallAdjust smallAdjust);
+    public T visit(SmallAdjust var1);
 
-	T visit(Balanced balanced);
+    public T visit(Balanced var1);
 
-	T visit(Rebuild rebuild);
+    public T visit(Rebuild var1);
 
-	T visit(SalaryDump salaryDump);
-
+    public T visit(SalaryDump var1);
 }

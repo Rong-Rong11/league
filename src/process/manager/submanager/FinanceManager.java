@@ -8,53 +8,62 @@ import data.sport.setup.Game;
 import data.team.Team;
 import process.manager.financetools.CentralRevenueDistributor;
 import process.manager.financetools.GameFinanceProcessor;
+import process.manager.financetools.LeagueExpenseCalculator;
 import process.manager.financetools.MonthlyTeamFinanceCalculator;
 import process.manager.financetools.RevenueSharingManager;
 import process.repositery.TeamRepositery;
 
 public class FinanceManager {
-	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
-	private RevenueSharingManager revenueSharingManager;
-	private MonthlyTeamFinanceCalculator monthlyTeamFinanceCalculator;
-	private CentralRevenueDistributor centralRevenueDistributor;
-	private GameFinanceProcessor gameFinanceProcessor;
+    private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+    private RevenueSharingManager revenueSharingManager;
+    private MonthlyTeamFinanceCalculator monthlyTeamFinanceCalculator;
+    private CentralRevenueDistributor centralRevenueDistributor;
+    private GameFinanceProcessor gameFinanceProcessor;
+    private LeagueExpenseCalculator leagueExpenseCalculator;
 
-	public FinanceManager(League league) {
-		revenueSharingManager = new RevenueSharingManager(league);
-		monthlyTeamFinanceCalculator = new MonthlyTeamFinanceCalculator();
-		centralRevenueDistributor = new CentralRevenueDistributor(league);
-		gameFinanceProcessor = new GameFinanceProcessor();
-	}
+    public FinanceManager(League league) {
+        revenueSharingManager = new RevenueSharingManager(league);
+        monthlyTeamFinanceCalculator = new MonthlyTeamFinanceCalculator();
+        centralRevenueDistributor = new CentralRevenueDistributor(league);
+        gameFinanceProcessor = new GameFinanceProcessor();
+        leagueExpenseCalculator = new LeagueExpenseCalculator(league);
+    }
 
-	public void applyMonthlyFinance(int month) {
-		applyMonthlyFinanceForAllTeams(month);
-		distributeMonthlyCentralRevenue(month);
-		applyRevenueSharing(month);
-	}
+    public void applyMonthlyFinance(int month) {
+        applyMonthlyFinanceForAllTeams(month);
+        distributeMonthlyCentralRevenue(month);
+        applyLeagueMonthlyExpenses(month);
+        applyRevenueSharing(month);
+    }
 
-	private void distributeMonthlyCentralRevenue(int month) {
-		centralRevenueDistributor.distributeMonthlyCentralRevenue(month);
-	}
-		
-	private void applyRevenueSharing(int month) {
-		revenueSharingManager.applyRevenueSharing(month);
-	}
+    private void distributeMonthlyCentralRevenue(int month) {
+        centralRevenueDistributor.distributeMonthlyCentralRevenue(month);
+    }
 
-	public void calculateGame(Game game, LocalDate date, int month) {
-		gameFinanceProcessor.calculateGame(game, date, month);
-	}
+    private void applyRevenueSharing(int month) {
+        revenueSharingManager.applyRevenueSharing(month);
+    }
 
-	private void applyMonthlyFinanceForTeam(Team team, int month) {
-		monthlyTeamFinanceCalculator.applyMonthlyFinance(team, month);
-	}
+    private void applyLeagueMonthlyExpenses(int month) {
+        leagueExpenseCalculator.applyMonthlyExpenses(month);
+    }
 
-	private void applyMonthlyFinanceForAllTeams(int month) {
-		for (Team team : teamRepositery.getAllTeams()) {
-			applyMonthlyFinanceForTeam(team, month);
-		}
-	}
-	public GameStat getGameStat(Game game) {
-		return gameFinanceProcessor.getGameStat(game) ; 
-	}
+    public void calculateGame(Game game, LocalDate date, int month) {
+        gameFinanceProcessor.calculateGame(game, date, month);
+    }
+
+    private void applyMonthlyFinanceForTeam(Team team, int month) {
+        monthlyTeamFinanceCalculator.applyMonthlyFinance(team, month);
+    }
+
+    private void applyMonthlyFinanceForAllTeams(int month) {
+        for (Team team : teamRepositery.getAllTeams()) {
+            applyMonthlyFinanceForTeam(team, month);
+        }
+    }
+
+    public GameStat getGameStat(Game game) {
+        return gameFinanceProcessor.getGameStat(game);
+    }
 
 }

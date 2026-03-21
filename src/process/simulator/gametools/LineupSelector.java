@@ -1,38 +1,36 @@
 package process.simulator.gametools;
-import config.GameConfiguration;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.TreeMap;
 
-import data.player.Asset;
+import config.GameConfiguration;
 import data.player.Player;
 import data.team.Team;
-import data.team.finance.financialprofil.AmbitiousProfil;
-import data.team.finance.financialprofil.BalancedProfil;
-import data.team.finance.financialprofil.FinancialProfil;
+import data.team.finance.financialpolicy.AmbitiousPolicy;
+import data.team.finance.financialpolicy.BalancedPolicy;
+import data.team.finance.financialpolicy.FinancialPolicy;
 import process.utilitary.FinanceUtilitary;
 import process.utilitary.PlayerUtilitary;
 import process.utilitary.TeamUtilitary;
 
 public class LineupSelector {
-	
+
 	public LineupSelector() {
-		
+
 	}
-	
+
 	public ArrayList<Player> choosePlayerToPlay(Team team, Team opponent) {
 		String opponentProfile = TeamUtilitary.getTeamSportProfile(opponent);
 		double averageSalary = FinanceUtilitary.getAverageSalary(team);
 		TreeMap<Double, Player> scoredPlayers = new TreeMap<Double, Player>(Collections.reverseOrder());
 
-		FinancialProfil teamFinancialProfil = team.getTeamFinance().getFinancialProfil();
+		FinancialPolicy teamFinancialProfil = team.getTeamFinance().getFinancialProfil();
 		double ecoWeight, matchProfileWeight;
-		if (teamFinancialProfil instanceof AmbitiousProfil) {
+		if (teamFinancialProfil instanceof AmbitiousPolicy) {
 			ecoWeight = 0.6;
 			matchProfileWeight = 0.4;
-		} else if (teamFinancialProfil instanceof BalancedProfil) {
+		} else if (teamFinancialProfil instanceof BalancedPolicy) {
 			ecoWeight = 0.4;
 			matchProfileWeight = 0.6;
 		} else {
@@ -74,7 +72,7 @@ public class LineupSelector {
 		}
 		return chosenPlayers;
 	}
-	
+
 	public void updatePlayers(Team team, ArrayList<Player> players) {
 		ArrayList<Player> playersToRemove = new ArrayList<Player>();
 		for (Player player : players) {
@@ -89,7 +87,7 @@ public class LineupSelector {
 			}
 		}
 	}
-	
+
 	public TreeMap<Double, Player> sortPlayersAccordingToAttack(ArrayList<Player> players) {
 		TreeMap<Double, Player> attackingPlayers = new TreeMap<Double, Player>();
 		double total = 0;
@@ -125,6 +123,5 @@ public class LineupSelector {
 		}
 		return defensivePlayers;
 	}
-	
-	
+
 }

@@ -1,17 +1,54 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.team.finance.transfer;
 
-import data.player.Player;
 import process.visitor.teamtransfer.TeamTransferVisitor;
 
-public class AllIn extends TeamTransferStrategy {
+public class AllIn
+        extends TeamTransferStrategy {
+    public AllIn() {
 
-	public AllIn(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
-	}
-	public <T> T accept(TeamTransferVisitor<T> visitor) {
-		return visitor.visit(this) ; 
-	}
-	
-	
+    }
+
+    @Override
+    public boolean isAllIn() {
+        // TODO Auto-generated method stub
+        return true;
+    }
+
+    @Override
+    public boolean isBalanced() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isRebuild() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isSalaryDump() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isSmallAdjust() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isSuperstarBuild() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public <T> T accept(TeamTransferVisitor<T> teamTransferVisitor) {
+        return teamTransferVisitor.visit(this);
+    }
 }

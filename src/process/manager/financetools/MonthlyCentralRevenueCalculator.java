@@ -1,53 +1,126 @@
 package process.manager.financetools;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import data.team.Team;
+import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.mediamarket.MediaMarket;
 import process.repositery.TeamRepositery;
 
 public class MonthlyCentralRevenueCalculator {
-	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 
-	public double calculateNationalTvRevenue() {
-		double totalPopularity = 0;
-		double totalPerformance = 0;
+    private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 
-		for (Team team : teamRepositery.getAllTeams()) {
-			totalPopularity += team.getPopularity();
-			totalPerformance += team.getTeamPerformance().getPerformanceRating();
-		}
+    public double calculateNationalTvRevenue() {
+        ArrayList<Team> teams = teamRepositery.getAllTeams();
+        int teamCount = teams.size();
 
-		double averagePopularity = totalPopularity / teamRepositery.getAllTeams().size();
-		double averagePerformance = totalPerformance / teamRepositery.getAllTeams().size();
+        double averagePopularity = calculateAveragePopularity(teams);
+        double averagePerformance = calculateAveragePerformance(teams);
+        double averagePrestige = calculateAverageHistoricalPrestige(teams);
+        int starTeams = countTeamsWithStarPlayer(teams);
 
-		return (0.18 * teamRepositery.getAllTeams().size()) + (averagePopularity * 0.03) + (averagePerformance * 2.0);
-	}
+        return (0.15 * teamCount)
+                + (averagePopularity * 0.025)
+                + (averagePerformance * 1.8)
+                + (averagePrestige * 1.2)
+                + (starTeams * 0.04);
+    }
 
-	public double calculateNationalSponsoringRevenue() {
-		double totalPopularity = 0;
-		int numberOfStarTeams = 0;
+    public double calculateNationalSponsoringRevenue() {
+        ArrayList<Team> teams = teamRepositery.getAllTeams();
+        int teamCount = teams.size();
 
-		for (Team team : teamRepositery.getAllTeams()) {
-			totalPopularity += team.getPopularity();
-			if (team.getStarPlayer() != null) {
-				numberOfStarTeams++;
-			}
-		}
+        double averagePopularity = calculateAveragePopularity(teams);
+        double averageCommercialAggressiveness = calculateAverageCommercialAggressiveness(teams);
+        double averageBusinessOpportunity = calculateAverageBusinessOpportunity(teams);
+        int starTeams = countTeamsWithStarPlayer(teams);
 
-		double averagePopularity = totalPopularity / teamRepositery.getAllTeams().size();
-		return (0.10 * teamRepositery.getAllTeams().size()) + (averagePopularity * 0.02) + (numberOfStarTeams * 0.08);
-	}
+        return (0.08 * teamCount)
+                + (averagePopularity * 0.02)
+                + (averageCommercialAggressiveness * 1.1)
+                + (averageBusinessOpportunity * 0.8)
+                + (starTeams * 0.06);
+    }
 
-	public double calculateNationalMerchandisingRevenue() {
-		double totalPopularity = 0;
-		double totalPayroll = 0;
+    public double calculateNationalMerchandisingRevenue() {
+        ArrayList<Team> teams = teamRepositery.getAllTeams();
+        int teamCount = teams.size();
 
-		for (Team team : teamRepositery.getAllTeams()) {
-			totalPopularity += team.getPopularity();
-			totalPayroll += team.getTeamFinance().getPayroll();
-		}
+        double averagePopularity = calculateAveragePopularity(teams);
+        double averageFanLoyalty = calculateAverageFanLoyalty(teams);
+        double averagePrestige = calculateAverageHistoricalPrestige(teams);
+        int starTeams = countTeamsWithStarPlayer(teams);
 
-		double averagePopularity = totalPopularity / teamRepositery.getAllTeams().size();
-		double averagePayroll = totalPayroll / teamRepositery.getAllTeams().size();
+        return (0.05 * teamCount)
+                + (averagePopularity * 0.015)
+                + (averageFanLoyalty * 0.9)
+                + (averagePrestige * 0.7)
+                + (starTeams * 0.05);
+    }
 
-		return (0.06 * teamRepositery.getAllTeams().size()) + (averagePopularity * 0.015) + (averagePayroll * 0.02);
-	}
+    private double calculateAveragePopularity(List<Team> teams) {
+        double total = 0.0;
+        for (Team team : teams) {
+            total += team.getPopularity();
+        }
+        return total / teams.size();
+    }
+
+    private double calculateAveragePerformance(List<Team> teams) {
+        double total = 0.0;
+        for (Team team : teams) {
+            total += team.getTeamPerformance().getPerformanceRating();
+        }
+        return total / teams.size();
+    }
+
+    private double calculateAverageHistoricalPrestige(List<Team> teams) {
+        double total = 0.0;
+        for (Team team : teams) {
+            EconomicProfil profil = team.getTeamFinance().getEconomicProfil();
+            total += profil.getHistoricalPrestige();
+
+        }
+        return total / teams.size();
+    }
+
+    private double calculateAverageFanLoyalty(List<Team> teams) {
+        double total = 0.0;
+        for (Team team : teams) {
+            EconomicProfil profil = team.getTeamFinance().getEconomicProfil();
+            total += profil.getFanLoyalty();
+        }
+        return total / teams.size();
+    }
+
+    private double calculateAverageCommercialAggressiveness(List<Team> teams) {
+        double total = 0.0;
+        for (Team team : teams) {
+            EconomicProfil profil = team.getTeamFinance().getEconomicProfil();
+            total += profil.getCommercialAggressiveness();
+
+        }
+        return total / teams.size();
+    }
+
+    private double calculateAverageBusinessOpportunity(List<Team> teams) {
+        double total = 0.0;
+        for (Team team : teams) {
+            MediaMarket mediaMarket = team.getTeamFinance().getMediaMarket();
+            total += mediaMarket.getBusinessOpportunityModifier();
+        }
+        return total / teams.size();
+    }
+
+    private int countTeamsWithStarPlayer(List<Team> teams) {
+        int count = 0;
+        for (Team team : teams) {
+            if (team.getStarPlayer() != null) {
+                count++;
+            }
+        }
+        return count;
+    }
 }

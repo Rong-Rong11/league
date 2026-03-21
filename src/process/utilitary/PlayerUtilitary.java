@@ -1,163 +1,93 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package process.utilitary;
-import config.GameConfiguration;
 
 import data.player.Asset;
 import data.player.HealthStatus;
 import data.player.Player;
 
 public class PlayerUtilitary {
+    public static double getPlayerAttackNote(Player player) {
+        Asset asset = PlayerUtilitary.getWeightedAssets(player);
+        double d = Math.sqrt(Math.max(0.0, asset.getPointPerMatch() / 10.0));
+        double d2 = Math.sqrt(Math.max(0.0, asset.getAssistPerMatch() / 3.0));
+        double d3 = asset.getTrueShootingPercentage();
+        double d4 = d * 0.45 + d2 * 0.25 + d3 * 0.3;
+        d4 = 0.55 + d4 * 0.35;
+        return Math.min(d4, 1.0);
+    }
 
-	public static double getPlayerAttackNote(Player player) {
-		double scoringRatio;
-		double assistRatio;
-		double efficiency;
-		double note;
-		Asset assets = getWeightedAssets(player);
-		scoringRatio = Math.sqrt(Math.max(0, assets.getPointPerMatch() / GameConfiguration.AVERAGE_POINTS_PER_MATCH));
-		assistRatio = Math.sqrt(Math.max(0, assets.getAssistPerMatch() / GameConfiguration.AVERAGE_ASSIST_PER_MATCH));
-		efficiency = assets.getTrueShootingPercentage();
+    public static double getPlayerDefenseNote(Player player) {
+        Asset asset = PlayerUtilitary.getWeightedAssets(player);
+        double d = Math.sqrt(Math.max(0.0, asset.getInterceptionPerMatch() / 1.0));
+        double d2 = Math.sqrt(Math.max(0.0, asset.getBlockPerMatch() / 1.0));
+        double d3 = d * 0.55 + d2 * 0.45;
+        d3 = 0.5 + d3 * 0.3;
+        return Math.min(d3, 1.0);
+    }
 
-		note = (scoringRatio * 0.45) + (assistRatio * 0.25) + (efficiency * 0.30);
-		note = 0.55 + (note * 0.35);
-		return Math.min(note, 1);
-	}
+    private static Asset getWeightedAssets(Player player) {
+        double d;
+        Asset asset = player.getCurrentSeasonAssets();
+        Asset asset2 = player.getPreSeasonAssets();
+        double d2 = asset.getMinutesPlayedPerMatch();
+        double d3 = d2 + (d = asset2.getMinutesPlayedPerMatch());
+        if (d3 == 0.0) {
+            return asset2;
+        }
+        Asset asset3 = new Asset();
+        asset3.setPointPerMatch((asset.getPointPerMatch() * d2 + asset2.getPointPerMatch() * d) / d3);
+        asset3.setAssistPerMatch((asset.getAssistPerMatch() * d2 + asset2.getAssistPerMatch() * d) / d3);
+        asset3.setInterceptionPerMatch((asset.getInterceptionPerMatch() * d2 + asset2.getInterceptionPerMatch() * d) / d3);
+        asset3.setBlockPerMatch((asset.getBlockPerMatch() * d2 + asset2.getBlockPerMatch() * d) / d3);
+        asset3.setTrueShootingPercentage((asset.getTrueShootingPercentage() * d2 + asset2.getTrueShootingPercentage() * d) / d3);
+        asset3.setMinutesPlayedPerMatch((asset.getMinutesPlayedPerMatch() * d2 + asset2.getMinutesPlayedPerMatch() * d) / d3);
+        return asset3;
+    }
 
-	public static double getPlayerDefenseNote(Player player) {
-		double interceptionRatio;
-		double blockRatio;
-		double note;
-		Asset asset = getWeightedAssets(player);
-		interceptionRatio = Math.sqrt(Math.max(0,
-				asset.getInterceptionPerMatch() / GameConfiguration.AVERAGE_INTERCEPTION_PER_MATCH));
-		blockRatio = Math.sqrt(Math.max(0, asset.getBlockPerMatch() / GameConfiguration.AVERAGE_BLOCK_PER_MATCH));
+    public static double getPlayerOverAllNote(Player player) {
+        double d = PlayerUtilitary.getPlayerAttackNote(player);
+        double d2 = PlayerUtilitary.getPlayerDefenseNote(player);
+        double d3 = d * 0.6 + d2 * 0.4;
+        double d4 = player.getPreSeasonAssets().getNote();
+        return d3 * 0.7 + d4 * 0.3;
+    }
 
-		note = (interceptionRatio * 0.55) + (blockRatio * 0.45);
-		note = 0.50 + (note * 0.30);
-		return Math.min(note, 1);
-	}
+    public static void updateFatigue(double d, Player player) {
+        HealthStatus healthStatus = player.getHealthStatus();
+        double d2 = healthStatus.getFatigue();
+        if ((d2 += 0.02 * d) > 1.0) {
+            d2 = 1.0;
+        }
+        healthStatus.setFatigue(d2);
+        player.setHealthStatus(healthStatus);
+    }
 
-	private static Asset getWeightedAssets(Player player) {
-		Asset season = player.getCurrentSeasonAssets();
-		Asset previous = player.getPreSeasonAssets();
+    public static void updateRest(double d, Player player) {
+        HealthStatus healthStatus = player.getHealthStatus();
+        double d2 = healthStatus.getFatigue();
+        if ((d2 -= 0.02 * d) < 0.0) {
+            d2 = 0.0;
+        }
+        healthStatus.setFatigue(d2);
+        player.setHealthStatus(healthStatus);
+    }
 
-		double seasonMinutes = season.getMinutesPlayedPerMatch();
-		double previousMinutes = previous.getMinutesPlayedPerMatch();
-		double totalMinutes = seasonMinutes + previousMinutes;
-
-		if (totalMinutes == 0) {
-			return previous;
-		}
-
-		Asset result = new Asset();
-
-		result.setPointPerMatch(
-				(season.getPointPerMatch() * seasonMinutes
-						+ previous.getPointPerMatch() * previousMinutes) /
-						totalMinutes);
-
-		result.setAssistPerMatch(
-				(season.getAssistPerMatch() * seasonMinutes
-						+ previous.getAssistPerMatch() * previousMinutes)
-						/ totalMinutes);
-
-		result.setInterceptionPerMatch(
-				(season.getInterceptionPerMatch() * seasonMinutes
-						+ previous.getInterceptionPerMatch() * previousMinutes)
-						/ totalMinutes);
-
-		result.setBlockPerMatch(
-				(season.getBlockPerMatch() * seasonMinutes
-						+ previous.getBlockPerMatch() * previousMinutes) /
-						totalMinutes);
-
-		result.setTrueShootingPercentage(
-				(season.getTrueShootingPercentage() * seasonMinutes
-						+ previous.getTrueShootingPercentage() * previousMinutes)
-						/ totalMinutes);
-
-		result.setMinutesPlayedPerMatch(
-				(season.getMinutesPlayedPerMatch() * seasonMinutes +
-						previous.getMinutesPlayedPerMatch() * previousMinutes) / totalMinutes);
-
-		return result;
-	}
-
-	public static double getPlayerOverAllNote(Player player) {
-		double attackNote = getPlayerAttackNote(player);
-		double defenseNote = getPlayerDefenseNote(player);
-
-		double performanceNote = (attackNote * 0.6) + (defenseNote * 0.4);
-		double lastSeasonNote = player.getPreSeasonAssets().getNote();
-
-		return (performanceNote * 0.7) + (lastSeasonNote * 0.3);
-	}
-
-	public static void updateFatigue(double minutesPlayed, Player player) {
-		HealthStatus healthStatus = player.getHealthStatus();
-		double fatigue = healthStatus.getFatigue();
-		fatigue += (0.02 * minutesPlayed);
-		if (fatigue > 1) {
-			fatigue = 1;
-		}
-		healthStatus.setFatigue(fatigue);
-		player.setHealthStatus(healthStatus);
-	}
-
-	public static void updateRest(double restMinutes, Player player) {
-		HealthStatus healthStatus = player.getHealthStatus();
-		double fatigue = healthStatus.getFatigue();
-		fatigue -= 0.02 * restMinutes;
-		if (fatigue < 0) {
-			fatigue = 0;
-		}
-		healthStatus.setFatigue(fatigue);
-		player.setHealthStatus(healthStatus);
-	}
-
-	public static void updateAsset(Player player, Asset matchAsset) {
-		Asset seasonAsset = player.getCurrentSeasonAssets();
-
-		if (matchAsset.getMinutesPlayedPerMatch() == 0) {
-			return;
-		}
-
-		double seasonMinutes = seasonAsset.getMinutesPlayedPerMatch();
-		double matchMinutes = matchAsset.getMinutesPlayedPerMatch();
-		double totalMinutes = seasonMinutes + matchMinutes;
-
-		seasonAsset.setPointPerMatch(
-				(seasonAsset.getPointPerMatch() * seasonMinutes
-				+ matchAsset.getPointPerMatch() * matchMinutes)
-						/ totalMinutes);
-
-		seasonAsset.setReboundPerMatch(
-				(seasonAsset.getReboundPerMatch() * seasonMinutes
-				+ matchAsset.getReboundPerMatch() * matchMinutes)
-						/ totalMinutes);
-
-		seasonAsset.setAssistPerMatch(
-				(seasonAsset.getAssistPerMatch() * seasonMinutes
-				+ matchAsset.getAssistPerMatch() * matchMinutes)
-				/ totalMinutes);
-
-		seasonAsset.setInterceptionPerMatch(
-				(seasonAsset.getInterceptionPerMatch() * seasonMinutes
-				+ matchAsset.getInterceptionPerMatch() * matchMinutes)
-				/ totalMinutes);
-
-		seasonAsset.setBlockPerMatch(
-				(seasonAsset.getBlockPerMatch() * seasonMinutes
-				+ matchAsset.getBlockPerMatch() * matchMinutes)
-				/ totalMinutes);
-
-		seasonAsset.setLostBallPerMatch(
-				(seasonAsset.getLostBallPerMatch() * seasonMinutes
-				+ matchAsset.getLostBallPerMatch() * matchMinutes)
-				/ totalMinutes);
-
-		seasonAsset.setMinutesPlayedPerMatch(
-				(seasonAsset.getMinutesPlayedPerMatch() * seasonMinutes
-				+ matchAsset.getMinutesPlayedPerMatch() * matchMinutes)
-				/ totalMinutes);
-	}
+    public static void updateAsset(Player player, Asset asset) {
+        Asset asset2 = player.getCurrentSeasonAssets();
+        if (asset.getMinutesPlayedPerMatch() == 0.0) {
+            return;
+        }
+        double d = asset2.getMinutesPlayedPerMatch();
+        double d2 = asset.getMinutesPlayedPerMatch();
+        double d3 = d + d2;
+        asset2.setPointPerMatch((asset2.getPointPerMatch() * d + asset.getPointPerMatch() * d2) / d3);
+        asset2.setReboundPerMatch((asset2.getReboundPerMatch() * d + asset.getReboundPerMatch() * d2) / d3);
+        asset2.setAssistPerMatch((asset2.getAssistPerMatch() * d + asset.getAssistPerMatch() * d2) / d3);
+        asset2.setInterceptionPerMatch((asset2.getInterceptionPerMatch() * d + asset.getInterceptionPerMatch() * d2) / d3);
+        asset2.setBlockPerMatch((asset2.getBlockPerMatch() * d + asset.getBlockPerMatch() * d2) / d3);
+        asset2.setLostBallPerMatch((asset2.getLostBallPerMatch() * d + asset.getLostBallPerMatch() * d2) / d3);
+        asset2.setMinutesPlayedPerMatch((asset2.getMinutesPlayedPerMatch() * d + asset.getMinutesPlayedPerMatch() * d2) / d3);
+    }
 }

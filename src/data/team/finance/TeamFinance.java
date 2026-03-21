@@ -1,103 +1,108 @@
+/*
+ * Decompiled with CFR 0.152.
+ */
 package data.team.finance;
 
 import data.finance.budget.Budget;
-import data.team.finance.financialprofil.FinancialProfil;
+import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
+import data.team.finance.mediamarket.MediaMarket;
 import data.team.finance.transfer.TeamTransferStrategy;
 
 public class TeamFinance {
-	
-	private FinancialProfil financialProfil ; 
-	private Budget budget ; 
-	private double payroll ; 
-	private MarketSize marketSize ; 
-	private double luxuryTaxPaid ;
-	private int transferMade = 0 ; 
-	private TeamTransferStrategy teamTransferStrategy ; 
-	
-	public TeamFinance(FinancialProfil financialProfil, Budget budget, MarketSize marketSize, TeamTransferStrategy teamTransferStrategy) {
-		super();
-		this.financialProfil = financialProfil;
-		this.budget = budget;
-		payroll = 0 ; 
-		this.marketSize = marketSize;
-		luxuryTaxPaid = 0 ;
-		transferMade = 0 ; 
-		this.teamTransferStrategy = teamTransferStrategy ; 
-	}
+    private FinancialPolicy financialProfil;
+    private EconomicProfil economicProfil = new EconomicProfil();
+    private MediaMarket mediaMarket = new MediaMarket();
+    private MarketSize marketSize;
 
-	public FinancialProfil getFinancialProfil() {
-		return financialProfil;
-	}
+    private Budget budget;
+    private double payroll;
+    private double luxuryTaxPaid;
+    private int transferMade = 0;
+    private TeamTransferStrategy teamTransferStrategy;
 
-	public double getPayroll() {
-		return payroll;
-	}
+    public TeamFinance(FinancialPolicy financialProfil, Budget budget, MarketSize marketSize,
+            TeamTransferStrategy teamTransferStrategy) {
+        this.financialProfil = financialProfil;
+        this.budget = budget;
+        this.payroll = 0.0;
+        this.marketSize = marketSize;
+        this.luxuryTaxPaid = 0.0;
+        this.transferMade = 0;
+        this.teamTransferStrategy = teamTransferStrategy;
+    }
 
-	public void setPayroll(double payroll) {
-		this.payroll = payroll;
-	} 
-	
-	public void incrementTransferMade() {
-		transferMade ++ ; 
-	}
+    public FinancialPolicy getFinancialProfil() {
+        return this.financialProfil;
+    }
 
-	public Budget getBudget() {
-		return budget;
-	}
+    public double getPayroll() {
+        return this.payroll;
+    }
 
-	public void setBudget(Budget budget) {
-		this.budget = budget;
-	}
+    public void setPayroll(double payroll) {
+        this.payroll = payroll;
+    }
 
-	public TeamTransferStrategy getTeamTransferStrategy() {
-		return teamTransferStrategy;
-	}
+    public void incrementTransferMade() {
+        ++this.transferMade;
+    }
 
-	public void setTeamTransferStrategy(TeamTransferStrategy teamTransferStrategy) {
-		this.teamTransferStrategy = teamTransferStrategy;
-	}
+    public Budget getBudget() {
+        return this.budget;
+    }
 
-	public int getTransferMade() {
-		return transferMade;
-	}
+    public void setBudget(Budget budget) {
+        this.budget = budget;
+    }
 
-	public MarketSize getMarketSize() {
-		return marketSize;
-	}
+    public TeamTransferStrategy getTeamTransferStrategy() {
+        return this.teamTransferStrategy;
+    }
 
-	public void setMarketSize(MarketSize marketSize) {
-		this.marketSize = marketSize;
-	}
+    public void setTeamTransferStrategy(TeamTransferStrategy teamTransferStrategy) {
+        this.teamTransferStrategy = teamTransferStrategy;
+    }
 
-	public double getLuxuryTaxPaid() {
-		return luxuryTaxPaid;
-	}
+    public int getTransferMade() {
+        return this.transferMade;
+    }
 
-	public void setLuxuryTaxPaid(double luxuryTaxPaid) {
-		this.luxuryTaxPaid = luxuryTaxPaid;
-	}
+    public MarketSize getMarketSize() {
+        return this.marketSize;
+    }
 
-	public void setFinancialProfil(FinancialProfil financialProfil) {
-		this.financialProfil = financialProfil;
-	}
+    public void setMarketSize(MarketSize marketSize) {
+        this.marketSize = marketSize;
+    }
 
-	public void setTransferMade(int transferMade) {
-		this.transferMade = transferMade;
-	}
-	
-	
+    public double getLuxuryTaxPaid() {
+        return this.luxuryTaxPaid;
+    }
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+    public void setLuxuryTaxPaid(double luxuryTaxPaid) {
+        this.luxuryTaxPaid = luxuryTaxPaid;
+    }
+
+    public void setFinancialProfil(FinancialPolicy financialProfil) {
+        this.financialProfil = financialProfil;
+    }
+
+    public void setTransferMade(int transferMade) {
+        this.transferMade = transferMade;
+    }
+
+    public EconomicProfil getEconomicProfil() {
+        return economicProfil;
+    }
+
+    public void setEconomicProfil(EconomicProfil economicProfil) {
+        this.economicProfil = economicProfil;
+    }
+
+    public MediaMarket getMediaMarket() {
+        return mediaMarket;
+    }
+
 }
