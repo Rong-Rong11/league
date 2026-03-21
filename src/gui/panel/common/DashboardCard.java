@@ -1,12 +1,9 @@
-package gui.components;
+package gui.panel.common;
 
 import java.awt.Color;
 
 import javax.swing.JPanel;
 
-/**
- * Composant carte simple réutilisable pour les dashboards.
- */
 public class DashboardCard extends JPanel {
 
 	private static final Color CARD_BACKGROUND = Color.WHITE;

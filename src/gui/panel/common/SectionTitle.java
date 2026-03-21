@@ -1,4 +1,4 @@
-package gui.components;
+package gui.panel.common;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -8,9 +8,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-/**
- * Bloc texte simple: titre + sous-titre.
- */
 public class SectionTitle extends JPanel {
 
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
