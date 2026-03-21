@@ -53,12 +53,13 @@ public class TradeManager {
         for (Team teamA : teamRepositery.getAllTeams()) {
             int tradeAttempts = 0;
             while (!isSatisfied(teamA.getTeamFinance(), season) && tradeAttempts < MAX_ATTEMPTS) {
+                tradeAttempts++;
                 if (teamA.getTeamFinance().getTransferMade() > FinanceConfiguration.MAX_TRADE_PER_TEAM) {
-                    continue;
+                    break;
                 }
                 if (season) {
                     if (!shouldTryTrade(teamA, date)) {
-                        continue;
+                        break;
                     }
                 }
                 Team teamB = tradeFinder.findTeamForTrade(teamA, season);
@@ -91,7 +92,6 @@ public class TradeManager {
                     }
 
                 }
-                tradeAttempts++;
             }
 
         }

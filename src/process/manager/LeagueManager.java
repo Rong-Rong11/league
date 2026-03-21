@@ -77,14 +77,14 @@ public class LeagueManager {
         tradeManager.simulateSeasonTrade(date, month);
     }
 
-    public void randomFinancialProfil() {
+    public void randomFinancialPolicy() {
         for (Team team : TeamRepositery.getInstance().getAllTeams()) {
             FinancialPolicy financialProfil = TeamUtilitary.randomFinancialProfil();
-            chooseFinancialProfil(team, financialProfil);
+            chooseFinancialPolicy(team, financialProfil);
         }
     }
 
-    public void chooseFinancialProfil(Team team, FinancialPolicy financialProfil) {
+    public void chooseFinancialPolicy(Team team, FinancialPolicy financialProfil) {
         team.getTeamFinance().setFinancialProfil(financialProfil);
         team.getTeamFinance()
                 .setTeamTransferStrategy(financialProfil.accept(new ChooseTransferStrategyVisitor(team.getRival())));

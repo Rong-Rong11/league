@@ -8,6 +8,13 @@ import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.league.League;
 import data.sport.setup.Game;
+import data.team.Team;
+import data.team.finance.financialpolicy.AmbitiousPolicy;
+import data.team.finance.financialpolicy.BalancedPolicy;
+import data.team.finance.financialpolicy.ThriftyPolicy;
+import data.team.finance.marketsize.LargeSize;
+import data.team.finance.marketsize.MediumSize;
+import data.team.finance.marketsize.SmallSize;
 import process.utilitary.CalendarUtilitary;
 
 //cerveau de la simulation 
@@ -24,8 +31,35 @@ public class SimulationManager {
 
     }
 
+    // methddes pour la presaison
+    // pour page de garde
     public void randomFinance() {
-        leagueManager.randomFinancialProfil();
+        leagueManager.randomFinancialPolicy();
+        leagueManager.randomMarketSize();
+    }
+
+    public void chooseAmbitiousPolicy(Team team) {
+        leagueManager.chooseFinancialPolicy(team, new AmbitiousPolicy());
+    }
+
+    public void chooseBalancedPolicy(Team team) {
+        leagueManager.chooseFinancialPolicy(team, new BalancedPolicy());
+    }
+
+    public void chooseThriftyPolicy(Team team) {
+        leagueManager.chooseFinancialPolicy(team, new ThriftyPolicy());
+    }
+
+    public void chooseLargeMarketSize(Team team) {
+        leagueManager.chooseMarketSize(team, new LargeSize());
+    }
+
+    public void chooseMediumMarketSize(Team team) {
+        leagueManager.chooseMarketSize(team, new MediumSize());
+    }
+
+    public void chooseSmallMarketSize(Team team) {
+        leagueManager.chooseMarketSize(team, new SmallSize());
     }
 
     // méthode à utiliser pour lancer la saison
@@ -41,6 +75,7 @@ public class SimulationManager {
         date = date.plusDays(1);
         currentMonthDate = date.getMonth();
         verifyMonth();
+        verifyWeek();
     }
 
     // si nouveau mois les évènements des nouveaux mois sont appliqués comme le
