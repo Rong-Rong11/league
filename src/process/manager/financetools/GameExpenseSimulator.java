@@ -22,15 +22,13 @@ public class GameExpenseSimulator {
 	public void calculateGameExpenses(Game game) {
 		Team homeTeam = game.getGameContext().getHomeTeam();
 		double gamePopularity = gameStat.getPopularity();
-
 		int attendees = gameStat.getAttendees();
 
 		calculateStadiumCosts(homeTeam, attendees, gamePopularity);
-		calculateStaffCosts();
-		calculateSecurityCosts(attendees);
+		calculateStaffCosts(homeTeam);
+		calculateSecurityCosts(homeTeam, attendees);
 		calculateLogisticCosts(game);
 		calculateAwayTravelCost(game);
-
 	}
 
 	private void calculateStadiumCosts(Team homeTeam, int attendees, double gamePopularity) {
@@ -41,58 +39,61 @@ public class GameExpenseSimulator {
 		double baseCosts = marketSize.accept(new CalculateStadiumCostVisitor());
 
 		double attendanceFactor = ((double) attendees) / 20000.0;
-		baseCosts *= (1 + (attendanceFactor * 0.25));
-		baseCosts *= (1 + (gamePopularity * 0.15));
+		double modifier = 0.0;
 
-		baseCosts *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.10);
+		modifier += attendanceFactor * 0.25;
+		modifier += gamePopularity * 0.15;
 
-		baseCosts *= (1 + economicProfil.getFanLoyalty() * 0.05);
-		baseCosts *= (1 + economicProfil.getHistoricalPrestige() * 0.05);
+		modifier += mediaMarket.getBusinessOpportunityModifier() * 0.10;
 
-		gameStat.getHomeFinance().setArenaCosts(baseCosts);
+		modifier += economicProfil.getFanLoyalty() * 0.05;
+		modifier += economicProfil.getHistoricalPrestige() * 0.05;
+
+		double arenaCost = baseCosts * (1 + modifier);
+		gameStat.getHomeFinance().setArenaCosts(arenaCost);
 	}
 
-	private void calculateSecurityCosts(int attendees) {
-		Team homeTeam = gameStat.getGame().getGameContext().getHomeTeam();
+	private void calculateSecurityCosts(Team homeTeam, int attendees) {
 		EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
 
-		double costPerFan = 5;
-		double riskFactor = attendees > 15000 ? 1.3 : 1.0;
+		double costPerFan = 5.0;
+		double modifier = 0.0;
 
-		if (economicProfil.getFanLoyalty() < 0.4) {
-			riskFactor *= 1.05;
+		if (attendees > 15000) {
+			modifier += 0.30;
 		}
 
-		double securityCost = (attendees * costPerFan * riskFactor) / 1000000;
+		if (economicProfil.getFanLoyalty() > 0.5) {
+			modifier += 0.05;
+		}
+
+		double securityCost = (attendees * costPerFan * (1 + modifier)) / 1000000.0;
 		gameStat.getHomeFinance().setSecurityCosts(securityCost);
 	}
 
-	private void calculateStaffCosts() {
-		Team homeTeam = gameStat.getGame().getGameContext().getHomeTeam();
+	private void calculateStaffCosts(Team homeTeam) {
 		EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
 
 		double baseStaffCost = 0.15;
-		double attendanceFactor = 1.0;
+		double modifier = 0.0;
+		double attendanceRate = gameStat.getAttendanceRate();
 
-		if (gameStat.getAttendanceRate() > 0.9) {
-			attendanceFactor = 1.2;
-		}
-		if (gameStat.getAttendanceRate() < 0.4) {
-			attendanceFactor = 0.9;
-		}
-
-		double staffCost = baseStaffCost * attendanceFactor;
-
-		if (economicProfil != null) {
-			staffCost *= (1 + economicProfil.getFanLoyalty() * 0.05);
+		if (attendanceRate > 0.9) {
+			modifier += 0.20;
+		} else if (attendanceRate < 0.6) {
+			modifier -= 0.10;
 		}
 
+		modifier += economicProfil.getFanLoyalty() * 0.05;
+
+		double staffCost = baseStaffCost * (1 + modifier);
 		gameStat.getHomeFinance().setStaffCosts(staffCost);
 	}
 
 	private void calculateAwayTravelCost(Game game) {
-		double travelCost = 0;
+		double travelCost;
 		int typeGame = game.getGameContext().getTypeGame();
+
 		if (typeGame == GameConfiguration.GAME_INTRA_DIVISION) {
 			travelCost = FinanceConfiguration.BASE_TRAVEL_INTRA_DIVISION_COST;
 		} else if (typeGame == GameConfiguration.GAME_INTRA_CONFERENCE) {
@@ -100,6 +101,7 @@ public class GameExpenseSimulator {
 		} else {
 			travelCost = FinanceConfiguration.BASE_TRAVEL_INTER_CONFERENCE_COST;
 		}
+
 		gameStat.getAwayFinance().setTravelCosts(travelCost);
 	}
 
@@ -111,20 +113,19 @@ public class GameExpenseSimulator {
 		double baseTransport = 0.05;
 		double mediaSetup = 0.04;
 		double equipment = 0.03;
-		double rivalryFactor = (CalendarUtilitary.isRivalry(game.getGameContext()) ? 1.15 : 1.0);
+		double baseLogisticCost = baseTransport + mediaSetup + equipment;
 
-		double logisticCost = (baseTransport + mediaSetup + equipment) * rivalryFactor;
+		double modifier = 0.0;
 
-		if (mediaMarket != null) {
-			logisticCost *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.08);
+		if (CalendarUtilitary.isRivalry(game.getGameContext())) {
+			modifier += 0.15;
 		}
+		modifier += mediaMarket.getBusinessOpportunityModifier() * 0.08;
 
-		if (economicProfil != null) {
-			logisticCost *= (1 + economicProfil.getCommercialAggressiveness() * 0.10);
-			logisticCost *= (1 + economicProfil.getHistoricalPrestige() * 0.05);
-		}
+		modifier += economicProfil.getCommercialAggressiveness() * 0.10;
+		modifier += economicProfil.getHistoricalPrestige() * 0.05;
 
+		double logisticCost = baseLogisticCost * (1 + modifier);
 		gameStat.getHomeFinance().setLogisticsCosts(logisticCost);
 	}
-
 }

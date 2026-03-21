@@ -50,50 +50,49 @@ public class TradeManager {
                 return;
             }
         }
-        int tradeAttempts = 0;
         for (Team teamA : teamRepositery.getAllTeams()) {
-            if (teamA.getTeamFinance().getTransferMade() > FinanceConfiguration.MAX_TRADE_PER_TEAM) {
-                continue;
-            }
-            if (season) {
-                if (!shouldTryTrade(teamA, date)) {
+            int tradeAttempts = 0;
+            while (!isSatisfied(teamA.getTeamFinance(), season) && tradeAttempts < MAX_ATTEMPTS) {
+                if (teamA.getTeamFinance().getTransferMade() > FinanceConfiguration.MAX_TRADE_PER_TEAM) {
                     continue;
                 }
-            }
-            Team teamB = tradeFinder.findTeamForTrade(teamA, season);
-            if (teamB == null) {
-                continue;
-            }
-
-            ArrayList<Player> playersA = new ArrayList<Player>(teamA.getPlayers().values());
-            ArrayList<Player> playersB = new ArrayList<Player>(teamB.getPlayers().values());
-
-            Player playerBToTrade = generatePlayersToTrade(teamB, season);
-            Player playerAToTrade = generatePlayersToTrade(teamA, season);
-            if (playerAToTrade == null || playerBToTrade == null) {
-                continue;
-            }
-
-            playersA.remove(playerAToTrade);
-            playersA.add(playerBToTrade);
-
-            playersB.remove(playerBToTrade);
-            playersB.add(playerAToTrade);
-
-            if (tradeSimulator.validateTrade(teamA, teamB, playersA, playersB, month, salaryCap, luxuryTaxLine)) {
                 if (season) {
-                    seasonTrades.put(date, new Trade(playerAToTrade, teamA, playerBToTrade, teamB, date));
-                } else {
-                    preSeasonTrade.add(
-                            new Trade(playerAToTrade, teamA, playerBToTrade, teamB,
-                                    FinanceConfiguration.PRESEASON_TRADE));
+                    if (!shouldTryTrade(teamA, date)) {
+                        continue;
+                    }
+                }
+                Team teamB = tradeFinder.findTeamForTrade(teamA, season);
+                if (teamB == null) {
+                    continue;
                 }
 
+                ArrayList<Player> playersA = new ArrayList<Player>(teamA.getPlayers().values());
+                ArrayList<Player> playersB = new ArrayList<Player>(teamB.getPlayers().values());
+
+                Player playerBToTrade = generatePlayersToTrade(teamB, season);
+                Player playerAToTrade = generatePlayersToTrade(teamA, season);
+                if (playerAToTrade == null || playerBToTrade == null) {
+                    continue;
+                }
+
+                playersA.remove(playerAToTrade);
+                playersA.add(playerBToTrade);
+
+                playersB.remove(playerBToTrade);
+                playersB.add(playerAToTrade);
+
+                if (tradeSimulator.validateTrade(teamA, teamB, playersA, playersB, month, salaryCap, luxuryTaxLine)) {
+                    if (season) {
+                        seasonTrades.put(date, new Trade(playerAToTrade, teamA, playerBToTrade, teamB, date));
+                    } else {
+                        preSeasonTrade.add(
+                                new Trade(playerAToTrade, teamA, playerBToTrade, teamB,
+                                        FinanceConfiguration.PRESEASON_TRADE));
+                    }
+
+                }
+                tradeAttempts++;
             }
-            if (isSatisfied(teamA.getTeamFinance(), season) || tradeAttempts >= MAX_ATTEMPTS) {
-                continue;
-            }
-            tradeAttempts++;
 
         }
     }

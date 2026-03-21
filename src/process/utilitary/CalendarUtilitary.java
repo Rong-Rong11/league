@@ -3,14 +3,15 @@
  */
 package process.utilitary;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
+
 import config.CalendarConfiguration;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
 import data.sport.setup.GameContext;
 import data.team.Team;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Month;
 
 public class CalendarUtilitary {
     public static boolean isWeekend(LocalDate localDate) {
@@ -22,7 +23,8 @@ public class CalendarUtilitary {
     }
 
     public static boolean isSpecialEvent(RegularSeason regularSeason, LocalDate localDate) {
-        return localDate.isEqual(CalendarConfiguration.CHRISTMAS_DAY) || localDate.isEqual(regularSeason.getDebutDate()) || localDate.isEqual(regularSeason.getEndDate()) || localDate.isEqual(CalendarUtilitary.getMLKDay());
+        return localDate.isEqual(CalendarConfiguration.CHRISTMAS_DAY) || localDate.isEqual(regularSeason.getDebutDate())
+                || localDate.isEqual(regularSeason.getEndDate()) || localDate.isEqual(CalendarUtilitary.getMLKDay());
     }
 
     public static boolean playedYesterday(Team team, LocalDate localDate) {
@@ -76,7 +78,8 @@ public class CalendarUtilitary {
         if (n2 < 3) {
             d -= 5.0;
         }
-        if (CalendarUtilitary.playedYesterday(game.getGameContext().getHomeTeam(), localDate) || CalendarUtilitary.playedYesterday(game.getGameContext().getAwayTeam(), localDate)) {
+        if (CalendarUtilitary.playedYesterday(game.getGameContext().getHomeTeam(), localDate)
+                || CalendarUtilitary.playedYesterday(game.getGameContext().getAwayTeam(), localDate)) {
             d -= 100.0;
         }
         return d;
@@ -92,6 +95,11 @@ public class CalendarUtilitary {
     }
 
     public static boolean checkDate(LocalDate localDate, LocalDate localDate2, LocalDate localDate3) {
-        return !(!localDate.isEqual(localDate2) && !localDate.isAfter(localDate2) || !localDate.isBefore(localDate3) && !localDate.isEqual(localDate3));
+        return !(!localDate.isEqual(localDate2) && !localDate.isAfter(localDate2)
+                || !localDate.isBefore(localDate3) && !localDate.isEqual(localDate3));
+    }
+
+    public static boolean isImportantMonth(int month) {
+        return month == 1 || month == 6 || month == 10;
     }
 }

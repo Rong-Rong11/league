@@ -13,6 +13,7 @@ import data.team.finance.marketsize.MarketSize;
 import process.builder.CalendarBuilder;
 import process.builder.LeagueBuilder;
 import process.builder.SimulationBuilder;
+import process.manager.leaguetools.TeamPopularityUpdater;
 import process.manager.submanager.FinanceManager;
 import process.manager.submanager.GameManager;
 import process.manager.submanager.TradeManager;
@@ -29,6 +30,7 @@ public class LeagueManager {
     private GameManager gameManager = null;
     private TradeManager tradeManager;
     private FinanceManager financeManager;
+    private TeamPopularityUpdater teamPopularityUpdater = new TeamPopularityUpdater();
 
     public LeagueManager() {
         league = leagueBuilder.build();
@@ -45,6 +47,7 @@ public class LeagueManager {
     public void startSeason() {
         simulationBuilder.build();
         simulatePreSeasonTrade();
+        teamPopularityUpdater.updateBeforeSeason();
         buildRegularSeasonCalendar();
         league.getLeagueFinance().getBudget().getInitialAmount();
     }
@@ -66,7 +69,12 @@ public class LeagueManager {
     }
 
     public void newMonth(int month) {
+        teamPopularityUpdater.updateMonthlyPopularity();
         financeManager.applyMonthlyFinance(month);
+    }
+
+    public void newWeek(LocalDate date, int month) {
+        tradeManager.simulateSeasonTrade(date, month);
     }
 
     public void randomFinancialProfil() {

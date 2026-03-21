@@ -2,35 +2,62 @@ package data.league.finance;
 
 public class LeagueRedistributionPolicy {
 
-   private double leagueRetentionRate; // part gardée par la ligue
+   private double baseLeagueRetentionRate = 0.05;
+   private double baseRedistributionRate = 0.25;
+   private double baseEqualShareRate = 0.4;
+   private double baseWeightedShareRate = 0.6;
+   private double minimumRedistributionRate = 0.15;
+   private double maximumRedistributionRate = 0.4;
 
-   private double redistributionRate; // combien les riches donnent
-   private double equalShareRate; // part distribuée equally
-   private double weightedShareRate; // part distribuée selon besoin
-
-   public LeagueRedistributionPolicy(double leagueRetentionRate,
-         double redistributionRate,
-         double equalShareRate,
-         double weightedShareRate) {
-      this.leagueRetentionRate = leagueRetentionRate;
-      this.redistributionRate = redistributionRate;
-      this.equalShareRate = equalShareRate;
-      this.weightedShareRate = weightedShareRate;
+   public LeagueRedistributionPolicy() {
    }
 
-   public double getLeagueRetentionRate() {
-      return leagueRetentionRate;
+   public double getBaseLeagueRetentionRate() {
+      return baseLeagueRetentionRate;
    }
 
-   public double getRedistributionRate() {
-      return redistributionRate;
+   public void setBaseLeagueRetentionRate(double baseLeagueRetentionRate) {
+      this.baseLeagueRetentionRate = baseLeagueRetentionRate;
    }
 
-   public double getEqualShareRate() {
-      return equalShareRate;
+   public double getBaseRedistributionRate() {
+      return baseRedistributionRate;
    }
 
-   public double getWeightedShareRate() {
-      return weightedShareRate;
+   public void setBaseRedistributionRate(double baseRedistributionRate) {
+      this.baseRedistributionRate = baseRedistributionRate;
    }
+
+   public double getBaseEqualShareRate() {
+      return baseEqualShareRate;
+   }
+
+   public void setBaseEqualShareRate(double baseEqualShareRate) {
+      this.baseEqualShareRate = baseEqualShareRate;
+   }
+
+   public double getBaseWeightedShareRate() {
+      return baseWeightedShareRate;
+   }
+
+   public void setBaseWeightedShareRate(double baseWeightedShareRate) {
+      this.baseWeightedShareRate = baseWeightedShareRate;
+   }
+
+   public double getMinimumRedistributionRate() {
+      return minimumRedistributionRate;
+   }
+
+   public void setMinimumRedistributionRate(double minimumRedistributionRate) {
+      this.minimumRedistributionRate = minimumRedistributionRate;
+   }
+
+   public double getMaximumRedistributionRate() {
+      return maximumRedistributionRate;
+   }
+
+   public void setMaximumRedistributionRate(double maximumRedistributionRate) {
+      this.maximumRedistributionRate = maximumRedistributionRate;
+   }
+
 }
