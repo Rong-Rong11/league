@@ -87,10 +87,22 @@ public class LiveMatchHeaderPanel extends JPanel {
 
 	public void updateHeader(Team homeTeam, Team awayTeam, int homeScore, int awayScore,
 			String quarterLabelText, String quarterTimeText) {
-		homeLogoPanel.setTeamName(homeTeam.getName());
-		awayLogoPanel.setTeamName(awayTeam.getName());
-		homeNameLabel.setText(TeamDisplayUtil.getShortName(homeTeam));
-		awayNameLabel.setText(TeamDisplayUtil.getShortName(awayTeam));
+		if (homeTeam == null) {
+			homeLogoPanel.setTeamName("");
+			homeNameLabel.setText("Equipe");
+		} else {
+			homeLogoPanel.setTeamName(homeTeam.getName());
+			homeNameLabel.setText(TeamDisplayUtil.getShortName(homeTeam));
+		}
+
+		if (awayTeam == null) {
+			awayLogoPanel.setTeamName("");
+			awayNameLabel.setText("Equipe");
+		} else {
+			awayLogoPanel.setTeamName(awayTeam.getName());
+			awayNameLabel.setText(TeamDisplayUtil.getShortName(awayTeam));
+		}
+
 		homeScoreLabel.setText(String.valueOf(homeScore));
 		awayScoreLabel.setText(String.valueOf(awayScore));
 		quarterLabel.setText(quarterLabelText);
