@@ -279,6 +279,12 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 	}
 
 	private void updateHeaderPanel() {
+		if (game == null) {
+			headerPanel.updateHeader(null, null,
+					liveMatchStatistics.getHomePoints(), liveMatchStatistics.getAwayPoints(), buildQuarterLabel(),
+					buildQuarterTimeText());
+			return;
+		}
 		headerPanel.updateHeader(game.getGameContext().getHomeTeam(), game.getGameContext().getAwayTeam(),
 				liveMatchStatistics.getHomePoints(), liveMatchStatistics.getAwayPoints(), buildQuarterLabel(),
 				buildQuarterTimeText());
