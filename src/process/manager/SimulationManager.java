@@ -65,7 +65,6 @@ public class SimulationManager {
     // méthode à utiliser pour lancer la saison
     public void startSeason() {
         leagueManager.startSeason();
-        simulateCurrentSeason();
         resetCalendarCursor();
     }
 
@@ -103,33 +102,24 @@ public class SimulationManager {
     }
 
     // simuler jour par jour
-    private void simulateDay() {
+    private void simulateRegularSeasonDay() {
         if (CalendarUtilitary.checkDate(date, CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE,
                 CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
             leagueManager.simulateRegularSeasonDay(date, month);
         }
-        if (CalendarUtilitary.checkDate(date, CalendarConfiguration.PLAYOFF_DEBUT_DATE,
-                CalendarConfiguration.PLAYOFF_END_DATE)) {
+    }
 
-        }
-
+    public void endRegulaSeason() {
+        // leaguemanager.initializePlayoff()
     }
 
     // simuler la fin de saison régulière ou fin playoff
-    public void simulateCurrentSeason() {
-        if (CalendarUtilitary.checkDate(date, CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE,
-                CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
-            while (!date.equals(CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
-                simulateDay();
-                nextDay();
-            }
-        } else if (CalendarUtilitary.checkDate(date, CalendarConfiguration.PLAYOFF_DEBUT_DATE,
-                CalendarConfiguration.PLAYOFF_END_DATE)) {
-            while (!date.equals(CalendarConfiguration.PLAYOFF_END_DATE)) {
-                simulateDay();
-                nextDay();
-            }
+    public void simulateRegularSeason() {
+        while (!date.equals(CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
+            simulateRegularSeasonDay();
+            nextDay();
         }
+        endRegulaSeason();
     }
 
     private void resetCalendarCursor() {

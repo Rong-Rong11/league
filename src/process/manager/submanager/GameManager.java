@@ -1,25 +1,48 @@
 package process.manager.submanager;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 import data.calendar.GameDay;
+import data.league.Conference;
 import data.league.League;
 import data.league.Ranking;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
+import data.team.Team;
+import process.repositery.TeamRepositery;
 import process.simulator.GameSimulator;
+import process.utilitary.TeamUtilitary;
 
 public class GameManager {
 
     private League league;
     private GameSimulator gameSimulator = new GameSimulator();
     private FinanceManager financeManager;
-    private RegularSeasonRankingManager regularSeasonRankingManager = new RegularSeasonRankingManager();
+    private RegularSeasonRankingManager regularSeasonRankingManager;
+    private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 
     public GameManager(League league, FinanceManager financeManager) {
         this.league = league;
+        ArrayList<Team> eastTeams = new ArrayList<>();
+        ArrayList<Team> westTeams = new ArrayList<>();
+        getConferenceTeams(eastTeams, westTeams);
+        regularSeasonRankingManager = new RegularSeasonRankingManager(westTeams, eastTeams);
+
         this.financeManager = financeManager;
+    }
+
+    private void getConferenceTeams(ArrayList<Team> eastTeams, ArrayList<Team> westTeams) {
+        Conference easternConference = league.getEasternConference();
+        for (Team team : teamRepositery.getAllTeams()) {
+            if (TeamUtilitary.getConferenceOfTeam(league, team).equals(league.getEasternConference())) {
+                eastTeams.add(team);
+            } else {
+                westTeams.add(team);
+            }
+        }
+
     }
 
     public boolean simulateGameDay(LocalDate date, int month) {

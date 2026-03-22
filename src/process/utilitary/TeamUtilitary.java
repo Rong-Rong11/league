@@ -1,6 +1,9 @@
 package process.utilitary;
 
 import config.GameConfiguration;
+import data.league.Conference;
+import data.league.Division;
+import data.league.League;
 import data.player.Player;
 import data.team.Team;
 import data.team.TeamPerformance;
@@ -137,5 +140,50 @@ public class TeamUtilitary {
         }
         teamPerformance.setCurrentWinStreak(0);
         teamPerformance.incrementCurrentLoseStreak();
+    }
+
+    public static Conference getConferenceOfTeam(League league, Team team) {
+        Conference easternConference = league.getEasternConference();
+        for (Division division : easternConference.getDivisions().values()) {
+            for (Team divisionTeam : division.getTeams().values()) {
+                if (divisionTeam.equals(team)) {
+                    return easternConference;
+                }
+            }
+        }
+
+        Conference westernConference = league.getWesternConference();
+        for (Division division : westernConference.getDivisions().values()) {
+            for (Team divisionTeam : division.getTeams().values()) {
+                if (divisionTeam.equals(team)) {
+                    return westernConference;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static Division getDivisionOfTeam(League league, Team team) {
+        Conference easternConference = league.getEasternConference();
+        Conference westernConference = league.getWesternConference();
+
+        for (Division division : easternConference.getDivisions().values()) {
+            for (Team divisionTeam : division.getTeams().values()) {
+                if (divisionTeam.equals(team)) {
+                    return division;
+                }
+            }
+        }
+
+        for (Division division : westernConference.getDivisions().values()) {
+            for (Team divisionTeam : division.getTeams().values()) {
+                if (divisionTeam.equals(team)) {
+                    return division;
+                }
+            }
+        }
+
+        return null;
     }
 }

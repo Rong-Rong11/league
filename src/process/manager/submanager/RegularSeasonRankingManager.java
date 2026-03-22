@@ -16,23 +16,34 @@ import process.repositery.TeamRepositery;
 public class RegularSeasonRankingManager {
     private TeamRepositery teamRepositery = TeamRepositery.getInstance();
     private ArrayList<GameDay> simulatedGameDay = new ArrayList<>();
+    private ArrayList<Team> westTeams;
+    private ArrayList<Team> eastTeams;
 
-    public RegularSeasonRankingManager() {
-
+    public RegularSeasonRankingManager(ArrayList<Team> westTeams, ArrayList<Team> eastTeams) {
+        this.westTeams = westTeams;
+        this.eastTeams = eastTeams;
     }
 
     public void updateRanking(League league, Ranking ranking, TreeMap<LocalDate, GameDay> regularSeasonCalendar,
             LocalDate date) {
-        TreeMap<Integer, Team> newRanking = new TreeMap<Integer, Team>();
-        ArrayList<Team> teams = new ArrayList<Team>(teamRepositery.getAllTeams());
-        Collections.sort(teams, new NbaRegularSeasonTeamComparator(getSimulatedGames(), league));
+        TreeMap<Integer, Team> newEastRanking = new TreeMap<Integer, Team>();
+        TreeMap<Integer, Team> newWestRanking = new TreeMap<Integer, Team>();
 
+        Collections.sort(westTeams, new NbaRegularSeasonTeamComparator(getSimulatedGames(), league));
+        Collections.sort(eastTeams, new NbaRegularSeasonTeamComparator(getSimulatedGames(), league));
+
+        createNewRanking(newWestRanking, westTeams);
+        createNewRanking(newEastRanking, eastTeams);
+        ranking.setWestRanking(newWestRanking);
+        ranking.setEastRanking(newEastRanking);
+    }
+
+    private void createNewRanking(TreeMap<Integer, Team> newRanking, ArrayList<Team> sortedTeams) {
         int rank = 1;
-        for (Team team : teams) {
+        for (Team team : sortedTeams) {
             newRanking.put(rank, team);
             rank++;
         }
-        ranking.setRanking(newRanking);
     }
 
     public void addSimulatedGameDay(GameDay gameDay) {

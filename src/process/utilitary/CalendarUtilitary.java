@@ -1,14 +1,17 @@
 package process.utilitary;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Month;
-
 import config.CalendarConfiguration;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
 import data.sport.setup.GameContext;
 import data.team.Team;
+import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.marketsize.MarketSize;
+import data.team.finance.mediamarket.MediaMarket;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
+import process.visitor.marketsize.CalculateGamePopularityVisitor;
 
 public class CalendarUtilitary {
 
@@ -54,24 +57,16 @@ public class CalendarUtilitary {
 
         Team home = game.getGameContext().getHomeTeam();
         Team away = game.getGameContext().getAwayTeam();
-
-        // Popularité des équipes
-        score += (home.getPopularity() + away.getPopularity()) * 5.0;
-
-        // Rivalité
+        score += (home.getPopularity() + away.getPopularity()) * 0.2;
         if (game.getGameContext().isRivalry()) {
             score += 40.0;
         }
-
-        // Star players
         if (home.hasStarPlayer()) {
             score += 30.0;
         }
         if (away.hasStarPlayer()) {
             score += 30.0;
         }
-
-        // Type de match
         switch (game.getGameContext().getTypeGame()) {
             case 2:
                 score += 15.0;
@@ -82,9 +77,30 @@ public class CalendarUtilitary {
             case 0:
                 score += 5.0;
                 break;
-            default:
-                break;
         }
+
+        MediaMarket homeMedia = home.getTeamFinance().getMediaMarket();
+        MediaMarket awayMedia = away.getTeamFinance().getMediaMarket();
+
+        score += homeMedia.getPrestigeModifier() * 20;
+        score += homeMedia.getFanBaseModifier() * 10;
+        score += awayMedia.getPrestigeModifier() * 20;
+        score += awayMedia.getFanBaseModifier() * 10;
+
+        EconomicProfil homeEconomicProfile = home.getTeamFinance().getEconomicProfil();
+        EconomicProfil awayEconomicProfile = away.getTeamFinance().getEconomicProfil();
+
+        score += homeEconomicProfile.getFanLoyalty() * 15;
+        score += homeEconomicProfile.getHistoricalPrestige() * 10;
+
+        score += awayEconomicProfile.getFanLoyalty() * 15;
+        score += awayEconomicProfile.getHistoricalPrestige() * 10;
+
+        MarketSize homeMarket = home.getTeamFinance().getMarketSize();
+        MarketSize awayMarket = away.getTeamFinance().getMarketSize();
+
+        score += homeMarket.accept(new CalculateGamePopularityVisitor()) * 10;
+        score += awayMarket.accept(new CalculateGamePopularityVisitor()) * 10;
 
         return score;
     }

@@ -3,6 +3,7 @@ package process.builder.calendartools;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.TreeMap;
 
 import config.CalendarConfiguration;
@@ -31,6 +32,7 @@ public class GameSelector {
 	public ArrayList<Game> selectGamesForDay() {
 		ArrayList<Game> selectedGames = new ArrayList<Game>();
 		ArrayList<Game> candidates = getCandidates(league, date);
+		Collections.shuffle(candidates);
 
 		TreeMap<Double, ArrayList<Game>> scoreMap = new TreeMap<Double, ArrayList<Game>>();
 		for (Game game : candidates) {
@@ -43,7 +45,9 @@ public class GameSelector {
 			if (CalendarUtilitary.isSpecialEvent(regularSeason, date) || CalendarUtilitary.isImportantDay(date)) {
 				popularityScore = CalendarUtilitary.popularityScoreGame(game, date);
 			}
-			double totalScore = loadScore + popularityScore + scheduleScore;
+			double randomScore = (Math.random() - 0.5) * 10.0;
+			double totalScore = loadScore + popularityScore + scheduleScore + randomScore;
+
 			if (scoreMap.containsKey(totalScore)) {
 				scoreMap.get(totalScore).add(game);
 			} else {
@@ -91,7 +95,33 @@ public class GameSelector {
 			score += 120.0;
 		}
 
+		if (playedRecentlyAgainst(homeTeam, awayTeam, localDate, 5)) {
+			score -= 80.0;
+		}
+
 		return score;
+	}
+
+	private boolean playedRecentlyAgainst(Team teamA, Team teamB, LocalDate localDate, int numberOfDays) {
+		LocalDate startDate = localDate.minusDays(numberOfDays);
+
+		for (LocalDate gameDate : teamA.getSchedule().getScheduledGames().keySet()) {
+			if ((gameDate.isEqual(startDate) || gameDate.isAfter(startDate)) && gameDate.isBefore(localDate)) {
+				Game scheduledGame = teamA.getSchedule().getScheduledGames().get(gameDate);
+
+				Team scheduledHome = scheduledGame.getGameContext().getHomeTeam();
+				Team scheduledAway = scheduledGame.getGameContext().getAwayTeam();
+
+				boolean sameMatchup = (scheduledHome == teamA && scheduledAway == teamB) ||
+						(scheduledHome == teamB && scheduledAway == teamA);
+
+				if (sameMatchup) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	private double restPenalty(int daysSinceLastGame) {

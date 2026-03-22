@@ -3,11 +3,16 @@
  */
 package data.league;
 
-import data.league.Season;
 import java.time.LocalDate;
+import java.util.ArrayList;
+
+import data.team.Team;
 
 public class Playoff
-extends Season {
+        extends Season {
+    private ArrayList<Team> qualifiedEastTeams = new ArrayList<>();
+    private ArrayList<Team> qualifiedWestTeams = new ArrayList<>();
+
     public Playoff(LocalDate localDate, LocalDate localDate2) {
         super(localDate, localDate2);
     }
