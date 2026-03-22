@@ -3,7 +3,9 @@ package gui.dashboard;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.util.ArrayList;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -11,7 +13,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import data.player.Player;
 import data.team.Team;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardCard;
@@ -19,6 +20,7 @@ import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamRosterPanel;
 import process.utilitary.FinanceUtilitary;
+import process.utilitary.TeamStatUtil;
 
 public class RosterDashboard extends JPanel {
 	private static final int DASHBOARD_SPACING = 16;
@@ -139,7 +141,7 @@ public class RosterDashboard extends JPanel {
 	}
 
 	private JPanel buildSummaryPanel() {
-		JPanel summaryPanel = new JPanel(new java.awt.GridLayout(1, 4, DASHBOARD_SPACING, 0));
+		JPanel summaryPanel = new JPanel(new GridLayout(1, 4, DASHBOARD_SPACING, 0));
 		summaryPanel.setOpaque(false);
 		summaryPanel.add(buildMetricCard("Joueurs", playersCountValueLabel));
 		summaryPanel.add(buildMetricCard("Masse salariale", payrollValueLabel));
@@ -190,52 +192,35 @@ public class RosterDashboard extends JPanel {
 	private void updateDashboard() {
 		updateSeasonButtonsStyle();
 		if (selectedTeam == null) {
-			teamLogoPanel.setTeamName("");
-			teamNameLabel.setText("Effectif");
-			subtitleLabel.setText("-");
-			playersCountValueLabel.setText("-");
-			payrollValueLabel.setText("-");
-			averageNoteValueLabel.setText("-");
-			averagePointsValueLabel.setText("-");
-			rosterPanel.updateTeam(null, currentSeasonSelected);
+			showEmptyState();
 			return;
 		}
+		showTeamState();
+	}
 
+	private void showEmptyState() {
+		teamLogoPanel.setTeamName("");
+		teamNameLabel.setText("Effectif");
+		subtitleLabel.setText("-");
+		playersCountValueLabel.setText("-");
+		payrollValueLabel.setText("-");
+		averageNoteValueLabel.setText("-");
+		averagePointsValueLabel.setText("-");
+		rosterPanel.updateTeam(null, currentSeasonSelected);
+	}
+
+	private void showTeamState() {
 		teamLogoPanel.setTeamName(selectedTeam.getName());
 		teamNameLabel.setText(selectedTeam.getName());
 		subtitleLabel.setText("Effectif complet");
 		playersCountValueLabel.setText(String.valueOf(selectedTeam.getPlayers().size()));
 		FinanceUtilitary.updateTeamPayroll(selectedTeam);
 		payrollValueLabel.setText(PlayerDisplayUtil.formatSalary(selectedTeam.getTeamFinance().getPayroll()));
-		averageNoteValueLabel.setText(PlayerDisplayUtil.formatOneDecimal(computeAverageNote()) + "/100");
-		averagePointsValueLabel.setText(PlayerDisplayUtil.formatOneDecimal(computeAveragePoints()));
+		averageNoteValueLabel
+				.setText(PlayerDisplayUtil.formatOneDecimal(TeamStatUtil.getAverageNote(selectedTeam)) + "/100");
+		averagePointsValueLabel.setText(
+				PlayerDisplayUtil.formatOneDecimal(TeamStatUtil.getAveragePoints(selectedTeam, currentSeasonSelected)));
 		rosterPanel.updateTeam(selectedTeam, currentSeasonSelected);
-	}
-
-	private double computeAverageNote() {
-		ArrayList<Player> players = new ArrayList<Player>(selectedTeam.getPlayers().values());
-		if (players.isEmpty()) {
-			return 0;
-		}
-
-		double total = 0;
-		for (Player player : players) {
-			total += PlayerDisplayUtil.getDisplayedAssets(player, currentSeasonSelected).getNote();
-		}
-		return total / players.size();
-	}
-
-	private double computeAveragePoints() {
-		ArrayList<Player> players = new ArrayList<Player>(selectedTeam.getPlayers().values());
-		if (players.isEmpty()) {
-			return 0;
-		}
-
-		double total = 0;
-		for (Player player : players) {
-			total += PlayerDisplayUtil.getDisplayedAssets(player, currentSeasonSelected).getPointPerMatch();
-		}
-		return total / players.size();
 	}
 
 	private void updateSeasonButtonsStyle() {
@@ -262,26 +247,26 @@ public class RosterDashboard extends JPanel {
 		}
 	}
 
-	private class BackToMapListener implements java.awt.event.ActionListener {
+	private class BackToMapListener implements ActionListener {
 		@Override
-		public void actionPerformed(java.awt.event.ActionEvent e) {
+		public void actionPerformed(ActionEvent e) {
 			if (backToMapAction != null) {
 				backToMapAction.run();
 			}
 		}
 	}
 
-	private class CurrentSeasonListener implements java.awt.event.ActionListener {
+	private class CurrentSeasonListener implements ActionListener {
 		@Override
-		public void actionPerformed(java.awt.event.ActionEvent e) {
+		public void actionPerformed(ActionEvent e) {
 			currentSeasonSelected = true;
 			updateDashboard();
 		}
 	}
 
-	private class PreviousSeasonListener implements java.awt.event.ActionListener {
+	private class PreviousSeasonListener implements ActionListener {
 		@Override
-		public void actionPerformed(java.awt.event.ActionEvent e) {
+		public void actionPerformed(ActionEvent e) {
 			currentSeasonSelected = false;
 			updateDashboard();
 		}

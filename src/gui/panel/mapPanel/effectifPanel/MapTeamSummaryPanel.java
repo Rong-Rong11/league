@@ -11,11 +11,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import data.player.Player;
 import data.team.Team;
 import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import process.utilitary.FinanceUtilitary;
+import process.utilitary.TeamStatUtil;
 
 public class MapTeamSummaryPanel extends JPanel {
 	private JLabel teamNameLabel;
@@ -87,35 +87,29 @@ public class MapTeamSummaryPanel extends JPanel {
 
 	public void updateTeam(Team team) {
 		if (team == null) {
-			teamLogoPanel.setTeamName("");
-			teamNameLabel.setText("Aucune équipe");
-			payrollLabel.setText("-");
-			capacityLabel.setText("-");
-			averageNoteLabel.setText("-");
-			openRosterButton.setEnabled(false);
+			showEmptyState();
 			return;
 		}
-
-		FinanceUtilitary.updateTeamPayroll(team);
-		teamLogoPanel.setTeamName(team.getName());
-		teamNameLabel.setText(team.getName());
-		payrollLabel.setText(PlayerDisplayUtil.formatSalary(team.getTeamFinance().getPayroll()));
-		capacityLabel.setText(String.valueOf(team.getStadium().getCapacity()));
-		averageNoteLabel.setText(PlayerDisplayUtil.formatOneDecimal(computeAverageNote(team)) + "/100");
-		openRosterButton.setEnabled(true);
+		showTeamState(team);
 	}
 
-	private double computeAverageNote(Team team) {
-		double total = 0;
-		int count = 0;
-		for (Player player : team.getPlayers().values()) {
-			total += PlayerDisplayUtil.getDisplayedNote(player);
-			count++;
-		}
-		if (count == 0) {
-			return 0;
-		}
-		return total / count;
+	private void showEmptyState() {
+		teamLogoPanel.setTeamName("");
+		teamNameLabel.setText("Aucune équipe");
+		payrollLabel.setText("-");
+		capacityLabel.setText("-");
+		averageNoteLabel.setText("-");
+		openRosterButton.setEnabled(false);
+	}
+
+	private void showTeamState(Team team) {
+		teamLogoPanel.setTeamName(team.getName());
+		teamNameLabel.setText(team.getName());
+		FinanceUtilitary.updateTeamPayroll(team);
+		payrollLabel.setText(PlayerDisplayUtil.formatSalary(team.getTeamFinance().getPayroll()));
+		capacityLabel.setText(String.valueOf(team.getStadium().getCapacity()));
+		averageNoteLabel.setText(PlayerDisplayUtil.formatOneDecimal(TeamStatUtil.getAverageNote(team)) + "/100");
+		openRosterButton.setEnabled(true);
 	}
 
 	public JButton getOpenRosterButton() {

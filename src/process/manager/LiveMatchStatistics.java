@@ -1,19 +1,11 @@
-package gui.management;
-import config.GameConfiguration;
+package process.manager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import data.player.Player;
 import data.sport.play.action.ActionResult;
-import data.sport.play.action.Block;
-import data.sport.play.action.EndOfTime;
-import data.sport.play.action.MissedShot;
-import data.sport.play.action.PointScored;
-import data.sport.play.action.Rebound;
-import data.sport.play.action.Turnover;
 import data.sport.setup.Game;
-import process.visitor.actionresult.ActionResultVisitor;
 import process.visitor.actionresult.StatsVisitor;
 
 public class LiveMatchStatistics {
@@ -191,14 +183,6 @@ public class LiveMatchStatistics {
 
 	public PlayerLiveSummary[] getAwayBestPlayers() {
 		return buildTopPlayers(awayPlayerPoints, awayPlayers);
-	}
-
-	private int getPlayerPoints(HashMap<String, Integer> map, String playerName) {
-		Integer current = map.get(playerName);
-		if (current == null) {
-			return 0;
-		}
-		return current.intValue();
 	}
 
 	private String formatPercent(int made, int attempts) {
@@ -479,7 +463,4 @@ public class LiveMatchStatistics {
 	public void setGame(Game game) {
 		this.game = game;
 	}
-	
-	
-	
 }
