@@ -171,4 +171,5 @@ public class SimulationManager {
     public LocalDate getCurrentDate() {
         return date;
     }
+
 }
