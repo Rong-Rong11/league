@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import data.team.Team;
 import gui.panel.common.TeamDisplayUtil;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 
@@ -84,12 +85,12 @@ public class LiveMatchHeaderPanel extends JPanel {
 		return pauseButton;
 	}
 
-	public void updateHeader(String homeTeamName, String awayTeamName, int homeScore, int awayScore,
+	public void updateHeader(Team homeTeam, Team awayTeam, int homeScore, int awayScore,
 			String quarterLabelText, String quarterTimeText) {
-		homeLogoPanel.setTeamName(homeTeamName);
-		awayLogoPanel.setTeamName(awayTeamName);
-		homeNameLabel.setText(TeamDisplayUtil.getShortName(homeTeamName));
-		awayNameLabel.setText(TeamDisplayUtil.getShortName(awayTeamName));
+		homeLogoPanel.setTeamName(homeTeam.getName());
+		awayLogoPanel.setTeamName(awayTeam.getName());
+		homeNameLabel.setText(TeamDisplayUtil.getShortName(homeTeam));
+		awayNameLabel.setText(TeamDisplayUtil.getShortName(awayTeam));
 		homeScoreLabel.setText(String.valueOf(homeScore));
 		awayScoreLabel.setText(String.valueOf(awayScore));
 		quarterLabel.setText(quarterLabelText);

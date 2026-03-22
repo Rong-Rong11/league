@@ -1,26 +1,6 @@
 package gui.panel.common;
 
-import data.player.Asset;
-import data.player.Player;
-
 public class PlayerDisplayUtil {
-
-	public static Asset getDisplayedAssets(Player player, boolean currentSeasonSelected) {
-		if (!currentSeasonSelected) {
-			return player.getPreSeasonAssets();
-		}
-		if (player.getCurrentSeasonAssets().getMinutesPlayedPerMatch() > 0) {
-			return player.getCurrentSeasonAssets();
-		}
-		return player.getPreSeasonAssets();
-	}
-
-	public static double getDisplayedNote(Player player) {
-		if (player.getCurrentSeasonAssets().getNote() > 0) {
-			return player.getCurrentSeasonAssets().getNote();
-		}
-		return player.getPreSeasonAssets().getNote();
-	}
 
 	public static String formatOneDecimal(double value) {
 		double roundedValue = Math.round(value * 10.0) / 10.0;
