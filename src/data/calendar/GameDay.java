@@ -3,9 +3,10 @@
  */
 package data.calendar;
 
-import data.sport.setup.Game;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import data.sport.setup.Game;
 
 public class GameDay {
     private ArrayList<Game> games = new ArrayList();
@@ -49,5 +50,9 @@ public class GameDay {
 
     public void setDisplayed(boolean bl) {
         this.isDisplayed = bl;
+    }
+
+    public void addGame(Game game) {
+        games.add(game);
     }
 }

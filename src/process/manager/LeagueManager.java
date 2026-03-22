@@ -11,8 +11,9 @@ import data.team.Team;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import process.builder.CalendarBuilder;
+import process.builder.FinanceBuilder;
 import process.builder.LeagueBuilder;
-import process.builder.SimulationBuilder;
+import process.builder.PlayoffBuilder;
 import process.manager.leaguetools.TeamPopularityUpdater;
 import process.manager.submanager.FinanceManager;
 import process.manager.submanager.GameManager;
@@ -26,11 +27,12 @@ public class LeagueManager {
     private League league;
     private LeagueBuilder leagueBuilder = new LeagueBuilder();
     private CalendarBuilder calendarBuilder;
-    private SimulationBuilder simulationBuilder = new SimulationBuilder();
+    private FinanceBuilder simulationBuilder = new FinanceBuilder();
     private GameManager gameManager = null;
     private TradeManager tradeManager;
     private FinanceManager financeManager;
     private TeamPopularityUpdater teamPopularityUpdater = new TeamPopularityUpdater();
+    private PlayoffBuilder playoffBuilder;
 
     public LeagueManager() {
         league = leagueBuilder.build();
@@ -41,6 +43,7 @@ public class LeagueManager {
         gameManager = new GameManager(league, financeManager);
         LeagueFinancialRules leagueFinancialRules = league.getLeagueFinance().getLeagueFinancialRules();
         tradeManager = new TradeManager(leagueFinancialRules.getSalaryCap(), leagueFinancialRules.getLuxuryTaxLine());
+        playoffBuilder = new PlayoffBuilder(league);
 
     }
 
@@ -50,6 +53,10 @@ public class LeagueManager {
         teamPopularityUpdater.updateBeforeSeason();
         buildRegularSeasonCalendar();
         league.getLeagueFinance().getBudget().getInitialAmount();
+    }
+
+    public void startPlayoff() {
+        playoffBuilder.build();
     }
 
     private void simulatePreSeasonTrade() {

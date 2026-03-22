@@ -1,5 +1,9 @@
 package process.utilitary;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
+
 import config.CalendarConfiguration;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
@@ -8,9 +12,6 @@ import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Month;
 import process.visitor.marketsize.CalculateGamePopularityVisitor;
 
 public class CalendarUtilitary {
@@ -125,4 +126,5 @@ public class CalendarUtilitary {
     public static boolean isImportantMonth(int month) {
         return month == 1 || month == 6 || month == 10;
     }
+
 }

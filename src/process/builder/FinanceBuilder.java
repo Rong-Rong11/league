@@ -17,7 +17,7 @@ import process.visitor.marketsize.CalculateInitialTeamBudgetVisitor;
 import process.visitor.marketsize.CreateMediaMarketVisitor;
 import process.visitor.marketsize.GenerateStadiumCapacityVisitor;
 
-public class SimulationBuilder {
+public class FinanceBuilder {
     private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 
     public void build() {
