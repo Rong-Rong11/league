@@ -4,15 +4,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import data.player.Player;
 import data.team.Team;
-import gui.panel.common.PlayerDisplayUtil;
+import process.utilitary.PlayerStatUtil;
 
 public class MapTeamPlayersPanel extends JPanel {
 	private JLabel[] playerLabels;
@@ -49,20 +47,16 @@ public class MapTeamPlayersPanel extends JPanel {
 		}
 
 		ArrayList<Player> players = new ArrayList<Player>(team.getPlayers().values());
-		Collections.sort(players, new Comparator<Player>() {
-			@Override
-			public int compare(Player a, Player b) {
-				return Double.compare(PlayerDisplayUtil.getDisplayedNote(b), PlayerDisplayUtil.getDisplayedNote(a));
-			}
-		});
+		PlayerStatUtil.sortPlayersByDisplayedNote(players);
 
 		for (int i = 0; i < playerLabels.length; i++) {
 			if (i < players.size()) {
 				Player player = players.get(i);
-				playerLabels[i].setText((int) Math.round(PlayerDisplayUtil.getDisplayedNote(player)) + "  " + player.getName());
+				playerLabels[i].setText((int) Math.round(PlayerStatUtil.getDisplayedNote(player)) + "  " + player.getName());
 			} else {
 				playerLabels[i].setText("-");
 			}
 		}
 	}
+
 }

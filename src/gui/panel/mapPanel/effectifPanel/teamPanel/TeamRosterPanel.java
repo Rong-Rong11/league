@@ -2,15 +2,13 @@ package gui.panel.mapPanel.effectifPanel.teamPanel;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import javax.swing.JPanel;
 
 import data.player.Player;
 import data.team.Team;
-import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.mapPanel.effectifPanel.playerPanel.PlayerRosterEntryPanel;
+import process.utilitary.PlayerStatUtil;
 
 public class TeamRosterPanel extends JPanel {
 
@@ -28,12 +26,7 @@ public class TeamRosterPanel extends JPanel {
 		}
 
 		ArrayList<Player> players = new ArrayList<Player>(team.getPlayers().values());
-		Collections.sort(players, new Comparator<Player>() {
-			@Override
-			public int compare(Player a, Player b) {
-				return Double.compare(PlayerDisplayUtil.getDisplayedNote(b), PlayerDisplayUtil.getDisplayedNote(a));
-			}
-		});
+		PlayerStatUtil.sortPlayersByDisplayedNote(players);
 
 		int rows = 8;
 		int columns = (int) Math.ceil(players.size() / 8.0);
@@ -51,4 +44,5 @@ public class TeamRosterPanel extends JPanel {
 		revalidate();
 		repaint();
 	}
+
 }
