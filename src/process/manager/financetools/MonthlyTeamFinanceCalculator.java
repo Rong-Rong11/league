@@ -65,7 +65,9 @@ public class MonthlyTeamFinanceCalculator {
                 FinanceUtilitary.addExpense(budget,
                                 new Expense(FinanceConfiguration.EXPENSE_TYPE_PLAYER_SALARY, monthlyPayroll), month);
                 FinanceUtilitary.addExpense(budget,
-                                new Expense(FinanceConfiguration.EXPENSE_TYPE_STADIUM_COST, stadiumMaintenance), month);
+                                new Expense(FinanceConfiguration.EXPENSE_TYPE_MAINTENACE_STADIUM_COST,
+                                                stadiumMaintenance),
+                                month);
                 FinanceUtilitary.addExpense(budget,
                                 new Expense(FinanceConfiguration.EXPENSE_TYPE_STAFF_COST, staffCost),
                                 month);

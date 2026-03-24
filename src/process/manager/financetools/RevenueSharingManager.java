@@ -125,7 +125,7 @@ public class RevenueSharingManager {
 
                 FinanceUtilitary.addIncome(
                         budget,
-                        new Income(FinanceConfiguration.INCOME_TYPE_REVENUE_SHARING_WEIGHTED_SHARE, share),
+                        new Income(FinanceConfiguration.INCOME_TYPE_EQUAL_SHARE, share),
                         month);
 
                 FinanceUtilitary.updateBudget(budget);

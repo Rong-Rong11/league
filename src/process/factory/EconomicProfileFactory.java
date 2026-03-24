@@ -11,18 +11,18 @@ public class EconomicProfileFactory {
                   FinancialPolicy financialProfil,
                   TeamTransferStrategy transferStrategy) {
 
-            double historicalPrestige = clamp(0.2 + teamPopularity / 100.0 * 0.5);
+            double historicalPrestige = interval(0.2 + teamPopularity / 100.0 * 0.5);
 
-            double fanLoyalty = clamp(
+            double fanLoyalty = interval(
                         0.3 + teamPopularity / 100.0 * 0.3 + historicalPrestige * 0.2);
 
-            double priceElasticity = clamp(
+            double priceElasticity = interval(
                         0.8 - fanLoyalty * 0.3 - historicalPrestige * 0.2);
 
-            double commercialAggressiveness = clamp(
+            double commercialAggressiveness = interval(
                         0.4 + mediaMarket.getBusinessOpportunityModifier());
 
-            double ownerDeficitTolerance = clamp(
+            double ownerDeficitTolerance = interval(
                         0.4 + getFinancialModifier(financialProfil));
 
             economicProfil.setFanLoyalty(fanLoyalty);
@@ -35,7 +35,7 @@ public class EconomicProfileFactory {
             return 0.2; // simple version (à améliorer plus tard)
       }
 
-      private static double clamp(double value) {
+      private static double interval(double value) {
             return Math.max(0.0, Math.min(1.0, value));
       }
 }

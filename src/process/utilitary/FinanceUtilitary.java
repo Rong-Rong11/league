@@ -1,8 +1,5 @@
 package process.utilitary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import config.FinanceConfiguration;
 import data.finance.GameStat;
 import data.finance.TeamGameFinance;
@@ -12,6 +9,8 @@ import data.finance.budget.Income;
 import data.player.Player;
 import data.sport.setup.Game;
 import data.team.Team;
+import java.util.ArrayList;
+import java.util.HashMap;
 import process.repositery.TeamRepositery;
 
 //les sommes en millions
@@ -129,7 +128,8 @@ public class FinanceUtilitary {
 		addIncome(homeTeamBudget, new Income(FinanceConfiguration.INCOME_TYPE_LOCAL_TV, homeFinance.getTvRevenue()),
 				month);
 		addIncome(homeTeamBudget,
-				new Income(FinanceConfiguration.INCOME_TYPE_LOCAL_MERCHANDISING, homeFinance.getMerchRevenue()), month);
+				new Income(FinanceConfiguration.INCOME_TYPE_GAME_LOCAL_MERCHANDISING, homeFinance.getMerchRevenue()),
+				month);
 
 		addIncome(awayTeamBudget, new Income(FinanceConfiguration.INCOME_TYPE_LOCAL_TV, awayFinance.getTvRevenue()),
 				month);
