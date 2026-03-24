@@ -15,11 +15,10 @@ import data.team.Team;
 import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import process.utilitary.FinanceUtilitary;
-import process.utilitary.TeamStatUtil;
 
 public class MapTeamSummaryPanel extends JPanel {
 	private JLabel teamNameLabel;
-	private JLabel payrollLabel;
+	private JLabel budgetLabel;
 	private JLabel capacityLabel;
 	private JLabel averageNoteLabel;
 	private JButton openRosterButton;
@@ -28,12 +27,12 @@ public class MapTeamSummaryPanel extends JPanel {
 	public MapTeamSummaryPanel() {
 		create();
 		organize();
-		updateTeam(null);
+		updateTeam(null, true);
 	}
 
 	private void create() {
 		teamNameLabel = new JLabel();
-		payrollLabel = new JLabel();
+		budgetLabel = new JLabel();
 		capacityLabel = new JLabel();
 		averageNoteLabel = new JLabel();
 		openRosterButton = new JButton("Voir l'effectif complet");
@@ -56,7 +55,7 @@ public class MapTeamSummaryPanel extends JPanel {
 		JPanel infoPanel = new JPanel();
 		infoPanel.setOpaque(false);
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-		infoPanel.add(buildInfoLabel("Budget annuel", payrollLabel));
+		infoPanel.add(buildInfoLabel("Budget annuel", budgetLabel));
 		infoPanel.add(Box.createVerticalStrut(8));
 		infoPanel.add(buildInfoLabel("Capacité salle", capacityLabel));
 		infoPanel.add(Box.createVerticalStrut(8));
@@ -85,31 +84,44 @@ public class MapTeamSummaryPanel extends JPanel {
 		return row;
 	}
 
-	public void updateTeam(Team team) {
+	public void updateTeam(Team team, boolean currentSeasonSelected) {
 		if (team == null) {
 			showEmptyState();
 			return;
 		}
-		showTeamState(team);
+		showTeamState(team, currentSeasonSelected);
 	}
 
 	private void showEmptyState() {
 		teamLogoPanel.setTeamName("");
 		teamNameLabel.setText("Aucune équipe");
-		payrollLabel.setText("-");
+		budgetLabel.setText("-");
 		capacityLabel.setText("-");
 		averageNoteLabel.setText("-");
 		openRosterButton.setEnabled(false);
+		revalidate();
+		repaint();
 	}
 
-	private void showTeamState(Team team) {
+	private void showTeamState(Team team, boolean currentSeasonSelected) {
 		teamLogoPanel.setTeamName(team.getName());
 		teamNameLabel.setText(team.getName());
-		FinanceUtilitary.updateTeamPayroll(team);
-		payrollLabel.setText(PlayerDisplayUtil.formatSalary(team.getTeamFinance().getCurrentPayroll()));
+
+		if (currentSeasonSelected) {
+			FinanceUtilitary.updateTeamPayroll(team);
+			budgetLabel.setText(PlayerDisplayUtil.formatSalary(team.getTeamFinance().getBudget().getRemainingAmount()));
+			averageNoteLabel.setText(PlayerDisplayUtil.formatOneDecimal(team.getCurrentPopularity()) + "/100");
+		} else {
+			budgetLabel.setText(PlayerDisplayUtil.formatSalary(team.getTeamFinance().getBudget().getInitialAmount()));
+			averageNoteLabel.setText(PlayerDisplayUtil.formatOneDecimal(
+					team.getFormerPopularity())
+					+ "/100");
+		}
+
 		capacityLabel.setText(String.valueOf(team.getStadium().getCapacity()));
-		averageNoteLabel.setText(PlayerDisplayUtil.formatOneDecimal(TeamStatUtil.getAverageNote(team)) + "/100");
 		openRosterButton.setEnabled(true);
+		revalidate();
+		repaint();
 	}
 
 	public JButton getOpenRosterButton() {

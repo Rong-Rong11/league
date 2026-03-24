@@ -1,5 +1,6 @@
 package gui.panel.common;
 
+<<<<<<<< HEAD:src/gui/panel/common/TeamMapPanel.java
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -200,4 +201,9 @@ public class TeamMapPanel extends JPanel {
 		public void mouseExited(MouseEvent event) {
 		}
 	}
+========
+import gui.panel.common.TeamMapPanel;
+
+public class MapPanel extends TeamMapPanel {
+>>>>>>>> db15de5 (séparer former et current pour les équipes, réglages affichage des roster pour afficher équipe et étalement calendrier jysqu'à avril):src/gui/panel/mapPanel/MapPanel.java
 }

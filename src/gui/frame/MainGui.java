@@ -1,5 +1,14 @@
 package gui.frame;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 import gui.dashboard.CalendarDashboard;
 import gui.dashboard.FinanceDashboard;
 import gui.dashboard.LiveMatchDashboard;
@@ -9,13 +18,6 @@ import gui.dashboard.OpeningDashboard;
 import gui.dashboard.RankingDashboard;
 import gui.dashboard.RosterDashboard;
 import gui.layout.SidebarPanel;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import process.manager.SimulationManager;
 
 public class MainGui extends JFrame {
@@ -79,13 +81,14 @@ public class MainGui extends JFrame {
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		sidebar = new SidebarPanel();
 
-		matchDashboard = new MatchDashboard(simulationManager.getLeagueManager());
+		matchDashboard = new MatchDashboard(simulationManager);
 		liveMatchDashboard = new LiveMatchDashboard();
-		mapDashboard = new MapDashboard(simulationManager.getLeagueManager());
+		mapDashboard = new MapDashboard(simulationManager);
 		rosterDashboard = new RosterDashboard();
 		dashboardPanel.add(matchDashboard, "match");
 		dashboardPanel.add(liveMatchDashboard, "liveMatch");
-		calendarDashboard = new CalendarDashboard(simulationManager, matchDashboard, new ShowMatchDashboardAction());
+		calendarDashboard = new CalendarDashboard(simulationManager, matchDashboard, new ShowMatchDashboardAction(),
+				rosterDashboard, mapDashboard);
 		dashboardPanel.add(calendarDashboard, "calendar");
 		dashboardPanel.add(new RankingDashboard(), "ranking");
 		dashboardPanel.add(new FinanceDashboard(), "finance");
@@ -179,7 +182,7 @@ public class MainGui extends JFrame {
 	private class ShowLiveMatchDashboardAction implements Runnable {
 		@Override
 		public void run() {
-			liveMatchDashboard.setSimulationContext(matchDashboard.getLeagueManager(), matchDashboard.getSelectedDate());
+			liveMatchDashboard.setSimulationContext(simulationManager, matchDashboard.getSelectedDate());
 			liveMatchDashboard.setGame(matchDashboard.getSelectedGame());
 			dashboardLayout.show(dashboardPanel, "liveMatch");
 		}

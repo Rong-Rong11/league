@@ -1,13 +1,15 @@
 package gui.panel.mapPanel.effectifPanel;
 
-import data.player.Player;
-import data.team.Team;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import data.player.Player;
+import data.team.Team;
 import process.utilitary.PlayerStatUtil;
 
 public class MapTeamPlayersPanel extends JPanel {
@@ -16,7 +18,7 @@ public class MapTeamPlayersPanel extends JPanel {
 	public MapTeamPlayersPanel() {
 		create();
 		organize();
-		updateTeam(null);
+		updateTeam(null, true);
 	}
 
 	private void create() {
@@ -36,15 +38,19 @@ public class MapTeamPlayersPanel extends JPanel {
 		}
 	}
 
-	public void updateTeam(Team team) {
+	public void updateTeam(Team team, boolean currentSeasonSelected) {
 		if (team == null) {
 			for (int i = 0; i < playerLabels.length; i++) {
 				playerLabels[i].setText("-");
 			}
 			return;
 		}
-
-		ArrayList<Player> players = new ArrayList<Player>(team.getCurrentPlayers().values());
+		ArrayList<Player> players;
+		if (currentSeasonSelected) {
+			players = new ArrayList<Player>(team.getCurrentPlayers().values());
+		} else {
+			players = new ArrayList<Player>(team.getFormerPlayers().values());
+		}
 		PlayerStatUtil.sortPlayersByDisplayedNote(players);
 
 		for (int i = 0; i < playerLabels.length; i++) {
