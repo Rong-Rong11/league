@@ -1,18 +1,16 @@
 package gui.panel.mapPanel.effectifPanel.teamPanel;
 
+import data.team.Team;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import data.team.Team;
-import gui.panel.common.TeamDisplayUtil;
+import process.utilitary.TeamDisplayUtil;
 import process.utilitary.TeamStatUtil;
 
 public class TeamLogoPanel extends JPanel {

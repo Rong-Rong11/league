@@ -1,5 +1,4 @@
 package gui.dashboard;
-import config.CalendarConfiguration;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -13,6 +12,7 @@ import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import gui.panel.calendarPanel.HeaderPanel;
 import gui.panel.calendarPanel.MonthViewPanel;
@@ -36,11 +36,16 @@ public class CalendarDashboard extends JPanel {
 	private LocalDate currentCalendarDate;
 	private MatchDashboard matchDashboard;
 	private Runnable showMatchDashboardAction;
+	private RosterDashboard rosterDashboard;
+	private MapDashboard mapDashboard;
 
-	public CalendarDashboard(SimulationManager simulationManager, MatchDashboard matchDashboard, Runnable showMatchDashboardAction) {
+	public CalendarDashboard(SimulationManager simulationManager, MatchDashboard matchDashboard,
+			Runnable showMatchDashboardAction, RosterDashboard rosterDashboard, MapDashboard mapDashboard) {
 		this.simulationManager = simulationManager;
 		this.matchDashboard = matchDashboard;
 		this.showMatchDashboardAction = showMatchDashboardAction;
+		this.rosterDashboard = rosterDashboard;
+		this.mapDashboard = mapDashboard;
 		create();
 		organize();
 		actions();
@@ -82,7 +87,7 @@ public class CalendarDashboard extends JPanel {
 
 	public void startSeason() {
 		simulationManager.randomFinance();
-		simulationManager.getLeagueManager().startSeason();
+		simulationManager.startSeason();
 		weekViewPanel.loadSeasonState();
 		currentCalendarDate = weekViewPanel.getCurrentDate();
 		updateDisplayedMonth(currentCalendarDate);
@@ -132,8 +137,8 @@ public class CalendarDashboard extends JPanel {
 			return;
 		}
 
-		HashMap<LocalDate, GameDay> seasonCalendar =
-				new HashMap<LocalDate, GameDay>(simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar());
+		HashMap<LocalDate, GameDay> seasonCalendar = new HashMap<LocalDate, GameDay>(
+				simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar());
 		int totalGameDays = seasonCalendar.size();
 		int displayedGameDays = 0;
 		for (GameDay gameDay : seasonCalendar.values()) {
@@ -151,8 +156,8 @@ public class CalendarDashboard extends JPanel {
 			return;
 		}
 
-		HashMap<LocalDate, GameDay> seasonCalendar =
-				new HashMap<LocalDate, GameDay>(simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar());
+		HashMap<LocalDate, GameDay> seasonCalendar = new HashMap<LocalDate, GameDay>(
+				simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar());
 		monthViewPanel.showMonth(displayedMonth, currentDate, seasonCalendar);
 	}
 
@@ -195,9 +200,11 @@ public class CalendarDashboard extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			weekViewPanel.advanceDay();
+			rosterDashboard.refreshSelectedTeam();
 			currentCalendarDate = weekViewPanel.getCurrentDate();
 			updateDisplayedMonth(currentCalendarDate);
 			updateDashboardState();
+			mapDashboard.refreshSelectedTeam();
 		}
 	}
 
@@ -205,11 +212,13 @@ public class CalendarDashboard extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			weekViewPanel.advanceWeek();
+			rosterDashboard.refreshSelectedTeam();
 			if (weekViewPanel.getCurrentDate() != null) {
 				currentCalendarDate = weekViewPanel.getCurrentDate();
 			}
 			updateDisplayedMonth(currentCalendarDate);
 			updateDashboardState();
+			mapDashboard.refreshSelectedTeam();
 		}
 	}
 
@@ -217,9 +226,11 @@ public class CalendarDashboard extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			weekViewPanel.advanceSeason();
+			rosterDashboard.refreshSelectedTeam();
 			currentCalendarDate = weekViewPanel.getSimulationDate();
 			updateDisplayedMonth(currentCalendarDate);
 			updateDashboardState();
+			mapDashboard.refreshSelectedTeam();
 		}
 	}
 

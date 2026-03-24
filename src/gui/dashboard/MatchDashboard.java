@@ -1,5 +1,4 @@
 package gui.dashboard;
-import config.CalendarConfiguration;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -7,9 +6,9 @@ import java.awt.Dimension;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.finance.GameStat;
 import data.sport.setup.Game;
@@ -20,7 +19,7 @@ import gui.panel.matchPanel.MatchDayListPanel.MatchSelectionListener;
 import gui.panel.matchPanel.MatchDetailPanel;
 import gui.panel.matchPanel.MatchFinancePanel;
 import gui.panel.matchPanel.MatchHeaderPanel;
-import process.manager.LeagueManager;
+import process.manager.SimulationManager;
 
 public class MatchDashboard extends JPanel {
 	private static final int DASHBOARD_SPACING = 16;
@@ -28,7 +27,7 @@ public class MatchDashboard extends JPanel {
 	private static final int RIGHT_COLUMN_WIDTH = 300;
 	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
 
-	private LeagueManager leagueManager;
+	private SimulationManager simulationManager;
 	private LocalDate selectedDate;
 	private Game selectedGame;
 	private GameDay selectedGameDay;
@@ -44,8 +43,8 @@ public class MatchDashboard extends JPanel {
 		this(null);
 	}
 
-	public MatchDashboard(LeagueManager leagueManager) {
-		this.leagueManager = leagueManager == null ? new LeagueManager() : leagueManager;
+	public MatchDashboard(SimulationManager simulationManager) {
+		this.simulationManager = simulationManager;
 		selectedDate = CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE;
 		create();
 		organize();
@@ -106,10 +105,6 @@ public class MatchDashboard extends JPanel {
 		matchDayListPanel.setMatchSelectionListener(new DashboardMatchSelectionListener());
 	}
 
-	public LeagueManager getLeagueManager() {
-		return leagueManager;
-	}
-
 	public LocalDate getSelectedDate() {
 		return selectedDate;
 	}
@@ -124,7 +119,7 @@ public class MatchDashboard extends JPanel {
 
 	public void loadGamesOfDay(LocalDate date) {
 		selectedDate = date;
-		GameDay gameDay = leagueManager.getLeague().getReagularSeason().getCalendar().getCalendar().get(date);
+		GameDay gameDay = simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar().get(date);
 		showGameDay(gameDay, date);
 	}
 
@@ -160,7 +155,7 @@ public class MatchDashboard extends JPanel {
 			return;
 		}
 
-		GameStat gameStat = leagueManager.getFinanceManager().getGameStat(game);
+		GameStat gameStat = simulationManager.getLeagueManager().getFinanceManager().getGameStat(game);
 		matchDetailPanel.showGame(game, buildDayNumberText(), gameStat);
 		matchFinancePanel.showGameFinance(game, gameStat);
 	}
