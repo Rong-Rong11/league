@@ -1,8 +1,5 @@
 package process.utilitary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import config.FinanceConfiguration;
 import data.finance.GameStat;
 import data.finance.TeamGameFinance;
@@ -12,6 +9,8 @@ import data.finance.budget.Income;
 import data.player.Player;
 import data.sport.setup.Game;
 import data.team.Team;
+import java.util.ArrayList;
+import java.util.HashMap;
 import process.repositery.TeamRepositery;
 
 //les sommes en millions
