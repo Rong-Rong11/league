@@ -25,8 +25,9 @@ public class TeamPopularityUpdater {
       }
    }
 
+   // à varier car sinon on tous la même note
    private void updateTeamBeforeSeason(Team team) {
-      double currentPopularity = team.getPopularity();
+      double currentPopularity = team.getFormerPopularity();
       double variation = 0.0;
 
       variation += calculateCommonPopularityBase(team);
@@ -34,11 +35,12 @@ public class TeamPopularityUpdater {
       variation += calculateRandomVariation(0.8);
 
       double newPopularity = clampPopularity(currentPopularity + variation);
-      team.setPopularity(newPopularity);
+      team.setFormerPopularity(newPopularity);
+      team.setCurrentPopularity(newPopularity);
    }
 
    private void updateTeamMonthlyPopularity(Team team) {
-      double currentPopularity = team.getPopularity();
+      double currentPopularity = team.getCurrentPopularity();
       double variation = 0.0;
 
       variation += calculateCommonPopularityBase(team);
@@ -47,7 +49,7 @@ public class TeamPopularityUpdater {
 
       double newPopularity = currentPopularity + (variation * 0.4);
       newPopularity = clampPopularity(newPopularity);
-      team.setPopularity(newPopularity);
+      team.setCurrentPopularity(newPopularity);
    }
 
    private double calculateCommonPopularityBase(Team team) {
@@ -85,7 +87,7 @@ public class TeamPopularityUpdater {
       } else if (strategy.isRebuild()) {
          variation -= 1.5;
       }
-      double payroll = team.getTeamFinance().getPayroll();
+      double payroll = team.getTeamFinance().getCurrentPayroll();
       variation += (payroll / 200.0);
       variation += mediaMarket.getPrestigeModifier() * 1.2;
       variation += (Math.random() * 1.0) - 0.5;

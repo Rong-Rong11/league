@@ -58,7 +58,7 @@ public class CalendarUtilitary {
 
         Team home = game.getGameContext().getHomeTeam();
         Team away = game.getGameContext().getAwayTeam();
-        score += (home.getPopularity() + away.getPopularity()) * 0.2;
+        score += (home.getCurrentPopularity() + away.getCurrentPopularity()) * 0.2;
         if (game.getGameContext().isRivalry()) {
             score += 40.0;
         }

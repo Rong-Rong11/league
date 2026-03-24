@@ -3,7 +3,6 @@ package gui.dashboard;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -17,8 +16,10 @@ import gui.panel.common.SectionTitle;
 import gui.panel.common.TeamMapPanel;
 import gui.panel.mapPanel.effectifPanel.MapTeamPlayersPanel;
 import gui.panel.mapPanel.effectifPanel.MapTeamSummaryPanel;
-import process.manager.LeagueManager;
+import process.manager.SimulationManager;
+import process.repositery.TeamRepositery;
 import process.utilitary.TeamStatUtil;
+
 /**
  * Dashboard dédié à la page Carte.
  */
@@ -29,20 +30,18 @@ public class MapDashboard extends JPanel {
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
-	private LeagueManager leagueManager;
+	private SimulationManager simulationManager;
 	private ArrayList<Team> teams;
 	private Team selectedTeam;
 	private TeamMapPanel mapPanel;
 	private MapTeamSummaryPanel teamSummaryPanel;
 	private MapTeamPlayersPanel teamPlayersPanel;
 	private Runnable openRosterAction;
+	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+	private boolean currentSeasonSelected = true;
 
-	public MapDashboard() {
-		this(new LeagueManager());
-	}
-
-	public MapDashboard(LeagueManager leagueManager) {
-		this.leagueManager = leagueManager;
+	public MapDashboard(SimulationManager simulationManager) {
+		this.simulationManager = simulationManager;
 		create();
 		organize();
 		actions();
@@ -50,7 +49,7 @@ public class MapDashboard extends JPanel {
 	}
 
 	private void create() {
-		teams = new ArrayList<Team>(leagueManager.getLeague().getAllTeam());
+		teams = new ArrayList<Team>(teamRepositery.getAllTeams());
 		mapPanel = new TeamMapPanel();
 		teamSummaryPanel = new MapTeamSummaryPanel();
 		teamPlayersPanel = new MapTeamPlayersPanel();
@@ -70,7 +69,7 @@ public class MapDashboard extends JPanel {
 		return DashboardPanelUtil.createContentPanel(IDEAL_DASHBOARD_SPACING);
 	}
 
-	private JPanel buildHeader(){
+	private JPanel buildHeader() {
 		JPanel header = new SectionTitle("Carte des equipes", "Distribution geographique");
 		header.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, IDEAL_DASHBOARD_HEADER_HEIGHT));
 		return header;
@@ -87,10 +86,11 @@ public class MapDashboard extends JPanel {
 		return new BuildBox("LOCALISATION DES FRANCHISES", "", mapPanel);
 	}
 
-	private JPanel buildRightColumn(){
+	private JPanel buildRightColumn() {
 		JPanel column = DashboardPanelUtil.createGridColumn(2, 1, 0, 12, IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH);
-		
-		column.add(new BuildBox("Détails de l'équipe", "Informations détaillées sur l'équipe sélectionnée", teamSummaryPanel));
+
+		column.add(
+				new BuildBox("Détails de l'équipe", "Informations détaillées sur l'équipe sélectionnée", teamSummaryPanel));
 		column.add(new BuildBox("Joueurs de l'équipe", "", teamPlayersPanel));
 
 		return column;
@@ -111,8 +111,8 @@ public class MapDashboard extends JPanel {
 
 	public void setSelectedTeam(Team selectedTeam) {
 		this.selectedTeam = selectedTeam;
-		teamSummaryPanel.updateTeam(selectedTeam);
-		teamPlayersPanel.updateTeam(selectedTeam);
+		teamSummaryPanel.updateTeam(selectedTeam, currentSeasonSelected);
+		teamPlayersPanel.updateTeam(selectedTeam, currentSeasonSelected);
 		if (selectedTeam == null) {
 			mapPanel.setSelectedTeamName(null);
 		} else {
@@ -126,6 +126,10 @@ public class MapDashboard extends JPanel {
 
 	public void setOpenRosterAction(Runnable openRosterAction) {
 		this.openRosterAction = openRosterAction;
+	}
+
+	public void refreshSelectedTeam() {
+		setSelectedTeam(selectedTeam);
 	}
 
 	private class OpenRosterListener implements ActionListener {

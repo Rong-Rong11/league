@@ -28,26 +28,33 @@ public class FinanceUtilitary {
 		}
 	}
 
-	public static void updateLeaguePayroll() {
+	public static void updateFormerLeaguePayroll() {
 		TeamRepositery teamRepositery = TeamRepositery.getInstance();
 		for (Team team : teamRepositery.getAllTeams()) {
-			updateTeamPayroll(team);
+			updateTeamFormerPayroll(team);
 		}
+	}
 
+	private static void updateTeamFormerPayroll(Team team) {
+		double payroll = 0;
+		for (Player player : team.getFormerPlayers().values()) {
+			payroll += player.getSalary();
+		}
+		team.getTeamFinance().setFormerPayroll(payroll);
 	}
 
 	public static void updateTeamPayroll(Team team) {
 		double payroll = 0;
-		for (Player player : team.getPlayers().values()) {
+		for (Player player : team.getCurrentPlayers().values()) {
 			payroll += player.getSalary();
 		}
-		team.getTeamFinance().setPayroll(payroll);
+		team.getTeamFinance().setCurrentPayroll(payroll);
 	}
 
 	public static double getAverageSalary(Team team) {
 		int numberOfPlayers = 0;
 		double sumOfSalary = 0;
-		for (Player player : team.getPlayers().values()) {
+		for (Player player : team.getCurrentPlayers().values()) {
 			sumOfSalary += player.getSalary();
 			numberOfPlayers++;
 		}
@@ -184,7 +191,7 @@ public class FinanceUtilitary {
 	}
 
 	public static double calculateMerchandisingScore(Team team) {
-		double popularity = team.getPopularity() / 100.0;
+		double popularity = team.getCurrentPopularity() / 100.0;
 
 		double historicalPrestige = team.getTeamFinance()
 				.getEconomicProfil()

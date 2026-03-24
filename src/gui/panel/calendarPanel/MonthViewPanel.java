@@ -1,5 +1,8 @@
 package gui.panel.calendarPanel;
 
+import data.calendar.GameDay;
+import data.sport.setup.Game;
+import gui.dashboard.MatchDashboard;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
@@ -10,20 +13,15 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import data.calendar.GameDay;
-import data.sport.setup.Game;
-import gui.dashboard.MatchDashboard;
-import gui.panel.common.TeamDisplayUtil;
 import process.utilitary.CalendarUtilitary;
+import process.utilitary.TeamDisplayUtil;
 
 public class MonthViewPanel extends JPanel {
-	private static final String[] DAY_NAMES = {"LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM"};
+	private static final String[] DAY_NAMES = { "LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM" };
 	private static final Color CURRENT_DAY_COLOR = new Color(0x2F, 0x80, 0xA9);
 	private MatchDashboard matchDashboard;
 	private Runnable showMatchDashboardAction;

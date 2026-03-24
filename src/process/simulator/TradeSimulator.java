@@ -3,9 +3,10 @@
  */
 package process.simulator;
 
+import java.util.ArrayList;
+
 import data.player.Player;
 import data.team.Team;
-import java.util.ArrayList;
 import process.simulator.tradetools.TradeApplier;
 import process.simulator.tradetools.TradeImpact;
 import process.simulator.tradetools.TradeValidator;

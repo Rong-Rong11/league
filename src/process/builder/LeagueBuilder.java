@@ -75,7 +75,7 @@ public class LeagueBuilder {
 
 				}
 
-				teamRepositery.getTeam(teamName).addPlayer(player);
+				teamRepositery.getTeam(teamName).addFirstPlayer(player);
 				playerRepositery.register(player.getName(), player);
 				preSeasonAssetRepositery.register(player, player.getPreSeasonAssets());
 				currentSeasonAssetRepositery.register(player, player.getCurrentSeasonAssets());

@@ -1,5 +1,9 @@
 package process.manager;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.TreeMap;
+
 import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.league.League;
@@ -11,10 +15,6 @@ import data.team.finance.financialpolicy.ThriftyPolicy;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.TreeMap;
-import process.utilitary.CalendarUtilitary;
 
 //cerveau de la simulation 
 public class SimulationManager {
@@ -76,6 +76,13 @@ public class SimulationManager {
         verifyWeek();
     }
 
+    public void simulateRegularSeasonDay(LocalDate date) {
+        this.date = date;
+        leagueManager.simulateRegularSeasonDay(date, month);
+        verifyMonth();
+        verifyWeek();
+    }
+
     // si nouveau mois les évènements des nouveaux mois sont appliqués comme le
     // partage des revenus etc ...
     private void verifyMonth() {
@@ -100,14 +107,6 @@ public class SimulationManager {
         }
     }
 
-    // simuler jour par jour
-    private void simulateRegularSeasonDay() {
-        if (CalendarUtilitary.checkDate(date, CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE,
-                CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
-            leagueManager.simulateRegularSeasonDay(date, month);
-        }
-    }
-
     public void endRegulaSeason() {
         // leaguemanager.initializePlayoff()
     }
@@ -115,7 +114,7 @@ public class SimulationManager {
     // simuler la fin de saison régulière ou fin playoff
     public void simulateRegularSeason() {
         while (!date.equals(CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
-            simulateRegularSeasonDay();
+            simulateRegularSeasonDay(date);
             nextDay();
         }
         endRegulaSeason();

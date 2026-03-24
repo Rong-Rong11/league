@@ -38,7 +38,7 @@ public class LineupSelector {
 			matchProfileWeight = 0.8;
 		}
 
-		for (Player player : team.getPlayers().values()) {
+		for (Player player : team.getCurrentPlayers().values()) {
 			double economicFactor = player.getSalary() / averageSalary;
 			double playerAttackNote = PlayerUtilitary.getPlayerAttackNote(player);
 			double playerDefenseNote = PlayerUtilitary.getPlayerDefenseNote(player);
@@ -81,7 +81,7 @@ public class LineupSelector {
 			}
 		}
 		players.removeAll(playersToRemove);
-		for (Player player : team.getPlayers().values()) {
+		for (Player player : team.getCurrentPlayers().values()) {
 			if (!player.getHealthStatus().isInjured() && !players.contains(player)) {
 				players.add(player);
 			}

@@ -1,4 +1,4 @@
-package gui.panel.common;
+package process.utilitary;
 
 import data.team.Team;
 

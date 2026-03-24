@@ -17,9 +17,9 @@ public class TradeValidator {
     public boolean validateTrade(Team teamA, Team teamB, ArrayList<Player> teamAIncoming,
             ArrayList<Player> teamBIncoming, double salaryCap) {
         double teamBIncomingPayroll;
-        double teamAOutgoingPayroll = teamA.getTeamFinance().getPayroll();
+        double teamAOutgoingPayroll = teamA.getTeamFinance().getCurrentPayroll();
         double teamAIncomingPayroll = FinanceUtilitary.calculatePayroll(teamAIncoming);
-        double teamBOutgoingPayroll = teamB.getTeamFinance().getPayroll();
+        double teamBOutgoingPayroll = teamB.getTeamFinance().getCurrentPayroll();
         if (!TradeValidator.respectPayroll(teamB, teamBOutgoingPayroll,
                 teamBIncomingPayroll = FinanceUtilitary.calculatePayroll(teamBIncoming), salaryCap)) {
             return false;

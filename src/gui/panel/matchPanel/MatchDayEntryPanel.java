@@ -1,5 +1,6 @@
 package gui.panel.matchPanel;
 
+import data.sport.setup.Game;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,16 +9,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
-import data.sport.setup.Game;
-import gui.panel.common.TeamDisplayUtil;
+import process.utilitary.TeamDisplayUtil;
 
 public class MatchDayEntryPanel extends JPanel {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);

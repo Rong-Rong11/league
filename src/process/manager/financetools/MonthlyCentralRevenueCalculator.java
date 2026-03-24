@@ -1,10 +1,11 @@
 package process.manager.financetools;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.mediamarket.MediaMarket;
-import java.util.ArrayList;
-import java.util.List;
 import process.repositery.TeamRepositery;
 
 public class MonthlyCentralRevenueCalculator {
@@ -62,7 +63,7 @@ public class MonthlyCentralRevenueCalculator {
     private double calculateAveragePopularity(List<Team> teams) {
         double total = 0.0;
         for (Team team : teams) {
-            total += team.getPopularity();
+            total += team.getCurrentPopularity();
         }
         return total / teams.size();
     }

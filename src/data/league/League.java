@@ -68,11 +68,11 @@ public class League {
     }
 
     public void addPlayerWesternConference(Player player, String string, String string2) {
-        this.westernConference.getDivisions().get(string).getTeams().get(string2).addPlayer(player);
+        this.westernConference.getDivisions().get(string).getTeams().get(string2).addFirstPlayer(player);
     }
 
     public void addPlayerEasternConference(Player player, String string, String string2) {
-        this.easternConference.getDivisions().get(string).getTeams().get(string2).addPlayer(player);
+        this.easternConference.getDivisions().get(string).getTeams().get(string2).addFirstPlayer(player);
     }
 
     public ArrayList<Team> getAllTeam() {

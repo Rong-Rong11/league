@@ -27,7 +27,7 @@ public class SeasonPlayerToTradeVisitor implements TeamTransferVisitor<Player> {
 
     private TreeMap<Double, Player> getPlayersSortedByOverall() {
         TreeMap<Double, Player> sorted = new TreeMap<>();
-        for (Player p : team.getPlayers().values()) {
+        for (Player p : team.getCurrentPlayers().values()) {
             sorted.put(PlayerUtilitary.getPlayerOverAllNote(p), p);
         }
         return sorted;
@@ -197,7 +197,7 @@ public class SeasonPlayerToTradeVisitor implements TeamTransferVisitor<Player> {
     public Player visit(SalaryDump salaryDump) {
         Player candidate = null;
         double maxSalary = 0;
-        for (Player player : team.getPlayers().values()) {
+        for (Player player : team.getCurrentPlayers().values()) {
             if (player.isTransfered()) {
                 continue;
             }

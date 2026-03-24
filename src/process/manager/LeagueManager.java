@@ -36,7 +36,7 @@ public class LeagueManager {
 
     public LeagueManager() {
         league = leagueBuilder.build();
-        FinanceUtilitary.updateLeaguePayroll();
+        FinanceUtilitary.updateFormerLeaguePayroll();
 
         calendarBuilder = new CalendarBuilder(league);
         financeManager = new FinanceManager(league);
@@ -76,6 +76,7 @@ public class LeagueManager {
     }
 
     public void newMonth(int month) {
+        System.out.println("month = " + month);
         teamPopularityUpdater.updateMonthlyPopularity();
         financeManager.applyMonthlyFinance(month);
     }
@@ -114,10 +115,6 @@ public class LeagueManager {
 
     public FinanceManager getFinanceManager() {
         return financeManager;
-    }
-
-    public boolean simulateGameDay(LocalDate date, int month) {
-        return gameManager.simulateGameDay(date, month);
     }
 
     public boolean simulateGame(Game game, LocalDate date) {

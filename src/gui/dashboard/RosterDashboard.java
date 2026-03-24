@@ -13,13 +13,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import data.team.Team;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardCard;
 import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamRosterPanel;
-import process.utilitary.FinanceUtilitary;
 import process.utilitary.TeamStatUtil;
 
 public class RosterDashboard extends JPanel {
@@ -125,7 +125,8 @@ public class RosterDashboard extends JPanel {
 		JPanel centerContentPanel = new JPanel(new BorderLayout(0, DASHBOARD_SPACING));
 		centerContentPanel.setOpaque(false);
 		centerContentPanel.add(buildSummaryPanel(), BorderLayout.NORTH);
-		centerContentPanel.add(new BuildBox("LISTE DES JOUEURS", "Effectif complet", buildRosterContentPanel()), BorderLayout.CENTER);
+		centerContentPanel.add(new BuildBox("LISTE DES JOUEURS", "Effectif complet", buildRosterContentPanel()),
+				BorderLayout.CENTER);
 		return centerContentPanel;
 	}
 
@@ -213,13 +214,24 @@ public class RosterDashboard extends JPanel {
 		teamLogoPanel.setTeamName(selectedTeam.getName());
 		teamNameLabel.setText(selectedTeam.getName());
 		subtitleLabel.setText("Effectif complet");
-		playersCountValueLabel.setText(String.valueOf(selectedTeam.getPlayers().size()));
-		FinanceUtilitary.updateTeamPayroll(selectedTeam);
-		payrollValueLabel.setText(PlayerDisplayUtil.formatSalary(selectedTeam.getTeamFinance().getPayroll()));
-		averageNoteValueLabel
-				.setText(PlayerDisplayUtil.formatOneDecimal(TeamStatUtil.getAverageNote(selectedTeam)) + "/100");
+
+		if (currentSeasonSelected) {
+			playersCountValueLabel.setText(String.valueOf(selectedTeam.getCurrentPlayers().size()));
+			payrollValueLabel.setText(PlayerDisplayUtil.formatSalary(selectedTeam.getTeamFinance().getCurrentPayroll()));
+			averageNoteValueLabel
+					.setText(PlayerDisplayUtil.formatOneDecimal(selectedTeam.getCurrentPopularity()) + "/100");
+		} else {
+			playersCountValueLabel.setText(String.valueOf(selectedTeam.getFormerPlayers().size()));
+			payrollValueLabel.setText(PlayerDisplayUtil.formatSalary(selectedTeam.getTeamFinance().getFormerPayroll()));
+			averageNoteValueLabel
+					.setText(PlayerDisplayUtil.formatOneDecimal(
+							selectedTeam.getFormerPopularity())
+							+ "/100");
+		}
+
 		averagePointsValueLabel.setText(
 				PlayerDisplayUtil.formatOneDecimal(TeamStatUtil.getAveragePoints(selectedTeam, currentSeasonSelected)));
+
 		rosterPanel.updateTeam(selectedTeam, currentSeasonSelected);
 	}
 
@@ -271,4 +283,9 @@ public class RosterDashboard extends JPanel {
 			updateDashboard();
 		}
 	}
+
+	public void refreshSelectedTeam() {
+		updateDashboard();
+	}
+
 }

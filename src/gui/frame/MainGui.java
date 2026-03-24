@@ -1,7 +1,5 @@
 package gui.frame;
 
-//! a relire 
-
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
@@ -55,7 +53,7 @@ public class MainGui extends JFrame {
 		dashboardPanel = new JPanel(dashboardLayout);
 
 		simulationManager = new SimulationManager();
-		openingPanel = new OpeningDashboard(simulationManager.getLeagueManager());
+		openingPanel = new OpeningDashboard(simulationManager);
 		mainPanel = buildApplicationPanel();
 	}
 
@@ -83,13 +81,14 @@ public class MainGui extends JFrame {
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		sidebar = new SidebarPanel();
 
-		matchDashboard = new MatchDashboard(simulationManager.getLeagueManager());
+		matchDashboard = new MatchDashboard(simulationManager);
 		liveMatchDashboard = new LiveMatchDashboard();
-		mapDashboard = new MapDashboard(simulationManager.getLeagueManager());
+		mapDashboard = new MapDashboard(simulationManager);
 		rosterDashboard = new RosterDashboard();
 		dashboardPanel.add(matchDashboard, "match");
 		dashboardPanel.add(liveMatchDashboard, "liveMatch");
-		calendarDashboard = new CalendarDashboard(simulationManager, matchDashboard, new ShowMatchDashboardAction());
+		calendarDashboard = new CalendarDashboard(simulationManager, matchDashboard, new ShowMatchDashboardAction(),
+				rosterDashboard, mapDashboard);
 		dashboardPanel.add(calendarDashboard, "calendar");
 		dashboardPanel.add(new RankingDashboard(), "ranking");
 		dashboardPanel.add(new FinanceDashboard(), "finance");
@@ -161,7 +160,8 @@ public class MainGui extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			MainGui frame = MainGui.this;
 			String question = "Voulez-vous vraiment quitter la simulation ?";
-			int choice = JOptionPane.showConfirmDialog(frame, question, "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			int choice = JOptionPane.showConfirmDialog(frame, question, "Confirmation", JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
 
 			if (choice == JOptionPane.YES_OPTION) {
 				System.exit(0);
@@ -182,7 +182,7 @@ public class MainGui extends JFrame {
 	private class ShowLiveMatchDashboardAction implements Runnable {
 		@Override
 		public void run() {
-			liveMatchDashboard.setSimulationContext(matchDashboard.getLeagueManager(), matchDashboard.getSelectedDate());
+			liveMatchDashboard.setSimulationContext(simulationManager, matchDashboard.getSelectedDate());
 			liveMatchDashboard.setGame(matchDashboard.getSelectedGame());
 			dashboardLayout.show(dashboardPanel, "liveMatch");
 		}

@@ -1,25 +1,23 @@
 package gui.panel.openningPanel;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import data.league.League;
 import data.team.Team;
 import data.team.finance.financialpolicy.AmbitiousPolicy;
 import data.team.finance.financialpolicy.BalancedPolicy;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.LargeSize;
-import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.MarketSize;
+import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
 import gui.panel.common.PlayerDisplayUtil;
-import gui.panel.common.TeamDisplayUtil;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import process.utilitary.TeamDisplayUtil;
 import process.utilitary.TeamStatUtil;
 
 public class OpeningPolicyDetailPanel extends JPanel {
@@ -46,9 +44,8 @@ public class OpeningPolicyDetailPanel extends JPanel {
 		JPanel policyPanel = new JPanel(new BorderLayout());
 		policyPanel.setOpaque(false);
 		policyPanel.setBorder(BorderFactory.createCompoundBorder(
-			BorderFactory.createLineBorder(new Color(210, 214, 220)),
-			BorderFactory.createEmptyBorder(12, 16, 12, 16)
-		));
+				BorderFactory.createLineBorder(new Color(210, 214, 220)),
+				BorderFactory.createEmptyBorder(12, 16, 12, 16)));
 		policyPanel.add(policyLabel, BorderLayout.CENTER);
 
 		JPanel infoPanel = new JPanel(new GridLayout(8, 1, 0, 0));

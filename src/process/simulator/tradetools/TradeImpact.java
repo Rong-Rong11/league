@@ -10,8 +10,8 @@ import process.utilitary.FinanceUtilitary;
 public class TradeImpact {
     public void applyFinanceImpact(Team team, double d, int n) {
         FinanceUtilitary.updateTeamPayroll(team);
-        if (team.getTeamFinance().getPayroll() > d) {
-            double d2 = FinanceUtilitary.luxuryTaxPenalty(team.getTeamFinance().getPayroll(), d);
+        if (team.getTeamFinance().getCurrentPayroll() > d) {
+            double d2 = FinanceUtilitary.luxuryTaxPenalty(team.getTeamFinance().getCurrentPayroll(), d);
             FinanceUtilitary.addExpense(team.getTeamFinance().getBudget(), new Expense("luxurytaxpaid", d2), n);
         }
     }

@@ -18,7 +18,7 @@ public class MapTeamPlayersPanel extends JPanel {
 	public MapTeamPlayersPanel() {
 		create();
 		organize();
-		updateTeam(null);
+		updateTeam(null, true);
 	}
 
 	private void create() {
@@ -38,21 +38,26 @@ public class MapTeamPlayersPanel extends JPanel {
 		}
 	}
 
-	public void updateTeam(Team team) {
+	public void updateTeam(Team team, boolean currentSeasonSelected) {
 		if (team == null) {
 			for (int i = 0; i < playerLabels.length; i++) {
 				playerLabels[i].setText("-");
 			}
 			return;
 		}
-
-		ArrayList<Player> players = new ArrayList<Player>(team.getPlayers().values());
+		ArrayList<Player> players;
+		if (currentSeasonSelected) {
+			players = new ArrayList<Player>(team.getCurrentPlayers().values());
+		} else {
+			players = new ArrayList<Player>(team.getFormerPlayers().values());
+		}
 		PlayerStatUtil.sortPlayersByDisplayedNote(players);
 
 		for (int i = 0; i < playerLabels.length; i++) {
 			if (i < players.size()) {
 				Player player = players.get(i);
-				playerLabels[i].setText((int) Math.round(PlayerStatUtil.getDisplayedNote(player)) + "  " + player.getName());
+				playerLabels[i]
+						.setText((int) Math.round(PlayerStatUtil.getDisplayedNote(player)) + "  " + player.getName());
 			} else {
 				playerLabels[i].setText("-");
 			}

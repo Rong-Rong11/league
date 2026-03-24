@@ -161,7 +161,7 @@ public class RevenueSharingManager {
         double total = 0.0;
 
         for (Team team : teamRepositery.getAllTeams()) {
-            total += team.getPopularity();
+            total += team.getCurrentPopularity();
         }
 
         return total / teamRepositery.getAllTeams().size();

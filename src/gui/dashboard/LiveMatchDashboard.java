@@ -1,5 +1,4 @@
 package gui.dashboard;
-import config.GameConfiguration;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,7 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import data.player.Player;
+import config.GameConfiguration;
 import data.sport.play.action.ActionResult;
 import data.sport.setup.Game;
 import data.sport.setup.GameResult;
@@ -21,8 +20,8 @@ import gui.panel.common.BuildBox;
 import gui.panel.matchPanel.liveMatchPanel.LiveActionsPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveMatchHeaderPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveTeamStatsPanel;
-import process.manager.LeagueManager;
 import process.manager.LiveMatchStatistics;
+import process.manager.SimulationManager;
 import process.visitor.actionresult.LiveActionTextVisitor;
 
 public class LiveMatchDashboard extends JPanel implements Runnable {
@@ -34,7 +33,7 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
 
 	private Runnable backToMatchAction;
-	private LeagueManager leagueManager;
+	private SimulationManager simulationManager;
 	private LocalDate gameDate;
 	private Game game;
 	private String homeTeamName;
@@ -139,8 +138,8 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 		this.backToMatchAction = backToMatchAction;
 	}
 
-	public void setSimulationContext(LeagueManager leagueManager, LocalDate gameDate) {
-		this.leagueManager = leagueManager;
+	public void setSimulationContext(SimulationManager simulationManager, LocalDate gameDate) {
+		this.simulationManager = simulationManager;
 		this.gameDate = gameDate;
 	}
 
@@ -459,5 +458,5 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 		}
 		updateLiveDashboard();
 	}
-	
+
 }

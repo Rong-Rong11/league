@@ -24,7 +24,7 @@ public class MonthlyTeamFinanceCalculator {
                 FinancialPolicy financialPolicy = teamFinance.getFinancialProfil();
 
                 double marketMultiplier = getMarketMultiplier(marketSize);
-                double popularityFactor = team.getPopularity() / 100.0;
+                double popularityFactor = team.getCurrentPopularity() / 100.0;
                 double starFactor = 1;
                 if (team.hasStarPlayer()) {
                         starFactor = 1.1;
@@ -47,7 +47,7 @@ public class MonthlyTeamFinanceCalculator {
 
                 otherRevenue *= (1 + economicProfil.getOwnerDeficitTolerance() * 0.08);
 
-                double monthlyPayroll = team.getTeamFinance().getPayroll()
+                double monthlyPayroll = team.getTeamFinance().getCurrentPayroll()
                                 / FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS;
                 double stadiumMaintenance = calculateStadiumMaintenance(team, marketMultiplier, mediaMarket,
                                 economicProfil);
@@ -89,8 +89,8 @@ public class MonthlyTeamFinanceCalculator {
 
         private double calculateStaffCost(Team team, double marketMultiplier, EconomicProfil economicProfil,
                         FinancialPolicy financialPolicy) {
-                int numberOfPlayers = team.getPlayers().size();
-                double popularityFactor = 0.80 + (team.getPopularity() / 500.0);
+                int numberOfPlayers = team.getCurrentPlayers().size();
+                double popularityFactor = 0.80 + (team.getCurrentPopularity() / 500.0);
                 double staffCost = ((0.015 * numberOfPlayers) + 0.10) * marketMultiplier * popularityFactor;
 
                 staffCost *= (1 + economicProfil.getFanLoyalty() * 0.08);

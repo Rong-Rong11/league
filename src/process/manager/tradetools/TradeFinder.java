@@ -22,7 +22,7 @@ public class TradeFinder {
             if (teamB.equals(teamA)) {
                 continue;
             }
-            if (teamB.getPlayers().isEmpty()) {
+            if (teamB.getCurrentPlayers().isEmpty()) {
                 continue;
             }
             if (season) {
@@ -32,17 +32,19 @@ public class TradeFinder {
             }
             if (!isTradeCompatible(teamA, teamB, season)) {
                 double random = Math.random();
-                if (random < 0.15) {
+                if (random < 0.05) {
                     continue;
                 }
                 return teamB;
             }
             double random = Math.random();
-            if (random < 0.7) {
+            if (random < 0.85) {
                 continue;
             }
+            System.out.println("team trouvée");
             return teamB;
         }
+        System.out.println("pas de team trouvée");
         return null;
     }
 
@@ -50,17 +52,22 @@ public class TradeFinder {
         TeamTransferStrategy strategyA = teamA.getTeamFinance().getTeamTransferStrategy();
         TeamTransferStrategy strategyB = teamB.getTeamFinance().getTeamTransferStrategy();
         if (isSelling(teamA, strategyA, season) && isBuying(teamB, strategyB, season)) {
+            System.out.println("trade compatible");
             return true;
         }
         if (isSelling(teamB, strategyB, season) && isBuying(teamA, strategyA, season)) {
+            System.out.println("trade compatible");
             return true;
         }
         if (isStable(strategyA.getSeasonIntent()) || isStable(strategyB.getSeasonIntent())) {
+            System.out.println("trade compatible");
             return false;
         }
         if (!TeamUtilitary.getTeamSportProfile(teamA).equals(TeamUtilitary.getTeamSportProfile(teamB))) {
+            System.out.println("trade compatible");
             return true;
         }
+        System.out.println("trade pas compatible");
         return false;
     }
 

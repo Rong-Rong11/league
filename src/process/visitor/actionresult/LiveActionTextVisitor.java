@@ -11,10 +11,9 @@ import data.sport.play.action.PointScored;
 import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
 import data.sport.setup.Game;
-import process.visitor.actionresult.ActionResultVisitor;
 
 public class LiveActionTextVisitor
-implements ActionResultVisitor<String> {
+        implements ActionResultVisitor<String> {
     private Game game;
     private String homeTeamName;
     private String awayTeamName;
@@ -77,7 +76,7 @@ implements ActionResultVisitor<String> {
     }
 
     private boolean isHomePlayer(Player player) {
-        return this.game.getGameContext().getHomeTeam().getPlayers().containsKey(player.getName());
+        return this.game.getGameContext().getHomeTeam().getCurrentPlayers().containsKey(player.getName());
     }
 
     private int computeDisplayedPoints(PointScored pointScored) {

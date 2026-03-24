@@ -22,7 +22,7 @@ public class TeamUtilitary {
         double sumOfNote = 0;
         double numberOfPlayer = 0;
         double note;
-        for (Player player : team.getPlayers().values()) {
+        for (Player player : team.getCurrentPlayers().values()) {
             sumOfNote += PlayerUtilitary.getPlayerAttackNote(player);
             numberOfPlayer++;
         }
@@ -35,7 +35,7 @@ public class TeamUtilitary {
         double sumOfNote = 0;
         double numberOfPlayer = 0;
         double note;
-        for (Player player : team.getPlayers().values()) {
+        for (Player player : team.getCurrentPlayers().values()) {
             sumOfNote += PlayerUtilitary.getPlayerDefenseNote(player);
             numberOfPlayer++;
         }
@@ -58,7 +58,7 @@ public class TeamUtilitary {
     }
 
     public static void setStarPlayer(Team team) {
-        for (Player player : team.getPlayers().values()) {
+        for (Player player : team.getCurrentPlayers().values()) {
             if (player.isStar()) {
                 team.setStarPlayer(player);
                 return;

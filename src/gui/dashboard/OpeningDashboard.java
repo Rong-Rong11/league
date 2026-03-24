@@ -16,18 +16,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import data.team.Team;
-import data.team.finance.financialpolicy.AmbitiousPolicy;
-import data.team.finance.financialpolicy.BalancedPolicy;
-import data.team.finance.financialpolicy.FinancialPolicy;
-import data.team.finance.financialpolicy.ThriftyPolicy;
-import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.BuildBox;
+import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.SectionTitle;
 import gui.panel.common.TeamMapPanel;
 import gui.panel.openningPanel.OpeningPolicyDetailPanel;
 import gui.panel.openningPanel.OpeningTeamSelectionPanel;
-import process.manager.LeagueManager;
+import process.manager.SimulationManager;
+import process.repositery.TeamRepositery;
 import process.utilitary.TeamStatUtil;
 
 public class OpeningDashboard extends JPanel {
@@ -38,7 +35,7 @@ public class OpeningDashboard extends JPanel {
 	private static final int IDEAL_DASHBOARD_TOP_CARD_HEIGHT = 220;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
-	private LeagueManager leagueManager;
+	private SimulationManager simulationManager;
 	private ArrayList<Team> teams;
 	private Team selectedTeam;
 	private JButton continueButton;
@@ -46,14 +43,10 @@ public class OpeningDashboard extends JPanel {
 	private TeamMapPanel openingMapPanel;
 	private OpeningTeamSelectionPanel teamSelectionPanel;
 	private OpeningPolicyDetailPanel policyDetailPanel;
+	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 
-	public OpeningDashboard() {
-		this(new LeagueManager());
-	}
-
-	public OpeningDashboard(LeagueManager leagueManager) {
-		this.leagueManager = leagueManager;
-		this.leagueManager.prepareOpeningData();
+	public OpeningDashboard(SimulationManager simulationManager) {
+		this.simulationManager = simulationManager;
 		create();
 		organize();
 		actions();
@@ -61,7 +54,7 @@ public class OpeningDashboard extends JPanel {
 	}
 
 	private void create() {
-		teams = new ArrayList<Team>(leagueManager.getLeague().getAllTeam());
+		teams = new ArrayList<Team>(teamRepositery.getAllTeams());
 		continueButton = new JButton("Continuer");
 		randomPoliciesButton = new JButton();
 		openingMapPanel = new TeamMapPanel();
@@ -99,9 +92,8 @@ public class OpeningDashboard extends JPanel {
 
 	private JPanel buildHeader() {
 		JPanel header = new SectionTitle(
-			"Creation de la ligue",
-			"Definissez les politiques financieres des equipes"
-		);
+				"Creation de la ligue",
+				"Definissez les politiques financieres des equipes");
 		header.setPreferredSize(new Dimension(360, IDEAL_DASHBOARD_HEADER_HEIGHT));
 		return header;
 	}
@@ -127,27 +119,24 @@ public class OpeningDashboard extends JPanel {
 		mapContent.add(openingMapPanel, BorderLayout.CENTER);
 
 		return new BuildBox(
-			"LOCALISATION DES FRANCHISES",
-			"Cliquez sur une ville",
-			mapContent
-		);
+				"LOCALISATION DES FRANCHISES",
+				"Cliquez sur une ville",
+				mapContent);
 	}
 
 	private JPanel buildRightColumn() {
 		JPanel column = DashboardPanelUtil.createRightColumn(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, 12);
 
 		JPanel topCard = new BuildBox(
-			"EQUIPE SELECTIONNEE",
-			"Equipe courante",
-			teamSelectionPanel
-		);
+				"EQUIPE SELECTIONNEE",
+				"Equipe courante",
+				teamSelectionPanel);
 		topCard.setPreferredSize(new Dimension(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, IDEAL_DASHBOARD_TOP_CARD_HEIGHT));
 
 		JPanel bottomCard = new BuildBox(
-			"POLITIQUE FINANCIERE",
-			"Informations generales",
-			policyDetailPanel
-		);
+				"POLITIQUE FINANCIERE",
+				"Informations generales",
+				policyDetailPanel);
 
 		column.add(topCard, BorderLayout.NORTH);
 		column.add(bottomCard, BorderLayout.CENTER);
@@ -190,21 +179,12 @@ public class OpeningDashboard extends JPanel {
 		if (selectedTeam != null) {
 			teamSelectionPanel.setSelectedPolicy(selectedTeam.getTeamFinance().getFinancialProfil());
 		}
-		policyDetailPanel.updateTeam(selectedTeam, leagueManager.getLeague());
+		policyDetailPanel.updateTeam(selectedTeam, simulationManager.getLeague());
 		if (selectedTeam == null) {
 			openingMapPanel.setSelectedTeamName(null);
 			return;
 		}
 		openingMapPanel.setSelectedTeamName(selectedTeam.getName());
-	}
-
-	private void applyPolicy(FinancialPolicy policy) {
-		if (selectedTeam == null) {
-			return;
-		}
-		leagueManager.chooseFinancialPolicy(selectedTeam, policy);
-		leagueManager.prepareOpeningData();
-		refreshSelectedTeamPanels();
 	}
 
 	private class MapSelectionAction implements Runnable {
@@ -217,29 +197,32 @@ public class OpeningDashboard extends JPanel {
 	private class AmbitiousPolicyListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			applyPolicy(new AmbitiousPolicy());
+			simulationManager.chooseAmbitiousPolicy(selectedTeam);
+			refreshSelectedTeamPanels();
 		}
 	}
 
 	private class BalancedPolicyListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			applyPolicy(new BalancedPolicy());
+			simulationManager.chooseBalancedPolicy(selectedTeam);
+			refreshSelectedTeamPanels();
 		}
 	}
 
 	private class ThriftyPolicyListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			applyPolicy(new ThriftyPolicy());
+			simulationManager.chooseThriftyPolicy(selectedTeam);
+			refreshSelectedTeamPanels();
+
 		}
 	}
 
 	private class RandomPoliciesListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			leagueManager.randomFinancialPolicy();
-			leagueManager.prepareOpeningData();
+			simulationManager.randomFinance();
 			refreshSelectedTeamPanels();
 		}
 	}
@@ -254,10 +237,9 @@ public class OpeningDashboard extends JPanel {
 
 	public void showSelectionWarning() {
 		JOptionPane.showMessageDialog(
-			this,
-			"Selectionnez une equipe sur la carte avant de continuer.",
-			"Selection requise",
-			JOptionPane.WARNING_MESSAGE
-		);
+				this,
+				"Selectionnez une equipe sur la carte avant de continuer.",
+				"Selection requise",
+				JOptionPane.WARNING_MESSAGE);
 	}
 }
