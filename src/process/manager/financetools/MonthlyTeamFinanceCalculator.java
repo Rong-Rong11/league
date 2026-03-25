@@ -2,8 +2,10 @@ package process.manager.financetools;
 
 import config.FinanceConfiguration;
 import data.finance.budget.Budget;
-import data.finance.budget.Expense;
-import data.finance.budget.Income;
+import data.finance.budget.expense.Expense;
+import data.finance.budget.expense.ExpenseType;
+import data.finance.budget.income.Income;
+import data.finance.budget.income.IncomeType;
 import data.team.Team;
 import data.team.finance.TeamFinance;
 import data.team.finance.economicprofil.EconomicProfil;
@@ -55,24 +57,24 @@ public class MonthlyTeamFinanceCalculator {
                 double administrativeCost = calculateAdministrativeCost(marketMultiplier, mediaMarket, economicProfil);
 
                 FinanceUtilitary.addIncome(budget,
-                                new Income(FinanceConfiguration.INCOME_TYPE_LOCAL_SPONSORING, localSponsoring), month);
+                                new Income(IncomeType.LOCAL_SPONSORING, localSponsoring), month);
                 FinanceUtilitary.addIncome(budget,
-                                new Income(FinanceConfiguration.INCOME_TYPE_LOCAL_MERCHANDISING, localMerchandising),
+                                new Income(IncomeType.LOCAL_MERCHANDISING, localMerchandising),
                                 month);
-                FinanceUtilitary.addIncome(budget, new Income(FinanceConfiguration.INCOME_TYPE_OTHER, otherRevenue),
+                FinanceUtilitary.addIncome(budget, new Income(IncomeType.OTHER, otherRevenue),
                                 month);
 
                 FinanceUtilitary.addExpense(budget,
-                                new Expense(FinanceConfiguration.EXPENSE_TYPE_PLAYER_SALARY, monthlyPayroll), month);
+                                new Expense(ExpenseType.PLAYER_SALARY, monthlyPayroll), month);
                 FinanceUtilitary.addExpense(budget,
-                                new Expense(FinanceConfiguration.EXPENSE_TYPE_MAINTENACE_STADIUM_COST,
+                                new Expense(ExpenseType.MAINTENANCE_STADIUM_COST,
                                                 stadiumMaintenance),
                                 month);
                 FinanceUtilitary.addExpense(budget,
-                                new Expense(FinanceConfiguration.EXPENSE_TYPE_STAFF_COST, staffCost),
+                                new Expense(ExpenseType.STAFF_COST, staffCost),
                                 month);
                 FinanceUtilitary.addExpense(budget,
-                                new Expense(FinanceConfiguration.EXPENSE_TYPE_ADMINISTRATIVE_COST, administrativeCost),
+                                new Expense(ExpenseType.ADMINISTRATIVE_COST, administrativeCost),
                                 month);
 
                 FinanceUtilitary.updateBudget(budget);

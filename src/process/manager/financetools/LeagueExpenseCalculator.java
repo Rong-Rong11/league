@@ -2,7 +2,8 @@ package process.manager.financetools;
 
 import config.FinanceConfiguration;
 import data.finance.budget.Budget;
-import data.finance.budget.Expense;
+import data.finance.budget.expense.Expense;
+import data.finance.budget.expense.ExpenseType;
 import data.league.League;
 import process.utilitary.CalendarUtilitary;
 import process.utilitary.FinanceUtilitary;
@@ -25,22 +26,22 @@ public class LeagueExpenseCalculator {
 
       FinanceUtilitary.addExpense(
             budget,
-            new Expense(FinanceConfiguration.EXPENSE_TYPE_ADMINISTRATIVE_COST, administrativeCost),
+            new Expense(ExpenseType.ADMINISTRATIVE_COST, administrativeCost),
             month);
 
       FinanceUtilitary.addExpense(
             budget,
-            new Expense(FinanceConfiguration.EXPENSE_TYPE_MEDIA_COST, mediaCost),
+            new Expense(ExpenseType.MEDIA_COST, mediaCost),
             month);
 
       FinanceUtilitary.addExpense(
             budget,
-            new Expense(FinanceConfiguration.EXPENSE_TYPE_MARKETING_COST, marketingCost),
+            new Expense(ExpenseType.MARKETING_COST, marketingCost),
             month);
 
       FinanceUtilitary.addExpense(
             budget,
-            new Expense(FinanceConfiguration.EXPENSE_TYPE_OFFICIATING_COST, officiatingCost),
+            new Expense(ExpenseType.OFFICIATING_COST, officiatingCost),
             month);
 
       FinanceUtilitary.updateBudget(budget);

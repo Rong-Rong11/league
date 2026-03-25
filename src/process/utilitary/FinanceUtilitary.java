@@ -1,16 +1,19 @@
 package process.utilitary;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import config.FinanceConfiguration;
 import data.finance.GameStat;
 import data.finance.TeamGameFinance;
 import data.finance.budget.Budget;
-import data.finance.budget.Expense;
-import data.finance.budget.Income;
+import data.finance.budget.expense.Expense;
+import data.finance.budget.expense.ExpenseType;
+import data.finance.budget.income.Income;
+import data.finance.budget.income.IncomeType;
 import data.player.Player;
 import data.sport.setup.Game;
 import data.team.Team;
-import java.util.ArrayList;
-import java.util.HashMap;
 import process.repositery.TeamRepositery;
 
 //les sommes en millions
@@ -103,10 +106,11 @@ public class FinanceUtilitary {
 		Budget budget = team.getTeamFinance().getBudget();
 		double localRevenue = 0;
 		for (Income income : budget.getIncomesForMonth(month).values()) {
-			if (income.getName().equals(FinanceConfiguration.INCOME_TYPE_LOCAL_TV) ||
-					income.getName().equals(FinanceConfiguration.INCOME_TYPE_LOCAL_MERCHANDISING) ||
-					income.getName().equals(FinanceConfiguration.INCOME_TYPE_LOCAL_SPONSORING) ||
-					income.getName().equals(FinanceConfiguration.INCOME_TYPE_TICKET_OFFICE)) {
+			IncomeType incomeType = income.getIncomeType();
+			if (incomeType == IncomeType.LOCAL_TV ||
+					incomeType == IncomeType.LOCAL_MERCHANDISING ||
+					incomeType == IncomeType.LOCAL_SPONSORING ||
+					incomeType == IncomeType.TICKET_OFFICE) {
 				localRevenue += income.getAmount();
 			}
 		}
@@ -120,18 +124,18 @@ public class FinanceUtilitary {
 		TeamGameFinance awayFinance = gameStat.getAwayFinance();
 
 		addIncome(homeTeamBudget,
-				new Income(FinanceConfiguration.INCOME_TYPE_TICKET_OFFICE, homeFinance.getTicketRevenue()), month);
+				new Income(IncomeType.TICKET_OFFICE, homeFinance.getTicketRevenue()), month);
 		addIncome(homeTeamBudget,
-				new Income(FinanceConfiguration.INCOME_TYPE_CONCESSIONS, homeFinance.getConcessionsRevenue()), month);
-		addIncome(homeTeamBudget, new Income(FinanceConfiguration.INCOME_TYPE_PARKING, homeFinance.getParkingRevenue()),
+				new Income(IncomeType.CONCESSIONS, homeFinance.getConcessionsRevenue()), month);
+		addIncome(homeTeamBudget, new Income(IncomeType.PARKING, homeFinance.getParkingRevenue()),
 				month);
-		addIncome(homeTeamBudget, new Income(FinanceConfiguration.INCOME_TYPE_LOCAL_TV, homeFinance.getTvRevenue()),
+		addIncome(homeTeamBudget, new Income(IncomeType.LOCAL_TV, homeFinance.getTvRevenue()),
 				month);
 		addIncome(homeTeamBudget,
-				new Income(FinanceConfiguration.INCOME_TYPE_GAME_LOCAL_MERCHANDISING, homeFinance.getMerchRevenue()),
+				new Income(IncomeType.GAME_LOCAL_MERCHANDISING, homeFinance.getMerchRevenue()),
 				month);
 
-		addIncome(awayTeamBudget, new Income(FinanceConfiguration.INCOME_TYPE_LOCAL_TV, awayFinance.getTvRevenue()),
+		addIncome(awayTeamBudget, new Income(IncomeType.LOCAL_TV, awayFinance.getTvRevenue()),
 				month);
 
 		updateBudget(homeTeamBudget);
@@ -146,15 +150,15 @@ public class FinanceUtilitary {
 		TeamGameFinance awayFinance = gameStat.getAwayFinance();
 
 		addExpense(homeTeamBudget,
-				new Expense(FinanceConfiguration.EXPENSE_TYPE_STADIUM_COST, homeFinance.getArenaCosts()), month);
-		addExpense(homeTeamBudget, new Expense(FinanceConfiguration.EXPENSE_TYPE_STAFF_COST, homeFinance.getStaffCosts()),
+				new Expense(ExpenseType.STADIUM_COST, homeFinance.getArenaCosts()), month);
+		addExpense(homeTeamBudget, new Expense(ExpenseType.STAFF_COST, homeFinance.getStaffCosts()),
 				month);
 		addExpense(homeTeamBudget,
-				new Expense(FinanceConfiguration.EXPENSE_TYPE_SECURITY_COST, homeFinance.getSecurityCosts()), month);
+				new Expense(ExpenseType.SECURITY_COST, homeFinance.getSecurityCosts()), month);
 		addExpense(homeTeamBudget,
-				new Expense(FinanceConfiguration.EXPENSE_TYPE_LOGISTIC_COST, homeFinance.getLogisticsCosts()), month);
+				new Expense(ExpenseType.LOGISTIC_COST, homeFinance.getLogisticsCosts()), month);
 		addExpense(awayTeamBudget,
-				new Expense(FinanceConfiguration.EXPENSE_TYPE_TRAVEL_COST, awayFinance.getTravelCosts()), month);
+				new Expense(ExpenseType.TRAVEL_COST, awayFinance.getTravelCosts()), month);
 
 		updateBudget(homeTeamBudget);
 		updateBudget(awayTeamBudget);
