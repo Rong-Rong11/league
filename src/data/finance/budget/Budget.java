@@ -3,9 +3,10 @@
  */
 package data.finance.budget;
 
-import data.finance.budget.Expense;
-import data.finance.budget.Income;
 import java.util.HashMap;
+
+import data.finance.budget.expense.Expense;
+import data.finance.budget.income.Income;
 
 public class Budget {
     private double initialAmount;

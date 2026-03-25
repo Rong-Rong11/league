@@ -3,7 +3,8 @@
  */
 package process.simulator.tradetools;
 
-import data.finance.budget.Expense;
+import data.finance.budget.expense.Expense;
+import data.finance.budget.expense.ExpenseType;
 import data.team.Team;
 import process.utilitary.FinanceUtilitary;
 
@@ -12,7 +13,7 @@ public class TradeImpact {
         FinanceUtilitary.updateTeamPayroll(team);
         if (team.getTeamFinance().getCurrentPayroll() > d) {
             double d2 = FinanceUtilitary.luxuryTaxPenalty(team.getTeamFinance().getCurrentPayroll(), d);
-            FinanceUtilitary.addExpense(team.getTeamFinance().getBudget(), new Expense("luxurytaxpaid", d2), n);
+            FinanceUtilitary.addExpense(team.getTeamFinance().getBudget(), new Expense(ExpenseType.LUXURY_TAX_PAID, d2), n);
         }
     }
 }

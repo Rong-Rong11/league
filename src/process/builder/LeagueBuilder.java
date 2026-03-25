@@ -7,7 +7,8 @@ import java.io.IOException;
 import config.CalendarConfiguration;
 import config.FinanceConfiguration;
 import data.finance.budget.Budget;
-import data.finance.budget.Income;
+import data.finance.budget.income.Income;
+import data.finance.budget.income.IncomeType;
 import data.league.Division;
 import data.league.League;
 import data.league.finance.LeagueFinance;
@@ -101,13 +102,13 @@ public class LeagueBuilder {
 		Budget budget = new Budget(initialBudget);
 		FinanceUtilitary.initiateBudget(budget);
 
-		FinanceUtilitary.addIncome(budget, new Income(FinanceConfiguration.INCOME_TYPE_NATIONAL_TV, initialBudget * 0.65),
+		FinanceUtilitary.addIncome(budget, new Income(IncomeType.NATIONAL_TV, initialBudget * 0.65),
 				0);
 		FinanceUtilitary.addIncome(budget,
-				new Income(FinanceConfiguration.INCOME_TYPE_NATIONAL_SPONSORING, initialBudget * 0.15), 0);
+				new Income(IncomeType.NATIONAL_SPONSORING, initialBudget * 0.15), 0);
 		FinanceUtilitary.addIncome(budget,
-				new Income(FinanceConfiguration.INCOME_TYPE_NATIONAL_MERCHANDISING, initialBudget * 0.10), 0);
-		FinanceUtilitary.addIncome(budget, new Income(FinanceConfiguration.INCOME_TYPE_OTHER, initialBudget * 0.10), 0);
+				new Income(IncomeType.NATIONAL_MERCHANDISING, initialBudget * 0.10), 0);
+		FinanceUtilitary.addIncome(budget, new Income(IncomeType.OTHER, initialBudget * 0.10), 0);
 
 		double salaryCap = (initialBudget * FinanceConfiguration.PLAYER_SHARE) / CalendarConfiguration.NUMBER_OF_TEAM;
 		double luxuryTaxLine = salaryCap * FinanceConfiguration.LUXURYTAX_THRESHOLD_RATE;

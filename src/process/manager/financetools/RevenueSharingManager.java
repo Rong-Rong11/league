@@ -2,8 +2,10 @@ package process.manager.financetools;
 
 import config.FinanceConfiguration;
 import data.finance.budget.Budget;
-import data.finance.budget.Expense;
-import data.finance.budget.Income;
+import data.finance.budget.expense.Expense;
+import data.finance.budget.expense.ExpenseType;
+import data.finance.budget.income.Income;
+import data.finance.budget.income.IncomeType;
 import data.league.League;
 import data.league.finance.LeagueRedistributionPolicy;
 import data.team.Team;
@@ -33,7 +35,7 @@ public class RevenueSharingManager {
         double leagueKeeps = pool * leagueRedistributionPolicy.getBaseLeagueRetentionRate();
         FinanceUtilitary.addIncome(
                 league.getLeagueFinance().getBudget(),
-                new Income(FinanceConfiguration.INCOME_TYPE_LEAGUE_KEEPS, leagueKeeps),
+                new Income(IncomeType.LEAGUE_KEEPS, leagueKeeps),
                 month);
 
         double remainingPool = pool - leagueKeeps;
@@ -72,7 +74,7 @@ public class RevenueSharingManager {
 
                     FinanceUtilitary.addExpense(
                             budget,
-                            new Expense(FinanceConfiguration.EXPENSE_TYPE_REVENUE_SHARING_CONTRIBUTION,
+                            new Expense(ExpenseType.REVENUE_SHARING_CONTRIBUTION,
                                     contribution),
                             month);
 
@@ -95,7 +97,7 @@ public class RevenueSharingManager {
             Budget budget = team.getTeamFinance().getBudget();
             FinanceUtilitary.addIncome(
                     budget,
-                    new Income(FinanceConfiguration.INCOME_TYPE_EQUAL_SHARE, share),
+                    new Income(IncomeType.EQUAL_SHARE, share),
                     month);
             FinanceUtilitary.updateBudget(budget);
         }
@@ -125,7 +127,7 @@ public class RevenueSharingManager {
 
                 FinanceUtilitary.addIncome(
                         budget,
-                        new Income(FinanceConfiguration.INCOME_TYPE_EQUAL_SHARE, share),
+                        new Income(IncomeType.EQUAL_SHARE, share),
                         month);
 
                 FinanceUtilitary.updateBudget(budget);
