@@ -1,17 +1,5 @@
 package gui.dashboard;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.time.LocalDate;
-import java.util.ArrayList;
-
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
 import config.GameConfiguration;
 import data.sport.play.action.ActionResult;
 import data.sport.setup.Game;
@@ -20,8 +8,18 @@ import gui.panel.common.BuildBox;
 import gui.panel.matchPanel.liveMatchPanel.LiveActionsPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveMatchHeaderPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveTeamStatsPanel;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import process.SimulationInterface;
 import process.manager.LiveMatchStatistics;
-import process.manager.SimulationManager;
 import process.visitor.actionresult.LiveActionTextVisitor;
 
 public class LiveMatchDashboard extends JPanel implements Runnable {
@@ -33,7 +31,7 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
 
 	private Runnable backToMatchAction;
-	private SimulationManager simulationManager;
+	private SimulationInterface simulationManager;
 	private LocalDate gameDate;
 	private Game game;
 	private String homeTeamName;
@@ -138,7 +136,7 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 		this.backToMatchAction = backToMatchAction;
 	}
 
-	public void setSimulationContext(SimulationManager simulationManager, LocalDate gameDate) {
+	public void setSimulationContext(SimulationInterface simulationManager, LocalDate gameDate) {
 		this.simulationManager = simulationManager;
 		this.gameDate = gameDate;
 	}

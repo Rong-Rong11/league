@@ -1,14 +1,5 @@
 package gui.dashboard;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
-import javax.swing.JPanel;
-
 import data.team.Team;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
@@ -16,7 +7,14 @@ import gui.panel.common.SectionTitle;
 import gui.panel.common.TeamMapPanel;
 import gui.panel.mapPanel.effectifPanel.MapTeamPlayersPanel;
 import gui.panel.mapPanel.effectifPanel.MapTeamSummaryPanel;
-import process.manager.SimulationManager;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import javax.swing.JPanel;
+import process.SimulationInterface;
 import process.repositery.TeamRepositery;
 import process.utilitary.TeamStatUtil;
 
@@ -30,7 +28,7 @@ public class MapDashboard extends JPanel {
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
-	private SimulationManager simulationManager;
+	private SimulationInterface simulationManager;
 	private ArrayList<Team> teams;
 	private Team selectedTeam;
 	private TeamMapPanel mapPanel;
@@ -40,7 +38,7 @@ public class MapDashboard extends JPanel {
 	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 	private boolean currentSeasonSelected = true;
 
-	public MapDashboard(SimulationManager simulationManager) {
+	public MapDashboard(SimulationInterface simulationManager) {
 		this.simulationManager = simulationManager;
 		create();
 		organize();
