@@ -14,9 +14,10 @@ import data.team.finance.marketsize.SmallSize;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.TreeMap;
+import process.SimulationInterface;
 
 //cerveau de la simulation 
-public class SimulationManager {
+public class SimulationManager implements SimulationInterface {
     private LeagueManager leagueManager = new LeagueManager();
     private int month = 1;
     private Month debutMonthDate = CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE.getMonth();
@@ -61,6 +62,7 @@ public class SimulationManager {
     }
 
     // méthode à utiliser pour lancer la saison
+    @Override
     public void startSeason() {
         leagueManager.startSeason();
         resetCalendarCursor();
@@ -68,6 +70,7 @@ public class SimulationManager {
 
     // passe le prochain jour, méthode à utiliser pour la simulation et tout se fais
     // tous seul
+    @Override
     public void nextDay() {
         date = date.plusDays(1);
         currentMonthDate = date.getMonth();
@@ -167,6 +170,7 @@ public class SimulationManager {
         return leagueManager;
     }
 
+    @Override
     public LocalDate getCurrentDate() {
         return date;
     }
