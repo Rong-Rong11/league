@@ -1,5 +1,6 @@
 package process;
 
+import data.league.League;
 import java.time.LocalDate;
 
 public interface SimulationInterface {
