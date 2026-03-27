@@ -28,8 +28,4 @@ public class Expense {
     public String getName() {
         return this.expenseType.name();
     }
-
-    public String getLabel() {
-        return this.expenseType.getLabel();
-    }
 }

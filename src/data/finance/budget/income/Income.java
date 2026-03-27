@@ -30,7 +30,4 @@ public class Income {
         return this.incomeType.name();
     }
 
-    public String getLabel() {
-        return this.incomeType.getLabel();
-    }
 }

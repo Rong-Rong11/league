@@ -16,43 +16,6 @@ public class FinanceConfiguration {
     public static final double LEAGUE_MARKETING_COST = 0.20;
     public static final double LEAGUE_OFFICIATING_COST = 0.15;
 
-    public static final String INCOME_TYPE_NATIONAL_TV = "national TV";
-    public static final String INCOME_TYPE_LOCAL_TV = "local TV";
-    public static final String INCOME_TYPE_NATIONAL_SPONSORING = "national sponsoring";
-    public static final String INCOME_TYPE_LOCAL_SPONSORING = "local sponsoring";
-    public static final String INCOME_TYPE_NATIONAL_MERCHANDISING = "national merchandising";
-    public static final String INCOME_TYPE_LOCAL_MERCHANDISING = "local merchandising";
-    public static final String INCOME_TYPE_GAME_LOCAL_MERCHANDISING = "local merchandising";
-    public static final String INCOME_TYPE_TICKET_OFFICE = "ticket office";
-    public static final String INCOME_TYPE_REVENUE_SHARING = "income revenue sharing";
-    public static final String INCOME_TYPE_EQUAL_SHARE = "equal share";
-    public static final String INCOME_TYPE_CONCESSIONS = "concessions";
-    public static final String INCOME_TYPE_PARKING = "parking";
-    public static final String INCOME_TYPE_LEAGUE_KEEPS = "league keeps";
-    public static final String INCOME_TYPE_REVENUE_SHARING_WEIGHTED_SHARE = "revenue sharing weighted share";
-
-    public static final String INCOME_TYPE_OTHER = "others";
-    public static final String INCOME_TYPE_CENTRAL_SHARE = "central share";
-    public static final String INCOME_TYPE_POOL_SHARE = "pool share";
-
-    public static final String EXPENSE_TYPE_REVENUE_SHARING_CONTRIBUTION = "expense revenue sharing contribution";
-    public static final String EXPENSE_TYPE_PLAYER_SALARY = "expense player salary";
-    public static final String EXPENSE_TYPE_STADIUM_COST = "expense stadium cost";
-    public static final String EXPENSE_TYPE_MAINTENACE_STADIUM_COST = "expense maintenance cost";
-    public static final String EXPENSE_TYPE_STAFF_COST = "expense stAff cost";
-    public static final String EXPENSE_TYPE_ADMINISTRATIVE_COST = "expense administrative cost";
-    public static final String EXPENSE_TYPE_MEDIA_COST = "media cost";
-    public static final String EXPENSE_TYPE_MARKETING_COST = "marketing cost";
-    public static final String EXPENSE_TYPE_OFFICIATING_COST = "officiating cost";
-    public static final String EXPENSE_TYPE_SECURITY_COST = "expense security cost";
-    public static final String EXPENSE_TYPE_LOGISTIC_COST = "expense logistic cost";
-    public static final String EXPENSE_TYPE_TRAVEL_COST = "expense travel cost";
-    public static final String EXPENSE_TYPE_LUXURY_TAX_PAID = "luxurytaxpaid";
-
-    public static final String MARKET_SIZE_SMALL = "small";
-    public static final String MARKET_SIZE_MEDIUM = "medium";
-    public static final String MARKET_SIZE_LARGE = "large";
-
     public static final double MARKET_SIZE_SMALL_MULTIPLIER = 0.7;
     public static final double MARKET_SIZE_MEDIUM_MULTIPLIER = 1;
     public static final double MARKET_SIZE_LARGE_MULTIPLIER = 1.3;
