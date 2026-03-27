@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 
 import data.calendar.GameDay;
 import data.league.RegularSeason;
-import process.manager.SimulationManager;
+import process.SimulationInterface;
 
 public class WeekViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -29,14 +29,14 @@ public class WeekViewPanel extends JPanel {
 	private final JLabel currentDateLabel = new JLabel();
 	private final JPanel matchDisplayPanel = new JPanel();
 
-	private final SimulationManager simulationManager;
+	private SimulationInterface simulationInterface;
 	private RegularSeason regularSeason;
 	private LocalDate displayedDate;
 	private LocalDate lastSimulatedDate;
 	private OpenMatchDayAction openMatchDayAction;
 
-	public WeekViewPanel(SimulationManager simulationManager) {
-		this.simulationManager = simulationManager;
+	public WeekViewPanel(SimulationInterface simulationInterface) {
+		this.simulationInterface = simulationInterface;
 		create();
 		organize();
 		actions();
@@ -67,7 +67,7 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	public void loadSeasonState() {
-		regularSeason = simulationManager.getLeague().getReagularSeason();
+		regularSeason = simulationInterface.getLeague().getReagularSeason();
 		lastSimulatedDate = regularSeason.getDebutDate();
 		displayedDate = findNextGameDay(lastSimulatedDate);
 		updateDisplay();
@@ -181,8 +181,8 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	private void simulateDisplayedDay(LocalDate day) {
-		simulationManager.simulateRegularSeasonDay(day);
-		simulationManager.displayGameDay(day);
+		simulationInterface.simulateRegularSeasonDay(day);
+		simulationInterface.displayGameDay(day);
 	}
 
 	private boolean hasGame(LocalDate day) {

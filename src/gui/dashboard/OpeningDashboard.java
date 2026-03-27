@@ -23,7 +23,7 @@ import gui.panel.common.SectionTitle;
 import gui.panel.common.TeamMapPanel;
 import gui.panel.openningPanel.OpeningPolicyDetailPanel;
 import gui.panel.openningPanel.OpeningTeamSelectionPanel;
-import process.manager.SimulationManager;
+import process.SimulationInterface;
 import process.repositery.TeamRepositery;
 import process.utilitary.TeamStatUtil;
 
@@ -35,7 +35,7 @@ public class OpeningDashboard extends JPanel {
 	private static final int IDEAL_DASHBOARD_TOP_CARD_HEIGHT = 220;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
-	private SimulationManager simulationManager;
+	private SimulationInterface simulationInterface;
 	private ArrayList<Team> teams;
 	private Team selectedTeam;
 	private JButton continueButton;
@@ -45,8 +45,8 @@ public class OpeningDashboard extends JPanel {
 	private OpeningPolicyDetailPanel policyDetailPanel;
 	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 
-	public OpeningDashboard(SimulationManager simulationManager) {
-		this.simulationManager = simulationManager;
+	public OpeningDashboard(SimulationInterface simulationInterface) {
+		this.simulationInterface = simulationInterface;
 		create();
 		organize();
 		actions();
@@ -179,7 +179,7 @@ public class OpeningDashboard extends JPanel {
 		if (selectedTeam != null) {
 			teamSelectionPanel.setSelectedPolicy(selectedTeam.getTeamFinance().getFinancialProfil());
 		}
-		policyDetailPanel.updateTeam(selectedTeam, simulationManager.getLeague());
+		policyDetailPanel.updateTeam(selectedTeam, simulationInterface.getLeague());
 		if (selectedTeam == null) {
 			openingMapPanel.setSelectedTeamName(null);
 			return;
@@ -194,27 +194,40 @@ public class OpeningDashboard extends JPanel {
 		}
 	}
 
+	private void applySelectedPolicy(String policyType) {
+		if (selectedTeam == null) {
+			return;
+		}
+
+		if (policyType.equals("ambitious")) {
+			simulationInterface.chooseAmbitiousPolicy(selectedTeam);
+		} else if (policyType.equals("balanced")) {
+			simulationInterface.chooseBalancedPolicy(selectedTeam);
+		} else if (policyType.equals("thrifty")) {
+			simulationInterface.chooseThriftyPolicy(selectedTeam);
+		}
+
+		refreshSelectedTeamPanels();
+	}
+
 	private class AmbitiousPolicyListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			simulationManager.chooseAmbitiousPolicy(selectedTeam);
-			refreshSelectedTeamPanels();
+			applySelectedPolicy("ambitious");
 		}
 	}
 
 	private class BalancedPolicyListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			simulationManager.chooseBalancedPolicy(selectedTeam);
-			refreshSelectedTeamPanels();
+			applySelectedPolicy("balanced");
 		}
 	}
 
 	private class ThriftyPolicyListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			simulationManager.chooseThriftyPolicy(selectedTeam);
-			refreshSelectedTeamPanels();
+			applySelectedPolicy("thrifty");
 
 		}
 	}
@@ -222,7 +235,7 @@ public class OpeningDashboard extends JPanel {
 	private class RandomPoliciesListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			simulationManager.randomFinance();
+			simulationInterface.randomFinance();
 			refreshSelectedTeamPanels();
 		}
 	}

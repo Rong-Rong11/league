@@ -3,26 +3,28 @@ package gui.dashboard;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.SectionTitle;
+import process.SimulationInterface;
 
 /**
  * Dashboard dédié à la page Classement.
  */
 public class RankingDashboard extends JPanel {
 
+	private SimulationInterface simulationInterface;
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
 	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 300;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
-	public RankingDashboard() {
+	public RankingDashboard(SimulationInterface simulationInterface) {
+		this.simulationInterface = simulationInterface;
 		organize();
 	}
 
@@ -54,14 +56,18 @@ public class RankingDashboard extends JPanel {
 	}
 
 	private JPanel buildCenterColumn() {
-		return new BuildBox("CLASSEMENT COMPLET", "12 équipes", "TABLEAU CLASSEMENT");//! À changer le string par un jpanel quand on aura la fonctionnalité
+		return new BuildBox("CLASSEMENT COMPLET", "12 équipes", "TABLEAU CLASSEMENT");// ! À changer le string par un
+																												// jpanel quand on aura la
+																												// fonctionnalité
 	}
 
 	private JPanel buildRightColumn() {
 		JPanel column = DashboardPanelUtil.createGridColumn(2, 1, 0, 12, IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH);
 
-		column.add(new BuildBox("ZONE PLAYOFFS", "Équipes qualifiées", "PLAYOFFS"));//! À changer le string par un jpanel quand on aura la fonctionnalité
-		column.add(new BuildBox("PERFORMANCES", "Forme récente", "STATISTIQUES"));//! À changer le string par un jpanel quand on aura la fonctionnalité
+		column.add(new BuildBox("ZONE PLAYOFFS", "Équipes qualifiées", "PLAYOFFS"));// ! À changer le string par un jpanel
+																												// quand on aura la fonctionnalité
+		column.add(new BuildBox("PERFORMANCES", "Forme récente", "STATISTIQUES"));// ! À changer le string par un jpanel
+																											// quand on aura la fonctionnalité
 
 		return column;
 	}

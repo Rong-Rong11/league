@@ -22,7 +22,6 @@ import gui.panel.matchPanel.liveMatchPanel.LiveMatchHeaderPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveTeamStatsPanel;
 import process.SimulationInterface;
 import process.manager.LiveMatchStatistics;
-import process.manager.SimulationManager;
 import process.visitor.actionresult.LiveActionTextVisitor;
 
 public class LiveMatchDashboard extends JPanel implements Runnable {
@@ -35,7 +34,7 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 
 	private Runnable backToMatchAction;
 
-	private SimulationInterface simulationManager;
+	private SimulationInterface simulationInterface;
 
 	private LocalDate gameDate;
 	private Game game;
@@ -141,8 +140,8 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 		this.backToMatchAction = backToMatchAction;
 	}
 
-	public void setSimulationContext(SimulationInterface simulationManager, LocalDate gameDate) {
-		this.simulationManager = simulationManager;
+	public void setSimulationContext(SimulationInterface simulationInterface, LocalDate gameDate) {
+		this.simulationInterface = simulationInterface;
 		this.gameDate = gameDate;
 	}
 

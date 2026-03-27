@@ -32,31 +32,38 @@ public class SimulationManager implements SimulationInterface {
 
     // methddes pour la presaison
     // pour page de garde
+    @Override
     public void randomFinance() {
         leagueManager.randomFinancialPolicy();
         leagueManager.randomMarketSize();
     }
 
+    @Override
     public void chooseAmbitiousPolicy(Team team) {
         leagueManager.chooseFinancialPolicy(team, new AmbitiousPolicy());
     }
 
+    @Override
     public void chooseBalancedPolicy(Team team) {
         leagueManager.chooseFinancialPolicy(team, new BalancedPolicy());
     }
 
+    @Override
     public void chooseThriftyPolicy(Team team) {
         leagueManager.chooseFinancialPolicy(team, new ThriftyPolicy());
     }
 
+    @Override
     public void chooseLargeMarketSize(Team team) {
         leagueManager.chooseMarketSize(team, new LargeSize());
     }
 
+    @Override
     public void chooseMediumMarketSize(Team team) {
         leagueManager.chooseMarketSize(team, new MediumSize());
     }
 
+    @Override
     public void chooseSmallMarketSize(Team team) {
         leagueManager.chooseMarketSize(team, new SmallSize());
     }
@@ -78,6 +85,7 @@ public class SimulationManager implements SimulationInterface {
         verifyWeek();
     }
 
+    @Override
     public void simulateRegularSeasonDay(LocalDate date) {
         this.date = date;
         leagueManager.simulateRegularSeasonDay(date, month);
@@ -109,17 +117,19 @@ public class SimulationManager implements SimulationInterface {
         }
     }
 
-    public void endRegulaSeason() {
+    @Override
+    public void endRegularSeason() {
         // leaguemanager.initializePlayoff()
     }
 
     // simuler la fin de saison régulière ou fin playoff
+    @Override
     public void simulateRegularSeason() {
         while (!date.equals(CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
             simulateRegularSeasonDay(date);
             nextDay();
         }
-        endRegulaSeason();
+        endRegularSeason();
     }
 
     private void resetCalendarCursor() {
@@ -162,10 +172,12 @@ public class SimulationManager implements SimulationInterface {
         }
     }
 
+    @Override
     public League getLeague() {
         return leagueManager.getLeague();
     }
 
+    @Override
     public LeagueManager getLeagueManager() {
         return leagueManager;
     }

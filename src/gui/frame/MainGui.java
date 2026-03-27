@@ -18,7 +18,7 @@ import gui.dashboard.OpeningDashboard;
 import gui.dashboard.RankingDashboard;
 import gui.dashboard.RosterDashboard;
 import gui.layout.SidebarPanel;
-import process.manager.SimulationManager;
+import process.SimulationInterface;
 
 public class MainGui extends JFrame {
 
@@ -33,10 +33,11 @@ public class MainGui extends JFrame {
 	private LiveMatchDashboard liveMatchDashboard;
 	private MapDashboard mapDashboard;
 	private RosterDashboard rosterDashboard;
-	private SimulationManager simulationManager;
+	private SimulationInterface simulationInterface;
 	private SidebarPanel sidebar;
 
-	public MainGui() {
+	public MainGui(SimulationInterface simulationInterface) {
+		this.simulationInterface = simulationInterface;
 		create();
 		organize();
 		actions();
@@ -51,9 +52,7 @@ public class MainGui extends JFrame {
 
 		dashboardLayout = new CardLayout();
 		dashboardPanel = new JPanel(dashboardLayout);
-
-		simulationManager = new SimulationManager();
-		openingPanel = new OpeningDashboard(simulationManager);
+		openingPanel = new OpeningDashboard(simulationInterface);
 		mainPanel = buildApplicationPanel();
 	}
 
@@ -81,17 +80,17 @@ public class MainGui extends JFrame {
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		sidebar = new SidebarPanel();
 
-		matchDashboard = new MatchDashboard(simulationManager);
+		matchDashboard = new MatchDashboard(simulationInterface);
 		liveMatchDashboard = new LiveMatchDashboard();
-		mapDashboard = new MapDashboard(simulationManager);
+		mapDashboard = new MapDashboard(simulationInterface);
 		rosterDashboard = new RosterDashboard();
 		dashboardPanel.add(matchDashboard, "match");
 		dashboardPanel.add(liveMatchDashboard, "liveMatch");
-		calendarDashboard = new CalendarDashboard(simulationManager, matchDashboard, new ShowMatchDashboardAction(),
+		calendarDashboard = new CalendarDashboard(simulationInterface, matchDashboard, new ShowMatchDashboardAction(),
 				rosterDashboard, mapDashboard);
 		dashboardPanel.add(calendarDashboard, "calendar");
-		dashboardPanel.add(new RankingDashboard(), "ranking");
-		dashboardPanel.add(new FinanceDashboard(), "finance");
+		dashboardPanel.add(new RankingDashboard(simulationInterface), "ranking");
+		dashboardPanel.add(new FinanceDashboard(simulationInterface), "finance");
 		dashboardPanel.add(mapDashboard, "map");
 		dashboardPanel.add(rosterDashboard, "roster");
 
@@ -148,7 +147,7 @@ public class MainGui extends JFrame {
 			}
 
 			calendarDashboard.startSeason();
-			matchDashboard.loadGamesOfDay(simulationManager.getCurrentDate());
+			matchDashboard.loadGamesOfDay(simulationInterface.getCurrentDate());
 			sidebar.setActiveSection("match");
 			dashboardLayout.show(dashboardPanel, "match");
 			rootLayout.show(rootPanel, "main");
@@ -182,7 +181,7 @@ public class MainGui extends JFrame {
 	private class ShowLiveMatchDashboardAction implements Runnable {
 		@Override
 		public void run() {
-			liveMatchDashboard.setSimulationContext(simulationManager, matchDashboard.getSelectedDate());
+			liveMatchDashboard.setSimulationContext(simulationInterface, matchDashboard.getSelectedDate());
 			liveMatchDashboard.setGame(matchDashboard.getSelectedGame());
 			dashboardLayout.show(dashboardPanel, "liveMatch");
 		}

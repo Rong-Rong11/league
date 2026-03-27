@@ -17,7 +17,7 @@ import data.calendar.GameDay;
 import gui.panel.calendarPanel.HeaderPanel;
 import gui.panel.calendarPanel.MonthViewPanel;
 import gui.panel.calendarPanel.WeekViewPanel;
-import process.manager.SimulationManager;
+import process.SimulationInterface;
 
 public class CalendarDashboard extends JPanel {
 
@@ -25,7 +25,7 @@ public class CalendarDashboard extends JPanel {
 	private static final String MONTH_VIEW = "MONTH_VIEW";
 	private static final String WEEK_VIEW = "WEEK_VIEW";
 	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
-	private final SimulationManager simulationManager;
+	private SimulationInterface simulationInterface;
 	private HeaderPanel headerPanel;
 	private WeekViewPanel weekViewPanel;
 	private MonthViewPanel monthViewPanel;
@@ -39,9 +39,9 @@ public class CalendarDashboard extends JPanel {
 	private RosterDashboard rosterDashboard;
 	private MapDashboard mapDashboard;
 
-	public CalendarDashboard(SimulationManager simulationManager, MatchDashboard matchDashboard,
+	public CalendarDashboard(SimulationInterface simulationInterface, MatchDashboard matchDashboard,
 			Runnable showMatchDashboardAction, RosterDashboard rosterDashboard, MapDashboard mapDashboard) {
-		this.simulationManager = simulationManager;
+		this.simulationInterface = simulationInterface;
 		this.matchDashboard = matchDashboard;
 		this.showMatchDashboardAction = showMatchDashboardAction;
 		this.rosterDashboard = rosterDashboard;
@@ -54,7 +54,7 @@ public class CalendarDashboard extends JPanel {
 
 	private void create() {
 		headerPanel = new HeaderPanel();
-		weekViewPanel = new WeekViewPanel(simulationManager);
+		weekViewPanel = new WeekViewPanel(simulationInterface);
 		OpenMatchDayAction openMatchDayAction = new OpenMatchDayAction(matchDashboard, showMatchDashboardAction);
 		weekViewPanel.setOpenMatchDayAction(openMatchDayAction);
 		monthViewPanel = new MonthViewPanel();
@@ -86,8 +86,8 @@ public class CalendarDashboard extends JPanel {
 	}
 
 	public void startSeason() {
-		simulationManager.randomFinance();
-		simulationManager.startSeason();
+		simulationInterface.randomFinance();
+		simulationInterface.startSeason();
 		weekViewPanel.loadSeasonState();
 		currentCalendarDate = weekViewPanel.getCurrentDate();
 		updateDisplayedMonth(currentCalendarDate);
@@ -131,14 +131,14 @@ public class CalendarDashboard extends JPanel {
 	}
 
 	private void updateProgress() {
-		if (simulationManager.getLeague() == null || simulationManager.getLeague().getReagularSeason() == null
-				|| simulationManager.getLeague().getReagularSeason().getCalendar() == null) {
+		if (simulationInterface.getLeague() == null || simulationInterface.getLeague().getReagularSeason() == null
+				|| simulationInterface.getLeague().getReagularSeason().getCalendar() == null) {
 			headerPanel.setProgress(0, 0);
 			return;
 		}
 
 		HashMap<LocalDate, GameDay> seasonCalendar = new HashMap<LocalDate, GameDay>(
-				simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar());
+				simulationInterface.getLeague().getReagularSeason().getCalendar().getCalendar());
 		int totalGameDays = seasonCalendar.size();
 		int displayedGameDays = 0;
 		for (GameDay gameDay : seasonCalendar.values()) {
@@ -150,14 +150,14 @@ public class CalendarDashboard extends JPanel {
 	}
 
 	private void updateMonthView(LocalDate currentDate) {
-		if (simulationManager.getLeague() == null || simulationManager.getLeague().getReagularSeason() == null
-				|| simulationManager.getLeague().getReagularSeason().getCalendar() == null) {
+		if (simulationInterface.getLeague() == null || simulationInterface.getLeague().getReagularSeason() == null
+				|| simulationInterface.getLeague().getReagularSeason().getCalendar() == null) {
 			monthViewPanel.showMonth(displayedMonth, currentDate, null);
 			return;
 		}
 
 		HashMap<LocalDate, GameDay> seasonCalendar = new HashMap<LocalDate, GameDay>(
-				simulationManager.getLeague().getReagularSeason().getCalendar().getCalendar());
+				simulationInterface.getLeague().getReagularSeason().getCalendar().getCalendar());
 		monthViewPanel.showMonth(displayedMonth, currentDate, seasonCalendar);
 	}
 

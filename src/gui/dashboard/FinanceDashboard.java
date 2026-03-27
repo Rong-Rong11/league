@@ -1,17 +1,14 @@
 package gui.dashboard;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JPanel;
-
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.financePanel.FinanceHeaderPanel;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JPanel;
+import process.SimulationInterface;
 
 public class FinanceDashboard extends JPanel {
 
@@ -20,13 +17,15 @@ public class FinanceDashboard extends JPanel {
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 	private static final String LEAGUE_VIEW = "league";
 	private static final String TEAM_VIEW = "team";
+	private SimulationInterface simulationInterface;
 
 	private FinanceHeaderPanel headerPanel;
 	private JPanel centerContentPanel;
 	private String selectedView;
 
-	public FinanceDashboard() {
+	public FinanceDashboard(SimulationInterface simulationInterface) {
 		selectedView = LEAGUE_VIEW;
+		this.simulationInterface = simulationInterface;
 		create();
 		organize();
 		actions();
@@ -74,8 +73,12 @@ public class FinanceDashboard extends JPanel {
 	private JPanel buildRightColumn() {
 		JPanel column = DashboardPanelUtil.createGridColumn(2, 1, 0, 12, IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH);
 
-		column.add(new BuildBox("DISTRIBUTION - ÉQUIPE", "Équipe sélectionnée", "DISTRIBUTION"));//! À changer le string par un jpanel quand on aura la fonctionnalité
-		column.add(new BuildBox("DÉPENSES", "Équipe sélectionnée", "DÉPENSES"));//! À changer le string par un jpanel quand on aura la fonctionnalité
+		column.add(new BuildBox("DISTRIBUTION - ÉQUIPE", "Équipe sélectionnée", "DISTRIBUTION"));// ! À changer le string
+																																// par un jpanel quand
+																																// on aura la
+																																// fonctionnalité
+		column.add(new BuildBox("DÉPENSES", "Équipe sélectionnée", "DÉPENSES"));// ! À changer le string par un jpanel
+																										// quand on aura la fonctionnalité
 
 		return column;
 	}
