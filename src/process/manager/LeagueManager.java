@@ -1,8 +1,5 @@
 package process.manager;
 
-import java.time.LocalDate;
-import java.time.Month;
-
 import config.CalendarConfiguration;
 import data.league.League;
 import data.league.finance.LeagueFinancialRules;
@@ -10,6 +7,8 @@ import data.sport.setup.Game;
 import data.team.Team;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
+import java.time.LocalDate;
+import java.time.Month;
 import process.builder.CalendarBuilder;
 import process.builder.FinanceBuilder;
 import process.builder.LeagueBuilder;
@@ -27,7 +26,7 @@ public class LeagueManager {
     private League league;
     private LeagueBuilder leagueBuilder = new LeagueBuilder();
     private CalendarBuilder calendarBuilder;
-    private FinanceBuilder simulationBuilder = new FinanceBuilder();
+    private FinanceBuilder financeBuilder = new FinanceBuilder();
     private GameManager gameManager = null;
     private TradeManager tradeManager;
     private FinanceManager financeManager;
@@ -48,7 +47,7 @@ public class LeagueManager {
     }
 
     public void startSeason() {
-        simulationBuilder.build();
+        financeBuilder.build();
         simulatePreSeasonTrade();
         teamPopularityUpdater.updateBeforeSeason();
         buildRegularSeasonCalendar();
