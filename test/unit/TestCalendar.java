@@ -1,7 +1,6 @@
-package unit ;  
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+package unit;
+
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +35,7 @@ public class TestCalendar {
       assertNotNull(nbaCalendar);
       assertNotNull(nbaCalendar.getCalendar());
       assertFalse(nbaCalendar.getCalendar().isEmpty());
-      assertTrue(nbaCalendar.getCalendar().values().size() > 0) ; 
+      assertTrue(nbaCalendar.getCalendar().values().size() > 0);
    }
 
    @Test
@@ -45,8 +44,8 @@ public class TestCalendar {
       CalendarBuilder calendarBuilder = new CalendarBuilder(league);
 
       NBACalendar calendar = calendarBuilder.buildRegulaSeasonCalendar();
-      for(Team team : TeamRepositery.getInstance().getAllTeams()) {
-    	  assertTrue(team.getSchedule().getScheduledGames().values().size() > 0);	  
+      for (Team team : TeamRepositery.getInstance().getAllTeams()) {
+         assertTrue(team.getSchedule().getScheduledGames().values().size() > 0);
       }
    }
 
@@ -64,6 +63,6 @@ public class TestCalendar {
       assertTrue(firstGame.getGameContext().isScheduled());
       assertTrue(firstGame.getGameContext().getHomeTeam().getSchedule().isPlayingOn(firstGameDay.getDate()));
       assertTrue(firstGame.getGameContext().getAwayTeam().getSchedule().isPlayingOn(firstGameDay.getDate()));
-   
+
    }
 }

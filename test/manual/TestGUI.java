@@ -6,6 +6,6 @@ import process.SimulationInterface;
 import process.manager.SimulationManager;
 
 public class TestGUI {
-	SimulationInterface simulationInterface = new SimulationManager(); 
-	MainGui mainGui = new MainGui(simulationInterface) ; 
+	SimulationInterface simulationInterface = new SimulationManager();
+	MainGui mainGui = new MainGui(simulationInterface);
 }

@@ -65,5 +65,3 @@ public class TestLeagueBuilder {
         assertTrue(league.getAllTeam().stream().allMatch(team -> !team.getCurrentPlayers().isEmpty()));
     }
 }
-
-
