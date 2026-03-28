@@ -141,6 +141,7 @@ public class SidebarPanel extends JPanel {
 
 	private class HighlightAction implements ActionListener {
 		private JButton button;
+
 		public HighlightAction(JButton button) {
 			this.button = button;
 		}
@@ -166,11 +167,11 @@ public class SidebarPanel extends JPanel {
 
 	private void highlightActiveButton(JButton activeButton) {
 		JButton[] buttons = {
-			matchButton,
-			calendarButton,
-			rankingButton,
-			financeButton,
-			mapButton
+				matchButton,
+				calendarButton,
+				rankingButton,
+				financeButton,
+				mapButton
 		};
 
 		for (int i = 0; i < buttons.length; i++) {
@@ -187,22 +188,27 @@ public class SidebarPanel extends JPanel {
 		}
 	}
 
-	public JButton getMatchButton() { 
-		return matchButton; 
+	public JButton getMatchButton() {
+		return matchButton;
 	}
-	public JButton getCalendarButton() { 
-		return calendarButton; 
+
+	public JButton getCalendarButton() {
+		return calendarButton;
 	}
-	public JButton getRankingButton() { 
-		return rankingButton; 
+
+	public JButton getRankingButton() {
+		return rankingButton;
 	}
-	public JButton getFinanceButton() { 
-		return financeButton; 
+
+	public JButton getFinanceButton() {
+		return financeButton;
 	}
-	public JButton getMapButton() { 
-		return mapButton; 
+
+	public JButton getMapButton() {
+		return mapButton;
 	}
-	public JButton getExitButton() { 
-		return exitButton; 
+
+	public JButton getExitButton() {
+		return exitButton;
 	}
 }
