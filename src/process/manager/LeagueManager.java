@@ -3,7 +3,6 @@ package process.manager;
 import config.CalendarConfiguration;
 import data.league.League;
 import data.league.finance.LeagueFinancialRules;
-import data.sport.setup.Game;
 import data.team.Team;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
@@ -47,15 +46,15 @@ public class LeagueManager {
     }
 
     public void startSeason() {
-        financeBuilder.build();
+        financeManager.initializeFinance();
         simulatePreSeasonTrade();
         teamPopularityUpdater.updateBeforeSeason();
-        buildRegularSeasonCalendar();
+        league.getReagularSeason().setNbaCalendar(calendarBuilder.buildRegulaSeasonCalendar());
         league.getLeagueFinance().getBudget().getInitialAmount();
     }
 
     public void startPlayoff() {
-        playoffBuilder.build();
+        league.setPlayoff(playoffBuilder.buldFirstRoundPlayoffs());
     }
 
     private void simulatePreSeasonTrade() {
@@ -114,10 +113,6 @@ public class LeagueManager {
 
     public FinanceManager getFinanceManager() {
         return financeManager;
-    }
-
-    public boolean simulateGame(Game game, LocalDate date) {
-        return gameManager.simulateGame(game, date, this.computeMonth(date));
     }
 
     private int computeMonth(LocalDate date) {

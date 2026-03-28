@@ -130,13 +130,13 @@ public class CalendarDashboard extends JPanel {
 
 	private void updateProgress() {
 		if (simulationInterface.getLeague() == null || simulationInterface.getLeague().getReagularSeason() == null
-				|| simulationInterface.getLeague().getReagularSeason().getCalendar() == null) {
+				|| simulationInterface.getLeague().getReagularSeason().getNbaCalendar() == null) {
 			headerPanel.setProgress(0, 0);
 			return;
 		}
 
 		HashMap<LocalDate, GameDay> seasonCalendar = new HashMap<LocalDate, GameDay>(
-				simulationInterface.getLeague().getReagularSeason().getCalendar().getCalendar());
+				simulationInterface.getLeague().getReagularSeason().getNbaCalendar().getCalendar());
 		int totalGameDays = seasonCalendar.size();
 		int displayedGameDays = 0;
 		for (GameDay gameDay : seasonCalendar.values()) {
@@ -149,13 +149,13 @@ public class CalendarDashboard extends JPanel {
 
 	private void updateMonthView(LocalDate currentDate) {
 		if (simulationInterface.getLeague() == null || simulationInterface.getLeague().getReagularSeason() == null
-				|| simulationInterface.getLeague().getReagularSeason().getCalendar() == null) {
+				|| simulationInterface.getLeague().getReagularSeason().getNbaCalendar() == null) {
 			monthViewPanel.showMonth(displayedMonth, currentDate, null);
 			return;
 		}
 
 		HashMap<LocalDate, GameDay> seasonCalendar = new HashMap<LocalDate, GameDay>(
-				simulationInterface.getLeague().getReagularSeason().getCalendar().getCalendar());
+				simulationInterface.getLeague().getReagularSeason().getNbaCalendar().getCalendar());
 		monthViewPanel.showMonth(displayedMonth, currentDate, seasonCalendar);
 	}
 

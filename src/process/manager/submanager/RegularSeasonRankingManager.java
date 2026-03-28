@@ -1,16 +1,15 @@
 package process.manager.submanager;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.TreeMap;
-
 import data.calendar.GameDay;
 import data.league.League;
 import data.league.Ranking;
 import data.sport.setup.Game;
 import data.team.Team;
-import process.manager.submanager.rankingtools.NbaRegularSeasonTeamComparator;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.TreeMap;
+import process.manager.rankingtools.NbaRegularSeasonTeamComparator;
 import process.repositery.TeamRepositery;
 
 public class RegularSeasonRankingManager {
@@ -24,7 +23,7 @@ public class RegularSeasonRankingManager {
         this.eastTeams = eastTeams;
     }
 
-    public void updateRanking(League league, Ranking ranking, TreeMap<LocalDate, GameDay> regularSeasonCalendar,
+    public Ranking updateRanking(League league, Ranking ranking, TreeMap<LocalDate, GameDay> regularSeasonCalendar,
             LocalDate date) {
         TreeMap<Integer, Team> newEastRanking = new TreeMap<Integer, Team>();
         TreeMap<Integer, Team> newWestRanking = new TreeMap<Integer, Team>();
@@ -36,6 +35,7 @@ public class RegularSeasonRankingManager {
         createNewRanking(newEastRanking, eastTeams);
         ranking.setWestRanking(newWestRanking);
         ranking.setEastRanking(newEastRanking);
+        return ranking;
     }
 
     private void createNewRanking(TreeMap<Integer, Team> newRanking, ArrayList<Team> sortedTeams) {

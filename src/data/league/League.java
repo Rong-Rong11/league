@@ -3,12 +3,11 @@
  */
 package data.league;
 
-import java.util.ArrayList;
-
 import config.CalendarConfiguration;
 import data.league.finance.LeagueFinance;
 import data.player.Player;
 import data.team.Team;
+import java.util.ArrayList;
 
 public class League {
     private Conference westernConference = new Conference("West");

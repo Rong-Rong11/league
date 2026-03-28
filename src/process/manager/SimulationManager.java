@@ -143,7 +143,7 @@ public class SimulationManager implements SimulationInterface {
         if (date == null) {
             return;
         }
-        GameDay gameDay = leagueManager.getLeague().getReagularSeason().getCalendar().getCalendar().get(date);
+        GameDay gameDay = leagueManager.getLeague().getReagularSeason().getNbaCalendar().getCalendar().get(date);
         if (gameDay != null) {
             gameDay.setDisplayed(true);
             for (data.sport.setup.Game game : gameDay.getGames()) {
@@ -162,7 +162,7 @@ public class SimulationManager implements SimulationInterface {
     }
 
     public void displayCurrentSeason() {
-        TreeMap<LocalDate, GameDay> calendar = leagueManager.getLeague().getReagularSeason().getCalendar()
+        TreeMap<LocalDate, GameDay> calendar = leagueManager.getLeague().getReagularSeason().getNbaCalendar()
                 .getCalendar();
         for (GameDay gameDay : calendar.values()) {
             gameDay.setDisplayed(true);

@@ -16,11 +16,7 @@ public class PlayoffBuilder {
       this.league = league;
    }
 
-   public void build() {
-      initializePlayoffs();
-   }
-
-   private void initializePlayoffs() {
+   public Playoff buldFirstRoundPlayoffs() {
       Ranking ranking = league.getReagularSeason().getRanking();
       Playoff playoff = league.getPlayoff();
 
@@ -61,8 +57,9 @@ public class PlayoffBuilder {
       firstEastRound.add(new PlayoffSeries(east3, east6));
       firstEastRound.add(new PlayoffSeries(east4, east5));
 
-      league.getPlayoff().setEastFirstRound(firstEastRound);
-      league.getPlayoff().setWestFirstRound(firstWestRound);
+      playoff.setEastFirstRound(firstEastRound);
+      playoff.setWestFirstRound(firstWestRound);
+      return playoff;
    }
 
    private void addEastQualifiedTeam(TreeMap<Integer, Team> eastRanking, Playoff playoff) {

@@ -1,5 +1,7 @@
 package gui.panel.calendarPanel;
 
+import data.calendar.GameDay;
+import data.league.RegularSeason;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -7,15 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import data.calendar.GameDay;
-import data.league.RegularSeason;
 import process.SimulationInterface;
 
 public class WeekViewPanel extends JPanel {
@@ -123,7 +121,7 @@ public class WeekViewPanel extends JPanel {
 		}
 
 		LocalDate simulatedDay = lastSimulatedDate;
-		for (LocalDate day : regularSeason.getCalendar().getCalendar().keySet()) {
+		for (LocalDate day : regularSeason.getNbaCalendar().getCalendar().keySet()) {
 			if (day.isBefore(displayedDate)) {
 				continue;
 			}
@@ -191,10 +189,10 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	private GameDay getGameDay(LocalDate day) {
-		if (regularSeason == null || regularSeason.getCalendar() == null) {
+		if (regularSeason == null || regularSeason.getNbaCalendar() == null) {
 			return null;
 		}
-		return regularSeason.getCalendar().getCalendar().get(day);
+		return regularSeason.getNbaCalendar().getCalendar().get(day);
 	}
 
 	private void updateWeekRows() {

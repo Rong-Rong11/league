@@ -6,6 +6,7 @@ import java.util.TreeMap;
 
 import config.CalendarConfiguration;
 import data.calendar.GameDay;
+import data.calendar.NBACalendar;
 import data.league.League;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
@@ -41,7 +42,7 @@ public class CalendarBuilder {
         GameGenerator.generateFirstRoundPlayoffGames(league.getPlayoff());
     }
 
-    public void buildRegulaSeasonCalendar() {
+    public NBACalendar buildRegulaSeasonCalendar() {
         this.resetSchedule();
         this.specialEventsPlacement();
         this.generateAllGames();
@@ -63,10 +64,12 @@ public class CalendarBuilder {
             }
             currentDate = currentDate.plusDays(1L);
         }
-        this.league.getReagularSeason().getCalendar().setCalendar(calendar);
+        NBACalendar newCalendar = new NBACalendar(calendar);
+        return newCalendar;
+
     }
 
-    public void buildFirstRoundCalendar() {
+    public NBACalendar buildFirstRoundCalendar() {
         resetSchedule();
         TreeMap<LocalDate, GameDay> playoffCalendar = new TreeMap<>();
 
@@ -75,7 +78,8 @@ public class CalendarBuilder {
         scheduleConferenceFirstFourGames(playoffCalendar, league.getPlayoff().getEastFirstRound(), startDate);
         scheduleConferenceFirstFourGames(playoffCalendar, league.getPlayoff().getWestFirstRound(), startDate);
 
-        league.getPlayoff().getCalendar().setCalendar(playoffCalendar);
+        NBACalendar newCalendar = new NBACalendar(playoffCalendar);
+        return newCalendar;
     }
 
     private void scheduleConferenceFirstFourGames(TreeMap<LocalDate, GameDay> playoffCalendar,

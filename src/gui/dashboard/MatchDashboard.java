@@ -1,13 +1,5 @@
 package gui.dashboard;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-
-import javax.swing.JPanel;
-
 import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.finance.GameStat;
@@ -19,6 +11,12 @@ import gui.panel.matchPanel.MatchDayListPanel.MatchSelectionListener;
 import gui.panel.matchPanel.MatchDetailPanel;
 import gui.panel.matchPanel.MatchFinancePanel;
 import gui.panel.matchPanel.MatchHeaderPanel;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import javax.swing.JPanel;
 import process.SimulationInterface;
 
 public class MatchDashboard extends JPanel {
@@ -119,7 +117,7 @@ public class MatchDashboard extends JPanel {
 
 	public void loadGamesOfDay(LocalDate date) {
 		selectedDate = date;
-		GameDay gameDay = simulationInterface.getLeague().getReagularSeason().getCalendar().getCalendar().get(date);
+		GameDay gameDay = simulationInterface.getLeague().getReagularSeason().getNbaCalendar().getCalendar().get(date);
 		showGameDay(gameDay, date);
 	}
 

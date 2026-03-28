@@ -10,7 +10,7 @@ import data.calendar.NBACalendar;
 import data.calendar.SpecialEvent;
 
 public abstract class Season {
-    private NBACalendar calendar = new NBACalendar();
+    private NBACalendar nbaCalendar = new NBACalendar();
     private LocalDate debutDate;
     private LocalDate endDate;
     private HashMap<LocalDate, SpecialEvent> specialEvents;
@@ -37,17 +37,25 @@ public abstract class Season {
         this.endDate = localDate;
     }
 
-    public NBACalendar getCalendar() {
-        return this.calendar;
-    }
-
-    public void setCalendar(NBACalendar nBACalendar) {
-        this.calendar = nBACalendar;
-    }
-
     public void addSpecialEvents(SpecialEvent specialEvent) {
         if (!this.specialEvents.containsKey(specialEvent.getDate())) {
             this.specialEvents.put(specialEvent.getDate(), specialEvent);
         }
+    }
+
+    public NBACalendar getNbaCalendar() {
+        return nbaCalendar;
+    }
+
+    public void setNbaCalendar(NBACalendar nbaCalendar) {
+        this.nbaCalendar = nbaCalendar;
+    }
+
+    public HashMap<LocalDate, SpecialEvent> getSpecialEvents() {
+        return specialEvents;
+    }
+
+    public void setSpecialEvents(HashMap<LocalDate, SpecialEvent> specialEvents) {
+        this.specialEvents = specialEvents;
     }
 }

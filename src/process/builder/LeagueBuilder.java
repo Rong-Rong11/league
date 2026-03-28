@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import process.factory.PlayerFactory;
 import process.factory.TeamFactory;
 import process.repositery.CurrentSeasonAssetRepositery;
@@ -120,8 +121,8 @@ public class LeagueBuilder {
 
 	private BufferedReader createReader() throws IOException {
 		Path[] candidatePaths = {
-				Path.of("resources", "nba.csv"),
-				Path.of("league", "resources", "nba.csv")
+				Paths.get("resources", "nba.csv"),
+				Paths.get("league", "resources", "nba.csv")
 		};
 
 		for (Path path : candidatePaths) {

@@ -3,12 +3,18 @@
  */
 package data.calendar;
 
-import data.calendar.GameDay;
 import java.time.LocalDate;
 import java.util.TreeMap;
 
 public class NBACalendar {
     private TreeMap<LocalDate, GameDay> calendar = new TreeMap<>();
+
+    public NBACalendar(TreeMap<LocalDate, GameDay> calendar) {
+        this.calendar = calendar;
+    }
+
+    public NBACalendar() {
+    }
 
     public TreeMap<LocalDate, GameDay> getCalendar() {
         return this.calendar;

@@ -1,12 +1,12 @@
 package process.manager.submanager;
 
-import java.time.LocalDate;
-
 import data.finance.GameStat;
 import data.league.League;
 import data.sport.setup.Game;
 import data.team.Team;
+import java.time.LocalDate;
 import process.manager.financetools.CentralRevenueDistributor;
+import process.manager.financetools.FinanceInitializer;
 import process.manager.financetools.GameFinanceProcessor;
 import process.manager.financetools.LeagueExpenseCalculator;
 import process.manager.financetools.MonthlyTeamFinanceCalculator;
@@ -15,6 +15,7 @@ import process.repositery.TeamRepositery;
 
 public class FinanceManager {
     private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+    private FinanceInitializer financeInitializer = new FinanceInitializer();
     private RevenueSharingManager revenueSharingManager;
     private MonthlyTeamFinanceCalculator monthlyTeamFinanceCalculator;
     private CentralRevenueDistributor centralRevenueDistributor;
@@ -27,6 +28,10 @@ public class FinanceManager {
         centralRevenueDistributor = new CentralRevenueDistributor(league);
         gameFinanceProcessor = new GameFinanceProcessor();
         leagueExpenseCalculator = new LeagueExpenseCalculator(league);
+    }
+
+    public void initializeFinance() {
+        financeInitializer.initializeFinance();
     }
 
     public void applyMonthlyFinance(int month) {

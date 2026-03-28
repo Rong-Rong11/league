@@ -20,18 +20,8 @@ import process.visitor.marketsize.GenerateStadiumCapacityVisitor;
 public class FinanceBuilder {
     private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 
-    public void build() {
-        buildFinance();
-    }
-
-    private void buildFinance() {
-        for (Team team : this.teamRepositery.getAllTeams()) {
-            buildTeamFinance(team);
-        }
-    }
-
     // déjà un marketSize et un profil financier car choisi en random
-    private void buildTeamFinance(Team team) {
+    public static TeamFinance buildTeamFinance(Team team) {
         Budget budget = team.getTeamFinance().getBudget();
         TeamFinance teamFinance = team.getTeamFinance();
 
@@ -51,9 +41,11 @@ public class FinanceBuilder {
         FinanceUtilitary.initiateBudget(budget);
         stadium.setCapacity(generateCapacity(marketSize));
         stadium.setTicketPrice(calculateBaseTicketPrice(marketSize));
+
+        return teamFinance;
     }
 
-    private void calculateInitialBudget(Budget budget, MarketSize marketSize, EconomicProfil economicProfil,
+    private static void calculateInitialBudget(Budget budget, MarketSize marketSize, EconomicProfil economicProfil,
             double popularity) {
         calculateBaseBudget(budget, popularity);
         CalculateInitialTeamBudgetVisitor calculateInitialTeamBudgetVisitor = new CalculateInitialTeamBudgetVisitor(
@@ -63,7 +55,7 @@ public class FinanceBuilder {
         budget.setRemainingAmount(initialAmount);
     }
 
-    private void calculateBaseBudget(Budget budget, double popularity) {
+    private static void calculateBaseBudget(Budget budget, double popularity) {
         double initialAmount = FinanceConfiguration.BASE_TEAM_BUDGET;
         if (popularity <= 70) {
             initialAmount *= 1.1;
@@ -77,17 +69,17 @@ public class FinanceBuilder {
         budget.setInitialAmount(initialAmount);
     }
 
-    private int generateCapacity(MarketSize marketSize) {
+    private static int generateCapacity(MarketSize marketSize) {
         GenerateStadiumCapacityVisitor generateStadiumCapacityVisitor = new GenerateStadiumCapacityVisitor();
         return marketSize.accept(generateStadiumCapacityVisitor);
     }
 
-    private double calculateBaseTicketPrice(MarketSize marketSize) {
+    private static double calculateBaseTicketPrice(MarketSize marketSize) {
         CalculateBaseTicketVisitor calculateBaseTicketVisitor = new CalculateBaseTicketVisitor();
         return marketSize.accept(calculateBaseTicketVisitor);
     }
 
-    private void createMediaMarket(MediaMarket mediaMarket, MarketSize marketSize) {
+    private static void createMediaMarket(MediaMarket mediaMarket, MarketSize marketSize) {
         marketSize.accept(new CreateMediaMarketVisitor(mediaMarket));
     }
 }
