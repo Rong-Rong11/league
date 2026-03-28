@@ -21,8 +21,8 @@ public class Team {
     private double formerPopularity;
     private double currentPopularity;
     private TeamPerformance teamPerformance = new TeamPerformance();
-    private HashMap<String, Player> formerPlayers = new HashMap();
-    private HashMap<String, Player> currentPlayers = new HashMap();
+    private HashMap<String, Player> formerPlayers = new HashMap<>();
+    private HashMap<String, Player> currentPlayers = new HashMap<>();
     private Schedule schedule;
     private Player starPlayer = null;
     private TeamFinance teamFinance;

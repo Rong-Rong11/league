@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.TreeMap;
 
 public class NBACalendar {
-    private TreeMap<LocalDate, GameDay> calendar = new TreeMap();
+    private TreeMap<LocalDate, GameDay> calendar = new TreeMap<>();
 
     public TreeMap<LocalDate, GameDay> getCalendar() {
         return this.calendar;

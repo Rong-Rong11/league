@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TeamRepositery {
-    private HashMap<String, Team> teams = new HashMap();
+    private HashMap<String, Team> teams = new HashMap<>();
     private static TeamRepositery instance = new TeamRepositery();
 
     private TeamRepositery() {

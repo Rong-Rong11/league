@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DivisionRepositery {
-    private HashMap<String, Division> divisions = new HashMap();
+    private HashMap<String, Division> divisions = new HashMap<>();
     private static DivisionRepositery instance = new DivisionRepositery();
 
     private DivisionRepositery() {

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import data.sport.setup.Game;
 
 public class GameDay {
-    private ArrayList<Game> games = new ArrayList();
+    private ArrayList<Game> games = new ArrayList<>();
     private LocalDate date;
     private boolean isSimulated;
     private boolean isDisplayed;

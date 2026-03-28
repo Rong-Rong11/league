@@ -41,7 +41,7 @@ public class GameResult {
         this.blockAwayTeam = n12;
         this.freeThrowHomeTeam = n13;
         this.freeThrowAwayTeam = n14;
-        this.actions = new ArrayList();
+        this.actions = new ArrayList<>();
     }
 
     public GameResult() {

@@ -18,7 +18,7 @@ public abstract class Season {
     public Season(LocalDate localDate, LocalDate localDate2) {
         this.debutDate = localDate;
         this.endDate = localDate2;
-        this.specialEvents = new HashMap();
+        this.specialEvents = new HashMap<>();
     }
 
     public LocalDate getDebutDate() {

@@ -13,6 +13,8 @@ import data.team.Team;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import process.factory.PlayerFactory;
 import process.factory.TeamFactory;
 import process.repositery.CurrentSeasonAssetRepositery;
@@ -25,7 +27,6 @@ import process.utilitary.TeamUtilitary;
 
 public class LeagueBuilder {
 
-	private String filename = "src/test/nba.csv";
 	private PlayerRepositery playerRepositery = PlayerRepositery.getInstance();
 	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 	private DivisionRepositery divisionRepositery = DivisionRepositery.getInstance();
@@ -39,7 +40,7 @@ public class LeagueBuilder {
 	public League build() {
 		League league = new League();
 		try {
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
+			BufferedReader bufferedReader = this.createReader();
 			String line;
 			bufferedReader.readLine();
 
@@ -115,6 +116,21 @@ public class LeagueBuilder {
 
 		LeagueFinance leagueFinance = new LeagueFinance(budget, salaryCap, luxuryTaxLine, minimumTeamSalary);
 		league.setLeagueFinance(leagueFinance);
+	}
+
+	private BufferedReader createReader() throws IOException {
+		Path[] candidatePaths = {
+				Path.of("resources", "nba.csv"),
+				Path.of("league", "resources", "nba.csv")
+		};
+
+		for (Path path : candidatePaths) {
+			if (Files.exists(path)) {
+				return new BufferedReader(new FileReader(path.toFile()));
+			}
+		}
+
+		throw new IOException("Impossible de trouver nba.csv dans resources/ ou league/resources/");
 	}
 
 }

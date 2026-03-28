@@ -8,7 +8,7 @@ import data.player.Player;
 import java.util.HashMap;
 
 public class PreSeasonAssetRepositery {
-    private HashMap<Player, Asset> preSeasonAssets = new HashMap();
+    private HashMap<Player, Asset> preSeasonAssets = new HashMap<>();
     private static PreSeasonAssetRepositery instance = new PreSeasonAssetRepositery();
 
     private PreSeasonAssetRepositery() {

@@ -14,7 +14,7 @@ import process.utilitary.TeamDisplayUtil;
 import process.utilitary.TeamStatUtil;
 
 public class TeamLogoPanel extends JPanel {
-	private static final String LOGO_FOLDER_PATH = "src/test/nba_logos/";
+	private static final String LOGO_FOLDER_PATH = "resources/nba_logos/";
 	private static final int DEFAULT_LOGO_SIZE = 64;
 
 	private JLabel logoLabel;

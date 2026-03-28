@@ -1,21 +1,18 @@
 package gui.panel.common;
 
+import gui.panel.mapPanel.TeamZone;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.Image;
 import java.util.HashMap;
-
-
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import gui.panel.mapPanel.TeamZone;
-
 public class TeamMapPanel extends JPanel {
-	private static final String MAP_IMAGE_PATH = "src/test/map.png";
+	private static final String MAP_IMAGE_PATH = "resources/map.png";
 	private static final Color POINT_COLOR = new Color(210, 48, 48);
 	private static final int TEAM_POINT_RADIUS = 6;
 	private static final double SOURCE_IMAGE_WIDTH = 1000.0;

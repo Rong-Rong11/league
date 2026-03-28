@@ -10,8 +10,8 @@ import java.util.HashMap;
 public class Budget {
     private double initialAmount;
     private double remainingAmount;
-    private HashMap<Integer, HashMap<String, Income>> monthlyIncomes = new HashMap();
-    private HashMap<Integer, HashMap<String, Expense>> monthlyExpenses = new HashMap();
+    private HashMap<Integer, HashMap<String, Income>> monthlyIncomes = new HashMap<>();
+    private HashMap<Integer, HashMap<String, Expense>> monthlyExpenses = new HashMap<>();
 
     public Budget(double d) {
         this.initialAmount = d;

@@ -9,7 +9,7 @@ import data.player.Asset;
 import data.player.Player;
 
 public class CurrentSeasonAssetRepositery {
-    private HashMap<Player, Asset> currentSeasonAssets = new HashMap();
+    private HashMap<Player, Asset> currentSeasonAssets = new HashMap<>();
     private static CurrentSeasonAssetRepositery instance = new CurrentSeasonAssetRepositery();
 
     private CurrentSeasonAssetRepositery() {

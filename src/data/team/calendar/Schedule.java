@@ -22,9 +22,9 @@ public class Schedule {
         this.setNumberOfAwayGames(0);
         this.setNumberOfHomeGames(0);
         this.setNumberOfPlayedGames(0);
-        this.games = new ArrayList();
-        this.scheduledGames = new TreeMap();
-        this.playedGames = new TreeMap();
+        this.games = new ArrayList<>();
+        this.scheduledGames = new TreeMap<>();
+        this.playedGames = new TreeMap<>();
     }
 
     public int getNumberOfPlayedGames() {
