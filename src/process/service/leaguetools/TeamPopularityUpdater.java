@@ -1,4 +1,4 @@
-package process.manager.leaguetools;
+package process.service.leaguetools;
 
 import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;

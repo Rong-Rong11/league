@@ -1,13 +1,5 @@
 package gui.dashboard;
 
-import data.team.Team;
-import gui.panel.common.BuildBox;
-import gui.panel.common.ButtonStyleUtil;
-import gui.panel.common.DashboardPanelUtil;
-import gui.panel.common.SectionTitle;
-import gui.panel.common.TeamMapPanel;
-import gui.panel.openningPanel.OpeningPolicyDetailPanel;
-import gui.panel.openningPanel.OpeningTeamSelectionPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,12 +8,22 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import process.SimulationInterface;
+
+import data.team.Team;
+import gui.panel.common.BuildBox;
+import gui.panel.common.ButtonStyleUtil;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.SectionTitle;
+import gui.panel.common.TeamMapPanel;
+import gui.panel.openningPanel.OpeningPolicyDetailPanel;
+import gui.panel.openningPanel.OpeningTeamSelectionPanel;
+import process.orchestrator.SimulationInterface;
 import process.repositery.TeamRepositery;
 import process.utilitary.TeamStatUtil;
 

@@ -20,8 +20,8 @@ import gui.panel.common.BuildBox;
 import gui.panel.matchPanel.liveMatchPanel.LiveActionsPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveMatchHeaderPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveTeamStatsPanel;
-import process.SimulationInterface;
-import process.manager.LiveMatchStatistics;
+import process.orchestrator.SimulationInterface;
+import process.service.LiveMatchStatistics;
 import process.visitor.actionresult.LiveActionTextVisitor;
 
 public class LiveMatchDashboard extends JPanel implements Runnable {

@@ -16,7 +16,7 @@ import gui.panel.common.SectionTitle;
 import gui.panel.common.TeamMapPanel;
 import gui.panel.mapPanel.effectifPanel.MapTeamPlayersPanel;
 import gui.panel.mapPanel.effectifPanel.MapTeamSummaryPanel;
-import process.SimulationInterface;
+import process.orchestrator.SimulationInterface;
 import process.repositery.TeamRepositery;
 import process.utilitary.TeamStatUtil;
 

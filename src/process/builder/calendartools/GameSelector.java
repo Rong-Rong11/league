@@ -126,7 +126,7 @@ public class GameSelector {
 
 	private double restPenalty(int daysSinceLastGame) {
 		if (daysSinceLastGame <= 0) {
-			return -1000.0;
+			return -10000.0;
 		}
 		if (daysSinceLastGame == 1) {
 			return -1000.0;

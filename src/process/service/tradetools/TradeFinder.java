@@ -1,4 +1,4 @@
-package process.manager.tradetools;
+package process.service.tradetools;
 
 import config.FinanceConfiguration;
 import data.team.Team;

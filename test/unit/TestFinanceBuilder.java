@@ -13,10 +13,10 @@ import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
 import process.builder.LeagueBuilder;
-import process.manager.financetools.FinanceInitializer;
 import process.repositery.DivisionRepositery;
 import process.repositery.PlayerRepositery;
 import process.repositery.TeamRepositery;
+import process.service.financetools.FinanceInitializer;
 
 public class TestFinanceBuilder {
 
@@ -42,7 +42,7 @@ public class TestFinanceBuilder {
          assertNotNull(teamFinance.getMarketSize());
          assertNotNull(teamFinance.getFinancialProfil());
       }
-   }     
+   }
 
    @Test
    public void shouldBuildInitialBudgetForTeamFinance() {
@@ -175,8 +175,10 @@ public class TestFinanceBuilder {
          double expectedFanLoyaltyMin = interval(0.3 + popularity / 100.0 * 0.3 + expectedHistoricalPrestigeMin * 0.2);
          double expectedFanLoyaltyMax = interval(0.3 + popularity / 100.0 * 0.3 + expectedHistoricalPrestigeMax * 0.2);
 
-         double expectedPriceElasticityMin = interval(0.8 - expectedFanLoyaltyMax * 0.3 - expectedHistoricalPrestigeMax * 0.2);
-         double expectedPriceElasticityMax = interval(0.8 - expectedFanLoyaltyMin * 0.3 - expectedHistoricalPrestigeMin * 0.2);
+         double expectedPriceElasticityMin = interval(
+               0.8 - expectedFanLoyaltyMax * 0.3 - expectedHistoricalPrestigeMax * 0.2);
+         double expectedPriceElasticityMax = interval(
+               0.8 - expectedFanLoyaltyMin * 0.3 - expectedHistoricalPrestigeMin * 0.2);
 
          double expectedCommercialAggressivenessMin = 0.4;
          double expectedCommercialAggressivenessMax = interval(0.4
@@ -194,8 +196,10 @@ public class TestFinanceBuilder {
          assertTrue(team.getTeamFinance().getEconomicProfil().getPriceElasticity() >= expectedPriceElasticityMin);
          assertTrue(team.getTeamFinance().getEconomicProfil().getPriceElasticity() <= expectedPriceElasticityMax);
 
-         assertTrue(team.getTeamFinance().getEconomicProfil().getCommercialAggressiveness() >= expectedCommercialAggressivenessMin);
-         assertTrue(team.getTeamFinance().getEconomicProfil().getCommercialAggressiveness() <= expectedCommercialAggressivenessMax);
+         assertTrue(team.getTeamFinance().getEconomicProfil()
+               .getCommercialAggressiveness() >= expectedCommercialAggressivenessMin);
+         assertTrue(team.getTeamFinance().getEconomicProfil()
+               .getCommercialAggressiveness() <= expectedCommercialAggressivenessMax);
 
          assertEquals(expectedOwnerDeficitToleranceMin,
                team.getTeamFinance().getEconomicProfil().getOwnerDeficitTolerance(), 0.0001);

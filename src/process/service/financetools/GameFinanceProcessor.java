@@ -1,9 +1,10 @@
-package process.manager.financetools;
+package process.service.financetools;
+
+import java.time.LocalDate;
+import java.util.HashMap;
 
 import data.finance.GameStat;
 import data.sport.setup.Game;
-import java.time.LocalDate;
-import java.util.HashMap;
 import process.utilitary.FinanceUtilitary;
 
 public class GameFinanceProcessor {

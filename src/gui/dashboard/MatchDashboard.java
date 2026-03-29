@@ -1,5 +1,13 @@
 package gui.dashboard;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+import javax.swing.JPanel;
+
 import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.finance.GameStat;
@@ -11,13 +19,7 @@ import gui.panel.matchPanel.MatchDayListPanel.MatchSelectionListener;
 import gui.panel.matchPanel.MatchDetailPanel;
 import gui.panel.matchPanel.MatchFinancePanel;
 import gui.panel.matchPanel.MatchHeaderPanel;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import javax.swing.JPanel;
-import process.SimulationInterface;
+import process.orchestrator.SimulationInterface;
 
 public class MatchDashboard extends JPanel {
 	private static final int DASHBOARD_SPACING = 16;
@@ -153,7 +155,7 @@ public class MatchDashboard extends JPanel {
 			return;
 		}
 
-		GameStat gameStat = simulationInterface.getLeagueManager().getFinanceManager().getGameStat(game);
+		GameStat gameStat = simulationInterface.getGameStat(game);
 		matchDetailPanel.showGame(game, buildDayNumberText(), gameStat);
 		matchFinancePanel.showGameFinance(game, gameStat);
 	}

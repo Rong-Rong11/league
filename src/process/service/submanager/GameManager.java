@@ -1,4 +1,4 @@
-package process.manager.submanager;
+package process.service.submanager;
 
 import data.calendar.GameDay;
 import data.league.League;

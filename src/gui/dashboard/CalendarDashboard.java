@@ -1,10 +1,5 @@
 package gui.dashboard;
 
-import config.CalendarConfiguration;
-import data.calendar.GameDay;
-import gui.panel.calendarPanel.HeaderPanel;
-import gui.panel.calendarPanel.MonthViewPanel;
-import gui.panel.calendarPanel.WeekViewPanel;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -13,9 +8,16 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.HashMap;
+
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import process.SimulationInterface;
+
+import config.CalendarConfiguration;
+import data.calendar.GameDay;
+import gui.panel.calendarPanel.HeaderPanel;
+import gui.panel.calendarPanel.MonthViewPanel;
+import gui.panel.calendarPanel.WeekViewPanel;
+import process.orchestrator.SimulationInterface;
 
 public class CalendarDashboard extends JPanel {
 

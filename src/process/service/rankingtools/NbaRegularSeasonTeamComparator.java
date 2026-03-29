@@ -1,4 +1,4 @@
-package process.manager.rankingtools;
+package process.service.rankingtools;
 
 import data.league.Division;
 import data.league.League;

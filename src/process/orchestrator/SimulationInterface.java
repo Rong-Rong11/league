@@ -1,9 +1,11 @@
-package process;
+package process.orchestrator;
 
-import data.league.League;
-import data.team.Team;
 import java.time.LocalDate;
-import process.manager.LeagueManager;
+
+import data.finance.GameStat;
+import data.league.League;
+import data.sport.setup.Game;
+import data.team.Team;
 
 public interface SimulationInterface {
 
@@ -23,27 +25,18 @@ public interface SimulationInterface {
 
    void chooseSmallMarketSize(Team team);
 
-   // méthode à utiliser pour lancer la saison
    void startSeason();
-
-   // passe le prochain jour, méthode à utiliser pour la simulation et tout se fais
-   // tous seul
-   void nextDay();
 
    void simulateRegularSeasonDay(LocalDate date);
 
    void endRegularSeason();
 
-   // simuler la fin de saison régulière ou fin playoff
    void simulateRegularSeason();
 
    League getLeague();
 
-   LeagueManager getLeagueManager();
-
    LocalDate getCurrentDate();
 
-   // à enkever les plus tard
-   void displayGameDay(LocalDate date);
+   GameStat getGameStat(Game game);
 
 }

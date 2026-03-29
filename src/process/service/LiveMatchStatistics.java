@@ -1,4 +1,4 @@
-package process.manager;
+package process.service;
 
 import data.player.Player;
 import data.sport.play.action.ActionResult;

@@ -1,7 +1,5 @@
 package gui.panel.calendarPanel;
 
-import data.calendar.GameDay;
-import data.league.RegularSeason;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -9,12 +7,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import process.SimulationInterface;
+
+import data.calendar.GameDay;
+import data.league.RegularSeason;
+import process.orchestrator.DisplayInterface;
+import process.orchestrator.DisplayManager;
+import process.orchestrator.SimulationInterface;
 
 public class WeekViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -28,6 +32,7 @@ public class WeekViewPanel extends JPanel {
 	private final JPanel matchDisplayPanel = new JPanel();
 
 	private SimulationInterface simulationInterface;
+	private DisplayInterface displayInterface;
 	private RegularSeason regularSeason;
 	private LocalDate displayedDate;
 	private LocalDate lastSimulatedDate;
@@ -35,6 +40,7 @@ public class WeekViewPanel extends JPanel {
 
 	public WeekViewPanel(SimulationInterface simulationInterface) {
 		this.simulationInterface = simulationInterface;
+		displayInterface = new DisplayManager(simulationInterface.getLeague());
 		create();
 		organize();
 		actions();
@@ -180,7 +186,7 @@ public class WeekViewPanel extends JPanel {
 
 	private void simulateDisplayedDay(LocalDate day) {
 		simulationInterface.simulateRegularSeasonDay(day);
-		simulationInterface.displayGameDay(day);
+		displayInterface.displayGameDay(day);
 	}
 
 	private boolean hasGame(LocalDate day) {

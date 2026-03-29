@@ -1,9 +1,8 @@
 package manual;
 
-import gui.app.App;
 import gui.frame.MainGui;
-import process.SimulationInterface;
-import process.manager.SimulationManager;
+import process.orchestrator.SimulationInterface;
+import process.orchestrator.SimulationManager;
 
 public class TestGUI {
 	SimulationInterface simulationInterface = new SimulationManager();

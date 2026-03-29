@@ -11,7 +11,7 @@ import data.sport.play.action.PointScored;
 import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
 import data.sport.setup.Game;
-import process.manager.LiveMatchStatistics;
+import process.service.LiveMatchStatistics;
 
 public class StatsVisitor implements ActionResultVisitor<Void> {
     private LiveMatchStatistics liveMatchStatistics;

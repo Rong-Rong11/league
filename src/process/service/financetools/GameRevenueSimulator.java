@@ -1,4 +1,4 @@
-package process.manager.financetools;
+package process.service.financetools;
 
 import data.finance.GameStat;
 import data.sport.setup.Game;

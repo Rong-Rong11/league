@@ -31,7 +31,8 @@ public class FinanceConfiguration {
     public static final double BASE_TRAVEL_INTER_CONFERENCE_COST = 0.09;
 
     public static final int MAX_PRESEASON_BIG_TRADE = 3;
-    public static final int MAX_TRADE_PER_TEAM = 3;
+    public static final int MAX_TRADE_PER_TEAM = 5;
+    public static final int MAX_TRADE_ATTEMPTS_PER_TEAM = 5;
     public static final LocalDate PRESEASON_TRADE = LocalDate.of(CalendarConfiguration.SEASON_YEAR, 8, 1);
     public static final String SEASON_TRADE_INTENT_BUYER = "buyer";
     public static final String SEASON_TRADE_INTENT_SELLER = "seller";

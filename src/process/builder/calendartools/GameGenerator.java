@@ -60,7 +60,7 @@ public class GameGenerator {
 
 				for (Team team : divisionA.getTeams().values()) {
 					for (Team other : divisionB.getTeams().values()) {
-						int games = 3;
+						int games = 4;
 						for (int k = 0; k < games; k++) {
 							boolean home = (k % 2 == 0);
 							Game game;

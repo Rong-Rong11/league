@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 import gui.panel.common.SectionTitle;
 import gui.panel.mapPanel.effectifPanel.playerPanel.PlayerSummaryPanel;
-import process.manager.LiveMatchStatistics.PlayerLiveSummary;
+import process.service.LiveMatchStatistics.PlayerLiveSummary;
 
 public class LiveTeamStatsPanel extends JPanel {
 	private JLabel pointsLabel;

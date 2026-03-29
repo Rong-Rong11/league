@@ -1,14 +1,16 @@
 package gui.dashboard;
 
-import gui.panel.common.BuildBox;
-import gui.panel.common.DashboardPanelUtil;
-import gui.panel.financePanel.FinanceHeaderPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JPanel;
-import process.SimulationInterface;
+
+import gui.panel.common.BuildBox;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.financePanel.FinanceHeaderPanel;
+import process.orchestrator.SimulationInterface;
 
 public class FinanceDashboard extends JPanel {
 

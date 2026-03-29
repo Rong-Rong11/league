@@ -18,7 +18,7 @@ import gui.dashboard.OpeningDashboard;
 import gui.dashboard.RankingDashboard;
 import gui.dashboard.RosterDashboard;
 import gui.layout.SidebarPanel;
-import process.SimulationInterface;
+import process.orchestrator.SimulationInterface;
 
 public class MainGui extends JFrame {
 

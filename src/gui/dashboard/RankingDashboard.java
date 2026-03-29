@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.SectionTitle;
-import process.SimulationInterface;
+import process.orchestrator.SimulationInterface;
 
 /**
  * Dashboard dédié à la page Classement.

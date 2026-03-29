@@ -1,4 +1,4 @@
-package process.manager.submanager;
+package process.service.submanager;
 
 import data.calendar.GameDay;
 import data.league.League;
@@ -9,8 +9,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
-import process.manager.rankingtools.NbaRegularSeasonTeamComparator;
+
 import process.repositery.TeamRepositery;
+import process.service.rankingtools.NbaRegularSeasonTeamComparator;
 
 public class RegularSeasonRankingManager {
     private TeamRepositery teamRepositery = TeamRepositery.getInstance();
