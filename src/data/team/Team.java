@@ -65,7 +65,7 @@ public class Team {
     }
 
     public boolean hasStarPlayer() {
-        return this.starPlayer == null;
+        return this.starPlayer != null;
     }
 
     public void addGame(Game game) {

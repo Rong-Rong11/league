@@ -201,6 +201,7 @@ public class RevenueSharingManager {
 
     private double calculateRevenueContextFactor(Team team) {
         double factor = 0.75;
+        double valueFactor = FinanceUtilitary.getNormalizedTeamValue(team);
 
         MarketSize marketSize = team.getTeamFinance().getMarketSize();
         MediaMarket mediaMarket = team.getTeamFinance().getMediaMarket();
@@ -222,6 +223,7 @@ public class RevenueSharingManager {
 
         double combinedFactor = 1 + (mediaFactor * 0.6 + ecomonicFactor * 0.4);
         factor *= combinedFactor;
+        factor *= (1 + valueFactor * 0.12);
 
         return Math.max(0.75, factor);
     }

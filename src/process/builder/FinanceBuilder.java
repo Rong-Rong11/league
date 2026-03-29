@@ -14,13 +14,15 @@ import process.repositery.TeamRepositery;
 import process.utilitary.FinanceUtilitary;
 import process.visitor.marketsize.CalculateBaseTicketVisitor;
 import process.visitor.marketsize.CalculateInitialTeamBudgetVisitor;
+import process.visitor.marketsize.CalculateInitialTeamValue;
 import process.visitor.marketsize.CreateMediaMarketVisitor;
 import process.visitor.marketsize.GenerateStadiumCapacityVisitor;
 
 public class FinanceBuilder {
     private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 
-    // déjà un marketSize et un profil financier car choisi en random
+    // déjà un marketSize et un profil financier au moment de l'appel car choisi en
+    // random
     public static TeamFinance buildTeamFinance(Team team) {
         Budget budget = team.getTeamFinance().getBudget();
         TeamFinance teamFinance = team.getTeamFinance();
@@ -38,6 +40,7 @@ public class FinanceBuilder {
                 teamFinance.getTeamTransferStrategy());
 
         calculateInitialBudget(budget, marketSize, economicProfil, popularity);
+        teamFinance.setTeamValue(calculateInitialTeamValue(team, marketSize, budget));
         FinanceUtilitary.initiateBudget(budget);
         stadium.setCapacity(generateCapacity(marketSize));
         stadium.setTicketPrice(calculateBaseTicketPrice(marketSize));
@@ -53,6 +56,19 @@ public class FinanceBuilder {
         double initialAmount = marketSize.accept(calculateInitialTeamBudgetVisitor);
         budget.setInitialAmount(initialAmount);
         budget.setRemainingAmount(initialAmount);
+    }
+
+    private static double calculateInitialTeamValue(Team team, MarketSize marketSize, Budget budget) {
+        double baseValue = 250.0;
+        double popularityBonus = team.getFormerPopularity() * 2.0;
+        double marketBonus = getMarketValueBonus(marketSize);
+        double stadiumBonus = 25.0;
+
+        return baseValue + budget.getRemainingAmount() + popularityBonus + marketBonus + stadiumBonus;
+    }
+
+    private static double getMarketValueBonus(MarketSize marketSize) {
+        return marketSize.accept(new CalculateInitialTeamValue());
     }
 
     private static void calculateBaseBudget(Budget budget, double popularity) {

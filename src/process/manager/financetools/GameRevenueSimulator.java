@@ -9,6 +9,7 @@ import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import java.time.LocalDate;
 import process.utilitary.CalendarUtilitary;
+import process.utilitary.FinanceUtilitary;
 import process.visitor.marketsize.CalculateBaseTicketVisitor;
 
 public class GameRevenueSimulator {
@@ -58,6 +59,7 @@ public class GameRevenueSimulator {
         MarketSize marketSize = homeTeam.getTeamFinance().getMarketSize();
         MediaMarket mediaMarket = homeTeam.getTeamFinance().getMediaMarket();
         EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
+        double teamValueFactor = FinanceUtilitary.getNormalizedTeamValue(homeTeam);
 
         double base = stadium.getTicketPrice();
         base = marketSize.accept(new CalculateBaseTicketVisitor());
@@ -69,6 +71,7 @@ public class GameRevenueSimulator {
 
         price *= (1 + economicProfil.getHistoricalPrestige() * 0.05);
         price *= (1 - economicProfil.getPriceElasticity() * 0.18);
+        price *= (1 + teamValueFactor * 0.08);
 
         if (stadium.getCapacity() > 0) {
             double occupancyRate = (double) attendees / stadium.getCapacity();
@@ -91,6 +94,7 @@ public class GameRevenueSimulator {
     private double calculateAttendanceRate(LocalDate date, Team homeTeam, double popularityRate) {
         MediaMarket mediaMarket = homeTeam.getTeamFinance().getMediaMarket();
         EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
+        double teamValueFactor = FinanceUtilitary.getNormalizedTeamValue(homeTeam);
 
         double importantDayBonus = CalendarUtilitary.isImportantDay(date) ? 0.04 : 0.0;
 
@@ -102,6 +106,7 @@ public class GameRevenueSimulator {
 
         attendanceRate += economicProfil.getFanLoyalty() * 0.10;
         attendanceRate += economicProfil.getHistoricalPrestige() * 0.03;
+        attendanceRate += teamValueFactor * 0.04;
 
         double volatility = 0.15;
 
@@ -186,6 +191,7 @@ public class GameRevenueSimulator {
     private void calculateMerchRevenue(Team homeTeam, double popularityRate, int attendees) {
         MediaMarket mediaMarket = homeTeam.getTeamFinance().getMediaMarket();
         EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
+        double teamValueFactor = FinanceUtilitary.getNormalizedTeamValue(homeTeam);
 
         double purchaseRate = 0.015 + (popularityRate * 0.025);
         double averageSpend = 28;
@@ -200,6 +206,9 @@ public class GameRevenueSimulator {
             purchaseRate += mediaMarket.getPrestigeModifier() * 0.005;
             averageSpend *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.04);
         }
+
+        purchaseRate += teamValueFactor * 0.01;
+        averageSpend *= (1 + teamValueFactor * 0.06);
 
         double revenue = (attendees * purchaseRate * averageSpend) / 1000000;
         gameStat.getHomeFinance().setMerchRevenue(revenue);

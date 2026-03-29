@@ -9,6 +9,7 @@ import data.team.finance.marketsize.MarketSize;
 import data.team.finance.transfer.TeamTransferStrategy;
 import process.utilitary.TeamUtilitary;
 import process.visitor.financialprofil.ChooseTransferStrategyVisitor;
+import process.visitor.marketsize.CalculateInitialTeamValue;
 
 public class TeamFactory {
     private static String checkRivalTeam(String rivalTeam) {
@@ -39,4 +40,5 @@ public class TeamFactory {
         team.setShortName(data[35]);
         return team;
     }
+
 }

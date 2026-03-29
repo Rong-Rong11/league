@@ -209,10 +209,42 @@ public class FinanceUtilitary {
 				.getMediaMarket()
 				.getPrestigeModifier();
 
+		double valueFactor = getNormalizedTeamValue(team);
+
 		return (0.4 * popularity)
 				+ (0.3 * historicalPrestige)
 				+ (0.2 * fanLoyalty)
-				+ (0.1 * mediaPrestige);
+				+ (0.1 * mediaPrestige)
+				+ (0.15 * valueFactor);
+	}
+
+	public static double getNormalizedTeamValue(Team team) {
+		double teamValue = team.getTeamFinance().getTeamValue();
+		double minValue = 250.0;
+		double maxValue = 900.0;
+
+		if (teamValue <= minValue) {
+			return 0.0;
+		}
+
+		return Math.max(0.0, Math.min(1.0, (teamValue - minValue) / (maxValue - minValue)));
+	}
+
+	public static void updateTeamValue(Team team) {
+		double currentBudget = team.getTeamFinance().getBudget().getRemainingAmount();
+		double popularityBonus = team.getCurrentPopularity() * 2.0;
+		double performanceBonus = team.getTeamPerformance().getPerformanceRating() * 120.0;
+		double payrollBonus = Math.min(team.getTeamFinance().getCurrentPayroll(), 220.0) * 0.35;
+		double stadiumBonus = (team.getStadium().getCapacity() / 1000.0) * 3.0;
+
+		double updatedValue = 180.0
+				+ currentBudget
+				+ popularityBonus
+				+ performanceBonus
+				+ payrollBonus
+				+ stadiumBonus;
+
+		team.getTeamFinance().setTeamValue(updatedValue);
 	}
 
 }

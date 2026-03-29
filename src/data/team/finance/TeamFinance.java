@@ -11,6 +11,7 @@ import data.team.finance.mediamarket.MediaMarket;
 import data.team.finance.transfer.TeamTransferStrategy;
 
 public class TeamFinance {
+    private double teamValue;
     private FinancialPolicy financialProfil;
     private EconomicProfil economicProfil = new EconomicProfil();
     private MediaMarket mediaMarket = new MediaMarket();
@@ -33,6 +34,7 @@ public class TeamFinance {
         this.luxuryTaxPaid = 0.0;
         this.transferMade = 0;
         this.teamTransferStrategy = teamTransferStrategy;
+        teamValue = 0.0;
     }
 
     public FinancialPolicy getFinancialProfil() {
@@ -117,6 +119,14 @@ public class TeamFinance {
 
     public void setCurrentPayroll(double currentPayroll) {
         this.currentPayroll = currentPayroll;
+    }
+
+    public double getTeamValue() {
+        return teamValue;
+    }
+
+    public void setTeamValue(double teamValue) {
+        this.teamValue = teamValue;
     }
 
 }

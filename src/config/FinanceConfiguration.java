@@ -5,12 +5,13 @@ import java.time.LocalDate;
 public class FinanceConfiguration {
     // les chiffres en millions
 
-    public static final double INITIAL_LEAGUE_BUDGET = 10_500;
+    public static final double INITIAL_LEAGUE_BUDGET = 9278.82;
+    public static final double INITIAL_LEAGUE_VALUE = 120000.0;
     public static final int NUMBER_OF_FINANCIAL_MONTHS = 12;
-    public static final double LUXURYTAX_THRESHOLD_RATE = 1.20;
+    public static final double LUXURYTAX_THRESHOLD_RATE = 1.215;
     public static final double LUXURY_TAX_RATE_BASE = 1.5;
-    public static final double PLAYER_SHARE = 0.45;
-    public static final double MINIMUM_TEAM_SALARY_RATE = 0.9;
+    public static final double PLAYER_SHARE = 0.50;
+    public static final double MINIMUM_TEAM_SALARY_RATE = 0.85;
     public static final double LEAGUE_ADMINISTRATIVE_COST = 0.35;
     public static final double LEAGUE_MEDIA_COST = 0.25;
     public static final double LEAGUE_MARKETING_COST = 0.20;
@@ -20,8 +21,8 @@ public class FinanceConfiguration {
     public static final double MARKET_SIZE_MEDIUM_MULTIPLIER = 1;
     public static final double MARKET_SIZE_LARGE_MULTIPLIER = 1.3;
 
-    public static final double BASE_TEAM_BUDGET = 200;
-    public static final double MAX_BUDGET_TEAM = 350;
+    public static final double BASE_TEAM_BUDGET = 100;
+    public static final double MAX_BUDGET_TEAM = 150;
     public static final double BASE_STADIUM_COSTS = 0.2;
     public static final double BASE_TICKET_PRICE = 45; // pas en millions
     public static final double ATTENDANCE_RATE_BASE = 0.5;

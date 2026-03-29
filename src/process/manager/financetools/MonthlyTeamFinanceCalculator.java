@@ -24,6 +24,7 @@ public class MonthlyTeamFinanceCalculator {
                 MediaMarket mediaMarket = teamFinance.getMediaMarket();
                 EconomicProfil economicProfil = teamFinance.getEconomicProfil();
                 FinancialPolicy financialPolicy = teamFinance.getFinancialProfil();
+                double teamValueFactor = FinanceUtilitary.getNormalizedTeamValue(team);
 
                 double marketMultiplier = getMarketMultiplier(marketSize);
                 double popularityFactor = team.getCurrentPopularity() / 100.0;
@@ -43,11 +44,14 @@ public class MonthlyTeamFinanceCalculator {
 
                 localSponsoring *= (1 + economicProfil.getCommercialAggressiveness() * 0.30);
                 localSponsoring *= (1 + economicProfil.getHistoricalPrestige() * 0.15);
+                localSponsoring *= (1 + teamValueFactor * 0.25);
 
                 localMerchandising *= (1 + economicProfil.getFanLoyalty() * 0.25);
                 localMerchandising *= (1 + economicProfil.getHistoricalPrestige() * 0.20);
+                localMerchandising *= (1 + teamValueFactor * 0.22);
 
                 otherRevenue *= (1 + economicProfil.getOwnerDeficitTolerance() * 0.08);
+                otherRevenue *= (1 + teamValueFactor * 0.15);
 
                 double monthlyPayroll = team.getTeamFinance().getCurrentPayroll()
                                 / FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS;
@@ -78,6 +82,7 @@ public class MonthlyTeamFinanceCalculator {
                                 month);
 
                 FinanceUtilitary.updateBudget(budget);
+                FinanceUtilitary.updateTeamValue(team);
         }
 
         private double calculateStadiumMaintenance(Team team, double marketMultiplier, MediaMarket mediaMarket,

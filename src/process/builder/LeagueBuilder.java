@@ -1,5 +1,12 @@
 package process.builder;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import config.CalendarConfiguration;
 import config.FinanceConfiguration;
 import data.finance.budget.Budget;
@@ -10,12 +17,6 @@ import data.league.League;
 import data.league.finance.LeagueFinance;
 import data.player.Player;
 import data.team.Team;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import process.factory.PlayerFactory;
 import process.factory.TeamFactory;
 import process.repositery.CurrentSeasonAssetRepositery;
@@ -100,6 +101,7 @@ public class LeagueBuilder {
 
 	private void buildFinanceLeague(League league) {
 		double initialBudget = FinanceConfiguration.INITIAL_LEAGUE_BUDGET;
+
 		Budget budget = new Budget(initialBudget);
 		FinanceUtilitary.initiateBudget(budget);
 
@@ -115,7 +117,8 @@ public class LeagueBuilder {
 		double luxuryTaxLine = salaryCap * FinanceConfiguration.LUXURYTAX_THRESHOLD_RATE;
 		double minimumTeamSalary = salaryCap * FinanceConfiguration.MINIMUM_TEAM_SALARY_RATE;
 
-		LeagueFinance leagueFinance = new LeagueFinance(budget, salaryCap, luxuryTaxLine, minimumTeamSalary);
+		LeagueFinance leagueFinance = new LeagueFinance(budget, salaryCap, luxuryTaxLine, minimumTeamSalary,
+				FinanceConfiguration.INITIAL_LEAGUE_VALUE);
 		league.setLeagueFinance(leagueFinance);
 	}
 
