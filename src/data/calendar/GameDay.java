@@ -19,7 +19,7 @@ public class GameDay {
         this.isSimulated = false;
         this.isDisplayed = false;
     }
-
+    
     public LocalDate getDate() {
         return this.date;
     }

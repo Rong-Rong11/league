@@ -24,14 +24,13 @@ public class TestCalendar {
       TeamRepositery.getInstance().clear();
       DivisionRepositery.getInstance().clear();
    }
-
+   
    @Test
    public void buildRegularSeasonCalendarAfterLeagueCreation() {
       League league = new LeagueBuilder().build();
       CalendarBuilder calendarBuilder = new CalendarBuilder(league);
 
       NBACalendar nbaCalendar = calendarBuilder.buildRegulaSeasonCalendar();
-
       assertNotNull(nbaCalendar);
       assertNotNull(nbaCalendar.getCalendar());
       assertFalse(nbaCalendar.getCalendar().isEmpty());
@@ -57,7 +56,6 @@ public class TestCalendar {
       NBACalendar calendar = calendarBuilder.buildRegulaSeasonCalendar();
       GameDay firstGameDay = calendar.getCalendar().firstEntry().getValue();
       Game firstGame = firstGameDay.getGames().get(0);
-
       assertNotNull(firstGameDay);
       assertNotNull(firstGame);
       assertTrue(firstGame.getGameContext().isScheduled());

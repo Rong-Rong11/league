@@ -14,7 +14,7 @@ public class GameStat {
     private double popularity = 0.0;
     private TeamGameFinance homeFinance = new TeamGameFinance();
     private TeamGameFinance awayFinance = new TeamGameFinance();
-
+    
     public GameStat(Game game) {
         this.game = game;
     }
