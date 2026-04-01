@@ -3,10 +3,12 @@
  */
 package data.sport.setup;
 
-import data.sport.setup.GameContext;
-import data.sport.setup.GameResult;
+import data.team.Team;
 
 public class Game {
+    private Team winner = null;
+    private Team loser = null;
+
     private GameContext gameContext;
     private GameResult[] quarterResults;
     private int homeFinalScore;
@@ -60,4 +62,21 @@ public class Game {
     public void setDisplayed(boolean bl) {
         this.displayed = bl;
     }
+
+    public Team getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Team winner) {
+        this.winner = winner;
+    }
+
+    public Team getLoser() {
+        return loser;
+    }
+
+    public void setLoser(Team loser) {
+        this.loser = loser;
+    }
+
 }
