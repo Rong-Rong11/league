@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
 
+import config.CalendarConfiguration;
+
 public class SimulationClock {
    private final LocalDate startDate;
 
@@ -55,6 +57,10 @@ public class SimulationClock {
 
    public boolean hasMonthChanged() {
       return computeMonth() != currentMonth;
+   }
+
+   public boolean isRegularSeasonEnd() {
+      return currentDate.equals(CalendarConfiguration.REGULAR_SEASON_END_DATE);
    }
 
    public int refreshWeek() {

@@ -128,7 +128,7 @@ public class GameGenerator {
 			}
 			addGameToTeam(game, lowerTeam);
 			addGameToTeam(game, higherTeam);
-			playoffSeries.addExpectedGame(game, i - 1);
+			playoffSeries.addExpectedGame(game, i);
 		}
 	}
 

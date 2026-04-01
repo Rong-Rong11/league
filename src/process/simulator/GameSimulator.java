@@ -1,5 +1,9 @@
 package process.simulator;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
+
 import config.GameConfiguration;
 import data.player.Asset;
 import data.player.Player;
@@ -15,9 +19,6 @@ import data.sport.setup.Game;
 import data.sport.setup.GameResult;
 import data.team.Team;
 import data.team.TeamPerformance;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeMap;
 import process.repositery.PlayerRepositery;
 import process.simulator.gametools.ActionSimulator;
 import process.simulator.gametools.EventSimulator;
@@ -274,6 +275,9 @@ public class GameSimulator {
 		awayTeam.getTeamPerformance().incrementNmberPlayedGames();
 		if (totalHome > totalAway) {
 			int scoreDifference = totalHome - totalAway;
+			game.setWinner(homeTeam);
+			game.setLoser(awayTeam);
+
 			homePerformance.incrementNumberWin();
 			awayPerformance.incrementNumberLose();
 			TeamUtilitary.updatePerformanceRating(homeTeam, awayTeam, 1, scoreDifference, awayTeam.getCurrentPopularity());
@@ -282,6 +286,8 @@ public class GameSimulator {
 			TeamUtilitary.updateStreak(homeTeam, true);
 			TeamUtilitary.updateStreak(awayTeam, false);
 		} else if (totalAway > totalHome) {
+			game.setWinner(awayTeam);
+			game.setLoser(homeTeam);
 			int scoreDifference = totalAway - totalHome;
 			homeTeam.getTeamPerformance().incrementNumberLose();
 			awayTeam.getTeamPerformance().incrementNumberWin();

@@ -3,13 +3,11 @@
  */
 package data.sport.setup;
 
-import data.sport.play.action.ActionResult;
-import data.team.Team;
 import java.util.ArrayList;
 
+import data.sport.play.action.ActionResult;
+
 public class GameResult {
-    private Team winner = null;
-    private Team loser = null;
     private int scorehomeTeam;
     private int scoreAwayTeam;
     private int twoPointsHomeTeam;
@@ -26,7 +24,8 @@ public class GameResult {
     private int freeThrowAwayTeam;
     private ArrayList<ActionResult> actions;
 
-    public GameResult(int n, int n2, int n3, int n4, int n5, int n6, int n7, int n8, int n9, int n10, int n11, int n12, int n13, int n14) {
+    public GameResult(int n, int n2, int n3, int n4, int n5, int n6, int n7, int n8, int n9, int n10, int n11, int n12,
+            int n13, int n14) {
         this.scorehomeTeam = n;
         this.scoreAwayTeam = n2;
         this.twoPointsHomeTeam = n3;
