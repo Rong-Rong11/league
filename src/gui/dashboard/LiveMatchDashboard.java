@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -20,7 +19,6 @@ import gui.panel.common.BuildBox;
 import gui.panel.matchPanel.liveMatchPanel.LiveActionsPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveMatchHeaderPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveTeamStatsPanel;
-import process.orchestrator.SimulationInterface;
 import process.service.LiveMatchStatistics;
 import process.visitor.actionresult.LiveActionTextVisitor;
 
@@ -34,9 +32,6 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 
 	private Runnable backToMatchAction;
 
-	private SimulationInterface simulationInterface;
-
-	private LocalDate gameDate;
 	private Game game;
 	private String homeTeamName;
 	private String awayTeamName;
@@ -138,11 +133,6 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 
 	public void setBackToMatchAction(Runnable backToMatchAction) {
 		this.backToMatchAction = backToMatchAction;
-	}
-
-	public void setSimulationContext(SimulationInterface simulationInterface, LocalDate gameDate) {
-		this.simulationInterface = simulationInterface;
-		this.gameDate = gameDate;
 	}
 
 	public void setGame(Game game) {

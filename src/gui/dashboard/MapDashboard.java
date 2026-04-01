@@ -16,9 +16,7 @@ import gui.panel.common.SectionTitle;
 import gui.panel.common.TeamMapPanel;
 import gui.panel.mapPanel.effectifPanel.MapTeamPlayersPanel;
 import gui.panel.mapPanel.effectifPanel.MapTeamSummaryPanel;
-import process.orchestrator.SimulationInterface;
-import process.repositery.TeamRepositery;
-import process.utilitary.TeamStatUtil;
+import process.orchestrator.GUIInterface;
 
 /**
  * Dashboard dédié à la page Carte.
@@ -30,18 +28,17 @@ public class MapDashboard extends JPanel {
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
-	private SimulationInterface simulationInterface;
+	private GUIInterface guiInterface;
 	private ArrayList<Team> teams;
 	private Team selectedTeam;
 	private TeamMapPanel mapPanel;
 	private MapTeamSummaryPanel teamSummaryPanel;
 	private MapTeamPlayersPanel teamPlayersPanel;
 	private Runnable openRosterAction;
-	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 	private boolean currentSeasonSelected = true;
 
-	public MapDashboard(SimulationInterface simulationInterface) {
-		this.simulationInterface = simulationInterface;
+	public MapDashboard(GUIInterface guiInterface) {
+		this.guiInterface = guiInterface;
 		create();
 		organize();
 		actions();
@@ -49,9 +46,9 @@ public class MapDashboard extends JPanel {
 	}
 
 	private void create() {
-		teams = new ArrayList<Team>(teamRepositery.getAllTeams());
+		teams = new ArrayList<Team>(guiInterface.getTeams());
 		mapPanel = new TeamMapPanel();
-		teamSummaryPanel = new MapTeamSummaryPanel();
+		teamSummaryPanel = new MapTeamSummaryPanel(guiInterface);
 		teamPlayersPanel = new MapTeamPlayersPanel();
 	}
 
@@ -144,7 +141,7 @@ public class MapDashboard extends JPanel {
 	private class MapSelectionAction implements Runnable {
 		@Override
 		public void run() {
-			setSelectedTeam(TeamStatUtil.findTeamByName(mapPanel.getSelectedTeamName()));
+			setSelectedTeam(guiInterface.getTeamByName(mapPanel.getSelectedTeamName()));
 		}
 	}
 }

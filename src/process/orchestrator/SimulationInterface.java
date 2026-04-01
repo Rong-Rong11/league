@@ -2,9 +2,6 @@ package process.orchestrator;
 
 import java.time.LocalDate;
 
-import data.finance.GameStat;
-import data.league.League;
-import data.sport.setup.Game;
 import data.team.Team;
 
 public interface SimulationInterface {
@@ -32,11 +29,5 @@ public interface SimulationInterface {
    void endRegularSeason();
 
    void simulateRegularSeason();
-
-   League getLeague();
-
-   LocalDate getCurrentDate();
-
-   GameStat getGameStat(Game game);
 
 }

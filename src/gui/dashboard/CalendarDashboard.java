@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -17,7 +18,7 @@ import data.calendar.GameDay;
 import gui.panel.calendarPanel.HeaderPanel;
 import gui.panel.calendarPanel.MonthViewPanel;
 import gui.panel.calendarPanel.WeekViewPanel;
-import process.orchestrator.SimulationInterface;
+import process.orchestrator.GUIInterface;
 
 public class CalendarDashboard extends JPanel {
 
@@ -25,7 +26,7 @@ public class CalendarDashboard extends JPanel {
 	private static final String MONTH_VIEW = "MONTH_VIEW";
 	private static final String WEEK_VIEW = "WEEK_VIEW";
 	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
-	private SimulationInterface simulationInterface;
+	private GUIInterface guiInterface;
 	private HeaderPanel headerPanel;
 	private WeekViewPanel weekViewPanel;
 	private MonthViewPanel monthViewPanel;
@@ -39,9 +40,9 @@ public class CalendarDashboard extends JPanel {
 	private RosterDashboard rosterDashboard;
 	private MapDashboard mapDashboard;
 
-	public CalendarDashboard(SimulationInterface simulationInterface, MatchDashboard matchDashboard,
-			Runnable showMatchDashboardAction, RosterDashboard rosterDashboard, MapDashboard mapDashboard) {
-		this.simulationInterface = simulationInterface;
+	public CalendarDashboard(GUIInterface guiInterface, MatchDashboard matchDashboard, Runnable showMatchDashboardAction,
+			RosterDashboard rosterDashboard, MapDashboard mapDashboard) {
+		this.guiInterface = guiInterface;
 		this.matchDashboard = matchDashboard;
 		this.showMatchDashboardAction = showMatchDashboardAction;
 		this.rosterDashboard = rosterDashboard;
@@ -54,7 +55,7 @@ public class CalendarDashboard extends JPanel {
 
 	private void create() {
 		headerPanel = new HeaderPanel();
-		weekViewPanel = new WeekViewPanel(simulationInterface);
+		weekViewPanel = new WeekViewPanel(guiInterface);
 		OpenMatchDayAction openMatchDayAction = new OpenMatchDayAction(matchDashboard, showMatchDashboardAction);
 		weekViewPanel.setOpenMatchDayAction(openMatchDayAction);
 		monthViewPanel = new MonthViewPanel();
@@ -86,8 +87,8 @@ public class CalendarDashboard extends JPanel {
 	}
 
 	public void startSeason() {
-		simulationInterface.randomFinance();
-		simulationInterface.startSeason();
+		guiInterface.randomFinance();
+		guiInterface.startSeason();
 		weekViewPanel.loadSeasonState();
 		currentCalendarDate = weekViewPanel.getCurrentDate();
 		updateDisplayedMonth(currentCalendarDate);
@@ -131,14 +132,12 @@ public class CalendarDashboard extends JPanel {
 	}
 
 	private void updateProgress() {
-		if (simulationInterface.getLeague() == null || simulationInterface.getLeague().getReagularSeason() == null
-				|| simulationInterface.getLeague().getReagularSeason().getNbaCalendar() == null) {
+		if (!guiInterface.isSeasonInitialized()) {
 			headerPanel.setProgress(0, 0);
 			return;
 		}
 
-		HashMap<LocalDate, GameDay> seasonCalendar = new HashMap<LocalDate, GameDay>(
-				simulationInterface.getLeague().getReagularSeason().getNbaCalendar().getCalendar());
+		TreeMap<LocalDate, GameDay> seasonCalendar = guiInterface.getSeasonCalendar();
 		int totalGameDays = seasonCalendar.size();
 		int displayedGameDays = 0;
 		for (GameDay gameDay : seasonCalendar.values()) {
@@ -150,14 +149,12 @@ public class CalendarDashboard extends JPanel {
 	}
 
 	private void updateMonthView(LocalDate currentDate) {
-		if (simulationInterface.getLeague() == null || simulationInterface.getLeague().getReagularSeason() == null
-				|| simulationInterface.getLeague().getReagularSeason().getNbaCalendar() == null) {
+		if (!guiInterface.isSeasonInitialized()) {
 			monthViewPanel.showMonth(displayedMonth, currentDate, null);
 			return;
 		}
 
-		HashMap<LocalDate, GameDay> seasonCalendar = new HashMap<LocalDate, GameDay>(
-				simulationInterface.getLeague().getReagularSeason().getNbaCalendar().getCalendar());
+		HashMap<LocalDate, GameDay> seasonCalendar = new HashMap<LocalDate, GameDay>(guiInterface.getSeasonCalendar());
 		monthViewPanel.showMonth(displayedMonth, currentDate, seasonCalendar);
 	}
 

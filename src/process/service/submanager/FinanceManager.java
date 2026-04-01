@@ -100,4 +100,7 @@ public class FinanceManager {
         }
     }
 
+    public double getTeamCurrentPayroll(Team team) {
+        return team.getTeamFinance().getCurrentPayroll();
+    }
 }
