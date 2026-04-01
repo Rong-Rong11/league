@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.financePanel.FinanceHeaderPanel;
-import process.orchestrator.SimulationInterface;
 
 public class FinanceDashboard extends JPanel {
 
@@ -19,15 +18,13 @@ public class FinanceDashboard extends JPanel {
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 	private static final String LEAGUE_VIEW = "league";
 	private static final String TEAM_VIEW = "team";
-	private SimulationInterface simulationInterface;
 
 	private FinanceHeaderPanel headerPanel;
 	private JPanel centerContentPanel;
 	private String selectedView;
 
-	public FinanceDashboard(SimulationInterface simulationInterface) {
+	public FinanceDashboard() {
 		selectedView = LEAGUE_VIEW;
-		this.simulationInterface = simulationInterface;
 		create();
 		organize();
 		actions();
