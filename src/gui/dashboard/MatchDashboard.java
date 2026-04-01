@@ -19,8 +19,7 @@ import gui.panel.matchPanel.MatchDayListPanel.MatchSelectionListener;
 import gui.panel.matchPanel.MatchDetailPanel;
 import gui.panel.matchPanel.MatchFinancePanel;
 import gui.panel.matchPanel.MatchHeaderPanel;
-import process.orchestrator.MatchQueryInterface;
-import process.orchestrator.SeasonQueryInterface;
+import process.orchestrator.GUIInterface;
 
 public class MatchDashboard extends JPanel {
 	private static final int DASHBOARD_SPACING = 16;
@@ -28,8 +27,7 @@ public class MatchDashboard extends JPanel {
 	private static final int RIGHT_COLUMN_WIDTH = 300;
 	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
 
-	private SeasonQueryInterface seasonQueryInterface;
-	private MatchQueryInterface matchQueryInterface;
+	private GUIInterface guiInterface;
 	private LocalDate selectedDate;
 	private Game selectedGame;
 	private GameDay selectedGameDay;
@@ -41,9 +39,8 @@ public class MatchDashboard extends JPanel {
 
 	private Runnable openLiveMatchAction;
 
-	public MatchDashboard(SeasonQueryInterface seasonQueryInterface, MatchQueryInterface matchQueryInterface) {
-		this.seasonQueryInterface = seasonQueryInterface;
-		this.matchQueryInterface = matchQueryInterface;
+	public MatchDashboard(GUIInterface guiInterface) {
+		this.guiInterface = guiInterface;
 		selectedDate = CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE;
 		create();
 		organize();
@@ -118,7 +115,7 @@ public class MatchDashboard extends JPanel {
 
 	public void loadGamesOfDay(LocalDate date) {
 		selectedDate = date;
-		GameDay gameDay = seasonQueryInterface.getGameDay(date);
+		GameDay gameDay = guiInterface.getGameDay(date);
 		showGameDay(gameDay, date);
 	}
 
@@ -154,7 +151,7 @@ public class MatchDashboard extends JPanel {
 			return;
 		}
 
-		GameStat gameStat = matchQueryInterface.getGameStat(game);
+		GameStat gameStat = guiInterface.getGameStat(game);
 		matchDetailPanel.showGame(game, buildDayNumberText(), gameStat);
 		matchFinancePanel.showGameFinance(game, gameStat);
 	}

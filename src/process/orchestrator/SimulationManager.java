@@ -32,8 +32,7 @@ import process.utilitary.TeamDisplayUtil;
 import process.utilitary.TeamStatUtil;
 
 //cerveau de la simulation 
-public class SimulationManager
-		implements SimulationInterface, SeasonQueryInterface, TeamQueryInterface, MatchQueryInterface, DisplayInterface {
+public class SimulationManager implements GUIInterface {
 
 	private League league;
 	private LeagueBuilder leagueBuilder = new LeagueBuilder();

@@ -14,10 +14,10 @@ import javax.swing.JPanel;
 import data.team.Team;
 import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
-import process.orchestrator.TeamQueryInterface;
+import process.orchestrator.GUIInterface;
 
 public class MapTeamSummaryPanel extends JPanel {
-	private final TeamQueryInterface teamQueryInterface;
+	private final GUIInterface guiInterface;
 	private JLabel teamNameLabel;
 	private JLabel budgetLabel;
 	private JLabel capacityLabel;
@@ -25,8 +25,8 @@ public class MapTeamSummaryPanel extends JPanel {
 	private JButton openRosterButton;
 	private TeamLogoPanel teamLogoPanel;
 
-	public MapTeamSummaryPanel(TeamQueryInterface teamQueryInterface) {
-		this.teamQueryInterface = teamQueryInterface;
+	public MapTeamSummaryPanel(GUIInterface guiInterface) {
+		this.guiInterface = guiInterface;
 		create();
 		organize();
 		updateTeam(null, true);
@@ -39,7 +39,7 @@ public class MapTeamSummaryPanel extends JPanel {
 		averageNoteLabel = new JLabel();
 		openRosterButton = new JButton("Voir l'effectif complet");
 		teamLogoPanel = new TeamLogoPanel("", 56);
-		teamLogoPanel.setTeamQueryInterface(teamQueryInterface);
+		teamLogoPanel.setTeamQueryInterface(guiInterface);
 
 		teamNameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 		teamNameLabel.setForeground(new Color(0x17, 0x31, 0x74));
@@ -111,7 +111,7 @@ public class MapTeamSummaryPanel extends JPanel {
 		teamNameLabel.setText(team.getName());
 
 		if (currentSeasonSelected) {
-			teamQueryInterface.refreshTeamPayroll(team);
+			guiInterface.refreshTeamPayroll(team);
 			budgetLabel.setText(PlayerDisplayUtil.formatSalary(team.getTeamFinance().getBudget().getRemainingAmount()));
 			averageNoteLabel.setText(PlayerDisplayUtil.formatOneDecimal(team.getCurrentPopularity()) + "/100");
 		} else {

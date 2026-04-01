@@ -16,11 +16,11 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import process.orchestrator.TeamQueryInterface;
+import process.orchestrator.GUIInterface;
 import process.utilitary.TeamDisplayUtil;
 
 public class OpeningPolicyDetailPanel extends JPanel {
-	private final TeamQueryInterface teamQueryInterface;
+	private final GUIInterface guiInterface;
 
 	private JLabel policyLabel;
 	private JLabel teamValueLabel;
@@ -32,8 +32,8 @@ public class OpeningPolicyDetailPanel extends JPanel {
 	private JLabel capacityValueLabel;
 	private JLabel noteValueLabel;
 
-	public OpeningPolicyDetailPanel(TeamQueryInterface teamQueryInterface) {
-		this.teamQueryInterface = teamQueryInterface;
+	public OpeningPolicyDetailPanel(GUIInterface guiInterface) {
+		this.guiInterface = guiInterface;
 		setLayout(new BorderLayout(0, 14));
 		setOpaque(false);
 		setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
@@ -121,13 +121,13 @@ public class OpeningPolicyDetailPanel extends JPanel {
 		policyLabel.setText(getPolicyName(team.getTeamFinance().getFinancialProfil()));
 		teamValueLabel.setText(TeamDisplayUtil.getShortName(team));
 		cityValueLabel.setText(TeamDisplayUtil.getCityName(team));
-		conferenceValueLabel.setText(TeamDisplayUtil.getConferenceLabel(teamQueryInterface.getConferenceName(team)));
-		divisionValueLabel.setText(teamQueryInterface.getDivisionName(team));
+		conferenceValueLabel.setText(TeamDisplayUtil.getConferenceLabel(guiInterface.getConferenceName(team)));
+		divisionValueLabel.setText(guiInterface.getDivisionName(team));
 		marketSizeValueLabel.setText(getMarketSizeName(team.getTeamFinance().getMarketSize()));
 		budgetValueLabel.setText(PlayerDisplayUtil.formatSalary(team.getTeamFinance().getBudget().getRemainingAmount()));
 		capacityValueLabel.setText(team.getStadium().getCapacity() + " places");
 
-		int note = (int) Math.round(teamQueryInterface.getAverageNote(team));
+		int note = (int) Math.round(guiInterface.getAverageNote(team));
 		noteValueLabel.setText(note + "/100");
 	}
 

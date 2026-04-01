@@ -16,9 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import data.calendar.GameDay;
-import process.orchestrator.DisplayInterface;
-import process.orchestrator.SeasonQueryInterface;
-import process.orchestrator.SimulationInterface;
+import process.orchestrator.GUIInterface;
 
 public class WeekViewPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -31,18 +29,13 @@ public class WeekViewPanel extends JPanel {
 	private final JLabel currentDateLabel = new JLabel();
 	private final JPanel matchDisplayPanel = new JPanel();
 
-	private final SimulationInterface simulationInterface;
-	private final SeasonQueryInterface seasonQueryInterface;
-	private final DisplayInterface displayInterface;
+	private final GUIInterface guiInterface;
 	private LocalDate displayedDate;
 	private LocalDate lastSimulatedDate;
 	private OpenMatchDayAction openMatchDayAction;
 
-	public WeekViewPanel(SimulationInterface simulationInterface, SeasonQueryInterface seasonQueryInterface,
-			DisplayInterface displayInterface) {
-		this.simulationInterface = simulationInterface;
-		this.seasonQueryInterface = seasonQueryInterface;
-		this.displayInterface = displayInterface;
+	public WeekViewPanel(GUIInterface guiInterface) {
+		this.guiInterface = guiInterface;
 		create();
 		organize();
 		actions();
@@ -73,19 +66,19 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	public void loadSeasonState() {
-		if (!seasonQueryInterface.isSeasonInitialized()) {
+		if (!guiInterface.isSeasonInitialized()) {
 			displayedDate = null;
 			lastSimulatedDate = null;
 			updateDisplay();
 			return;
 		}
-		lastSimulatedDate = seasonQueryInterface.getRegularSeasonStartDate();
+		lastSimulatedDate = guiInterface.getRegularSeasonStartDate();
 		displayedDate = findNextGameDay(lastSimulatedDate);
 		updateDisplay();
 	}
 
 	public void advanceDay() {
-		if (!seasonQueryInterface.isSeasonInitialized() || displayedDate == null) {
+		if (!guiInterface.isSeasonInitialized() || displayedDate == null) {
 			return;
 		}
 
@@ -100,7 +93,7 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	public void advanceWeek() {
-		if (!seasonQueryInterface.isSeasonInitialized() || displayedDate == null) {
+		if (!guiInterface.isSeasonInitialized() || displayedDate == null) {
 			return;
 		}
 
@@ -117,7 +110,7 @@ public class WeekViewPanel extends JPanel {
 
 		lastSimulatedDate = simulatedDay;
 		LocalDate nextWeekStart = weekEnd.plusDays(1);
-		if (!nextWeekStart.isAfter(seasonQueryInterface.getRegularSeasonEndDate())) {
+		if (!nextWeekStart.isAfter(guiInterface.getRegularSeasonEndDate())) {
 			displayedDate = findNextGameDay(nextWeekStart);
 		} else {
 			displayedDate = lastSimulatedDate;
@@ -129,12 +122,12 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	public void advanceSeason() {
-		if (!seasonQueryInterface.isSeasonInitialized() || displayedDate == null) {
+		if (!guiInterface.isSeasonInitialized() || displayedDate == null) {
 			return;
 		}
 
 		LocalDate simulatedDay = lastSimulatedDate;
-		for (LocalDate day : seasonQueryInterface.getSeasonCalendar().keySet()) {
+		for (LocalDate day : guiInterface.getSeasonCalendar().keySet()) {
 			if (day.isBefore(displayedDate)) {
 				continue;
 			}
@@ -148,7 +141,7 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	private void updateDisplay() {
-		if (!seasonQueryInterface.isSeasonInitialized() || displayedDate == null) {
+		if (!guiInterface.isSeasonInitialized() || displayedDate == null) {
 			showWaitingState();
 			return;
 		}
@@ -192,8 +185,8 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	private void simulateDisplayedDay(LocalDate day) {
-		simulationInterface.simulateRegularSeasonDay(day);
-		displayInterface.displayGameDay(day);
+		guiInterface.simulateRegularSeasonDay(day);
+		guiInterface.displayGameDay(day);
 	}
 
 	private boolean hasGame(LocalDate day) {
@@ -202,7 +195,7 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	private GameDay getGameDay(LocalDate day) {
-		return seasonQueryInterface.getGameDay(day);
+		return guiInterface.getGameDay(day);
 	}
 
 	private void updateWeekRows() {
@@ -210,8 +203,8 @@ public class WeekViewPanel extends JPanel {
 		LocalDate weekStart = getWeekStart(displayedDate);
 		for (int offset = 0; offset < 7; offset++) {
 			LocalDate day = weekStart.plusDays(offset);
-			if (day.isBefore(seasonQueryInterface.getRegularSeasonStartDate())
-					|| day.isAfter(seasonQueryInterface.getRegularSeasonEndDate())) {
+			if (day.isBefore(guiInterface.getRegularSeasonStartDate())
+					|| day.isAfter(guiInterface.getRegularSeasonEndDate())) {
 				continue;
 			}
 			GameDay gameDay = getGameDay(day);
@@ -244,12 +237,12 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	private LocalDate findNextGameDay(LocalDate startDate) {
-		if (!seasonQueryInterface.isSeasonInitialized() || startDate == null) {
+		if (!guiInterface.isSeasonInitialized() || startDate == null) {
 			return null;
 		}
 
-		TreeMap<LocalDate, GameDay> seasonCalendar = seasonQueryInterface.getSeasonCalendar();
-		for (LocalDate day = startDate; !day.isAfter(seasonQueryInterface.getRegularSeasonEndDate()); day = day.plusDays(1)) {
+		TreeMap<LocalDate, GameDay> seasonCalendar = guiInterface.getSeasonCalendar();
+		for (LocalDate day = startDate; !day.isAfter(guiInterface.getRegularSeasonEndDate()); day = day.plusDays(1)) {
 			if (hasGame(day)) {
 				return day;
 			}
@@ -265,11 +258,11 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	private void showPreviousWeek() {
-		if (!seasonQueryInterface.isSeasonInitialized() || displayedDate == null) {
+		if (!guiInterface.isSeasonInitialized() || displayedDate == null) {
 			return;
 		}
 		LocalDate previousWeek = displayedDate.minusDays(7);
-		if (!previousWeek.isBefore(seasonQueryInterface.getRegularSeasonStartDate())) {
+		if (!previousWeek.isBefore(guiInterface.getRegularSeasonStartDate())) {
 			displayedDate = findNextGameDay(previousWeek);
 			if (displayedDate == null) {
 				displayedDate = previousWeek;

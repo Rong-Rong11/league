@@ -16,7 +16,7 @@ import gui.panel.common.SectionTitle;
 import gui.panel.common.TeamMapPanel;
 import gui.panel.mapPanel.effectifPanel.MapTeamPlayersPanel;
 import gui.panel.mapPanel.effectifPanel.MapTeamSummaryPanel;
-import process.orchestrator.TeamQueryInterface;
+import process.orchestrator.GUIInterface;
 
 /**
  * Dashboard dédié à la page Carte.
@@ -28,7 +28,7 @@ public class MapDashboard extends JPanel {
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
-	private TeamQueryInterface teamQueryInterface;
+	private GUIInterface guiInterface;
 	private ArrayList<Team> teams;
 	private Team selectedTeam;
 	private TeamMapPanel mapPanel;
@@ -37,8 +37,8 @@ public class MapDashboard extends JPanel {
 	private Runnable openRosterAction;
 	private boolean currentSeasonSelected = true;
 
-	public MapDashboard(TeamQueryInterface teamQueryInterface) {
-		this.teamQueryInterface = teamQueryInterface;
+	public MapDashboard(GUIInterface guiInterface) {
+		this.guiInterface = guiInterface;
 		create();
 		organize();
 		actions();
@@ -46,9 +46,9 @@ public class MapDashboard extends JPanel {
 	}
 
 	private void create() {
-		teams = new ArrayList<Team>(teamQueryInterface.getTeams());
+		teams = new ArrayList<Team>(guiInterface.getTeams());
 		mapPanel = new TeamMapPanel();
-		teamSummaryPanel = new MapTeamSummaryPanel(teamQueryInterface);
+		teamSummaryPanel = new MapTeamSummaryPanel(guiInterface);
 		teamPlayersPanel = new MapTeamPlayersPanel();
 	}
 
@@ -141,7 +141,7 @@ public class MapDashboard extends JPanel {
 	private class MapSelectionAction implements Runnable {
 		@Override
 		public void run() {
-			setSelectedTeam(teamQueryInterface.getTeamByName(mapPanel.getSelectedTeamName()));
+			setSelectedTeam(guiInterface.getTeamByName(mapPanel.getSelectedTeamName()));
 		}
 	}
 }

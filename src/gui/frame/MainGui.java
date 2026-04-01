@@ -18,11 +18,7 @@ import gui.dashboard.OpeningDashboard;
 import gui.dashboard.RankingDashboard;
 import gui.dashboard.RosterDashboard;
 import gui.layout.SidebarPanel;
-import process.orchestrator.DisplayInterface;
-import process.orchestrator.MatchQueryInterface;
-import process.orchestrator.SeasonQueryInterface;
-import process.orchestrator.SimulationInterface;
-import process.orchestrator.TeamQueryInterface;
+import process.orchestrator.GUIInterface;
 
 public class MainGui extends JFrame {
 
@@ -37,21 +33,11 @@ public class MainGui extends JFrame {
 	private LiveMatchDashboard liveMatchDashboard;
 	private MapDashboard mapDashboard;
 	private RosterDashboard rosterDashboard;
-	private SimulationInterface simulationInterface;
-	private SeasonQueryInterface seasonQueryInterface;
-	private TeamQueryInterface teamQueryInterface;
-	private MatchQueryInterface matchQueryInterface;
-	private DisplayInterface displayInterface;
+	private GUIInterface guiInterface;
 	private SidebarPanel sidebar;
 
-	public MainGui(SimulationInterface simulationInterface, SeasonQueryInterface seasonQueryInterface,
-			TeamQueryInterface teamQueryInterface, MatchQueryInterface matchQueryInterface,
-			DisplayInterface displayInterface) {
-		this.simulationInterface = simulationInterface;
-		this.seasonQueryInterface = seasonQueryInterface;
-		this.teamQueryInterface = teamQueryInterface;
-		this.matchQueryInterface = matchQueryInterface;
-		this.displayInterface = displayInterface;
+	public MainGui(GUIInterface guiInterface) {
+		this.guiInterface = guiInterface;
 		create();
 		organize();
 		actions();
@@ -66,7 +52,7 @@ public class MainGui extends JFrame {
 
 		dashboardLayout = new CardLayout();
 		dashboardPanel = new JPanel(dashboardLayout);
-		openingPanel = new OpeningDashboard(simulationInterface, teamQueryInterface);
+		openingPanel = new OpeningDashboard(guiInterface);
 		mainPanel = buildApplicationPanel();
 	}
 
@@ -94,14 +80,14 @@ public class MainGui extends JFrame {
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		sidebar = new SidebarPanel();
 
-		matchDashboard = new MatchDashboard(seasonQueryInterface, matchQueryInterface);
+		matchDashboard = new MatchDashboard(guiInterface);
 		liveMatchDashboard = new LiveMatchDashboard();
-		mapDashboard = new MapDashboard(teamQueryInterface);
-		rosterDashboard = new RosterDashboard(teamQueryInterface);
+		mapDashboard = new MapDashboard(guiInterface);
+		rosterDashboard = new RosterDashboard(guiInterface);
 		dashboardPanel.add(matchDashboard, "match");
 		dashboardPanel.add(liveMatchDashboard, "liveMatch");
-		calendarDashboard = new CalendarDashboard(simulationInterface, seasonQueryInterface, displayInterface,
-				matchDashboard, new ShowMatchDashboardAction(), rosterDashboard, mapDashboard);
+		calendarDashboard = new CalendarDashboard(guiInterface, matchDashboard, new ShowMatchDashboardAction(),
+				rosterDashboard, mapDashboard);
 		dashboardPanel.add(calendarDashboard, "calendar");
 		dashboardPanel.add(new RankingDashboard(), "ranking");
 		dashboardPanel.add(new FinanceDashboard(), "finance");
@@ -161,7 +147,7 @@ public class MainGui extends JFrame {
 			}
 
 			calendarDashboard.startSeason();
-			matchDashboard.loadGamesOfDay(seasonQueryInterface.getCurrentDate());
+			matchDashboard.loadGamesOfDay(guiInterface.getCurrentDate());
 			sidebar.setActiveSection("match");
 			dashboardLayout.show(dashboardPanel, "match");
 			rootLayout.show(rootPanel, "main");
