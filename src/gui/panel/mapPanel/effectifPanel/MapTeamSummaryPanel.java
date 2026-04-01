@@ -111,7 +111,6 @@ public class MapTeamSummaryPanel extends JPanel {
 		teamNameLabel.setText(team.getName());
 
 		if (currentSeasonSelected) {
-			guiInterface.refreshTeamPayroll(team);
 			budgetLabel.setText(PlayerDisplayUtil.formatSalary(team.getTeamFinance().getBudget().getRemainingAmount()));
 			averageNoteLabel.setText(PlayerDisplayUtil.formatOneDecimal(team.getCurrentPopularity()) + "/100");
 		} else {

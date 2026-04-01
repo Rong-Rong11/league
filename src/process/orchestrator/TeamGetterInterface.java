@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import data.team.Team;
 
-public interface TeamQueryInterface {
+public interface TeamGetterInterface {
 
    ArrayList<Team> getTeams();
 
@@ -20,5 +20,5 @@ public interface TeamQueryInterface {
 
    String getTeamAbbreviation(String teamName);
 
-   void refreshTeamPayroll(Team team);
+   double getTeamCurrentPayroll(Team team);
 }

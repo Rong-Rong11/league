@@ -240,10 +240,8 @@ public class SimulationManager implements GUIInterface {
 	}
 
 	@Override
-	public void refreshTeamPayroll(Team team) {
-		if (team != null) {
-			FinanceUtilitary.updateTeamPayroll(team);
-		}
+	public double getTeamCurrentPayroll(Team team) {
+		return financeManager.getTeamCurrentPayroll(team);
 	}
 
 	@Override

@@ -1,17 +1,17 @@
 package gui.panel.mapPanel.effectifPanel.teamPanel;
 
-import data.team.Team;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import process.orchestrator.TeamQueryInterface;
-import process.utilitary.TeamDisplayUtil;
+
+import process.orchestrator.TeamGetterInterface;
 
 public class TeamLogoPanel extends JPanel {
 	private static final String LOGO_FOLDER_PATH = "resources/nba_logos/";
@@ -20,7 +20,7 @@ public class TeamLogoPanel extends JPanel {
 	private JLabel logoLabel;
 	private String teamName;
 	private int logoSize;
-	private TeamQueryInterface teamQueryInterface;
+	private TeamGetterInterface teamQueryInterface;
 
 	public TeamLogoPanel() {
 		this("", DEFAULT_LOGO_SIZE);
@@ -52,7 +52,7 @@ public class TeamLogoPanel extends JPanel {
 		updateLogo();
 	}
 
-	public void setTeamQueryInterface(TeamQueryInterface teamQueryInterface) {
+	public void setTeamQueryInterface(TeamGetterInterface teamQueryInterface) {
 		this.teamQueryInterface = teamQueryInterface;
 		updateLogo();
 	}

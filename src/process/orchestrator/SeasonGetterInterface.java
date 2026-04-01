@@ -5,7 +5,7 @@ import java.util.TreeMap;
 
 import data.calendar.GameDay;
 
-public interface SeasonQueryInterface {
+public interface SeasonGetterInterface {
 
    LocalDate getCurrentDate();
 

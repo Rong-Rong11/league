@@ -6,9 +6,9 @@ import process.orchestrator.SimulationManager;
 
 public class App {
 
-public static void main(String[] args) {
-	GUIInterface guiInterface = new SimulationManager();
-	MainGui gui = new MainGui(guiInterface);
+	public static void main(String[] args) {
+		GUIInterface guiInterface = new SimulationManager();
+		MainGui gui = new MainGui(guiInterface);
 
-}
+	}
 }
