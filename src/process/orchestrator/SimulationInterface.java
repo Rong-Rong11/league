@@ -9,7 +9,7 @@ import data.team.Team;
 
 public interface SimulationInterface {
 
-   // methddes pour la presaison
+   // methodes pour la presaison
    // pour page de garde
    void randomFinance();
 
