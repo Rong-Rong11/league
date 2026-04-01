@@ -1,23 +1,27 @@
 package process.service.submanager;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 import data.calendar.GameDay;
 import data.league.League;
-import data.league.Playoff;
 import data.sport.setup.Game;
 import data.sport.setup.PlayoffSeries;
 import data.team.Team;
-import process.builder.CalendarBuilder;
+import process.builder.PlayoffBuilder;
+import process.builder.PlayoffCalendarBuilder;
 
-public class PlayoffManager {
+public abstract class PlayoffManager {
    private League league;
-   private CalendarBuilder calendarBuilder;
+   private PlayoffCalendarBuilder currentRoundCalendarBuilder;
+   private PlayoffBuilder playoffBuilder;
 
-   public PlayoffManager(League league, CalendarBuilder calendarBuilder) {
+   public PlayoffManager(League league, PlayoffCalendarBuilder currentRoundCalendarBuilder,
+         PlayoffBuilder playoffBuilder) {
       this.league = league;
-      this.calendarBuilder = calendarBuilder;
+      this.currentRoundCalendarBuilder = currentRoundCalendarBuilder;
+      this.playoffBuilder = playoffBuilder;
    }
 
    public void handlePlayedGame(Game game, LocalDate gameDate) {
@@ -25,46 +29,82 @@ public class PlayoffManager {
       if (series == null || series.isFinished()) {
          return;
       }
-      updateSeries(game, series);
+
+      updateSeries(series, game);
+
       if (series.isFinished()) {
-         tryAdvanceRound();
-      } else {
-         TreeMap<LocalDate, GameDay> playoffCalendar = league.getPlayoff().getNbaCalendar().getCalendar();
-         calendarBuilder.scheduleNextGameIfNecessary(playoffCalendar, series, gameDate);
+         if (isManagedRoundFinished()) {
+            advanceToNextRound(gameDate);
+         }
+         return;
       }
-   }
 
-   private void tryAdvanceRound() {
-      // a compléter plus tard
-   }
-
-   public void updateSeries(Game game, PlayoffSeries series) {
-      Team winner = game.getWinner();
-
-      if (winner.equals(series.getHigherTeam())) {
-         series.setHigherTeamWins(series.getHigherTeamWins() + 1);
-      } else if (winner.equals(series.getLowerTeam())) {
-         series.setLowerTeamWins(series.getLowerTeamWins() + 1);
-      }
-      series.setNumberPlayedGames(series.getNumberPlayedGames() + 1);
-      if (series.getHigherTeamWins() == 4 || series.getLowerTeamWins() == 4) {
-         series.setFinished(true);
-      }
+      TreeMap<LocalDate, GameDay> playoffCalendar = league.getPlayoff().getNbaCalendar().getCalendar();
+      currentRoundCalendarBuilder.scheduleNextGameIfNecessary(playoffCalendar, series, gameDate);
    }
 
    private PlayoffSeries findSeriesByGame(Game game) {
-      Playoff playoff = league.getPlayoff();
-      for (PlayoffSeries series : playoff.getEastFirstRound()) {
-         if (containsGame(series, game)) {
-            return series;
-         }
-      }
-      for (PlayoffSeries series : playoff.getWestFirstRound()) {
+      for (PlayoffSeries series : getManagedSeries()) {
          if (containsGame(series, game)) {
             return series;
          }
       }
       return null;
+   }
+
+   private void updateSeries(PlayoffSeries series, Game game) {
+      Team winner = getWinner(game);
+
+      if (winner == null) {
+         return;
+      }
+
+      if (winner.equals(series.getHigherTeam())) {
+         series.setHigherTeamWins(series.getHigherTeamWins() + 1);
+      } else if (winner.equals(series.getLowerTeam())) {
+         series.setLowerTeamWins(series.getLowerTeamWins() + 1);
+      } else {
+         return;
+      }
+
+      series.setNumberPlayedGames(series.getNumberPlayedGames() + 1);
+      if (series.getHigherTeamWins() >= 4 || series.getLowerTeamWins() >= 4) {
+         series.setFinished(true);
+      }
+   }
+
+   private boolean isManagedRoundFinished() {
+      ArrayList<PlayoffSeries> managedSeries = getManagedSeries();
+      if (managedSeries.isEmpty()) {
+         return false;
+      }
+
+      for (PlayoffSeries series : managedSeries) {
+         if (!series.isFinished()) {
+            return false;
+         }
+      }
+      return true;
+   }
+
+   public Team getSeriesWinner(PlayoffSeries series) {
+      if (!series.isFinished()) {
+         return null;
+      }
+      if (series.getHigherTeamWins() > series.getLowerTeamWins()) {
+         return series.getHigherTeam();
+      }
+      return series.getLowerTeam();
+   }
+
+   private Team getWinner(Game game) {
+      if (game.getHomeFinalScore() == game.getAwayFinalScore()) {
+         return null;
+      }
+      if (game.getHomeFinalScore() > game.getAwayFinalScore()) {
+         return game.getGameContext().getHomeTeam();
+      }
+      return game.getGameContext().getAwayTeam();
    }
 
    private boolean containsGame(PlayoffSeries series, Game game) {
@@ -76,4 +116,19 @@ public class PlayoffManager {
       return false;
    }
 
+   public League getLeague() {
+      return league;
+   }
+
+   public PlayoffBuilder getPlayoffBuilder() {
+      return playoffBuilder;
+   }
+
+   public abstract ArrayList<PlayoffSeries> getManagedSeries();
+
+   public abstract void advanceToNextRound(LocalDate roundEndDate);
+
+   public PlayoffCalendarBuilder getCurrentRoundCalendarBuilder() {
+      return currentRoundCalendarBuilder;
+   }
 }

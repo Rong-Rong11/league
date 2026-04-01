@@ -12,7 +12,8 @@ import data.league.RegularSeason;
 import data.sport.setup.Game;
 import data.team.Team;
 import process.builder.CalendarBuilder;
-import process.repositery.TeamRepositery;
+import process.builder.FirstRoundCalendarBuilder;
+import process.builder.PlayoffBuilder;
 import process.simulator.GameSimulator;
 import process.utilitary.LeagueUtility;
 
@@ -22,18 +23,19 @@ public class GameManager {
     private GameSimulator gameSimulator = new GameSimulator();
     private FinanceManager financeManager;
     private RegularSeasonRankingManager regularSeasonRankingManager;
-    private TeamRepositery teamRepositery = TeamRepositery.getInstance();
-    private PlayoffManager playoffManager;
+    private FirstRoundPlayoffManager firstRoundPlayoffManager;
 
-    public GameManager(League league, FinanceManager financeManager, CalendarBuilder calendarBuilder) {
+    public GameManager(League league, FinanceManager financeManager, CalendarBuilder calendarBuilder,
+            PlayoffBuilder playoffBuilder, FirstRoundCalendarBuilder firstRoundCalendarBuilder) {
         this.league = league;
         ArrayList<Team> eastTeams = new ArrayList<>();
         ArrayList<Team> westTeams = new ArrayList<>();
         LeagueUtility.getConferenceTeams(league, eastTeams, westTeams);
         regularSeasonRankingManager = new RegularSeasonRankingManager(westTeams, eastTeams);
-
         this.financeManager = financeManager;
-        this.playoffManager = new PlayoffManager(league, calendarBuilder);
+        this.firstRoundPlayoffManager = new FirstRoundPlayoffManager(league,
+                firstRoundCalendarBuilder,
+                playoffBuilder);
     }
 
     public boolean simulateRegularSeasonDay(LocalDate date, int month) {
@@ -52,14 +54,14 @@ public class GameManager {
 
     }
 
-    public void simulatePlayoffsDay(LocalDate date, int month) {
+    public void simulateFirstRoundDay(LocalDate date, int month) {
         Playoff playoff = league.getPlayoff();
         TreeMap<LocalDate, GameDay> playoffCalendar = playoff.getNbaCalendar().getCalendar();
         GameDay gameDay = playoffCalendar.get(date);
         if (gameDay != null && !gameDay.isSimulated()) {
             simulateGameDay(gameDay, date, month);
             for (Game game : gameDay.getGames()) {
-                playoffManager.handlePlayedGame(game, date);
+                firstRoundPlayoffManager.handlePlayedGame(game, date);
             }
         }
     }

@@ -116,6 +116,17 @@ public class GameGenerator {
 		}
 	}
 
+	public static void generateSecondRoundPlayoffGames(Playoff playoff) {
+		ArrayList<PlayoffSeries> eastSemis = playoff.getEastConferenceSemis();
+		ArrayList<PlayoffSeries> westSemis = playoff.getWestConferenceSemis();
+		for (PlayoffSeries playoffSeries : eastSemis) {
+			createGameForSeries(playoffSeries);
+		}
+		for (PlayoffSeries playoffSeries : westSemis) {
+			createGameForSeries(playoffSeries);
+		}
+	}
+
 	private static void createGameForSeries(PlayoffSeries playoffSeries) {
 		for (int i = 1; i <= 7; i++) {
 			Team higherTeam = playoffSeries.getHigherTeam();

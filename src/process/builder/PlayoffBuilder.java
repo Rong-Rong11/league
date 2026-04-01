@@ -62,6 +62,40 @@ public class PlayoffBuilder {
       return playoff;
    }
 
+   public Playoff buldSecondRoundPlayoffs() {
+      Playoff playoff = league.getPlayoff();
+
+      ArrayList<PlayoffSeries> eastSemis = new ArrayList<PlayoffSeries>();
+      ArrayList<PlayoffSeries> westSemis = new ArrayList<PlayoffSeries>();
+
+      Team eastWinner1 = getSeriesWinner(playoff.getEastFirstRound().get(0));
+      Team eastWinner2 = getSeriesWinner(playoff.getEastFirstRound().get(1));
+      Team eastWinner3 = getSeriesWinner(playoff.getEastFirstRound().get(2));
+      Team eastWinner4 = getSeriesWinner(playoff.getEastFirstRound().get(3));
+
+      Team westWinner1 = getSeriesWinner(playoff.getWestFirstRound().get(0));
+      Team westWinner2 = getSeriesWinner(playoff.getWestFirstRound().get(1));
+      Team westWinner3 = getSeriesWinner(playoff.getWestFirstRound().get(2));
+      Team westWinner4 = getSeriesWinner(playoff.getWestFirstRound().get(3));
+
+      eastSemis.add(new PlayoffSeries(eastWinner1, eastWinner4));
+      eastSemis.add(new PlayoffSeries(eastWinner2, eastWinner3));
+
+      westSemis.add(new PlayoffSeries(westWinner1, westWinner4));
+      westSemis.add(new PlayoffSeries(westWinner2, westWinner3));
+
+      playoff.setEastConferenceSemis(eastSemis);
+      playoff.setWestConferenceSemis(westSemis);
+      return playoff;
+   }
+
+   private Team getSeriesWinner(PlayoffSeries series) {
+      if (series.getHigherTeamWins() > series.getLowerTeamWins()) {
+         return series.getHigherTeam();
+      }
+      return series.getLowerTeam();
+   }
+
    private void addEastQualifiedTeam(TreeMap<Integer, Team> eastRanking, Playoff playoff) {
       for (int i = 1; i <= 8; i++) {
          playoff.addQualifiedEastTeam(eastRanking.get(i));

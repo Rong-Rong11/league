@@ -17,9 +17,10 @@ import data.team.finance.financialpolicy.ThriftyPolicy;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
-import process.builder.CalendarBuilder;
+import process.builder.FirstRoundCalendarBuilder;
 import process.builder.LeagueBuilder;
 import process.builder.PlayoffBuilder;
+import process.builder.RegularSeasonCalendarBuilder;
 import process.repositery.TeamRepositery;
 import process.service.leaguetools.TeamPopularityUpdater;
 import process.service.submanager.FinanceManager;
@@ -36,7 +37,8 @@ public class SimulationManager implements GUIInterface {
 
 	private League league;
 	private LeagueBuilder leagueBuilder = new LeagueBuilder();
-	private CalendarBuilder calendarBuilder;
+	private RegularSeasonCalendarBuilder regularSeasonCalendarBuilder;
+	private FirstRoundCalendarBuilder firstRoundCalendarBuilder;
 	private SimulationClock clock;
 
 	private GameManager gameManager = null;
@@ -50,17 +52,21 @@ public class SimulationManager implements GUIInterface {
 	public SimulationManager() {
 		league = leagueBuilder.build();
 		FinanceUtilitary.updateFormerLeaguePayroll();
+		playoffBuilder = new PlayoffBuilder(league);
+		firstRoundCalendarBuilder = new FirstRoundCalendarBuilder(league);
 
 		clock = new SimulationClock(CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE);
-		calendarBuilder = new CalendarBuilder(league);
+		regularSeasonCalendarBuilder = new RegularSeasonCalendarBuilder(league);
 		financeManager = new FinanceManager(league);
-		gameManager = new GameManager(league, financeManager, calendarBuilder);
+		gameManager = new GameManager(league, financeManager, regularSeasonCalendarBuilder, playoffBuilder,
+				firstRoundCalendarBuilder);
 		LeagueFinancialRules leagueFinancialRules = league.getLeagueFinance().getLeagueFinancialRules();
 		preSeasonTradeService = new PreSeasonTradeService(leagueFinancialRules.getSalaryCap(),
 				leagueFinancialRules.getLuxuryTaxLine());
 		regularSeasonTradeService = new RegularSeasonTradeService(leagueFinancialRules.getSalaryCap(),
 				leagueFinancialRules.getLuxuryTaxLine());
 		playoffBuilder = new PlayoffBuilder(league);
+		firstRoundCalendarBuilder = new FirstRoundCalendarBuilder(league);
 	}
 
 	// methddes pour la presaison
@@ -107,7 +113,7 @@ public class SimulationManager implements GUIInterface {
 		financeManager.initializeFinance();
 		simulatePreSeasonTrade();
 		teamPopularityUpdater.updateBeforeSeason();
-		league.getReagularSeason().setNbaCalendar(calendarBuilder.buildRegulaSeasonCalendar());
+		league.getReagularSeason().setNbaCalendar(regularSeasonCalendarBuilder.buildCalendar());
 		league.getLeagueFinance().getBudget().getInitialAmount();
 		clock.reset();
 	}
@@ -149,6 +155,7 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public void endRegularSeason() {
 		league.setPlayoff(playoffBuilder.buldFirstRoundPlayoffs());
+		league.getPlayoff().setNbaCalendar(firstRoundCalendarBuilder.buildCalendar());
 	}
 
 	// simuler la fin de saison régulière ou fin playoff
