@@ -1,8 +1,11 @@
 package process.orchestrator;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.TreeMap;
 
 import config.CalendarConfiguration;
+import data.calendar.GameDay;
 import data.finance.GameStat;
 import data.league.League;
 import data.league.finance.LeagueFinancialRules;
@@ -17,6 +20,7 @@ import data.team.finance.marketsize.SmallSize;
 import process.builder.CalendarBuilder;
 import process.builder.LeagueBuilder;
 import process.builder.PlayoffBuilder;
+import process.repositery.TeamRepositery;
 import process.service.leaguetools.TeamPopularityUpdater;
 import process.service.submanager.FinanceManager;
 import process.service.submanager.GameManager;
@@ -24,9 +28,12 @@ import process.service.submanager.PreSeasonTradeService;
 import process.service.submanager.RegularSeasonTradeService;
 import process.service.submanager.TradeService;
 import process.utilitary.FinanceUtilitary;
+import process.utilitary.TeamDisplayUtil;
+import process.utilitary.TeamStatUtil;
 
 //cerveau de la simulation 
-public class SimulationManager implements SimulationInterface {
+public class SimulationManager
+		implements SimulationInterface, SeasonQueryInterface, TeamQueryInterface, MatchQueryInterface, DisplayInterface {
 
 	private League league;
 	private LeagueBuilder leagueBuilder = new LeagueBuilder();
@@ -160,17 +167,120 @@ public class SimulationManager implements SimulationInterface {
 	}
 
 	@Override
-	public League getLeague() {
-		return league;
-	}
-
-	@Override
 	public LocalDate getCurrentDate() {
 		return clock.getCurrentDate();
 	}
 
+	@Override
+	public LocalDate getRegularSeasonStartDate() {
+		return league.getReagularSeason().getDebutDate();
+	}
+
+	@Override
+	public LocalDate getRegularSeasonEndDate() {
+		return league.getReagularSeason().getEndDate();
+	}
+
+	@Override
+	public GameDay getGameDay(LocalDate date) {
+		if (!isSeasonInitialized() || date == null) {
+			return null;
+		}
+		return league.getReagularSeason().getNbaCalendar().getCalendar().get(date);
+	}
+
+	@Override
+	public TreeMap<LocalDate, GameDay> getSeasonCalendar() {
+		if (!isSeasonInitialized()) {
+			return new TreeMap<LocalDate, GameDay>();
+		}
+		return new TreeMap<LocalDate, GameDay>(league.getReagularSeason().getNbaCalendar().getCalendar());
+	}
+
+	@Override
+	public boolean isSeasonInitialized() {
+		return league != null
+				&& league.getReagularSeason() != null
+				&& league.getReagularSeason().getNbaCalendar() != null
+				&& !league.getReagularSeason().getNbaCalendar().getCalendar().isEmpty();
+	}
+
+	@Override
+	public ArrayList<Team> getTeams() {
+		return new ArrayList<Team>(TeamRepositery.getInstance().getAllTeams());
+	}
+
+	@Override
+	public Team getTeamByName(String teamName) {
+		return TeamRepositery.getInstance().getTeam(teamName);
+	}
+
+	@Override
+	public String getConferenceName(Team team) {
+		return TeamStatUtil.getConferenceName(team, league);
+	}
+
+	@Override
+	public String getDivisionName(Team team) {
+		return TeamStatUtil.getDivisionName(team, league);
+	}
+
+	@Override
+	public double getAverageNote(Team team) {
+		return TeamStatUtil.getAverageNote(team);
+	}
+
+	@Override
+	public double getAveragePoints(Team team, boolean currentSeasonSelected) {
+		return TeamStatUtil.getAveragePoints(team, currentSeasonSelected);
+	}
+
+	@Override
+	public String getTeamAbbreviation(String teamName) {
+		return TeamDisplayUtil.getAbbreviation(getTeamByName(teamName));
+	}
+
+	@Override
+	public void refreshTeamPayroll(Team team) {
+		if (team != null) {
+			FinanceUtilitary.updateTeamPayroll(team);
+		}
+	}
+
+	@Override
 	public GameStat getGameStat(Game game) {
 		return financeManager.getGameStat(game);
 	}
 
+	@Override
+	public void displayCurrentSeason() {
+		for (GameDay gameDay : getSeasonCalendar().values()) {
+			gameDay.setDisplayed(true);
+			for (Game game : gameDay.getGames()) {
+				game.setDisplayed(true);
+			}
+		}
+	}
+
+	@Override
+	public void displayWeek(LocalDate startDate) {
+		if (startDate == null) {
+			return;
+		}
+		for (int offset = 0; offset < 7; offset++) {
+			displayGameDay(startDate.plusDays(offset));
+		}
+	}
+
+	@Override
+	public void displayGameDay(LocalDate date) {
+		GameDay gameDay = getGameDay(date);
+		if (gameDay == null) {
+			return;
+		}
+		gameDay.setDisplayed(true);
+		for (Game game : gameDay.getGames()) {
+			game.setDisplayed(true);
+		}
+	}
 }

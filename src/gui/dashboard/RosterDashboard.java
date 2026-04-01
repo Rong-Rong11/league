@@ -20,13 +20,14 @@ import gui.panel.common.DashboardCard;
 import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamRosterPanel;
-import process.utilitary.TeamStatUtil;
+import process.orchestrator.TeamQueryInterface;
 
 public class RosterDashboard extends JPanel {
 	private static final int DASHBOARD_SPACING = 16;
 	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
 
 	private Team selectedTeam;
+	private TeamQueryInterface teamQueryInterface;
 	private Runnable backToMapAction;
 	private boolean currentSeasonSelected;
 
@@ -42,7 +43,8 @@ public class RosterDashboard extends JPanel {
 	private JLabel averagePointsValueLabel;
 	private TeamRosterPanel rosterPanel;
 
-	public RosterDashboard() {
+	public RosterDashboard(TeamQueryInterface teamQueryInterface) {
+		this.teamQueryInterface = teamQueryInterface;
 		create();
 		organize();
 		actions();
@@ -57,6 +59,7 @@ public class RosterDashboard extends JPanel {
 		teamNameLabel = new JLabel("Effectif");
 		subtitleLabel = new JLabel("-");
 		teamLogoPanel = new TeamLogoPanel("", 56);
+		teamLogoPanel.setTeamQueryInterface(teamQueryInterface);
 		playersCountValueLabel = new JLabel("-");
 		payrollValueLabel = new JLabel("-");
 		averageNoteValueLabel = new JLabel("-");
@@ -230,7 +233,8 @@ public class RosterDashboard extends JPanel {
 		}
 
 		averagePointsValueLabel.setText(
-				PlayerDisplayUtil.formatOneDecimal(TeamStatUtil.getAveragePoints(selectedTeam, currentSeasonSelected)));
+				PlayerDisplayUtil.formatOneDecimal(
+						teamQueryInterface.getAveragePoints(selectedTeam, currentSeasonSelected)));
 
 		rosterPanel.updateTeam(selectedTeam, currentSeasonSelected);
 	}

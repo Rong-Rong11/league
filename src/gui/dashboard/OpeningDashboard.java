@@ -24,8 +24,7 @@ import gui.panel.common.TeamMapPanel;
 import gui.panel.openningPanel.OpeningPolicyDetailPanel;
 import gui.panel.openningPanel.OpeningTeamSelectionPanel;
 import process.orchestrator.SimulationInterface;
-import process.repositery.TeamRepositery;
-import process.utilitary.TeamStatUtil;
+import process.orchestrator.TeamQueryInterface;
 
 public class OpeningDashboard extends JPanel {
 
@@ -36,6 +35,7 @@ public class OpeningDashboard extends JPanel {
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
 	private SimulationInterface simulationInterface;
+	private TeamQueryInterface teamQueryInterface;
 	private ArrayList<Team> teams;
 	private Team selectedTeam;
 	private JButton continueButton;
@@ -43,10 +43,10 @@ public class OpeningDashboard extends JPanel {
 	private TeamMapPanel openingMapPanel;
 	private OpeningTeamSelectionPanel teamSelectionPanel;
 	private OpeningPolicyDetailPanel policyDetailPanel;
-	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 
-	public OpeningDashboard(SimulationInterface simulationInterface) {
+	public OpeningDashboard(SimulationInterface simulationInterface, TeamQueryInterface teamQueryInterface) {
 		this.simulationInterface = simulationInterface;
+		this.teamQueryInterface = teamQueryInterface;
 		create();
 		organize();
 		actions();
@@ -54,12 +54,12 @@ public class OpeningDashboard extends JPanel {
 	}
 
 	private void create() {
-		teams = new ArrayList<Team>(teamRepositery.getAllTeams());
+		teams = new ArrayList<Team>(teamQueryInterface.getTeams());
 		continueButton = new JButton("Continuer");
 		randomPoliciesButton = new JButton();
 		openingMapPanel = new TeamMapPanel();
 		teamSelectionPanel = new OpeningTeamSelectionPanel();
-		policyDetailPanel = new OpeningPolicyDetailPanel();
+		policyDetailPanel = new OpeningPolicyDetailPanel(teamQueryInterface);
 
 		randomPoliciesButton.setFocusPainted(false);
 		ButtonStyleUtil.styleToggleButton(randomPoliciesButton);
@@ -179,7 +179,7 @@ public class OpeningDashboard extends JPanel {
 		if (selectedTeam != null) {
 			teamSelectionPanel.setSelectedPolicy(selectedTeam.getTeamFinance().getFinancialProfil());
 		}
-		policyDetailPanel.updateTeam(selectedTeam, simulationInterface.getLeague());
+		policyDetailPanel.updateTeam(selectedTeam);
 		if (selectedTeam == null) {
 			openingMapPanel.setSelectedTeamName(null);
 			return;
@@ -190,7 +190,7 @@ public class OpeningDashboard extends JPanel {
 	private class MapSelectionAction implements Runnable {
 		@Override
 		public void run() {
-			setSelectedTeam(TeamStatUtil.findTeamByName(openingMapPanel.getSelectedTeamName()));
+			setSelectedTeam(teamQueryInterface.getTeamByName(openingMapPanel.getSelectedTeamName()));
 		}
 	}
 

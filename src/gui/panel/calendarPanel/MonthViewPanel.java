@@ -1,4 +1,4 @@
-package gui.panel.calendarPanel;
+ package gui.panel.calendarPanel;
 
 import data.calendar.GameDay;
 import data.sport.setup.Game;

@@ -9,22 +9,18 @@ import javax.swing.JPanel;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.SectionTitle;
-import process.orchestrator.SimulationInterface;
 
 /**
  * Dashboard dédié à la page Classement.
  */
 public class RankingDashboard extends JPanel {
-
-	private SimulationInterface simulationInterface;
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
 	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 300;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
-	public RankingDashboard(SimulationInterface simulationInterface) {
-		this.simulationInterface = simulationInterface;
+	public RankingDashboard() {
 		organize();
 	}
 

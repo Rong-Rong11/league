@@ -10,8 +10,8 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import process.orchestrator.TeamQueryInterface;
 import process.utilitary.TeamDisplayUtil;
-import process.utilitary.TeamStatUtil;
 
 public class TeamLogoPanel extends JPanel {
 	private static final String LOGO_FOLDER_PATH = "resources/nba_logos/";
@@ -20,6 +20,7 @@ public class TeamLogoPanel extends JPanel {
 	private JLabel logoLabel;
 	private String teamName;
 	private int logoSize;
+	private TeamQueryInterface teamQueryInterface;
 
 	public TeamLogoPanel() {
 		this("", DEFAULT_LOGO_SIZE);
@@ -48,6 +49,11 @@ public class TeamLogoPanel extends JPanel {
 
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
+		updateLogo();
+	}
+
+	public void setTeamQueryInterface(TeamQueryInterface teamQueryInterface) {
+		this.teamQueryInterface = teamQueryInterface;
 		updateLogo();
 	}
 
@@ -81,12 +87,22 @@ public class TeamLogoPanel extends JPanel {
 	}
 
 	private String buildAbbreviation(String teamName) {
-		if (teamName != null && !teamName.equals("")) {
-			Team team = TeamStatUtil.findTeamByName(teamName);
-			if (team != null) {
-				return TeamDisplayUtil.getAbbreviation(team);
+		if (teamQueryInterface != null && teamName != null && !teamName.equals("")) {
+			return teamQueryInterface.getTeamAbbreviation(teamName);
+		}
+		if (teamName == null || teamName.equals("")) {
+			return "---";
+		}
+		String[] nameParts = teamName.split(" ");
+		if (nameParts.length == 1) {
+			return nameParts[0].substring(0, Math.min(3, nameParts[0].length())).toUpperCase();
+		}
+		StringBuilder abbreviation = new StringBuilder();
+		for (String namePart : nameParts) {
+			if (!namePart.isEmpty()) {
+				abbreviation.append(Character.toUpperCase(namePart.charAt(0)));
 			}
 		}
-		return "---";
+		return abbreviation.length() == 0 ? "---" : abbreviation.toString();
 	}
 }

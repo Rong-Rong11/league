@@ -19,7 +19,8 @@ import gui.panel.matchPanel.MatchDayListPanel.MatchSelectionListener;
 import gui.panel.matchPanel.MatchDetailPanel;
 import gui.panel.matchPanel.MatchFinancePanel;
 import gui.panel.matchPanel.MatchHeaderPanel;
-import process.orchestrator.SimulationInterface;
+import process.orchestrator.MatchQueryInterface;
+import process.orchestrator.SeasonQueryInterface;
 
 public class MatchDashboard extends JPanel {
 	private static final int DASHBOARD_SPACING = 16;
@@ -27,7 +28,8 @@ public class MatchDashboard extends JPanel {
 	private static final int RIGHT_COLUMN_WIDTH = 300;
 	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
 
-	private SimulationInterface simulationInterface;
+	private SeasonQueryInterface seasonQueryInterface;
+	private MatchQueryInterface matchQueryInterface;
 	private LocalDate selectedDate;
 	private Game selectedGame;
 	private GameDay selectedGameDay;
@@ -39,12 +41,9 @@ public class MatchDashboard extends JPanel {
 
 	private Runnable openLiveMatchAction;
 
-	public MatchDashboard() {
-		this(null);
-	}
-
-	public MatchDashboard(SimulationInterface simulationInterface) {
-		this.simulationInterface = simulationInterface;
+	public MatchDashboard(SeasonQueryInterface seasonQueryInterface, MatchQueryInterface matchQueryInterface) {
+		this.seasonQueryInterface = seasonQueryInterface;
+		this.matchQueryInterface = matchQueryInterface;
 		selectedDate = CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE;
 		create();
 		organize();
@@ -119,7 +118,7 @@ public class MatchDashboard extends JPanel {
 
 	public void loadGamesOfDay(LocalDate date) {
 		selectedDate = date;
-		GameDay gameDay = simulationInterface.getLeague().getReagularSeason().getNbaCalendar().getCalendar().get(date);
+		GameDay gameDay = seasonQueryInterface.getGameDay(date);
 		showGameDay(gameDay, date);
 	}
 
@@ -155,7 +154,7 @@ public class MatchDashboard extends JPanel {
 			return;
 		}
 
-		GameStat gameStat = simulationInterface.getGameStat(game);
+		GameStat gameStat = matchQueryInterface.getGameStat(game);
 		matchDetailPanel.showGame(game, buildDayNumberText(), gameStat);
 		matchFinancePanel.showGameFinance(game, gameStat);
 	}

@@ -1,6 +1,5 @@
 package gui.panel.openningPanel;
 
-import data.league.League;
 import data.team.Team;
 import data.team.finance.financialpolicy.AmbitiousPolicy;
 import data.team.finance.financialpolicy.BalancedPolicy;
@@ -17,10 +16,11 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import process.orchestrator.TeamQueryInterface;
 import process.utilitary.TeamDisplayUtil;
-import process.utilitary.TeamStatUtil;
 
 public class OpeningPolicyDetailPanel extends JPanel {
+	private final TeamQueryInterface teamQueryInterface;
 
 	private JLabel policyLabel;
 	private JLabel teamValueLabel;
@@ -32,7 +32,8 @@ public class OpeningPolicyDetailPanel extends JPanel {
 	private JLabel capacityValueLabel;
 	private JLabel noteValueLabel;
 
-	public OpeningPolicyDetailPanel() {
+	public OpeningPolicyDetailPanel(TeamQueryInterface teamQueryInterface) {
+		this.teamQueryInterface = teamQueryInterface;
 		setLayout(new BorderLayout(0, 14));
 		setOpaque(false);
 		setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
@@ -72,7 +73,7 @@ public class OpeningPolicyDetailPanel extends JPanel {
 		add(policyPanel, BorderLayout.NORTH);
 		add(infoPanel, BorderLayout.CENTER);
 
-		updateTeam(null, null);
+		updateTeam(null);
 	}
 
 	private JLabel createValueLabel() {
@@ -96,12 +97,12 @@ public class OpeningPolicyDetailPanel extends JPanel {
 		return row;
 	}
 
-	public void updateTeam(Team team, League league) {
-		if (team == null || league == null) {
+	public void updateTeam(Team team) {
+		if (team == null) {
 			showEmptyState();
 			return;
 		}
-		showTeamState(team, league);
+		showTeamState(team);
 	}
 
 	private void showEmptyState() {
@@ -116,17 +117,17 @@ public class OpeningPolicyDetailPanel extends JPanel {
 		noteValueLabel.setText("-");
 	}
 
-	private void showTeamState(Team team, League league) {
+	private void showTeamState(Team team) {
 		policyLabel.setText(getPolicyName(team.getTeamFinance().getFinancialProfil()));
 		teamValueLabel.setText(TeamDisplayUtil.getShortName(team));
 		cityValueLabel.setText(TeamDisplayUtil.getCityName(team));
-		conferenceValueLabel.setText(TeamDisplayUtil.getConferenceLabel(TeamStatUtil.getConferenceName(team, league)));
-		divisionValueLabel.setText(TeamStatUtil.getDivisionName(team, league));
+		conferenceValueLabel.setText(TeamDisplayUtil.getConferenceLabel(teamQueryInterface.getConferenceName(team)));
+		divisionValueLabel.setText(teamQueryInterface.getDivisionName(team));
 		marketSizeValueLabel.setText(getMarketSizeName(team.getTeamFinance().getMarketSize()));
 		budgetValueLabel.setText(PlayerDisplayUtil.formatSalary(team.getTeamFinance().getBudget().getRemainingAmount()));
 		capacityValueLabel.setText(team.getStadium().getCapacity() + " places");
 
-		int note = (int) Math.round(TeamStatUtil.getAverageNote(team));
+		int note = (int) Math.round(teamQueryInterface.getAverageNote(team));
 		noteValueLabel.setText(note + "/100");
 	}
 
