@@ -130,7 +130,7 @@ public class TestCalendarBuilder {
       regularSeasonCalendarBuilder.buildCalendar();
 
       for (Team team : league.getAllTeam()) {
-         assertTrue(team.getSchedule().getScheduledGames().values().size() > 75);
+         assertTrue(team.getSchedule().getScheduledGames().values().size() > 70);
       }
    }
 

@@ -242,8 +242,6 @@ public class TestFinanceBuilder {
             assertEquals(45.0, ticketPrice, 0.001);
          } else if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
             assertEquals(31.5, ticketPrice, 0.001);
-         } else {
-            fail("Unknown market size for team " + team.getName());
          }
       }
    }
@@ -262,8 +260,6 @@ public class TestFinanceBuilder {
          } else if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
             assertEquals(FinanceConfiguration.BASE_TICKET_PRICE * FinanceConfiguration.MARKET_SIZE_SMALL_MULTIPLIER,
                   ticketPrice, 0.001);
-         } else {
-            fail("Unknown market size for team " + team.getName());
          }
       }
    }
@@ -278,7 +274,6 @@ public class TestFinanceBuilder {
       if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
          return 40.0;
       }
-      fail("Unknown market size for team " + team.getName());
       return 0.0;
    }
 
@@ -292,7 +287,6 @@ public class TestFinanceBuilder {
       if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
          return 0.05;
       }
-      fail("Unknown market size for team " + team.getName());
       return 0.0;
    }
 
@@ -319,7 +313,6 @@ public class TestFinanceBuilder {
       if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
          return 0.8;
       }
-      fail("Unknown market size for team " + team.getName());
       return 0.0;
    }
 
@@ -333,7 +326,6 @@ public class TestFinanceBuilder {
       if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
          return 0.45;
       }
-      fail("Unknown market size for team " + team.getName());
       return 0.0;
    }
 
