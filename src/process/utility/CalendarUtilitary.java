@@ -1,4 +1,4 @@
-package process.utilitary;
+package process.utility;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

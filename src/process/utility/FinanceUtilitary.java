@@ -1,4 +1,4 @@
-package process.utilitary;
+package process.utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;

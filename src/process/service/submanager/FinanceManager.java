@@ -15,7 +15,7 @@ import process.service.financetools.GameFinanceProcessor;
 import process.service.financetools.LeagueExpenseCalculator;
 import process.service.financetools.MonthlyTeamFinanceCalculator;
 import process.service.financetools.RevenueSharingManager;
-import process.utilitary.TeamUtilitary;
+import process.utility.TeamUtilitary;
 import process.visitor.financialprofil.ChooseTransferStrategyVisitor;
 
 public class FinanceManager {

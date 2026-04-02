@@ -1,8 +1,11 @@
- package gui.panel.calendarPanel;
+package gui.panel.calendarPanel;
 
 import data.calendar.GameDay;
 import data.sport.setup.Game;
 import gui.dashboard.MatchDashboard;
+import process.utility.CalendarUtilitary;
+import process.utility.TeamDisplayUtil;
+
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
@@ -17,8 +20,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import process.utilitary.CalendarUtilitary;
-import process.utilitary.TeamDisplayUtil;
 
 public class MonthViewPanel extends JPanel {
 	private static final String[] DAY_NAMES = { "LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM" };

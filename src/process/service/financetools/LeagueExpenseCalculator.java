@@ -5,8 +5,8 @@ import data.finance.budget.Budget;
 import data.finance.budget.expense.Expense;
 import data.finance.budget.expense.ExpenseType;
 import data.league.League;
-import process.utilitary.CalendarUtilitary;
-import process.utilitary.FinanceUtilitary;
+import process.utility.CalendarUtilitary;
+import process.utility.FinanceUtilitary;
 
 public class LeagueExpenseCalculator {
 

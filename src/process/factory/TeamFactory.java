@@ -7,7 +7,7 @@ import data.team.finance.TeamFinance;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.transfer.TeamTransferStrategy;
-import process.utilitary.TeamUtilitary;
+import process.utility.TeamUtilitary;
 import process.visitor.financialprofil.ChooseTransferStrategyVisitor;
 import process.visitor.marketsize.CalculateInitialTeamValue;
 

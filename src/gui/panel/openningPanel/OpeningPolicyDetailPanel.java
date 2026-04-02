@@ -17,7 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import process.orchestrator.GUIInterface;
-import process.utilitary.TeamDisplayUtil;
+import process.utility.TeamDisplayUtil;
 
 public class OpeningPolicyDetailPanel extends JPanel {
 	private final GUIInterface guiInterface;

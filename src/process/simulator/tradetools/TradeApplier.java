@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import data.player.Player;
 import data.team.Team;
-import process.utilitary.FinanceUtilitary;
+import process.utility.FinanceUtilitary;
 
 public class TradeApplier {
     public void applyTrade(Team team, ArrayList<Player> arrayList) {

@@ -1,4 +1,4 @@
-package process.utilitary;
+package process.utility;
 
 import data.team.Team;
 

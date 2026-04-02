@@ -9,7 +9,7 @@ import data.finance.budget.Budget;
 import data.player.Player;
 import data.team.Team;
 import data.team.finance.financialpolicy.FinancialPolicy;
-import process.utilitary.FinanceUtilitary;
+import process.utility.FinanceUtilitary;
 import process.visitor.financialprofil.RiskBudgetVisitor;
 import process.visitor.financialprofil.ValidateTradeVisitor;
 

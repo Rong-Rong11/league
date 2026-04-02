@@ -1,4 +1,5 @@
 package process.simulator.gametools;
+
 import config.GameConfiguration;
 
 import java.util.TreeMap;
@@ -6,14 +7,14 @@ import java.util.TreeMap;
 import data.player.Asset;
 import data.player.Player;
 import data.sport.play.OffensiveTry;
-import process.utilitary.PlayerUtilitary;
+import process.utility.PlayerUtilitary;
 
 public class ActionSimulator {
-	
+
 	public ActionSimulator() {
-		
+
 	}
-	
+
 	public boolean effectiveTurnover(Player attackingPlayer, Player defendingPlayer) {
 		double playerDefenseNote = Math.min(PlayerUtilitary.getPlayerDefenseNote(defendingPlayer), 2);
 		double playerAttackNote = Math.min(PlayerUtilitary.getPlayerAttackNote(attackingPlayer), 2);
@@ -22,8 +23,8 @@ public class ActionSimulator {
 		turnoverProbability = Math.min(turnoverProbability, 0.12);
 		return Math.random() < turnoverProbability;
 	}
-	
-	public boolean simulateShot(Player attackingPlayer, OffensiveTry action,TreeMap<Double, Player> defensivePlayers) {
+
+	public boolean simulateShot(Player attackingPlayer, OffensiveTry action, TreeMap<Double, Player> defensivePlayers) {
 		Asset asset = attackingPlayer.getCurrentSeasonAssets().getMinutesPlayedPerMatch() > 0
 				? attackingPlayer.getCurrentSeasonAssets()
 				: attackingPlayer.getPreSeasonAssets();
@@ -44,7 +45,7 @@ public class ActionSimulator {
 		return Math.random() < shotProbability;
 
 	}
-	
+
 	private double defensingPlayersNote(TreeMap<Double, Player> defensivePlayers) {
 		double sumOfNote = 0;
 		double numberOfPlayer = 0;

@@ -1,4 +1,4 @@
-package process.utilitary;
+package process.utility;
 
 import data.player.Asset;
 import data.player.Player;

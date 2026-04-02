@@ -4,7 +4,7 @@
 package data.sport.setup;
 
 import data.team.Team;
-import process.utilitary.CalendarUtilitary;
+import process.utility.CalendarUtilitary;
 
 public class GameContext {
     private Team homeTeam;

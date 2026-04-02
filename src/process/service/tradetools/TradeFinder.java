@@ -4,7 +4,7 @@ import config.FinanceConfiguration;
 import data.team.Team;
 import data.team.finance.transfer.TeamTransferStrategy;
 import process.repositery.TeamRepositery;
-import process.utilitary.TeamUtilitary;
+import process.utility.TeamUtilitary;
 import process.visitor.teamtransfer.EvaluateSeasonIntentVisitor;
 
 public class TradeFinder {

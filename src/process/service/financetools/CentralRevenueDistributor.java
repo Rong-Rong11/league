@@ -7,7 +7,7 @@ import data.finance.budget.income.IncomeType;
 import data.league.League;
 import data.team.Team;
 import process.repositery.TeamRepositery;
-import process.utilitary.FinanceUtilitary;
+import process.utility.FinanceUtilitary;
 
 public class CentralRevenueDistributor {
     private League league;

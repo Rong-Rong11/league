@@ -10,9 +10,9 @@ import data.team.Team;
 import data.team.finance.financialpolicy.AmbitiousPolicy;
 import data.team.finance.financialpolicy.BalancedPolicy;
 import data.team.finance.financialpolicy.FinancialPolicy;
-import process.utilitary.FinanceUtilitary;
-import process.utilitary.PlayerUtilitary;
-import process.utilitary.TeamUtilitary;
+import process.utility.FinanceUtilitary;
+import process.utility.PlayerUtilitary;
+import process.utility.TeamUtilitary;
 
 public class LineupSelector {
 

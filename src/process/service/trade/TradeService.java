@@ -1,10 +1,9 @@
-package process.service.submanager;
+package process.service.trade;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import config.FinanceConfiguration;
-import data.finance.transfer.Trade;
 import data.player.Player;
 import data.team.Team;
 import process.repositery.TeamRepositery;

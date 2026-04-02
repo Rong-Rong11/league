@@ -12,7 +12,7 @@ import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
-import process.utilitary.FinanceUtilitary;
+import process.utility.FinanceUtilitary;
 import process.visitor.financialprofil.StaffCostMultiplierVisitor;
 import process.visitor.marketsize.CalculateMonthlyTeamFinanceVisitor;
 

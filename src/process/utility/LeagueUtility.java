@@ -1,4 +1,4 @@
-package process.utilitary;
+package process.utility;
 
 import data.league.Conference;
 import data.league.League;

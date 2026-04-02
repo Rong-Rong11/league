@@ -1,4 +1,4 @@
-package process.service.submanager;
+package process.service.playoff;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

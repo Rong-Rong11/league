@@ -8,8 +8,9 @@ import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import java.time.LocalDate;
-import process.utilitary.CalendarUtilitary;
-import process.utilitary.FinanceUtilitary;
+
+import process.utility.CalendarUtilitary;
+import process.utility.FinanceUtilitary;
 import process.visitor.marketsize.CalculateBaseTicketVisitor;
 
 public class GameRevenueSimulator {

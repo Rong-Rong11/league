@@ -127,6 +127,24 @@ public class GameGenerator {
 		}
 	}
 
+	public static void generateConferenceFinalsPlayoffGames(Playoff playoff) {
+		ArrayList<PlayoffSeries> eastConferenceFinals = playoff.getEastConferenceFinals();
+		ArrayList<PlayoffSeries> westConferenceFinals = playoff.getWestConferenceFinals();
+		for (PlayoffSeries playoffSeries : eastConferenceFinals) {
+			createGameForSeries(playoffSeries);
+		}
+		for (PlayoffSeries playoffSeries : westConferenceFinals) {
+			createGameForSeries(playoffSeries);
+		}
+	}
+
+	public static void generateNbaFinalsPlayoffGames(Playoff playoff) {
+		ArrayList<PlayoffSeries> nbaFinals = playoff.getNbaFinals();
+		for (PlayoffSeries playoffSeries : nbaFinals) {
+			createGameForSeries(playoffSeries);
+		}
+	}
+
 	private static void createGameForSeries(PlayoffSeries playoffSeries) {
 		for (int i = 1; i <= 7; i++) {
 			Team higherTeam = playoffSeries.getHigherTeam();

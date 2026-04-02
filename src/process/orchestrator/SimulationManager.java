@@ -25,12 +25,12 @@ import process.repositery.TeamRepositery;
 import process.service.leaguetools.TeamPopularityUpdater;
 import process.service.submanager.FinanceManager;
 import process.service.submanager.GameManager;
-import process.service.submanager.PreSeasonTradeService;
-import process.service.submanager.RegularSeasonTradeService;
-import process.service.submanager.TradeService;
-import process.utilitary.FinanceUtilitary;
-import process.utilitary.TeamDisplayUtil;
-import process.utilitary.TeamStatUtil;
+import process.service.trade.PreSeasonTradeService;
+import process.service.trade.RegularSeasonTradeService;
+import process.service.trade.TradeService;
+import process.utility.FinanceUtilitary;
+import process.utility.TeamDisplayUtil;
+import process.utility.TeamStatUtil;
 
 //cerveau de la simulation 
 public class SimulationManager implements GUIInterface {

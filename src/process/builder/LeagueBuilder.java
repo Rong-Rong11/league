@@ -24,8 +24,8 @@ import process.repositery.DivisionRepositery;
 import process.repositery.PlayerRepositery;
 import process.repositery.PreSeasonAssetRepositery;
 import process.repositery.TeamRepositery;
-import process.utilitary.FinanceUtilitary;
-import process.utilitary.TeamUtilitary;
+import process.utility.FinanceUtilitary;
+import process.utility.TeamUtilitary;
 
 public class LeagueBuilder {
 

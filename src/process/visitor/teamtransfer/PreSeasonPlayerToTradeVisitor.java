@@ -13,7 +13,7 @@ import data.team.finance.transfer.Rebuild;
 import data.team.finance.transfer.SalaryDump;
 import data.team.finance.transfer.SmallAdjust;
 import data.team.finance.transfer.SuperstarBuild;
-import process.utilitary.PlayerUtilitary;
+import process.utility.PlayerUtilitary;
 
 public class PreSeasonPlayerToTradeVisitor
         implements TeamTransferVisitor<Player> {

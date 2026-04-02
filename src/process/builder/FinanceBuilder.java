@@ -11,7 +11,7 @@ import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import process.factory.EconomicProfileFactory;
 import process.repositery.TeamRepositery;
-import process.utilitary.FinanceUtilitary;
+import process.utility.FinanceUtilitary;
 import process.visitor.marketsize.CalculateBaseTicketVisitor;
 import process.visitor.marketsize.CalculateInitialTeamBudgetVisitor;
 import process.visitor.marketsize.CalculateInitialTeamValue;
@@ -42,6 +42,7 @@ public class FinanceBuilder {
         calculateInitialBudget(budget, marketSize, economicProfil, popularity);
         teamFinance.setTeamValue(calculateInitialTeamValue(team, marketSize, budget));
         FinanceUtilitary.initiateBudget(budget);
+        FinanceUtilitary.updateTeamPayroll(team);
         stadium.setCapacity(generateCapacity(marketSize));
         stadium.setTicketPrice(calculateBaseTicketPrice(marketSize));
 

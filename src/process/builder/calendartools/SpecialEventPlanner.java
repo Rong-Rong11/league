@@ -3,7 +3,7 @@ package process.builder.calendartools;
 import config.CalendarConfiguration;
 import data.calendar.SpecialEvent;
 import data.league.RegularSeason;
-import process.utilitary.CalendarUtilitary;
+import process.utility.CalendarUtilitary;
 
 public class SpecialEventPlanner {
     public static void specialEventsPlacement(RegularSeason regularSeason) {

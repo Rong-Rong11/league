@@ -13,7 +13,7 @@ import data.sport.setup.Game;
 import data.team.Team;
 import data.team.calendar.Schedule;
 import process.repositery.TeamRepositery;
-import process.utilitary.CalendarUtilitary;
+import process.utility.CalendarUtilitary;
 
 public class GameSelector {
 

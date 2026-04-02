@@ -1,7 +1,7 @@
 /*
  * Decompiled with CFR 0.152.
  */
-package process.utilitary;
+package process.utility;
 
 import data.player.Asset;
 import data.player.HealthStatus;
@@ -39,10 +39,13 @@ public class PlayerUtilitary {
         Asset asset3 = new Asset();
         asset3.setPointPerMatch((asset.getPointPerMatch() * d2 + asset2.getPointPerMatch() * d) / d3);
         asset3.setAssistPerMatch((asset.getAssistPerMatch() * d2 + asset2.getAssistPerMatch() * d) / d3);
-        asset3.setInterceptionPerMatch((asset.getInterceptionPerMatch() * d2 + asset2.getInterceptionPerMatch() * d) / d3);
+        asset3.setInterceptionPerMatch(
+                (asset.getInterceptionPerMatch() * d2 + asset2.getInterceptionPerMatch() * d) / d3);
         asset3.setBlockPerMatch((asset.getBlockPerMatch() * d2 + asset2.getBlockPerMatch() * d) / d3);
-        asset3.setTrueShootingPercentage((asset.getTrueShootingPercentage() * d2 + asset2.getTrueShootingPercentage() * d) / d3);
-        asset3.setMinutesPlayedPerMatch((asset.getMinutesPlayedPerMatch() * d2 + asset2.getMinutesPlayedPerMatch() * d) / d3);
+        asset3.setTrueShootingPercentage(
+                (asset.getTrueShootingPercentage() * d2 + asset2.getTrueShootingPercentage() * d) / d3);
+        asset3.setMinutesPlayedPerMatch(
+                (asset.getMinutesPlayedPerMatch() * d2 + asset2.getMinutesPlayedPerMatch() * d) / d3);
         return asset3;
     }
 
@@ -85,9 +88,11 @@ public class PlayerUtilitary {
         asset2.setPointPerMatch((asset2.getPointPerMatch() * d + asset.getPointPerMatch() * d2) / d3);
         asset2.setReboundPerMatch((asset2.getReboundPerMatch() * d + asset.getReboundPerMatch() * d2) / d3);
         asset2.setAssistPerMatch((asset2.getAssistPerMatch() * d + asset.getAssistPerMatch() * d2) / d3);
-        asset2.setInterceptionPerMatch((asset2.getInterceptionPerMatch() * d + asset.getInterceptionPerMatch() * d2) / d3);
+        asset2.setInterceptionPerMatch(
+                (asset2.getInterceptionPerMatch() * d + asset.getInterceptionPerMatch() * d2) / d3);
         asset2.setBlockPerMatch((asset2.getBlockPerMatch() * d + asset.getBlockPerMatch() * d2) / d3);
         asset2.setLostBallPerMatch((asset2.getLostBallPerMatch() * d + asset.getLostBallPerMatch() * d2) / d3);
-        asset2.setMinutesPlayedPerMatch((asset2.getMinutesPlayedPerMatch() * d + asset.getMinutesPlayedPerMatch() * d2) / d3);
+        asset2.setMinutesPlayedPerMatch(
+                (asset2.getMinutesPlayedPerMatch() * d + asset.getMinutesPlayedPerMatch() * d2) / d3);
     }
 }

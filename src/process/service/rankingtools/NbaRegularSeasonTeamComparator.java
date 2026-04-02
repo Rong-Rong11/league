@@ -4,9 +4,10 @@ import data.league.Division;
 import data.league.League;
 import data.sport.setup.Game;
 import data.team.Team;
+import process.utility.TeamUtilitary;
+
 import java.util.ArrayList;
 import java.util.Comparator;
-import process.utilitary.TeamUtilitary;
 
 public class NbaRegularSeasonTeamComparator implements Comparator<Team> {
 

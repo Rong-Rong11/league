@@ -32,9 +32,9 @@ public class TestCalendarBuilder {
    @Test
    public void shouldBuildRegularSeasonCalendarAfterLeagueCreation() {
       League league = new LeagueBuilder().build();
-      RegularSeasonCalendarBuilder calendarBuilder = new RegularSeasonCalendarBuilder(league);
+      RegularSeasonCalendarBuilder regularSeasonCalendarBuilder = new RegularSeasonCalendarBuilder(league);
 
-      NBACalendar nbaCalendar = calendarBuilder.buildRegulaSeasonCalendar();
+      NBACalendar nbaCalendar = regularSeasonCalendarBuilder.buildCalendar();
       assertNotNull(nbaCalendar);
       assertNotNull(nbaCalendar.getCalendar());
       assertFalse(nbaCalendar.getCalendar().isEmpty());
@@ -44,9 +44,9 @@ public class TestCalendarBuilder {
    @Test
    public void shouldScheduleGamesForEachGameDay() {
       League league = new LeagueBuilder().build();
-      RegularSeasonCalendarBuilder calendarBuilder = new RegularSeasonCalendarBuilder(league);
+      RegularSeasonCalendarBuilder regularSeasonCalendarBuilder = new RegularSeasonCalendarBuilder(league);
 
-      NBACalendar calendar = calendarBuilder.buildRegulaSeasonCalendar();
+      NBACalendar calendar = regularSeasonCalendarBuilder.buildCalendar();
       for (GameDay gameDay : calendar.getCalendar().values()) {
          assertNotNull(gameDay.getGames());
          assertFalse(gameDay.getGames().isEmpty());
@@ -56,9 +56,9 @@ public class TestCalendarBuilder {
    @Test
    public void shouldKeepGamesWithinRegularSeasonDates() {
       League league = new LeagueBuilder().build();
-      RegularSeasonCalendarBuilder calendarBuilder = new RegularSeasonCalendarBuilder(league);
+      RegularSeasonCalendarBuilder regularSeasonCalendarBuilder = new RegularSeasonCalendarBuilder(league);
 
-      NBACalendar calendar = calendarBuilder.buildRegulaSeasonCalendar();
+      NBACalendar calendar = regularSeasonCalendarBuilder.buildCalendar();
       assertFalse(calendar.getCalendar().isEmpty());
       assertFalse(calendar.getCalendar().firstKey().isBefore(CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE));
       assertFalse(calendar.getCalendar().lastKey().isAfter(CalendarConfiguration.REGULAR_SEASON_END_DATE));
@@ -67,9 +67,9 @@ public class TestCalendarBuilder {
    @Test
    public void shouldScheduleGamesInsideTeamSchedules() {
       League league = new LeagueBuilder().build();
-      RegularSeasonCalendarBuilder calendarBuilder = new RegularSeasonCalendarBuilder(league);
+      RegularSeasonCalendarBuilder regularSeasonCalendarBuilder = new RegularSeasonCalendarBuilder(league);
 
-      calendarBuilder.buildRegulaSeasonCalendar();
+      regularSeasonCalendarBuilder.buildCalendar();
       for (Team team : TeamRepositery.getInstance().getAllTeams()) {
          assertTrue(team.getSchedule().getScheduledGames().values().size() > 0);
       }
@@ -78,9 +78,9 @@ public class TestCalendarBuilder {
    @Test
    public void shouldNotScheduleTwoGamesForTheSameTeamOnTheSameDay() {
       League league = new LeagueBuilder().build();
-      RegularSeasonCalendarBuilder calendarBuilder = new RegularSeasonCalendarBuilder(league);
+      RegularSeasonCalendarBuilder regularSeasonCalendarBuilder = new RegularSeasonCalendarBuilder(league);
 
-      NBACalendar calendar = calendarBuilder.buildRegulaSeasonCalendar();
+      NBACalendar calendar = regularSeasonCalendarBuilder.buildCalendar();
       for (GameDay gameDay : calendar.getCalendar().values()) {
          Set<String> teamsPlayingThatDay = new HashSet<>();
          for (Game game : gameDay.getGames()) {
@@ -96,9 +96,9 @@ public class TestCalendarBuilder {
    @Test
    public void shouldMarkGeneratedGamesAsScheduled() {
       League league = new LeagueBuilder().build();
-      RegularSeasonCalendarBuilder calendarBuilder = new RegularSeasonCalendarBuilder(league);
+      RegularSeasonCalendarBuilder regularSeasonCalendarBuilder = new RegularSeasonCalendarBuilder(league);
 
-      NBACalendar calendar = calendarBuilder.buildRegulaSeasonCalendar();
+      NBACalendar calendar = regularSeasonCalendarBuilder.buildCalendar();
       GameDay firstGameDay = calendar.getCalendar().firstEntry().getValue();
       Game firstGame = firstGameDay.getGames().get(0);
       assertNotNull(firstGameDay);
@@ -111,9 +111,9 @@ public class TestCalendarBuilder {
    @Test
    public void shouldRegisterPlannedGameInBothTeamSchedules() {
       League league = new LeagueBuilder().build();
-      RegularSeasonCalendarBuilder calendarBuilder = new RegularSeasonCalendarBuilder(league);
+      RegularSeasonCalendarBuilder regularSeasonCalendarBuilder = new RegularSeasonCalendarBuilder(league);
 
-      NBACalendar calendar = calendarBuilder.buildRegulaSeasonCalendar();
+      NBACalendar calendar = regularSeasonCalendarBuilder.buildCalendar();
       GameDay firstGameDay = calendar.getCalendar().firstEntry().getValue();
       Game firstGame = firstGameDay.getGames().get(0);
       Team homeTeam = firstGame.getGameContext().getHomeTeam();
@@ -126,8 +126,8 @@ public class TestCalendarBuilder {
    @Test
    public void shouldGenerateGamesForEachTeam() {
       League league = new LeagueBuilder().build();
-      RegularSeasonCalendarBuilder calendarBuilder = new RegularSeasonCalendarBuilder(league);
-      calendarBuilder.buildRegulaSeasonCalendar();
+      RegularSeasonCalendarBuilder regularSeasonCalendarBuilder = new RegularSeasonCalendarBuilder(league);
+      regularSeasonCalendarBuilder.buildCalendar();
 
       for (Team team : league.getAllTeam()) {
          assertTrue(team.getSchedule().getScheduledGames().values().size() > 75);

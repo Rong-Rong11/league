@@ -8,7 +8,7 @@ import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
-import process.utilitary.CalendarUtilitary;
+import process.utility.CalendarUtilitary;
 import process.visitor.marketsize.CalculateStadiumCostVisitor;
 
 public class GameExpenseSimulator {

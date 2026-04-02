@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import data.finance.GameStat;
 import data.sport.setup.Game;
-import process.utilitary.FinanceUtilitary;
+import process.utility.FinanceUtilitary;
 
 public class GameFinanceProcessor {
     private HashMap<Game, GameStat> gameStats = new HashMap<Game, GameStat>();

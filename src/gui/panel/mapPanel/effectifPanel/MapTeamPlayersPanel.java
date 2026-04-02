@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 import data.player.Player;
 import data.team.Team;
-import process.utilitary.PlayerStatUtil;
+import process.utility.PlayerStatUtil;
 
 public class MapTeamPlayersPanel extends JPanel {
 	private JLabel[] playerLabels;

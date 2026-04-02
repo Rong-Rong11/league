@@ -4,6 +4,8 @@ import data.sport.setup.Game;
 import data.sport.setup.GameResult;
 import data.team.Team;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
+import process.utility.TeamDisplayUtil;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -14,7 +16,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import process.utilitary.TeamDisplayUtil;
 
 public class MatchResultPanel extends JPanel {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);

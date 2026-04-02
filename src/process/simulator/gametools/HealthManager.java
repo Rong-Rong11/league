@@ -7,7 +7,7 @@ import data.player.Asset;
 import data.player.HealthStatus;
 import data.player.Player;
 import data.team.Team;
-import process.utilitary.PlayerUtilitary;
+import process.utility.PlayerUtilitary;
 
 public class HealthManager {
 

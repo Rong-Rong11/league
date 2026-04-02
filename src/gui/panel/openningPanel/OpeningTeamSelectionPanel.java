@@ -7,6 +7,8 @@ import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.financialpolicy.ThriftyPolicy;
 import gui.panel.common.ButtonStyleUtil;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
+import process.utility.TeamDisplayUtil;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -15,7 +17,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import process.utilitary.TeamDisplayUtil;
 
 public class OpeningTeamSelectionPanel extends JPanel {
 

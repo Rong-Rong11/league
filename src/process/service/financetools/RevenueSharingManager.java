@@ -13,7 +13,7 @@ import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import process.repositery.TeamRepositery;
-import process.utilitary.FinanceUtilitary;
+import process.utility.FinanceUtilitary;
 import process.visitor.marketsize.CalculateMonthlyTeamFinanceVisitor;
 
 public class RevenueSharingManager {

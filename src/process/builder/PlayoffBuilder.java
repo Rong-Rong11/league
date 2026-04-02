@@ -89,6 +89,40 @@ public class PlayoffBuilder {
       return playoff;
    }
 
+   public Playoff buildConferenceFinalsPlayoffs() {
+      Playoff playoff = league.getPlayoff();
+
+      ArrayList<PlayoffSeries> eastConferenceFinals = new ArrayList<PlayoffSeries>();
+      ArrayList<PlayoffSeries> westConferenceFinals = new ArrayList<PlayoffSeries>();
+
+      Team eastWinner1 = getSeriesWinner(playoff.getEastConferenceSemis().get(0));
+      Team eastWinner2 = getSeriesWinner(playoff.getEastConferenceSemis().get(1));
+
+      Team westWinner1 = getSeriesWinner(playoff.getWestConferenceSemis().get(0));
+      Team westWinner2 = getSeriesWinner(playoff.getWestConferenceSemis().get(1));
+
+      eastConferenceFinals.add(new PlayoffSeries(eastWinner1, eastWinner2));
+      westConferenceFinals.add(new PlayoffSeries(westWinner1, westWinner2));
+
+      playoff.setEastConferenceFinals(eastConferenceFinals);
+      playoff.setWestConferenceFinals(westConferenceFinals);
+      return playoff;
+   }
+
+   public Playoff buildNbaFinalsPlayoffs() {
+      Playoff playoff = league.getPlayoff();
+
+      ArrayList<PlayoffSeries> nbaFinals = new ArrayList<PlayoffSeries>();
+
+      Team eastWinner = getSeriesWinner(playoff.getEastConferenceFinals().get(0));
+      Team westWinner = getSeriesWinner(playoff.getWestConferenceFinals().get(0));
+
+      nbaFinals.add(new PlayoffSeries(eastWinner, westWinner));
+
+      playoff.setNbaFinals(nbaFinals);
+      return playoff;
+   }
+
    private Team getSeriesWinner(PlayoffSeries series) {
       if (series.getHigherTeamWins() > series.getLowerTeamWins()) {
          return series.getHigherTeam();
