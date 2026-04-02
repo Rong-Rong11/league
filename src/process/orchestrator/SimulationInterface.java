@@ -24,7 +24,7 @@ public interface SimulationInterface {
 
    void startSeason();
 
-   void simulateRegularSeasonDay(LocalDate date);
+   void simulateDay(LocalDate date);
 
    void endRegularSeason();
 

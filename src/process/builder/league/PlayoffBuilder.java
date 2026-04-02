@@ -26,7 +26,6 @@ public class PlayoffBuilder {
       addEastQualifiedTeam(eastRanking, playoff);
       addWestQualifiedTeam(westRanking, playoff);
 
-      // faire le play-in plus tard
       Team east1 = eastRanking.get(1);
       Team east2 = eastRanking.get(2);
       Team east3 = eastRanking.get(3);

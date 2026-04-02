@@ -9,6 +9,7 @@ import data.calendar.GameDay;
 import data.finance.GameStat;
 import data.league.League;
 import data.league.finance.LeagueFinancialRules;
+import data.league.PlayoffRound;
 import data.sport.setup.Game;
 import data.team.Team;
 import data.team.finance.financialpolicy.AmbitiousPolicy;
@@ -125,10 +126,33 @@ public class SimulationManager implements GUIInterface {
 	// passe le prochain jour, méthode à utiliser pour la simulation et tout se fais
 	// tous seul
 	@Override
-	public void simulateRegularSeasonDay(LocalDate date) {
+	public void simulateDay(LocalDate date) {
+		if (date == null) {
+			return;
+		}
+
 		clock.setDate(date);
-		gameManager.simulateRegularSeasonDay(date, clock.getCurrentMonth());
-		verifyTimeline();
+		if (isRegularSeasonDate(date)) {
+			gameManager.simulateRegularSeasonDay(date, clock.getCurrentMonth());
+			verifyTimeline();
+			return;
+		}
+
+		if (isPlayoffDate(date)) {
+			gameManager.simulatePlayoffDay(date, clock.getCurrentMonth(), league.getPlayoff().getCurrentRound());
+		}
+	}
+
+	private boolean isRegularSeasonDate(LocalDate date) {
+		return !date.isAfter(getRegularSeasonEndDate());
+	}
+
+	private boolean isPlayoffDate(LocalDate date) {
+		return league != null
+				&& league.getPlayoff() != null
+				&& league.getPlayoff().getCurrentRound() != null
+				&& league.getPlayoff().getNbaCalendar() != null
+				&& !date.isBefore(league.getPlayoff().getDebutDate());
 	}
 
 	private void verifyTimeline() {
@@ -155,6 +179,7 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public void endRegularSeason() {
 		league.setPlayoff(playoffBuilder.buldFirstRoundPlayoffs());
+		league.getPlayoff().setCurrentRound(PlayoffRound.FIRST_ROUND);
 		league.getPlayoff().setNbaCalendar(firstRoundCalendarBuilder.buildCalendar());
 	}
 
@@ -162,7 +187,7 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public void simulateRegularSeason() {
 		while (!clock.getCurrentDate().equals(CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
-			simulateRegularSeasonDay(clock.getCurrentDate());
+			simulateDay(clock.getCurrentDate());
 			nextDay();
 		}
 		endRegularSeason();
@@ -287,4 +312,5 @@ public class SimulationManager implements GUIInterface {
 			game.setDisplayed(true);
 		}
 	}
+
 }

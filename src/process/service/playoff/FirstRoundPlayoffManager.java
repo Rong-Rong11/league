@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import data.league.League;
+import data.league.PlayoffRound;
 import data.sport.setup.PlayoffSeries;
 import process.builder.calendar.FirstRoundCalendarBuilder;
 import process.builder.calendar.SemiCalendarBuilder;
@@ -29,6 +30,7 @@ public class FirstRoundPlayoffManager extends PlayoffManager {
    public void advanceToNextRound(LocalDate roundEndDate) {
       League league = getLeague();
       league.setPlayoff(getPlayoffBuilder().buldSecondRoundPlayoffs());
+      league.getPlayoff().setCurrentRound(PlayoffRound.CONFERENCE_SEMIFINALS);
       SemiCalendarBuilder semiCalendarBuilder = new SemiCalendarBuilder(league, roundEndDate);
       league.getPlayoff().setNbaCalendar(semiCalendarBuilder.buildCalendar());
    }

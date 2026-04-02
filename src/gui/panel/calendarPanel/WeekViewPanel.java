@@ -185,7 +185,7 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	private void simulateDisplayedDay(LocalDate day) {
-		guiInterface.simulateRegularSeasonDay(day);
+		guiInterface.simulateDay(day);
 		guiInterface.displayGameDay(day);
 	}
 
