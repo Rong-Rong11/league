@@ -9,8 +9,8 @@ import data.league.League;
 import data.sport.setup.Game;
 import data.sport.setup.PlayoffSeries;
 import data.team.Team;
-import process.builder.PlayoffBuilder;
-import process.builder.PlayoffCalendarBuilder;
+import process.builder.calendar.PlayoffCalendarBuilder;
+import process.builder.league.PlayoffBuilder;
 
 public abstract class PlayoffManager {
    private League league;

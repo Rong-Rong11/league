@@ -7,7 +7,6 @@ import config.FinanceConfiguration;
 import data.finance.transfer.Trade;
 import data.player.Player;
 import data.team.Team;
-import process.service.tradetools.EvaluateTradeSatisfaction;
 
 public class PreSeasonTradeService extends TradeService {
 

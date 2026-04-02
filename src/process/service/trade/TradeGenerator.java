@@ -1,4 +1,4 @@
-package process.service.tradetools;
+package process.service.trade;
 
 import data.player.Player;
 import data.team.Team;

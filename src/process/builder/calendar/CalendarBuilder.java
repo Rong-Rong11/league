@@ -1,11 +1,8 @@
-package process.builder;
-
-import java.time.LocalDate;
+package process.builder.calendar;
 
 import data.calendar.NBACalendar;
 import data.league.League;
-import data.sport.setup.Game;
-import process.builder.calendartools.ScheduleReset;
+import process.builder.calendar.tools.ScheduleReset;
 
 public abstract class CalendarBuilder {
    private ScheduleReset scheduleReset = new ScheduleReset();
@@ -27,12 +24,6 @@ public abstract class CalendarBuilder {
    }
 
    protected abstract void generateGames();
-
-   protected void notifySchedule(LocalDate date, Game game) {
-      game.getGameContext().setScheduled(true);
-      game.getGameContext().getHomeTeam().getSchedule().scheduleGame(date, game);
-      game.getGameContext().getAwayTeam().getSchedule().scheduleGame(date, game);
-   }
 
    protected abstract NBACalendar build();
 

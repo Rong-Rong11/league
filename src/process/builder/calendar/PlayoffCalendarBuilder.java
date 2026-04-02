@@ -1,4 +1,4 @@
-package process.builder;
+package process.builder.calendar;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,6 +8,7 @@ import data.calendar.GameDay;
 import data.league.League;
 import data.sport.setup.Game;
 import data.sport.setup.PlayoffSeries;
+import process.builder.calendar.tools.ScheduleNotifier;
 
 public abstract class PlayoffCalendarBuilder extends CalendarBuilder {
 
@@ -34,7 +35,7 @@ public abstract class PlayoffCalendarBuilder extends CalendarBuilder {
             Game game = expectedGames[i];
             LocalDate gameDate = startDate.plusDays(seriesStartOffset + gameOffsets[i]);
             addGameToCalendar(playoffCalendar, game, gameDate);
-            notifySchedule(gameDate, game);
+            ScheduleNotifier.notifySchedule(gameDate, game);
          }
       }
    }
@@ -52,7 +53,7 @@ public abstract class PlayoffCalendarBuilder extends CalendarBuilder {
       Game nextGame = expectedGames[nextGameIndex];
       LocalDate nextDate = lastGameDate.plusDays(2);
       addGameToCalendar(playoffCalendar, nextGame, nextDate);
-      notifySchedule(nextDate, nextGame);
+      ScheduleNotifier.notifySchedule(nextDate, nextGame);
    }
 
    protected void addGameToCalendar(TreeMap<LocalDate, GameDay> playoffCalendar, Game game, LocalDate gameDate) {

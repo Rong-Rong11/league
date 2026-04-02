@@ -1,4 +1,4 @@
-package process.builder;
+package process.builder.calendar;
 
 import java.time.LocalDate;
 import java.util.TreeMap;
@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import data.calendar.GameDay;
 import data.calendar.NBACalendar;
 import data.league.League;
-import process.builder.calendartools.GameGenerator;
+import process.builder.calendar.tools.GameGenerator;
 
 public class FirstRoundCalendarBuilder extends PlayoffCalendarBuilder {
    public FirstRoundCalendarBuilder(League league) {

@@ -13,7 +13,7 @@ import data.league.League;
 import data.league.finance.LeagueFinancialRules;
 import data.player.Player;
 import data.team.Team;
-import process.builder.LeagueBuilder;
+import process.builder.league.LeagueBuilder;
 import process.repositery.DivisionRepositery;
 import process.repositery.PlayerRepositery;
 import process.repositery.TeamRepositery;

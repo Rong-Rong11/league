@@ -1,4 +1,4 @@
-package process.builder;
+package process.builder.calendar;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,9 +10,10 @@ import data.calendar.NBACalendar;
 import data.league.League;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
-import process.builder.calendartools.GameGenerator;
-import process.builder.calendartools.GameSelector;
-import process.builder.calendartools.SpecialEventPlanner;
+import process.builder.calendar.tools.GameGenerator;
+import process.builder.calendar.tools.GameSelector;
+import process.builder.calendar.tools.ScheduleNotifier;
+import process.builder.calendar.tools.SpecialEventPlanner;
 
 public class RegularSeasonCalendarBuilder extends CalendarBuilder {
     private GameSelector gameSelector;
@@ -43,7 +44,7 @@ public class RegularSeasonCalendarBuilder extends CalendarBuilder {
             ArrayList<Game> arrayList = gameSelector.selectGamesForDay();
             gameDay.setGames(arrayList);
             for (Game game : arrayList) {
-                notifySchedule(currentDate, game);
+                ScheduleNotifier.notifySchedule(currentDate, game);
             }
             if (!gameDay.isEmpty()) {
                 calendar.put(currentDate, gameDay);

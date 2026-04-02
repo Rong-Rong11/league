@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 import data.league.League;
 import data.sport.setup.PlayoffSeries;
-import process.builder.NbaFinalCalendarBuilder;
-import process.builder.PlayoffBuilder;
+import process.builder.calendar.NbaFinalCalendarBuilder;
+import process.builder.league.PlayoffBuilder;
 
 public class NbaFinalPlayoffManager extends PlayoffManager {
 

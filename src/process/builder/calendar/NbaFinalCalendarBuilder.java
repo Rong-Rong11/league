@@ -1,4 +1,4 @@
-package process.builder;
+package process.builder.calendar;
 
 import java.time.LocalDate;
 import java.util.TreeMap;
@@ -6,13 +6,13 @@ import java.util.TreeMap;
 import data.calendar.GameDay;
 import data.calendar.NBACalendar;
 import data.league.League;
-import process.builder.calendartools.GameGenerator;
+import process.builder.calendar.tools.GameGenerator;
 
-public class SemiCalendarBuilder extends PlayoffCalendarBuilder {
+public class NbaFinalCalendarBuilder extends PlayoffCalendarBuilder {
 
    private LocalDate roundEndDate;
 
-   public SemiCalendarBuilder(League league, LocalDate roundEndDate) {
+   public NbaFinalCalendarBuilder(League league, LocalDate roundEndDate) {
       super(league);
       this.roundEndDate = roundEndDate;
    }
@@ -24,8 +24,7 @@ public class SemiCalendarBuilder extends PlayoffCalendarBuilder {
 
       LocalDate startDate = roundEndDate.plusDays(2);
 
-      scheduleRoundFirstFourGames(playoffCalendar, getLeague().getPlayoff().getEastConferenceSemis(), startDate);
-      scheduleRoundFirstFourGames(playoffCalendar, getLeague().getPlayoff().getWestConferenceSemis(), startDate);
+      scheduleRoundFirstFourGames(playoffCalendar, getLeague().getPlayoff().getNbaFinals(), startDate);
 
       NBACalendar newCalendar = new NBACalendar(playoffCalendar);
       return newCalendar;
@@ -34,7 +33,7 @@ public class SemiCalendarBuilder extends PlayoffCalendarBuilder {
    @Override
    protected void generateGames() {
       // TODO Auto-generated method stub
-      GameGenerator.generateSecondRoundPlayoffGames(getLeague().getPlayoff());
+      GameGenerator.generateNbaFinalsPlayoffGames(getLeague().getPlayoff());
 
    }
 

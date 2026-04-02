@@ -1,4 +1,4 @@
-package process.builder;
+package process.builder.league;
 
 import java.util.ArrayList;
 import java.util.TreeMap;

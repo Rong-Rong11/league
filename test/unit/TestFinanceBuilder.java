@@ -2,21 +2,21 @@ package unit;
 
 import static org.junit.Assert.*;
 
-import config.FinanceConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
+import config.FinanceConfiguration;
 import data.league.League;
 import data.team.Team;
 import data.team.finance.TeamFinance;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
-import process.builder.LeagueBuilder;
+import process.builder.league.LeagueBuilder;
 import process.repositery.DivisionRepositery;
 import process.repositery.PlayerRepositery;
 import process.repositery.TeamRepositery;
-import process.service.financetools.FinanceInitializer;
+import process.service.finance.tools.FinanceInitializer;
 
 public class TestFinanceBuilder {
 

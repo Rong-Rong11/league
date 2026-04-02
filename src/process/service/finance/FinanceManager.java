@@ -1,4 +1,4 @@
-package process.service.submanager;
+package process.service.finance;
 
 import java.time.LocalDate;
 
@@ -9,12 +9,11 @@ import data.team.Team;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import process.repositery.TeamRepositery;
-import process.service.financetools.CentralRevenueDistributor;
-import process.service.financetools.FinanceInitializer;
-import process.service.financetools.GameFinanceProcessor;
-import process.service.financetools.LeagueExpenseCalculator;
-import process.service.financetools.MonthlyTeamFinanceCalculator;
-import process.service.financetools.RevenueSharingManager;
+import process.service.finance.tools.CentralRevenueDistributor;
+import process.service.finance.tools.FinanceInitializer;
+import process.service.finance.tools.GameFinanceProcessor;
+import process.service.finance.tools.LeagueExpenseCalculator;
+import process.service.finance.tools.MonthlyTeamFinanceCalculator;
 import process.utility.TeamUtilitary;
 import process.visitor.financialprofil.ChooseTransferStrategyVisitor;
 

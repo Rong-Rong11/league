@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 import data.league.League;
 import data.sport.setup.PlayoffSeries;
-import process.builder.FirstRoundCalendarBuilder;
-import process.builder.PlayoffBuilder;
-import process.builder.SemiCalendarBuilder;
+import process.builder.calendar.FirstRoundCalendarBuilder;
+import process.builder.calendar.SemiCalendarBuilder;
+import process.builder.league.PlayoffBuilder;
 
 public class FirstRoundPlayoffManager extends PlayoffManager {
 
