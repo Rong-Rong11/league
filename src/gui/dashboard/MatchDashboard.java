@@ -25,7 +25,7 @@ public class MatchDashboard extends JPanel {
 	private static final int DASHBOARD_SPACING = 16;
 	private static final int LEFT_COLUMN_WIDTH = 270;
 	private static final int RIGHT_COLUMN_WIDTH = 300;
-	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final Color BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 
 	private GUIInterface guiInterface;
 	private LocalDate selectedDate;

@@ -17,14 +17,17 @@ import javax.swing.JPanel;
 import data.team.Team;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardCard;
+import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.PlayerDisplayUtil;
+import gui.panel.common.RoundedButton;
+import gui.panel.common.RoundedPanel;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamRosterPanel;
 import process.orchestrator.GUIInterface;
 
 public class RosterDashboard extends JPanel {
 	private static final int DASHBOARD_SPACING = 16;
-	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final Color BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 
 	private Team selectedTeam;
 	private GUIInterface guiInterface;
@@ -53,9 +56,9 @@ public class RosterDashboard extends JPanel {
 
 	private void create() {
 		currentSeasonSelected = true;
-		backButton = new JButton("Retour à la carte");
-		currentSeasonButton = new JButton("Saison actuelle");
-		previousSeasonButton = new JButton("Saison passée");
+		backButton = new RoundedButton("Retour à la carte");
+		currentSeasonButton = new RoundedButton("Saison actuelle");
+		previousSeasonButton = new RoundedButton("Saison passée");
 		teamNameLabel = new JLabel("Effectif");
 		subtitleLabel = new JLabel("-");
 		teamLogoPanel = new TeamLogoPanel("", 56);
@@ -92,8 +95,9 @@ public class RosterDashboard extends JPanel {
 	}
 
 	private JPanel buildHeader() {
-		JPanel header = new JPanel(new BorderLayout(12, 0));
-		header.setOpaque(false);
+		JPanel header = new RoundedPanel(new BorderLayout(12, 0), 24);
+		header.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		header.setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
 
 		JPanel titlePanel = new JPanel();
 		titlePanel.setOpaque(false);
@@ -113,6 +117,7 @@ public class RosterDashboard extends JPanel {
 		titlePanel.add(subtitleLabel);
 
 		header.add(titlePanel, BorderLayout.WEST);
+		header.setPreferredSize(new java.awt.Dimension(420, 86));
 		return header;
 	}
 

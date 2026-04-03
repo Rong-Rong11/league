@@ -15,7 +15,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class LiveMatchHeaderPanel extends JPanel {
+import gui.panel.common.RoundedButton;
+import gui.panel.common.RoundedPanel;
+import gui.panel.common.DashboardPanelUtil;
+
+public class LiveMatchHeaderPanel extends RoundedPanel {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
 	private static final Color PRIMARY_COLOR = new Color(0x2F, 0x80, 0xA9);
@@ -39,16 +43,13 @@ public class LiveMatchHeaderPanel extends JPanel {
 
 	public LiveMatchHeaderPanel() {
 		super(new BorderLayout(16, 0));
-		setOpaque(true);
-		setBackground(Color.WHITE);
-		setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(225, 225, 225)),
-				BorderFactory.createEmptyBorder(12, 16, 12, 16)));
+		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
 
-		backButton = new JButton("Retour");
-		playButton = new JButton("Play");
-		nextQuarterButton = new JButton("Quart");
-		pauseButton = new JButton("Pause");
+		backButton = new RoundedButton("Retour");
+		playButton = new RoundedButton("Play");
+		nextQuarterButton = new RoundedButton("Quart");
+		pauseButton = new RoundedButton("Pause");
 		homeLogoPanel = new TeamLogoPanel("", 56);
 		awayLogoPanel = new TeamLogoPanel("", 56);
 		homeNameLabel = createNameLabel();
@@ -203,8 +204,8 @@ public class LiveMatchHeaderPanel extends JPanel {
 
 	private void styleActionButton(JButton button, Color background) {
 		button.setFocusPainted(false);
-		button.setOpaque(true);
-		button.setContentAreaFilled(true);
+		button.setOpaque(false);
+		button.setContentAreaFilled(false);
 		button.setBorderPainted(false);
 		button.setBackground(background);
 		button.setForeground(Color.WHITE);

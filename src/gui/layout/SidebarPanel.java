@@ -21,18 +21,19 @@ import javax.swing.SwingConstants;
 
 import gui.layout.strategy.ButtonHighlightStrategy;
 import gui.layout.strategy.SidebarHighlightStrategy;
+import gui.panel.common.RoundedButton;
 
 public class SidebarPanel extends JPanel {
 	private static final Color SIDEBAR_BACKGROUND_COLOR = new Color(255, 255, 255);
 	private static final Color ACTIVE_BUTTON_BACKGROUND_COLOR = new Color(230, 235, 240);
 	private static final Color BUTTON_TEXT_COLOR = new Color(40, 40, 40);
 
-	private JButton matchButton = new JButton("Match");
-	private JButton calendarButton = new JButton("Calendrier");
-	private JButton rankingButton = new JButton("Classement");
-	private JButton financeButton = new JButton("Finance");
-	private JButton mapButton = new JButton("Carte");
-	private JButton exitButton = new JButton("Quitter");
+	private JButton matchButton = new RoundedButton("Match");
+	private JButton calendarButton = new RoundedButton("Calendrier");
+	private JButton rankingButton = new RoundedButton("Classement");
+	private JButton financeButton = new RoundedButton("Finance");
+	private JButton mapButton = new RoundedButton("Carte");
+	private JButton exitButton = new RoundedButton("Quitter");
 	private Map<String, SidebarHighlightStrategy> highlightStrategies = new HashMap<String, SidebarHighlightStrategy>();
 	private JButton[] menuButtons;
 
@@ -127,8 +128,8 @@ public class SidebarPanel extends JPanel {
 		button.setHorizontalAlignment(SwingConstants.LEFT);
 		button.setFocusPainted(false);
 		button.setBorderPainted(false);
-		button.setContentAreaFilled(true);
-		button.setOpaque(true);
+		button.setContentAreaFilled(false);
+		button.setOpaque(false);
 
 		button.setBackground(SIDEBAR_BACKGROUND_COLOR);
 		button.setForeground(BUTTON_TEXT_COLOR);

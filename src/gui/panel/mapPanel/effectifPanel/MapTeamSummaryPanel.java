@@ -13,10 +13,13 @@ import javax.swing.JPanel;
 
 import data.team.Team;
 import gui.panel.common.PlayerDisplayUtil;
+import gui.panel.common.RoundedButton;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import process.orchestrator.GUIInterface;
 
 public class MapTeamSummaryPanel extends JPanel {
+	private static final Color OPEN_ROSTER_BUTTON_COLOR = new Color(0x17, 0x31, 0x74);
+
 	private final GUIInterface guiInterface;
 	private JLabel teamNameLabel;
 	private JLabel budgetLabel;
@@ -37,18 +40,21 @@ public class MapTeamSummaryPanel extends JPanel {
 		budgetLabel = new JLabel();
 		capacityLabel = new JLabel();
 		averageNoteLabel = new JLabel();
-		openRosterButton = new JButton("Voir l'effectif complet");
+		openRosterButton = new RoundedButton("Voir l'effectif complet");
 		teamLogoPanel = new TeamLogoPanel("", 56);
 		teamLogoPanel.setTeamQueryInterface(guiInterface);
 
 		teamNameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 		teamNameLabel.setForeground(new Color(0x17, 0x31, 0x74));
 		openRosterButton.setFocusPainted(false);
+		openRosterButton.setBackground(OPEN_ROSTER_BUTTON_COLOR);
+		openRosterButton.setForeground(Color.WHITE);
 	}
 
 	private void organize() {
 		setLayout(new BorderLayout(0, 12));
 		setOpaque(false);
+		setBorder(BorderFactory.createEmptyBorder(8, 10, 10, 10));
 
 		JPanel headerPanel = new JPanel(new BorderLayout(12, 0));
 		headerPanel.setOpaque(false);
@@ -67,6 +73,7 @@ public class MapTeamSummaryPanel extends JPanel {
 		add(headerPanel, BorderLayout.NORTH);
 		add(infoPanel, BorderLayout.CENTER);
 		add(openRosterButton, BorderLayout.SOUTH);
+		openRosterButton.setBorder(BorderFactory.createEmptyBorder(12, 24, 12, 24));
 	}
 
 	private JPanel buildInfoLabel(String title, JLabel valueLabel) {

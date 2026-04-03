@@ -16,6 +16,7 @@ import data.sport.play.action.ActionResult;
 import data.sport.setup.Game;
 import data.sport.setup.GameResult;
 import gui.panel.common.BuildBox;
+import gui.panel.common.DashboardPanelUtil;
 import gui.panel.matchPanel.liveMatchPanel.LiveActionsPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveMatchHeaderPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveTeamStatsPanel;
@@ -28,7 +29,7 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 	private static final int LIVE_ROWS = 10;
 	private static final int CHRONO_SPEED = 200;
 	private static final int GAME_SECONDS_PER_TICK = 2;
-	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final Color BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 
 	private Runnable backToMatchAction;
 
