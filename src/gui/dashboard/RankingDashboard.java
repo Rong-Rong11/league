@@ -7,18 +7,18 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 
 import gui.panel.common.BuildBox;
+import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.DashboardPanelUtil;
-import gui.panel.common.SectionTitle;
 
 /**
  * Dashboard dédié à la page Classement.
  */
 public class RankingDashboard extends JPanel {
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
-	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
+	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 64;
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
 	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 300;
-	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 
 	public RankingDashboard() {
 		organize();
@@ -39,7 +39,7 @@ public class RankingDashboard extends JPanel {
 	}
 
 	private JPanel buildHeader() {
-		JPanel header = new SectionTitle("CLASSEMENT GÉNÉRAL", "Conférence Est - Saison régulière");
+		JPanel header = new DashboardTitleBanner("CLASSEMENT GÉNÉRAL", "Conférence Est - Saison régulière");
 		header.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, IDEAL_DASHBOARD_HEADER_HEIGHT));
 		return header;
 	}

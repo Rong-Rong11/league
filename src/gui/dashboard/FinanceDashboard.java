@@ -15,7 +15,7 @@ public class FinanceDashboard extends JPanel {
 
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
-	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 	private static final String LEAGUE_VIEW = "league";
 	private static final String TEAM_VIEW = "team";
 

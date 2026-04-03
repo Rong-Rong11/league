@@ -8,6 +8,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class DashboardPanelUtil {
+	public static final java.awt.Color DASHBOARD_BACKGROUND_COLOR = new java.awt.Color(247, 248, 250);
+	public static final java.awt.Color PANEL_SURFACE_COLOR = java.awt.Color.WHITE;
 
 	public static JPanel createContentPanel(int spacing) {
 		JPanel content = new JPanel(new BorderLayout(spacing, spacing));

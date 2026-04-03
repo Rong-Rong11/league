@@ -18,6 +18,7 @@ import data.calendar.GameDay;
 import gui.panel.calendarPanel.HeaderPanel;
 import gui.panel.calendarPanel.MonthViewPanel;
 import gui.panel.calendarPanel.WeekViewPanel;
+import gui.panel.common.DashboardPanelUtil;
 import process.orchestrator.GUIInterface;
 
 public class CalendarDashboard extends JPanel {
@@ -25,7 +26,7 @@ public class CalendarDashboard extends JPanel {
 	private static final int DASHBOARD_SPACING = 16;
 	private static final String MONTH_VIEW = "MONTH_VIEW";
 	private static final String WEEK_VIEW = "WEEK_VIEW";
-	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final Color BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 	private GUIInterface guiInterface;
 	private HeaderPanel headerPanel;
 	private WeekViewPanel weekViewPanel;

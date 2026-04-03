@@ -18,6 +18,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.RoundedButton;
+
 public class MatchDayEntryPanel extends JPanel {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color TEXT_COLOR = new Color(90, 90, 90);
@@ -28,18 +31,18 @@ public class MatchDayEntryPanel extends JPanel {
 			final MatchDayListPanel.MatchSelectionListener matchSelectionListener) {
 		super(new BorderLayout(10, 0));
 		setOpaque(true);
-		setBackground(Color.WHITE);
+		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
 		setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createMatteBorder(index == 0 ? 1 : 0, 0, 1, 0, SEPARATOR_COLOR),
 				BorderFactory.createEmptyBorder(8, 10, 8, 10)));
 
 		JPanel centerPanel = new JPanel(new BorderLayout(8, 0));
 		centerPanel.setOpaque(true);
-		centerPanel.setBackground(Color.WHITE);
+		centerPanel.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
 
 		JPanel textPanel = new JPanel();
 		textPanel.setOpaque(true);
-		textPanel.setBackground(Color.WHITE);
+		textPanel.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
 		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 
 		textPanel.add(createTeamLabel(TeamDisplayUtil.getShortName(game.getGameContext().getHomeTeam())));
@@ -59,7 +62,7 @@ public class MatchDayEntryPanel extends JPanel {
 
 		centerPanel.addMouseListener(new SelectMatchMouseListener(game, matchSelectionListener));
 
-		JButton detailButton = new JButton(">");
+		JButton detailButton = new RoundedButton(">");
 		detailButton.setFocusPainted(false);
 		detailButton.setBorderPainted(false);
 		detailButton.setContentAreaFilled(false);
