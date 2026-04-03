@@ -130,13 +130,12 @@ public class SimulationManager implements GUIInterface {
 		clock.setDate(date);
 		if (isRegularSeasonDate(date)) {
 			gameManager.simulateRegularSeasonDay(date, clock.getCurrentMonth());
-			verifyTimeline();
-			return;
 		}
 
 		if (isPlayoffDate(date)) {
 			gameManager.simulatePlayoffDay(date, clock.getCurrentMonth(), league.getPlayoff().getCurrentRound());
 		}
+		verifyTimeline();
 	}
 
 	private boolean isRegularSeasonDate(LocalDate date) {
