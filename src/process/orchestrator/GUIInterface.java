@@ -2,5 +2,5 @@ package process.orchestrator;
 
 public interface GUIInterface
             extends SimulationInterface, SeasonGetterInterface, TeamGetterInterface, MatchGetterInterface,
-            DisplayInterface {
+            DisplayInterface, LiveMatchInterface {
 }

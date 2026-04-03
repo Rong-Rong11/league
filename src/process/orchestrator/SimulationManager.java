@@ -24,6 +24,8 @@ import process.builder.league.LeagueBuilder;
 import process.builder.league.PlayoffBuilder;
 import process.repositery.TeamRepositery;
 import process.service.finance.FinanceManager;
+import process.service.live.LiveMatchService;
+import process.service.live.LiveMatchState;
 import process.service.leaguetools.TeamPopularityUpdater;
 import process.service.submanager.GameManager;
 import process.service.trade.PreSeasonTradeService;
@@ -49,6 +51,7 @@ public class SimulationManager implements GUIInterface {
 
 	private TeamPopularityUpdater teamPopularityUpdater = new TeamPopularityUpdater();
 	private PlayoffBuilder playoffBuilder;
+	private LiveMatchService liveMatchService = new LiveMatchService();
 
 	public SimulationManager() {
 		league = leagueBuilder.build();
@@ -311,6 +314,51 @@ public class SimulationManager implements GUIInterface {
 		for (Game game : gameDay.getGames()) {
 			game.setDisplayed(true);
 		}
+	}
+
+	@Override
+	public boolean isLiveMatchAvailable(Game game) {
+		return liveMatchService.isLiveMatchAvailable(game);
+	}
+
+	@Override
+	public void setLiveGame(Game game) {
+		liveMatchService.setGame(game);
+	}
+
+	@Override
+	public void startLiveMatch() {
+		liveMatchService.startLiveMatch();
+	}
+
+	@Override
+	public void pauseLiveMatch() {
+		liveMatchService.pauseLiveMatch();
+	}
+
+	@Override
+	public void playCurrentLiveQuarter() {
+		liveMatchService.playCurrentLiveQuarter();
+	}
+
+	@Override
+	public void resetLiveMatch() {
+		liveMatchService.resetLiveMatch();
+	}
+
+	@Override
+	public void tickLiveMatch() {
+		liveMatchService.tickLiveMatch();
+	}
+
+	@Override
+	public boolean isLiveMatchRunning() {
+		return liveMatchService.isRunning();
+	}
+
+	@Override
+	public LiveMatchState getCurrentLiveState() {
+		return liveMatchService.getCurrentState();
 	}
 
 }
