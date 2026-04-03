@@ -82,3 +82,4 @@ public class FinanceHeaderPanel extends RoundedPanel {
 		return panel;
 	}
 }
+
