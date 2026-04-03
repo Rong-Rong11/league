@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import config.CalendarConfiguration;
@@ -180,6 +181,30 @@ public class MatchDashboard extends JPanel {
 		@Override
 		public void onMatchDetail(Game game) {
 			updateSelectedGame(game);
+			if (!guiInterface.isLiveMatchAvailable(game)) {
+				int choice = JOptionPane.showOptionDialog(
+						MatchDashboard.this,
+						"Ce match n'est pas encore simule. Simulez d'abord la journee complete pour acceder au live match.",
+						"Live match indisponible",
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE,
+						null,
+						new Object[] { "Simuler la journee", "Annuler" },
+						"Simuler la journee");
+				if (choice != 0) {
+					return;
+				}
+				guiInterface.simulateDay(selectedDate);
+				guiInterface.displayGameDay(selectedDate);
+				showGameDay(guiInterface.getGameDay(selectedDate), selectedDate);
+				updateSelectedGame(game);
+				if (!guiInterface.isLiveMatchAvailable(game)) {
+					JOptionPane.showMessageDialog(MatchDashboard.this,
+							"Le live match reste indisponible apres la simulation de cette journee.",
+							"Live match indisponible", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+			}
 			if (openLiveMatchAction != null) {
 				openLiveMatchAction.run();
 			}
