@@ -8,8 +8,8 @@ import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.finance.GameStat;
 import data.league.League;
-import data.league.finance.LeagueFinancialRules;
 import data.league.PlayoffRound;
+import data.league.finance.LeagueFinancialRules;
 import data.sport.setup.Game;
 import data.team.Team;
 import data.team.finance.financialpolicy.AmbitiousPolicy;
@@ -24,8 +24,8 @@ import process.builder.league.LeagueBuilder;
 import process.builder.league.PlayoffBuilder;
 import process.repositery.TeamRepositery;
 import process.service.finance.FinanceManager;
+import process.service.game.GameManager;
 import process.service.leaguetools.TeamPopularityUpdater;
-import process.service.submanager.GameManager;
 import process.service.trade.PreSeasonTradeService;
 import process.service.trade.RegularSeasonTradeService;
 import process.service.trade.TradeService;
@@ -127,10 +127,6 @@ public class SimulationManager implements GUIInterface {
 	// tous seul
 	@Override
 	public void simulateDay(LocalDate date) {
-		if (date == null) {
-			return;
-		}
-
 		clock.setDate(date);
 		if (isRegularSeasonDate(date)) {
 			gameManager.simulateRegularSeasonDay(date, clock.getCurrentMonth());
@@ -148,11 +144,7 @@ public class SimulationManager implements GUIInterface {
 	}
 
 	private boolean isPlayoffDate(LocalDate date) {
-		return league != null
-				&& league.getPlayoff() != null
-				&& league.getPlayoff().getCurrentRound() != null
-				&& league.getPlayoff().getNbaCalendar() != null
-				&& !date.isBefore(league.getPlayoff().getDebutDate());
+		return !date.isBefore(league.getPlayoff().getDebutDate());
 	}
 
 	private void verifyTimeline() {

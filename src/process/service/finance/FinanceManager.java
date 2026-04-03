@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import data.finance.GameStat;
 import data.league.League;
+import data.league.PlayoffRound;
 import data.sport.setup.Game;
 import data.team.Team;
 import data.team.finance.financialpolicy.FinancialPolicy;
@@ -11,9 +12,10 @@ import data.team.finance.marketsize.MarketSize;
 import process.repositery.TeamRepositery;
 import process.service.finance.tools.CentralRevenueDistributor;
 import process.service.finance.tools.FinanceInitializer;
-import process.service.finance.tools.GameFinanceProcessor;
 import process.service.finance.tools.LeagueExpenseCalculator;
 import process.service.finance.tools.MonthlyTeamFinanceCalculator;
+import process.service.finance.tools.game.processor.PlayoffGameFinanceProcessor;
+import process.service.finance.tools.game.processor.RegularSeasonGameFinanceProcessor;
 import process.utility.TeamUtilitary;
 import process.visitor.financialprofil.ChooseTransferStrategyVisitor;
 
@@ -23,15 +25,18 @@ public class FinanceManager {
     private RevenueSharingManager revenueSharingManager;
     private MonthlyTeamFinanceCalculator monthlyTeamFinanceCalculator;
     private CentralRevenueDistributor centralRevenueDistributor;
-    private GameFinanceProcessor gameFinanceProcessor;
     private LeagueExpenseCalculator leagueExpenseCalculator;
+
+    private RegularSeasonGameFinanceProcessor regularSeasonGameFinanceProcessor;
+    private PlayoffGameFinanceProcessor playoffGameFinanceProcessor;
 
     public FinanceManager(League league) {
         revenueSharingManager = new RevenueSharingManager(league);
         monthlyTeamFinanceCalculator = new MonthlyTeamFinanceCalculator();
         centralRevenueDistributor = new CentralRevenueDistributor(league);
-        gameFinanceProcessor = new GameFinanceProcessor();
         leagueExpenseCalculator = new LeagueExpenseCalculator(league);
+
+        regularSeasonGameFinanceProcessor = new RegularSeasonGameFinanceProcessor();
     }
 
     public void initializeFinance() {
@@ -57,8 +62,16 @@ public class FinanceManager {
         leagueExpenseCalculator.applyMonthlyExpenses(month);
     }
 
-    public void calculateGame(Game game, LocalDate date, int month) {
-        gameFinanceProcessor.calculateGame(game, date, month);
+    public void calculateRegularSeasonGame(Game game, LocalDate date, int month) {
+        regularSeasonGameFinanceProcessor.calculateGame(game, date, month);
+    }
+
+    public void calculatePlayoffGame(Game game, LocalDate date, int month, PlayoffRound round) {
+        if (playoffGameFinanceProcessor == null || playoffGameFinanceProcessor.getRound() != round) {
+            playoffGameFinanceProcessor = new PlayoffGameFinanceProcessor(round);
+        }
+
+        playoffGameFinanceProcessor.calculateGame(game, date, month);
     }
 
     private void applyMonthlyFinanceForTeam(Team team, int month) {
@@ -72,7 +85,17 @@ public class FinanceManager {
     }
 
     public GameStat getGameStat(Game game) {
-        return gameFinanceProcessor.getGameStat(game);
+        GameStat gameStat = regularSeasonGameFinanceProcessor.getGameStat(game);
+
+        if (gameStat != null) {
+            return gameStat;
+        }
+
+        if (playoffGameFinanceProcessor != null) {
+            return playoffGameFinanceProcessor.getGameStat(game);
+        }
+
+        return null;
     }
 
     public void randomFinancialPolicy() {

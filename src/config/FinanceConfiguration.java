@@ -21,7 +21,7 @@ public class FinanceConfiguration {
     public static final double MARKET_SIZE_MEDIUM_MULTIPLIER = 1;
     public static final double MARKET_SIZE_LARGE_MULTIPLIER = 1.3;
 
-    public static final double BASE_TEAM_BUDGET = 150;
+    public static final double BASE_TEAM_BUDGET = 200;
     public static final double BASE_STADIUM_COSTS = 0.2;
     public static final double BASE_TICKET_PRICE = 45; // pas en millions
     public static final double ATTENDANCE_RATE_BASE = 0.5;
