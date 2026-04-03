@@ -11,8 +11,8 @@ import javax.swing.JPanel;
 
 import data.team.Team;
 import gui.panel.common.BuildBox;
+import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.DashboardPanelUtil;
-import gui.panel.common.SectionTitle;
 import gui.panel.common.TeamMapPanel;
 import gui.panel.mapPanel.effectifPanel.MapTeamPlayersPanel;
 import gui.panel.mapPanel.effectifPanel.MapTeamSummaryPanel;
@@ -23,10 +23,10 @@ import process.orchestrator.GUIInterface;
  */
 public class MapDashboard extends JPanel {
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
-	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
+	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 64;
 	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 270;
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
-	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 
 	private GUIInterface guiInterface;
 	private ArrayList<Team> teams;
@@ -67,7 +67,7 @@ public class MapDashboard extends JPanel {
 	}
 
 	private JPanel buildHeader() {
-		JPanel header = new SectionTitle("Carte des equipes", "Distribution geographique");
+		JPanel header = new DashboardTitleBanner("Carte des equipes", "Distribution geographique");
 		header.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, IDEAL_DASHBOARD_HEADER_HEIGHT));
 		return header;
 	}

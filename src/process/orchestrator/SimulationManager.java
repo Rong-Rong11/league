@@ -25,6 +25,8 @@ import process.builder.league.PlayoffBuilder;
 import process.repositery.TeamRepositery;
 import process.service.finance.FinanceManager;
 import process.service.game.GameManager;
+import process.service.live.LiveMatchService;
+import process.service.live.LiveMatchState;
 import process.service.leaguetools.TeamPopularityUpdater;
 import process.service.trade.PreSeasonTradeService;
 import process.service.trade.RegularSeasonTradeService;
@@ -49,6 +51,7 @@ public class SimulationManager implements GUIInterface {
 
 	private TeamPopularityUpdater teamPopularityUpdater = new TeamPopularityUpdater();
 	private PlayoffBuilder playoffBuilder;
+	private LiveMatchService liveMatchService = new LiveMatchService();
 
 	public SimulationManager() {
 		league = leagueBuilder.build();
@@ -204,6 +207,44 @@ public class SimulationManager implements GUIInterface {
 	}
 
 	@Override
+	public LocalDate getCalendarDisplayDate(LocalDate simulationDate) {
+		if (!isSeasonInitialized() || simulationDate == null) {
+			return null;
+		}
+
+		GameDay currentGameDay = getGameDay(simulationDate);
+		if (currentGameDay == null || currentGameDay.isEmpty()) {
+			return getNextGameDay(simulationDate);
+		}
+
+		if (!currentGameDay.isDisplayed()) {
+			return simulationDate;
+		}
+
+		LocalDate nextGameDay = getNextGameDay(simulationDate.plusDays(1));
+		if (nextGameDay != null) {
+			return nextGameDay;
+		}
+		return simulationDate;
+	}
+
+	@Override
+	public LocalDate getNextGameDay(LocalDate startDate) {
+		if (!isSeasonInitialized() || startDate == null) {
+			return null;
+		}
+
+		for (LocalDate day = startDate; !day.isAfter(getRegularSeasonEndDate()); day = day.plusDays(1)) {
+			GameDay gameDay = getGameDay(day);
+			if (gameDay != null && !gameDay.isEmpty()) {
+				return day;
+			}
+		}
+
+		return null;
+	}
+
+	@Override
 	public GameDay getGameDay(LocalDate date) {
 		if (!isSeasonInitialized() || date == null) {
 			return null;
@@ -302,6 +343,51 @@ public class SimulationManager implements GUIInterface {
 		for (Game game : gameDay.getGames()) {
 			game.setDisplayed(true);
 		}
+	}
+
+	@Override
+	public boolean isLiveMatchAvailable(Game game) {
+		return liveMatchService.isLiveMatchAvailable(game);
+	}
+
+	@Override
+	public void setLiveGame(Game game) {
+		liveMatchService.setGame(game);
+	}
+
+	@Override
+	public void startLiveMatch() {
+		liveMatchService.startLiveMatch();
+	}
+
+	@Override
+	public void pauseLiveMatch() {
+		liveMatchService.pauseLiveMatch();
+	}
+
+	@Override
+	public void playCurrentLiveQuarter() {
+		liveMatchService.playCurrentLiveQuarter();
+	}
+
+	@Override
+	public void resetLiveMatch() {
+		liveMatchService.resetLiveMatch();
+	}
+
+	@Override
+	public void tickLiveMatch() {
+		liveMatchService.tickLiveMatch();
+	}
+
+	@Override
+	public boolean isLiveMatchRunning() {
+		return liveMatchService.isRunning();
+	}
+
+	@Override
+	public LiveMatchState getCurrentLiveState() {
+		return liveMatchService.getCurrentState();
 	}
 
 }

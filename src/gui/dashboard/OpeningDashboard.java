@@ -18,8 +18,9 @@ import javax.swing.JPanel;
 import data.team.Team;
 import gui.panel.common.BuildBox;
 import gui.panel.common.ButtonStyleUtil;
+import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.DashboardPanelUtil;
-import gui.panel.common.SectionTitle;
+import gui.panel.common.RoundedButton;
 import gui.panel.common.TeamMapPanel;
 import gui.panel.openningPanel.OpeningPolicyDetailPanel;
 import gui.panel.openningPanel.OpeningTeamSelectionPanel;
@@ -28,10 +29,10 @@ import process.orchestrator.GUIInterface;
 public class OpeningDashboard extends JPanel {
 
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
-	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
-	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 420;
-	private static final int IDEAL_DASHBOARD_TOP_CARD_HEIGHT = 220;
-	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 64;
+	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 500;
+	private static final int IDEAL_DASHBOARD_TOP_CARD_HEIGHT = 335;
+	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 
 	private GUIInterface guiInterface;
 	private ArrayList<Team> teams;
@@ -52,8 +53,8 @@ public class OpeningDashboard extends JPanel {
 
 	private void create() {
 		teams = new ArrayList<Team>(guiInterface.getTeams());
-		continueButton = new JButton("Continuer");
-		randomPoliciesButton = new JButton();
+		continueButton = new RoundedButton("Continuer");
+		randomPoliciesButton = new RoundedButton();
 		openingMapPanel = new TeamMapPanel();
 		teamSelectionPanel = new OpeningTeamSelectionPanel();
 		policyDetailPanel = new OpeningPolicyDetailPanel(guiInterface);
@@ -64,6 +65,9 @@ public class OpeningDashboard extends JPanel {
 		randomPoliciesButton.setIcon(createRandomIcon());
 		randomPoliciesButton.setText("");
 		randomPoliciesButton.setPreferredSize(new Dimension(44, 44));
+		continueButton.setFont(new java.awt.Font(java.awt.Font.SANS_SERIF, java.awt.Font.BOLD, 16));
+		continueButton.setPreferredSize(new Dimension(170, 56));
+		continueButton.setBorder(BorderFactory.createEmptyBorder(14, 28, 14, 28));
 	}
 
 	private ImageIcon createRandomIcon() {
@@ -88,7 +92,7 @@ public class OpeningDashboard extends JPanel {
 	}
 
 	private JPanel buildHeader() {
-		JPanel header = new SectionTitle(
+		JPanel header = new DashboardTitleBanner(
 				"Creation de la ligue",
 				"Definissez les politiques financieres des equipes");
 		header.setPreferredSize(new Dimension(360, IDEAL_DASHBOARD_HEADER_HEIGHT));
@@ -131,7 +135,7 @@ public class OpeningDashboard extends JPanel {
 		topCard.setPreferredSize(new Dimension(IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH, IDEAL_DASHBOARD_TOP_CARD_HEIGHT));
 
 		JPanel bottomCard = new BuildBox(
-				"POLITIQUE FINANCIERE",
+				"INFORMATIONS EQUIPE",
 				"Informations generales",
 				policyDetailPanel);
 
@@ -156,6 +160,9 @@ public class OpeningDashboard extends JPanel {
 		teamSelectionPanel.getAmbitiousButton().addActionListener(new AmbitiousPolicyListener());
 		teamSelectionPanel.getBalancedButton().addActionListener(new BalancedPolicyListener());
 		teamSelectionPanel.getThriftyButton().addActionListener(new ThriftyPolicyListener());
+		teamSelectionPanel.getLargeMarketButton().addActionListener(new LargeMarketSizeListener());
+		teamSelectionPanel.getMediumMarketButton().addActionListener(new MediumMarketSizeListener());
+		teamSelectionPanel.getSmallMarketButton().addActionListener(new SmallMarketSizeListener());
 	}
 
 	private void selectDefaultTeam() {
@@ -175,6 +182,7 @@ public class OpeningDashboard extends JPanel {
 		teamSelectionPanel.updateTeam(selectedTeam);
 		if (selectedTeam != null) {
 			teamSelectionPanel.setSelectedPolicy(selectedTeam.getTeamFinance().getFinancialProfil());
+			teamSelectionPanel.setSelectedMarketSize(selectedTeam.getTeamFinance().getMarketSize());
 		}
 		policyDetailPanel.updateTeam(selectedTeam);
 		if (selectedTeam == null) {
@@ -207,6 +215,22 @@ public class OpeningDashboard extends JPanel {
 		refreshSelectedTeamPanels();
 	}
 
+	private void applySelectedMarketSize(String marketSizeType) {
+		if (selectedTeam == null) {
+			return;
+		}
+
+		if (marketSizeType.equals("large")) {
+			guiInterface.chooseLargeMarketSize(selectedTeam);
+		} else if (marketSizeType.equals("medium")) {
+			guiInterface.chooseMediumMarketSize(selectedTeam);
+		} else if (marketSizeType.equals("small")) {
+			guiInterface.chooseSmallMarketSize(selectedTeam);
+		}
+
+		refreshSelectedTeamPanels();
+	}
+
 	private class AmbitiousPolicyListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -226,6 +250,27 @@ public class OpeningDashboard extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			applySelectedPolicy("thrifty");
 
+		}
+	}
+
+	private class LargeMarketSizeListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			applySelectedMarketSize("large");
+		}
+	}
+
+	private class MediumMarketSizeListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			applySelectedMarketSize("medium");
+		}
+	}
+
+	private class SmallMarketSizeListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			applySelectedMarketSize("small");
 		}
 	}
 

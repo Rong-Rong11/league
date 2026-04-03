@@ -12,15 +12,19 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
 import gui.panel.common.ButtonStyleUtil;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.RoundedButton;
+import gui.panel.common.RoundedPanel;
 
-public class HeaderPanel extends JPanel {
+public class HeaderPanel extends RoundedPanel {
 
-	private static final Color BACKGROUND_COLOR = Color.WHITE;
+	private static final Color BACKGROUND_COLOR = DashboardPanelUtil.PANEL_SURFACE_COLOR;
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
 	private static final Color PROGRESS_COLOR = new Color(0x2F, 0x80, 0xA9);
@@ -51,20 +55,23 @@ public class HeaderPanel extends JPanel {
 		percentageLabel = new JLabel("0%");
 		progressBar = new JProgressBar(0, 100);
 
-		simulateDayButton = new JButton("Simuler Jour");
-		simulateWeekButton = new JButton("Simuler Semaine");
-		simulateSeasonButton = new JButton("Simuler Saison");
+		simulateDayButton = new RoundedButton("Simuler Jour");
+		simulateWeekButton = new RoundedButton("Simuler Semaine");
+		simulateSeasonButton = new RoundedButton("Simuler Saison");
 
-		previousMonthButton = new JButton("<");
-		nextMonthButton = new JButton(">");
+		previousMonthButton = new RoundedButton("<");
+		nextMonthButton = new RoundedButton(">");
 		monthLabel = new JLabel("-");
-		monthButton = new JButton("Mois");
-		weekButton = new JButton("Semaine");
+		monthButton = new RoundedButton("Mois");
+		weekButton = new RoundedButton("Semaine");
 
 		progressTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
 		progressSubtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 		percentageLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
 		monthLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+		monthLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		monthLabel.setPreferredSize(new Dimension(210, 36));
+		monthLabel.setMinimumSize(new Dimension(210, 36));
 
 		progressTitleLabel.setForeground(TITLE_COLOR);
 		progressSubtitleLabel.setForeground(SUBTITLE_COLOR);
@@ -83,7 +90,6 @@ public class HeaderPanel extends JPanel {
 
 	private void organize() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setOpaque(true);
 		setBackground(BACKGROUND_COLOR);
 		setBorder(BorderFactory.createEmptyBorder(14, 16, 10, 16));
 
@@ -127,7 +133,7 @@ public class HeaderPanel extends JPanel {
 		JPanel row = new JPanel(new BorderLayout());
 		row.setOpaque(false);
 
-		JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+		JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 0));
 		leftPanel.setOpaque(false);
 		leftPanel.add(previousMonthButton);
 		leftPanel.add(monthLabel);

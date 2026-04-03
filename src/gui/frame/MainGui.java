@@ -81,7 +81,7 @@ public class MainGui extends JFrame {
 		sidebar = new SidebarPanel();
 
 		matchDashboard = new MatchDashboard(guiInterface);
-		liveMatchDashboard = new LiveMatchDashboard();
+		liveMatchDashboard = new LiveMatchDashboard(guiInterface);
 		mapDashboard = new MapDashboard(guiInterface);
 		rosterDashboard = new RosterDashboard(guiInterface);
 		dashboardPanel.add(matchDashboard, "match");

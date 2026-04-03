@@ -13,8 +13,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import gui.panel.common.ButtonStyleUtil;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.RoundedButton;
+import gui.panel.common.RoundedPanel;
 
-public class FinanceHeaderPanel extends JPanel {
+public class FinanceHeaderPanel extends RoundedPanel {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
 
@@ -23,14 +26,11 @@ public class FinanceHeaderPanel extends JPanel {
 
 	public FinanceHeaderPanel() {
 		super(new BorderLayout(16, 0));
-		setOpaque(true);
-		setBackground(Color.WHITE);
-		setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(225, 225, 225)),
-				BorderFactory.createEmptyBorder(12, 16, 12, 16)));
+		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
 
-		leagueButton = new JButton("Ligue");
-		teamsButton = new JButton("Equipes");
+		leagueButton = new RoundedButton("Ligue");
+		teamsButton = new RoundedButton("Equipes");
 
 		ButtonStyleUtil.styleToggleButton(leagueButton);
 		ButtonStyleUtil.styleToggleButton(teamsButton);
@@ -82,3 +82,4 @@ public class FinanceHeaderPanel extends JPanel {
 		return panel;
 	}
 }
+

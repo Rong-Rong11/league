@@ -93,7 +93,7 @@ public class MatchStatPanel extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setOpaque(false);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
+		panel.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
 
 		JLabel title = new JLabel("STATISTIQUES DU MATCH");
 		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
@@ -121,7 +121,7 @@ public class MatchStatPanel extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setOpaque(false);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
+		panel.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
 
 		JLabel title = new JLabel("AFFLUENCE");
 		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));

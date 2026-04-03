@@ -18,6 +18,7 @@ import data.calendar.GameDay;
 import gui.panel.calendarPanel.HeaderPanel;
 import gui.panel.calendarPanel.MonthViewPanel;
 import gui.panel.calendarPanel.WeekViewPanel;
+import gui.panel.common.DashboardPanelUtil;
 import process.orchestrator.GUIInterface;
 
 public class CalendarDashboard extends JPanel {
@@ -25,7 +26,7 @@ public class CalendarDashboard extends JPanel {
 	private static final int DASHBOARD_SPACING = 16;
 	private static final String MONTH_VIEW = "MONTH_VIEW";
 	private static final String WEEK_VIEW = "WEEK_VIEW";
-	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final Color BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 	private GUIInterface guiInterface;
 	private HeaderPanel headerPanel;
 	private WeekViewPanel weekViewPanel;
@@ -89,19 +90,34 @@ public class CalendarDashboard extends JPanel {
 	public void startSeason() {
 		guiInterface.randomFinance();
 		guiInterface.startSeason();
-		weekViewPanel.loadSeasonState();
-		currentCalendarDate = weekViewPanel.getCurrentDate();
+		currentCalendarDate = guiInterface.getCalendarDisplayDate(guiInterface.getCurrentDate());
+		weekViewPanel.syncToSimulationDate(guiInterface.getCurrentDate());
 		updateDisplayedMonth(currentCalendarDate);
 		updateDashboardState();
 	}
 
 	public void refreshSeasonState() {
-		if (weekViewPanel.getCurrentDate() == null) {
+		if (!guiInterface.isSeasonInitialized()) {
 			weekViewPanel.loadSeasonState();
+			updateDashboardState();
+			return;
 		}
-		if (weekViewPanel.getCurrentDate() != null) {
-			currentCalendarDate = weekViewPanel.getCurrentDate();
-		}
+
+		LocalDate simulationDate = guiInterface.getCurrentDate();
+		currentCalendarDate = guiInterface.getCalendarDisplayDate(simulationDate);
+		weekViewPanel.syncToSimulationDate(simulationDate);
+		updateDisplayedMonth(currentCalendarDate);
+		updateDashboardState();
+	}
+
+	public void showUninitializedSeasonState() {
+		weekViewPanel.loadSeasonState();
+		updateDashboardState();
+	}
+
+	public void applySeasonSynchronization(LocalDate simulationDate) {
+		currentCalendarDate = guiInterface.getCalendarDisplayDate(simulationDate);
+		weekViewPanel.syncToSimulationDate(simulationDate);
 		updateDisplayedMonth(currentCalendarDate);
 		updateDashboardState();
 	}
