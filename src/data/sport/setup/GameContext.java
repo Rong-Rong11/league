@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package data.sport.setup;
 
 import data.team.Team;
@@ -10,12 +7,19 @@ public class GameContext {
     private Team homeTeam;
     private Team awayTeam;
     private int typeGame;
+    private GameMoment gameMoment;
     private boolean isScheduled;
     private boolean isRivalry;
 
-    public GameContext(Team team, Team team2, int n) {
-        this.setAwayTeam(team2);
-        this.setHomeTeam(team);
+    public GameContext(Team homeTeam, Team awayTeam, int typeGame) {
+        this(homeTeam, awayTeam, typeGame, new Evening());
+    }
+
+    public GameContext(Team homeTeam, Team awayTeam, int typeGame, GameMoment gameMoment) {
+        this.setAwayTeam(awayTeam);
+        this.setHomeTeam(homeTeam);
+        this.setTypeGame(typeGame);
+        this.setGameMoment(gameMoment);
         this.isRivalry = CalendarUtilitary.isRivalry(this);
     }
 
@@ -23,32 +27,40 @@ public class GameContext {
         return this.isScheduled;
     }
 
-    public void setScheduled(boolean bl) {
-        this.isScheduled = bl;
+    public void setScheduled(boolean scheduled) {
+        this.isScheduled = scheduled;
     }
 
     public Team getHomeTeam() {
         return this.homeTeam;
     }
 
-    public void setHomeTeam(Team team) {
-        this.homeTeam = team;
+    public void setHomeTeam(Team homeTeam) {
+        this.homeTeam = homeTeam;
     }
 
     public Team getAwayTeam() {
         return this.awayTeam;
     }
 
-    public void setAwayTeam(Team team) {
-        this.awayTeam = team;
+    public void setAwayTeam(Team awayTeam) {
+        this.awayTeam = awayTeam;
     }
 
     public int getTypeGame() {
         return this.typeGame;
     }
 
-    public void setTypeGame(int n) {
-        this.typeGame = n;
+    public void setTypeGame(int typeGame) {
+        this.typeGame = typeGame;
+    }
+
+    public GameMoment getGameMoment() {
+        return this.gameMoment;
+    }
+
+    public void setGameMoment(GameMoment gameMoment) {
+        this.gameMoment = gameMoment;
     }
 
     public boolean isRivalry() {

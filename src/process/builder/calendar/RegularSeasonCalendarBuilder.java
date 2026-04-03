@@ -9,11 +9,15 @@ import data.calendar.GameDay;
 import data.calendar.NBACalendar;
 import data.league.League;
 import data.league.RegularSeason;
+import data.sport.setup.Afternoon;
+import data.sport.setup.Evening;
 import data.sport.setup.Game;
+import data.sport.setup.Night;
 import process.builder.calendar.tools.GameGenerator;
 import process.builder.calendar.tools.GameSelector;
 import process.builder.calendar.tools.ScheduleNotifier;
 import process.builder.calendar.tools.SpecialEventPlanner;
+import process.utility.CalendarUtilitary;
 
 public class RegularSeasonCalendarBuilder extends CalendarBuilder {
     private GameSelector gameSelector;
@@ -44,6 +48,7 @@ public class RegularSeasonCalendarBuilder extends CalendarBuilder {
             ArrayList<Game> arrayList = gameSelector.selectGamesForDay();
             gameDay.setGames(arrayList);
             for (Game game : arrayList) {
+                assignGameMoment(game, currentDate);
                 ScheduleNotifier.notifySchedule(currentDate, game);
             }
             if (!gameDay.isEmpty()) {
@@ -55,4 +60,16 @@ public class RegularSeasonCalendarBuilder extends CalendarBuilder {
         return newCalendar;
 
     }
+
+    private void assignGameMoment(Game game, LocalDate date) {
+        if (CalendarUtilitary.isSpecialEvent(getLeague().getReagularSeason(), date)
+                || game.getGameContext().isRivalry()) {
+            game.getGameContext().setGameMoment(new Night());
+        } else if (CalendarUtilitary.isWeekend(date)) {
+            game.getGameContext().setGameMoment(new Afternoon());
+        } else {
+            game.getGameContext().setGameMoment(new Evening());
+        }
+    }
+
 }
