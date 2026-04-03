@@ -216,6 +216,44 @@ public class SimulationManager implements GUIInterface {
 	}
 
 	@Override
+	public LocalDate getCalendarDisplayDate(LocalDate simulationDate) {
+		if (!isSeasonInitialized() || simulationDate == null) {
+			return null;
+		}
+
+		GameDay currentGameDay = getGameDay(simulationDate);
+		if (currentGameDay == null || currentGameDay.isEmpty()) {
+			return getNextGameDay(simulationDate);
+		}
+
+		if (!currentGameDay.isDisplayed()) {
+			return simulationDate;
+		}
+
+		LocalDate nextGameDay = getNextGameDay(simulationDate.plusDays(1));
+		if (nextGameDay != null) {
+			return nextGameDay;
+		}
+		return simulationDate;
+	}
+
+	@Override
+	public LocalDate getNextGameDay(LocalDate startDate) {
+		if (!isSeasonInitialized() || startDate == null) {
+			return null;
+		}
+
+		for (LocalDate day = startDate; !day.isAfter(getRegularSeasonEndDate()); day = day.plusDays(1)) {
+			GameDay gameDay = getGameDay(day);
+			if (gameDay != null && !gameDay.isEmpty()) {
+				return day;
+			}
+		}
+
+		return null;
+	}
+
+	@Override
 	public GameDay getGameDay(LocalDate date) {
 		if (!isSeasonInitialized() || date == null) {
 			return null;

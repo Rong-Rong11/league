@@ -90,19 +90,34 @@ public class CalendarDashboard extends JPanel {
 	public void startSeason() {
 		guiInterface.randomFinance();
 		guiInterface.startSeason();
-		weekViewPanel.loadSeasonState();
-		currentCalendarDate = weekViewPanel.getCurrentDate();
+		currentCalendarDate = guiInterface.getCalendarDisplayDate(guiInterface.getCurrentDate());
+		weekViewPanel.syncToSimulationDate(guiInterface.getCurrentDate());
 		updateDisplayedMonth(currentCalendarDate);
 		updateDashboardState();
 	}
 
 	public void refreshSeasonState() {
-		if (weekViewPanel.getCurrentDate() == null) {
+		if (!guiInterface.isSeasonInitialized()) {
 			weekViewPanel.loadSeasonState();
+			updateDashboardState();
+			return;
 		}
-		if (weekViewPanel.getCurrentDate() != null) {
-			currentCalendarDate = weekViewPanel.getCurrentDate();
-		}
+
+		LocalDate simulationDate = guiInterface.getCurrentDate();
+		currentCalendarDate = guiInterface.getCalendarDisplayDate(simulationDate);
+		weekViewPanel.syncToSimulationDate(simulationDate);
+		updateDisplayedMonth(currentCalendarDate);
+		updateDashboardState();
+	}
+
+	public void showUninitializedSeasonState() {
+		weekViewPanel.loadSeasonState();
+		updateDashboardState();
+	}
+
+	public void applySeasonSynchronization(LocalDate simulationDate) {
+		currentCalendarDate = guiInterface.getCalendarDisplayDate(simulationDate);
+		weekViewPanel.syncToSimulationDate(simulationDate);
 		updateDisplayedMonth(currentCalendarDate);
 		updateDashboardState();
 	}

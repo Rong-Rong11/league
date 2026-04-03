@@ -74,8 +74,21 @@ public class WeekViewPanel extends JPanel {
 			updateDisplay();
 			return;
 		}
-		lastSimulatedDate = guiInterface.getRegularSeasonStartDate();
-		displayedDate = findNextGameDay(lastSimulatedDate);
+		syncToSimulationDate(guiInterface.getCurrentDate());
+	}
+
+	public void syncToSimulationDate(LocalDate simulationDate) {
+		if (!guiInterface.isSeasonInitialized() || simulationDate == null) {
+			displayedDate = null;
+			lastSimulatedDate = null;
+			updateDisplay();
+			return;
+		}
+		lastSimulatedDate = simulationDate;
+		displayedDate = guiInterface.getCalendarDisplayDate(simulationDate);
+		if (displayedDate == null) {
+			displayedDate = simulationDate;
+		}
 		updateDisplay();
 	}
 
@@ -87,7 +100,7 @@ public class WeekViewPanel extends JPanel {
 		LocalDate day = displayedDate;
 		simulateDisplayedDay(day);
 		lastSimulatedDate = day;
-		displayedDate = findNextGameDay(day.plusDays(1));
+		displayedDate = guiInterface.getNextGameDay(day.plusDays(1));
 		if (displayedDate == null) {
 			displayedDate = day;
 		}
@@ -113,7 +126,7 @@ public class WeekViewPanel extends JPanel {
 		lastSimulatedDate = simulatedDay;
 		LocalDate nextWeekStart = weekEnd.plusDays(1);
 		if (!nextWeekStart.isAfter(guiInterface.getRegularSeasonEndDate())) {
-			displayedDate = findNextGameDay(nextWeekStart);
+			displayedDate = guiInterface.getNextGameDay(nextWeekStart);
 		} else {
 			displayedDate = lastSimulatedDate;
 		}
@@ -241,21 +254,6 @@ public class WeekViewPanel extends JPanel {
 		return date.minusDays(date.getDayOfWeek().getValue() - 1L);
 	}
 
-	private LocalDate findNextGameDay(LocalDate startDate) {
-		if (!guiInterface.isSeasonInitialized() || startDate == null) {
-			return null;
-		}
-
-		TreeMap<LocalDate, GameDay> seasonCalendar = guiInterface.getSeasonCalendar();
-		for (LocalDate day = startDate; !day.isAfter(guiInterface.getRegularSeasonEndDate()); day = day.plusDays(1)) {
-			if (hasGame(day)) {
-				return day;
-			}
-		}
-
-		return null;
-	}
-
 	private void openMatchDashboard(GameDay gameDay, LocalDate date) {
 		if (openMatchDayAction != null) {
 			openMatchDayAction.open(gameDay, date);
@@ -268,7 +266,7 @@ public class WeekViewPanel extends JPanel {
 		}
 		LocalDate previousWeek = displayedDate.minusDays(7);
 		if (!previousWeek.isBefore(guiInterface.getRegularSeasonStartDate())) {
-			displayedDate = findNextGameDay(previousWeek);
+			displayedDate = guiInterface.getNextGameDay(previousWeek);
 			if (displayedDate == null) {
 				displayedDate = previousWeek;
 			}

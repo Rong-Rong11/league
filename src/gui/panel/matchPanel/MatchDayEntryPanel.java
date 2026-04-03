@@ -67,7 +67,7 @@ public class MatchDayEntryPanel extends JPanel {
 		detailButton.setBorderPainted(false);
 		detailButton.setContentAreaFilled(false);
 		detailButton.setForeground(TEXT_COLOR);
-		detailButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
+		detailButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 28));
 		detailButton.addActionListener(new DetailButtonListener(game, matchSelectionListener));
 
 		add(centerPanel, BorderLayout.CENTER);
@@ -77,20 +77,20 @@ public class MatchDayEntryPanel extends JPanel {
 	private JLabel createTeamLabel(String text) {
 		JLabel label = new JLabel(text);
 		label.setForeground(TITLE_COLOR);
-		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
 		return label;
 	}
 
 	private JLabel createOpponentLabel(String text) {
 		JLabel label = new JLabel(text);
 		label.setForeground(TEXT_COLOR);
-		label.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+		label.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
 		return label;
 	}
 
 	private JLabel createStatusLabel(String text, boolean displayed) {
 		JLabel label = new JLabel(text);
-		label.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 9));
+		label.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
 		label.setForeground(displayed ? TEXT_COLOR : UPCOMING_COLOR);
 		return label;
 	}
@@ -98,11 +98,11 @@ public class MatchDayEntryPanel extends JPanel {
 	private JLabel createScoreLabel(int score) {
 		JLabel label = new JLabel(String.valueOf(score), SwingConstants.RIGHT);
 		label.setForeground(TITLE_COLOR);
-		label.setFont(new Font(Font.MONOSPACED, Font.BOLD, 12));
+		label.setFont(new Font(Font.MONOSPACED, Font.BOLD, 15));
 		label.setHorizontalAlignment(SwingConstants.RIGHT);
-		label.setPreferredSize(new Dimension(40, 14));
-		label.setMinimumSize(new Dimension(40, 14));
-		label.setMaximumSize(new Dimension(40, 14));
+		label.setPreferredSize(new Dimension(46, 18));
+		label.setMinimumSize(new Dimension(46, 18));
+		label.setMaximumSize(new Dimension(46, 18));
 		label.setAlignmentX(RIGHT_ALIGNMENT);
 		return label;
 	}

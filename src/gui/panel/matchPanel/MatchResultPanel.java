@@ -40,7 +40,7 @@ public class MatchResultPanel extends JPanel {
 	private JLabel awayQuarterTotalLabel;
 
 	public MatchResultPanel() {
-		super(new BorderLayout(0, 16));
+		super(new BorderLayout(0, 12));
 		setOpaque(false);
 		add(buildScoreHeaderPanel(), BorderLayout.NORTH);
 		add(buildQuarterPanel(), BorderLayout.CENTER);
@@ -85,22 +85,22 @@ public class MatchResultPanel extends JPanel {
 	}
 
 	private JPanel buildScoreHeaderPanel() {
-		JPanel panel = new JPanel(new BorderLayout(12, 0));
+		JPanel panel = new JPanel(new BorderLayout(10, 0));
 		panel.setOpaque(false);
-		panel.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
+		panel.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
 
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
 		topPanel.setOpaque(false);
 		titleLabel = new JLabel("SAISON RÉGULIÈRE");
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
 		titleLabel.setForeground(SUBTITLE_COLOR);
 		matchStatusLabel = new JLabel("À venir");
-		matchStatusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
+		matchStatusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 		matchStatusLabel.setForeground(PRIMARY_BAR_COLOR);
 		topPanel.add(titleLabel);
 		topPanel.add(matchStatusLabel);
 
-		JPanel centerPanel = new JPanel(new GridLayout(1, 3, 12, 0));
+		JPanel centerPanel = new JPanel(new GridLayout(1, 3, 10, 0));
 		centerPanel.setOpaque(false);
 		centerPanel.add(buildTeamPanel(true));
 		centerPanel.add(buildScorePanel());
@@ -116,23 +116,23 @@ public class MatchResultPanel extends JPanel {
 		panel.setOpaque(false);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-		TeamLogoPanel logoPanel = new TeamLogoPanel("", 70);
+		TeamLogoPanel logoPanel = new TeamLogoPanel("", 60);
 		logoPanel.setAlignmentX(CENTER_ALIGNMENT);
 
 		JLabel nameLabel = new JLabel(home ? "Home" : "Away");
-		nameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+		nameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
 		nameLabel.setForeground(TITLE_COLOR);
 		nameLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		JLabel cityLabel = new JLabel("-");
-		cityLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+		cityLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
 		cityLabel.setForeground(SUBTITLE_COLOR);
 		cityLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		panel.add(logoPanel);
-		panel.add(Box.createVerticalStrut(8));
+		panel.add(Box.createVerticalStrut(6));
 		panel.add(nameLabel);
-		panel.add(Box.createVerticalStrut(4));
+		panel.add(Box.createVerticalStrut(3));
 		panel.add(cityLabel);
 
 		if (home) {
@@ -153,19 +153,19 @@ public class MatchResultPanel extends JPanel {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 		mainScoreLabel = new JLabel("0 - 0", JLabel.CENTER);
-		mainScoreLabel.setFont(new Font(Font.MONOSPACED, Font.BOLD, 22));
+		mainScoreLabel.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
 		mainScoreLabel.setForeground(TITLE_COLOR);
 		mainScoreLabel.setAlignmentX(CENTER_ALIGNMENT);
 		mainScoreLabel.setHorizontalAlignment(JLabel.CENTER);
 
 		quarterTitleLabel = new JLabel("Résultat masqué");
-		quarterTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
+		quarterTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 		quarterTitleLabel.setForeground(SUBTITLE_COLOR);
 		quarterTitleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		panel.add(Box.createVerticalGlue());
 		panel.add(mainScoreLabel);
-		panel.add(Box.createVerticalStrut(4));
+		panel.add(Box.createVerticalStrut(3));
 		panel.add(quarterTitleLabel);
 		panel.add(Box.createVerticalGlue());
 		return panel;
@@ -174,14 +174,14 @@ public class MatchResultPanel extends JPanel {
 	private JPanel buildQuarterPanel() {
 		JPanel panel = new JPanel(new BorderLayout(0, 8));
 		panel.setOpaque(false);
-		panel.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
+		panel.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
 
 		JLabel title = new JLabel("SCORE PAR QUART-TEMPS");
-		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
 		title.setForeground(TITLE_COLOR);
 		panel.add(title, BorderLayout.NORTH);
 
-		JPanel table = new JPanel(new GridLayout(3, 6, 12, 8));
+		JPanel table = new JPanel(new GridLayout(3, 6, 10, 6));
 		table.setOpaque(false);
 		table.add(new JLabel("ÉQUIPE"));
 		table.add(new JLabel("Q1", JLabel.CENTER));
