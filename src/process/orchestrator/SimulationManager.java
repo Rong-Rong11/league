@@ -3,16 +3,17 @@ package process.orchestrator;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.TreeMap;
 
 import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.finance.GameStat;
 import data.league.League;
+import data.league.Playoff;
 import data.league.PlayoffRound;
 import data.league.finance.LeagueFinancialRules;
 import data.sport.setup.Game;
+import data.sport.setup.PlayoffSeries;
 import data.team.Team;
 import data.team.finance.financialpolicy.AmbitiousPolicy;
 import data.team.finance.financialpolicy.BalancedPolicy;
@@ -27,12 +28,13 @@ import process.builder.league.PlayoffBuilder;
 import process.repositery.TeamRepositery;
 import process.service.finance.FinanceManager;
 import process.service.game.GameManager;
+import process.service.leaguetools.TeamPopularityUpdater;
 import process.service.live.LiveMatchService;
 import process.service.live.LiveMatchState;
-import process.service.leaguetools.TeamPopularityUpdater;
 import process.service.trade.PreSeasonTradeService;
 import process.service.trade.RegularSeasonTradeService;
 import process.service.trade.TradeService;
+import process.utility.CalendarUtilitary;
 import process.utility.FinanceUtilitary;
 import process.utility.TeamDisplayUtil;
 import process.utility.TeamStatUtil;
@@ -66,7 +68,7 @@ public class SimulationManager implements GUIInterface {
 		regularSeasonCalendarBuilder = new RegularSeasonCalendarBuilder(league);
 		financeManager = new FinanceManager(league);
 		gameManager = new GameManager(league, financeManager, regularSeasonCalendarBuilder, playoffBuilder,
-				firstRoundCalendarBuilder);
+				firstRoundCalendarBuilder, teamPopularityUpdater);
 		LeagueFinancialRules leagueFinancialRules = league.getLeagueFinance().getLeagueFinancialRules();
 		preSeasonTradeService = new PreSeasonTradeService(leagueFinancialRules.getSalaryCap(),
 				leagueFinancialRules.getLuxuryTaxLine());
@@ -215,7 +217,29 @@ public class SimulationManager implements GUIInterface {
 
 	private void newMonth(int month) {
 		teamPopularityUpdater.updateMonthlyPopularity();
-		financeManager.applyMonthlyFinance(month);
+		if (isRegularSeasonDate(clock.getCurrentDate())) {
+			financeManager.applyMonthlyFinance(month);
+			return;
+		}
+
+		financeManager.applyPlayoffMonthlyFinance(month, getActivePlayoffTeams());
+	}
+
+	private ArrayList<Team> getActivePlayoffTeams() {
+		ArrayList<Team> activeTeams = new ArrayList<>();
+		Playoff playoff = league.getPlayoff();
+
+		if (playoff == null || playoff.getCurrentRound() == null) {
+			return new ArrayList<>(activeTeams);
+		}
+		for (PlayoffSeries series : CalendarUtilitary.getCurrentRoundSeries(playoff)) {
+			if (series == null || series.isFinished()) {
+				continue;
+			}
+			activeTeams.add(series.getHigherTeam());
+			activeTeams.add(series.getLowerTeam());
+		}
+		return activeTeams;
 	}
 
 	private void newWeek(LocalDate date, int month) {
@@ -225,11 +249,44 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public void endRegularSeason() {
 		league.setPlayoff(playoffBuilder.buldFirstRoundPlayoffs());
+		applyPlayoffQualificationBonuses(clock.getCurrentMonth());
+		applyPlayoffQualificationPopularityBonuses();
+		applyMissedPlayoffPenalties();
 		league.getPlayoff().setCurrentRound(PlayoffRound.FIRST_ROUND);
 		league.getPlayoff().setNbaCalendar(firstRoundCalendarBuilder.buildCalendar());
 	}
 
-	// simuler la fin de saison reguliere ou fin playoff
+	private void applyPlayoffQualificationBonuses(int month) {
+		ArrayList<Team> qualifiedTeams = new ArrayList<Team>();
+		qualifiedTeams.addAll(league.getPlayoff().getQualifiedEastTeams());
+		qualifiedTeams.addAll(league.getPlayoff().getQualifiedWestTeams());
+
+		financeManager.applyPlayoffQualificationBonus(qualifiedTeams, month);
+	}
+
+	private void applyPlayoffQualificationPopularityBonuses() {
+		ArrayList<Team> qualifiedTeams = new ArrayList<Team>();
+		qualifiedTeams.addAll(league.getPlayoff().getQualifiedEastTeams());
+		qualifiedTeams.addAll(league.getPlayoff().getQualifiedWestTeams());
+
+		for (Team team : qualifiedTeams) {
+			teamPopularityUpdater.applyPlayoffQualificationBonus(team);
+		}
+	}
+
+	private void applyMissedPlayoffPenalties() {
+		ArrayList<Team> qualifiedTeams = new ArrayList<Team>();
+		qualifiedTeams.addAll(league.getPlayoff().getQualifiedEastTeams());
+		qualifiedTeams.addAll(league.getPlayoff().getQualifiedWestTeams());
+
+		for (Team team : TeamRepositery.getInstance().getAllTeams()) {
+			if (!qualifiedTeams.contains(team)) {
+				teamPopularityUpdater.applyMissedPlayoffPenalty(team);
+			}
+		}
+	}
+
+	// simuler la fin de saison régulière ou fin playoff
 	@Override
 	public void simulateRegularSeason() {
 		while (!clock.getCurrentDate().equals(CalendarConfiguration.REGULAR_SEASON_END_DATE)) {

@@ -85,6 +85,39 @@ public class MonthlyTeamFinanceCalculator {
                 FinanceUtilitary.updateTeamValue(team);
         }
 
+        public void applyMonthlyFixedCosts(Team team, int month) {
+                Budget budget = team.getTeamFinance().getBudget();
+                TeamFinance teamFinance = team.getTeamFinance();
+                MarketSize marketSize = teamFinance.getMarketSize();
+                MediaMarket mediaMarket = teamFinance.getMediaMarket();
+                EconomicProfil economicProfil = teamFinance.getEconomicProfil();
+                FinancialPolicy financialPolicy = teamFinance.getFinancialProfil();
+
+                double marketMultiplier = getMarketMultiplier(marketSize);
+                double monthlyPayroll = team.getTeamFinance().getCurrentPayroll()
+                                / FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS;
+                double stadiumMaintenance = calculateStadiumMaintenance(team, marketMultiplier, mediaMarket,
+                                economicProfil);
+                double staffCost = calculateStaffCost(team, marketMultiplier, economicProfil, financialPolicy);
+                double administrativeCost = calculateAdministrativeCost(marketMultiplier, mediaMarket, economicProfil);
+
+                FinanceUtilitary.addExpense(budget,
+                                new Expense(ExpenseType.PLAYER_SALARY, monthlyPayroll), month);
+                FinanceUtilitary.addExpense(budget,
+                                new Expense(ExpenseType.MAINTENANCE_STADIUM_COST,
+                                                stadiumMaintenance),
+                                month);
+                FinanceUtilitary.addExpense(budget,
+                                new Expense(ExpenseType.STAFF_COST, staffCost),
+                                month);
+                FinanceUtilitary.addExpense(budget,
+                                new Expense(ExpenseType.ADMINISTRATIVE_COST, administrativeCost),
+                                month);
+
+                FinanceUtilitary.updateBudget(budget);
+                FinanceUtilitary.updateTeamValue(team);
+        }
+
         private double calculateStadiumMaintenance(Team team, double marketMultiplier, MediaMarket mediaMarket,
                         EconomicProfil economicProfil) {
                 double capacityFactor = team.getStadium().getCapacity() / 20000.0;

@@ -1,6 +1,7 @@
 package process.service.finance.tools.game.processor;
 
 import data.finance.GameStat;
+import data.finance.budget.FinanceSeasonMoment;
 import data.league.PlayoffRound;
 import process.service.finance.tools.game.GameExpenseCalculator;
 import process.service.finance.tools.game.GameRevenueCalculator;
@@ -22,6 +23,11 @@ public class PlayoffGameFinanceProcessor extends GameFinanceProcessor {
    @Override
    protected GameExpenseCalculator createExpenseCalculator(GameStat gameStat) {
       return new PlayoffGameExpenseCalculator(gameStat, round);
+   }
+
+   @Override
+   protected FinanceSeasonMoment getSeasonMoment() {
+      return FinanceSeasonMoment.PLAYOFF;
    }
 
    public PlayoffRound getRound() {

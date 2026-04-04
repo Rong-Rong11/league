@@ -7,13 +7,17 @@ import data.league.League;
 import data.sport.setup.PlayoffSeries;
 import process.builder.calendar.NbaFinalCalendarBuilder;
 import process.builder.league.PlayoffBuilder;
+import process.service.finance.FinanceManager;
+import process.service.leaguetools.TeamPopularityUpdater;
 
 public class NbaFinalPlayoffManager extends PlayoffManager {
 
    public NbaFinalPlayoffManager(League league,
          NbaFinalCalendarBuilder nbaFinalCalendarBuilder,
-         PlayoffBuilder playoffBuilder) {
-      super(league, nbaFinalCalendarBuilder, playoffBuilder);
+         PlayoffBuilder playoffBuilder,
+         FinanceManager financeManager,
+         TeamPopularityUpdater teamPopularityUpdater) {
+      super(league, nbaFinalCalendarBuilder, playoffBuilder, financeManager, teamPopularityUpdater);
    }
 
    @Override

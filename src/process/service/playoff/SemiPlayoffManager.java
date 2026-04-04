@@ -9,13 +9,17 @@ import data.sport.setup.PlayoffSeries;
 import process.builder.calendar.ConferenceFinalCalendarBuilder;
 import process.builder.calendar.SemiCalendarBuilder;
 import process.builder.league.PlayoffBuilder;
+import process.service.finance.FinanceManager;
+import process.service.leaguetools.TeamPopularityUpdater;
 
 public class SemiPlayoffManager extends PlayoffManager {
 
    public SemiPlayoffManager(League league,
          SemiCalendarBuilder semiCalendarBuilder,
-         PlayoffBuilder playoffBuilder) {
-      super(league, semiCalendarBuilder, playoffBuilder);
+         PlayoffBuilder playoffBuilder,
+         FinanceManager financeManager,
+         TeamPopularityUpdater teamPopularityUpdater) {
+      super(league, semiCalendarBuilder, playoffBuilder, financeManager, teamPopularityUpdater);
    }
 
    @Override
