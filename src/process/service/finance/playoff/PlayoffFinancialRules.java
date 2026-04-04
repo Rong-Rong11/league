@@ -218,6 +218,25 @@ public class PlayoffFinancialRules {
       }
    }
 
+   public double getRoundQualificationBonus() {
+      if (round == null) {
+         return 0.0;
+      }
+
+      switch (round) {
+         case FIRST_ROUND:
+            return 1.5;
+         case CONFERENCE_SEMIFINALS:
+            return 2.5;
+         case CONFERENCE_FINALS:
+            return 4.0;
+         case NBA_FINALS:
+            return 6.5;
+         default:
+            return 0.0;
+      }
+   }
+
    public double getGameSevenBonusRate() {
       return 0.15;
    }

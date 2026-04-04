@@ -1,8 +1,12 @@
 package process.service.finance;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import data.finance.GameStat;
+import data.finance.budget.income.Income;
+import data.finance.budget.income.IncomeType;
 import data.league.League;
 import data.league.PlayoffRound;
 import data.sport.setup.Game;
@@ -10,12 +14,14 @@ import data.team.Team;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import process.repositery.TeamRepositery;
+import process.service.finance.playoff.PlayoffFinancialRules;
 import process.service.finance.tools.CentralRevenueDistributor;
 import process.service.finance.tools.FinanceInitializer;
 import process.service.finance.tools.LeagueExpenseCalculator;
 import process.service.finance.tools.MonthlyTeamFinanceCalculator;
 import process.service.finance.tools.game.processor.PlayoffGameFinanceProcessor;
 import process.service.finance.tools.game.processor.RegularSeasonGameFinanceProcessor;
+import process.utility.FinanceUtilitary;
 import process.utility.TeamUtilitary;
 import process.visitor.financialprofil.ChooseTransferStrategyVisitor;
 
@@ -28,7 +34,7 @@ public class FinanceManager {
     private LeagueExpenseCalculator leagueExpenseCalculator;
 
     private RegularSeasonGameFinanceProcessor regularSeasonGameFinanceProcessor;
-    private PlayoffGameFinanceProcessor playoffGameFinanceProcessor;
+    private HashMap<PlayoffRound, PlayoffGameFinanceProcessor> playoffGameFinanceProcessors = new HashMap<PlayoffRound, PlayoffGameFinanceProcessor>();
 
     public FinanceManager(League league) {
         revenueSharingManager = new RevenueSharingManager(league);
@@ -47,13 +53,19 @@ public class FinanceManager {
         applyMonthlyFinanceForAllTeams(month);
         distributeMonthlyCentralRevenue(month);
         applyLeagueMonthlyExpenses(month);
-
-        // changer que ça pour les playoffs
         applyRevenueSharing(month);
     }
 
-    public void applyPlayoffMonthlyFinance(int month) {
-        applyMonthlyFinanceForAllTeams(month);
+    public void applyPlayoffMonthlyFinance(int month, ArrayList<Team> activePlayoffTeams) {
+        for (Team team : teamRepositery.getAllTeams()) {
+            if (activePlayoffTeams.contains(team)) {
+                applyMonthlyFinanceForTeam(team, month);
+                continue;
+            }
+
+            applyMonthlyFixedFinanceForTeam(team, month);
+        }
+
         distributeMonthlyCentralRevenue(month);
         applyLeagueMonthlyExpenses(month);
     }
@@ -75,8 +87,11 @@ public class FinanceManager {
     }
 
     public void calculatePlayoffGame(Game game, LocalDate date, int month, PlayoffRound round) {
-        if (playoffGameFinanceProcessor == null || playoffGameFinanceProcessor.getRound() != round) {
+        PlayoffGameFinanceProcessor playoffGameFinanceProcessor = playoffGameFinanceProcessors.get(round);
+
+        if (playoffGameFinanceProcessor == null) {
             playoffGameFinanceProcessor = new PlayoffGameFinanceProcessor(round);
+            playoffGameFinanceProcessors.put(round, playoffGameFinanceProcessor);
         }
 
         playoffGameFinanceProcessor.calculateGame(game, date, month);
@@ -84,6 +99,10 @@ public class FinanceManager {
 
     private void applyMonthlyFinanceForTeam(Team team, int month) {
         monthlyTeamFinanceCalculator.applyMonthlyFinance(team, month);
+    }
+
+    private void applyMonthlyFixedFinanceForTeam(Team team, int month) {
+        monthlyTeamFinanceCalculator.applyMonthlyFixedCosts(team, month);
     }
 
     private void applyMonthlyFinanceForAllTeams(int month) {
@@ -99,8 +118,12 @@ public class FinanceManager {
             return gameStat;
         }
 
-        if (playoffGameFinanceProcessor != null) {
-            return playoffGameFinanceProcessor.getGameStat(game);
+        for (PlayoffGameFinanceProcessor playoffGameFinanceProcessor : playoffGameFinanceProcessors.values()) {
+            gameStat = playoffGameFinanceProcessor.getGameStat(game);
+
+            if (gameStat != null) {
+                return gameStat;
+            }
         }
 
         return null;
@@ -132,5 +155,38 @@ public class FinanceManager {
 
     public double getTeamCurrentPayroll(Team team) {
         return team.getTeamFinance().getCurrentPayroll();
+    }
+
+    public void applyPlayoffQualificationBonus(Team team, int month) {
+        double bonus = 0.8;
+
+        FinanceUtilitary.addIncome(
+                team.getTeamFinance().getBudget(),
+                new Income(IncomeType.PLAYOFF_QUALIFICATION_BONUS, bonus),
+                month);
+
+        FinanceUtilitary.updateBudget(team.getTeamFinance().getBudget());
+    }
+
+    public void applyPlayoffQualificationBonus(ArrayList<Team> teams, int month) {
+        for (Team team : teams) {
+            applyPlayoffQualificationBonus(team, month);
+        }
+    }
+
+    public void applyPlayoffRoundBonus(Team team, int month, PlayoffRound round) {
+        PlayoffFinancialRules playoffFinancialRules = new PlayoffFinancialRules(round);
+        double bonus = playoffFinancialRules.getRoundQualificationBonus();
+
+        if (bonus <= 0) {
+            return;
+        }
+
+        FinanceUtilitary.addIncome(
+                team.getTeamFinance().getBudget(),
+                new Income(IncomeType.PLAYOFF_ROUND_BONUS, bonus),
+                month);
+
+        FinanceUtilitary.updateBudget(team.getTeamFinance().getBudget());
     }
 }

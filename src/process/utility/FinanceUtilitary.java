@@ -7,6 +7,8 @@ import config.FinanceConfiguration;
 import data.finance.GameStat;
 import data.finance.TeamGameFinance;
 import data.finance.budget.Budget;
+import data.finance.budget.FinanceSeasonMoment;
+import data.finance.budget.FinanceScope;
 import data.finance.budget.expense.Expense;
 import data.finance.budget.expense.ExpenseType;
 import data.finance.budget.income.Income;
@@ -15,6 +17,7 @@ import data.player.Player;
 import data.sport.setup.Game;
 import data.team.Team;
 import process.repositery.TeamRepositery;
+import process.utility.tools.FinanceTypeResolver;
 
 //les sommes en millions
 public class FinanceUtilitary {
@@ -102,40 +105,123 @@ public class FinanceUtilitary {
 		return excess * penaltyRate;
 	}
 
-	public static double getTeamLocalRevenueOfMonth(Team team, int month) {
+	public static double getTeamTotalLocalRevenueOfMonth(Team team, int month) {
 		Budget budget = team.getTeamFinance().getBudget();
-		double localRevenue = 0;
+		double localRevenue = 0.0;
+
 		for (Income income : budget.getIncomesForMonth(month).values()) {
-			IncomeType incomeType = income.getIncomeType();
-			if (incomeType == IncomeType.LOCAL_TV ||
-					incomeType == IncomeType.LOCAL_MERCHANDISING ||
-					incomeType == IncomeType.LOCAL_SPONSORING ||
-					incomeType == IncomeType.TICKET_OFFICE) {
+			if (income.getIncomeType().getScope() == FinanceScope.LOCAL) {
 				localRevenue += income.getAmount();
 			}
 		}
+
 		return localRevenue;
 	}
 
-	public static void addGameRevenue(Game game, GameStat gameStat, int month) {
+	public static double getTeamIncomeOfMonthForRegularSeason(Team team, int month) {
+		Budget budget = team.getTeamFinance().getBudget();
+		double total = 0.0;
+
+		for (Income income : budget.getIncomesForMonth(month).values()) {
+			if (income.getIncomeType().getSeasonMoment() == FinanceSeasonMoment.REGULAR_SEASON) {
+				total += income.getAmount();
+			}
+		}
+
+		return total;
+	}
+
+	public static double getTeamIncomeOfMonthForPlayoff(Team team, int month) {
+		Budget budget = team.getTeamFinance().getBudget();
+		double total = 0.0;
+
+		for (Income income : budget.getIncomesForMonth(month).values()) {
+			if (income.getIncomeType().getSeasonMoment() == FinanceSeasonMoment.PLAYOFF) {
+				total += income.getAmount();
+			}
+		}
+
+		return total;
+	}
+
+	public static double getTeamIncomeOfMonthForBoth(Team team, int month) {
+		Budget budget = team.getTeamFinance().getBudget();
+		double total = 0.0;
+
+		for (Income income : budget.getIncomesForMonth(month).values()) {
+			if (income.getIncomeType().getSeasonMoment() == FinanceSeasonMoment.BOTH) {
+				total += income.getAmount();
+			}
+		}
+
+		return total;
+	}
+
+	public static double getTeamExpenseOfMonthForRegularSeason(Team team, int month) {
+		Budget budget = team.getTeamFinance().getBudget();
+		double total = 0.0;
+
+		for (Expense expense : budget.getExpensesForMonth(month).values()) {
+			if (expense.getExpenseType().getSeasonMoment() == FinanceSeasonMoment.REGULAR_SEASON) {
+				total += expense.getAmount();
+			}
+		}
+
+		return total;
+	}
+
+	public static double getTeamExpenseOfMonthForPlayoff(Team team, int month) {
+		Budget budget = team.getTeamFinance().getBudget();
+		double total = 0.0;
+
+		for (Expense expense : budget.getExpensesForMonth(month).values()) {
+			if (expense.getExpenseType().getSeasonMoment() == FinanceSeasonMoment.PLAYOFF) {
+				total += expense.getAmount();
+			}
+		}
+
+		return total;
+	}
+
+	public static double getTeamExpenseOfMonthForBoth(Team team, int month) {
+		Budget budget = team.getTeamFinance().getBudget();
+		double total = 0.0;
+
+		for (Expense expense : budget.getExpensesForMonth(month).values()) {
+			if (expense.getExpenseType().getSeasonMoment() == FinanceSeasonMoment.BOTH) {
+				total += expense.getAmount();
+			}
+		}
+
+		return total;
+	}
+
+	public static void addGameRevenue(Game game, GameStat gameStat, int month, FinanceSeasonMoment seasonMoment) {
+		FinanceTypeResolver financeTypeResolver = new FinanceTypeResolver(seasonMoment);
 		Budget homeTeamBudget = game.getGameContext().getHomeTeam().getTeamFinance().getBudget();
 		Budget awayTeamBudget = game.getGameContext().getAwayTeam().getTeamFinance().getBudget();
 		TeamGameFinance homeFinance = gameStat.getHomeFinance();
 		TeamGameFinance awayFinance = gameStat.getAwayFinance();
+		IncomeType homeTicketType = financeTypeResolver.resolveIncomeType(IncomeType.TICKET_OFFICE);
+		IncomeType homeConcessionsType = financeTypeResolver.resolveIncomeType(IncomeType.CONCESSIONS);
+		IncomeType homeParkingType = financeTypeResolver.resolveIncomeType(IncomeType.PARKING);
+		IncomeType homeTvType = financeTypeResolver.resolveIncomeType(IncomeType.LOCAL_TV);
+		IncomeType homeMerchandisingType = financeTypeResolver.resolveIncomeType(IncomeType.GAME_LOCAL_MERCHANDISING);
+		IncomeType awayTvType = financeTypeResolver.resolveIncomeType(IncomeType.LOCAL_TV);
 
 		addIncome(homeTeamBudget,
-				new Income(IncomeType.TICKET_OFFICE, homeFinance.getTicketRevenue()), month);
+				new Income(homeTicketType, homeFinance.getTicketRevenue()), month);
 		addIncome(homeTeamBudget,
-				new Income(IncomeType.CONCESSIONS, homeFinance.getConcessionsRevenue()), month);
-		addIncome(homeTeamBudget, new Income(IncomeType.PARKING, homeFinance.getParkingRevenue()),
+				new Income(homeConcessionsType, homeFinance.getConcessionsRevenue()), month);
+		addIncome(homeTeamBudget, new Income(homeParkingType, homeFinance.getParkingRevenue()),
 				month);
-		addIncome(homeTeamBudget, new Income(IncomeType.LOCAL_TV, homeFinance.getTvRevenue()),
+		addIncome(homeTeamBudget, new Income(homeTvType, homeFinance.getTvRevenue()),
 				month);
 		addIncome(homeTeamBudget,
-				new Income(IncomeType.GAME_LOCAL_MERCHANDISING, homeFinance.getMerchRevenue()),
+				new Income(homeMerchandisingType, homeFinance.getMerchRevenue()),
 				month);
 
-		addIncome(awayTeamBudget, new Income(IncomeType.LOCAL_TV, awayFinance.getTvRevenue()),
+		addIncome(awayTeamBudget, new Income(awayTvType, awayFinance.getTvRevenue()),
 				month);
 
 		updateBudget(homeTeamBudget);
@@ -143,22 +229,28 @@ public class FinanceUtilitary {
 
 	}
 
-	public static void addGameExpense(Game game, GameStat gameStat, int month) {
+	public static void addGameExpense(Game game, GameStat gameStat, int month, FinanceSeasonMoment seasonMoment) {
+		FinanceTypeResolver financeTypeResolver = new FinanceTypeResolver(seasonMoment);
 		Budget homeTeamBudget = game.getGameContext().getHomeTeam().getTeamFinance().getBudget();
 		Budget awayTeamBudget = game.getGameContext().getAwayTeam().getTeamFinance().getBudget();
 		TeamGameFinance homeFinance = gameStat.getHomeFinance();
 		TeamGameFinance awayFinance = gameStat.getAwayFinance();
+		ExpenseType homeStadiumType = financeTypeResolver.resolveExpenseType(ExpenseType.STADIUM_COST);
+		ExpenseType homeStaffType = financeTypeResolver.resolveExpenseType(ExpenseType.STAFF_COST);
+		ExpenseType homeSecurityType = financeTypeResolver.resolveExpenseType(ExpenseType.SECURITY_COST);
+		ExpenseType homeLogisticType = financeTypeResolver.resolveExpenseType(ExpenseType.LOGISTIC_COST);
+		ExpenseType awayTravelType = financeTypeResolver.resolveExpenseType(ExpenseType.TRAVEL_COST);
 
 		addExpense(homeTeamBudget,
-				new Expense(ExpenseType.STADIUM_COST, homeFinance.getArenaCosts()), month);
-		addExpense(homeTeamBudget, new Expense(ExpenseType.STAFF_COST, homeFinance.getStaffCosts()),
+				new Expense(homeStadiumType, homeFinance.getArenaCosts()), month);
+		addExpense(homeTeamBudget, new Expense(homeStaffType, homeFinance.getStaffCosts()),
 				month);
 		addExpense(homeTeamBudget,
-				new Expense(ExpenseType.SECURITY_COST, homeFinance.getSecurityCosts()), month);
+				new Expense(homeSecurityType, homeFinance.getSecurityCosts()), month);
 		addExpense(homeTeamBudget,
-				new Expense(ExpenseType.LOGISTIC_COST, homeFinance.getLogisticsCosts()), month);
+				new Expense(homeLogisticType, homeFinance.getLogisticsCosts()), month);
 		addExpense(awayTeamBudget,
-				new Expense(ExpenseType.TRAVEL_COST, awayFinance.getTravelCosts()), month);
+				new Expense(awayTravelType, awayFinance.getTravelCosts()), month);
 
 		updateBudget(homeTeamBudget);
 		updateBudget(awayTeamBudget);

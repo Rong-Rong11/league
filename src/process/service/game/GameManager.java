@@ -21,6 +21,7 @@ import process.service.finance.FinanceManager;
 import process.service.game.tools.GameDaySimulationProcessor;
 import process.service.game.tools.PlayoffGameDaySimulationProcessor;
 import process.service.game.tools.RegularSeasonGameDaySimulationProcessor;
+import process.service.leaguetools.TeamPopularityUpdater;
 import process.service.playoff.ConferenceFinalPlayoffManager;
 import process.service.playoff.FirstRoundPlayoffManager;
 import process.service.playoff.NbaFinalPlayoffManager;
@@ -42,7 +43,8 @@ public class GameManager {
 	private NbaFinalPlayoffManager nbaFinalPlayoffManager;
 
 	public GameManager(League league, FinanceManager financeManager, CalendarBuilder calendarBuilder,
-			PlayoffBuilder playoffBuilder, FirstRoundCalendarBuilder firstRoundCalendarBuilder) {
+			PlayoffBuilder playoffBuilder, FirstRoundCalendarBuilder firstRoundCalendarBuilder,
+			TeamPopularityUpdater teamPopularityUpdater) {
 		this.league = league;
 		ArrayList<Team> eastTeams = new ArrayList<>();
 		ArrayList<Team> westTeams = new ArrayList<>();
@@ -51,16 +53,24 @@ public class GameManager {
 		this.financeManager = financeManager;
 		this.firstRoundPlayoffManager = new FirstRoundPlayoffManager(league,
 				firstRoundCalendarBuilder,
-				playoffBuilder);
+				playoffBuilder,
+				financeManager,
+				teamPopularityUpdater);
 		this.semiPlayoffManager = new SemiPlayoffManager(league,
 				new SemiCalendarBuilder(league, CalendarConfiguration.PLAYOFF_DEBUT_DATE),
-				playoffBuilder);
+				playoffBuilder,
+				financeManager,
+				teamPopularityUpdater);
 		this.conferenceFinalPlayoffManager = new ConferenceFinalPlayoffManager(league,
 				new ConferenceFinalCalendarBuilder(league, CalendarConfiguration.PLAYOFF_DEBUT_DATE),
-				playoffBuilder);
+				playoffBuilder,
+				financeManager,
+				teamPopularityUpdater);
 		this.nbaFinalPlayoffManager = new NbaFinalPlayoffManager(league,
 				new NbaFinalCalendarBuilder(league, CalendarConfiguration.PLAYOFF_DEBUT_DATE),
-				playoffBuilder);
+				playoffBuilder,
+				financeManager,
+				teamPopularityUpdater);
 	}
 
 	public boolean simulateRegularSeasonDay(LocalDate date, int month) {

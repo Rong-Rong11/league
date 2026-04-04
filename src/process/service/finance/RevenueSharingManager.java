@@ -60,7 +60,7 @@ public class RevenueSharingManager {
         double pool = 0.0;
 
         for (Team team : teamRepositery.getAllTeams()) {
-            double localRevenue = FinanceUtilitary.getTeamLocalRevenueOfMonth(team, month);
+            double localRevenue = getRegularSeasonRevenueBase(team, month);
             double contextFactor = calculateRevenueContextFactor(team);
             double adjustedLocalRevenue = calculateAdjustedLocalRevenue(team, month);
             Budget budget = team.getTeamFinance().getBudget();
@@ -189,7 +189,7 @@ public class RevenueSharingManager {
     }
 
     private double calculateAdjustedLocalRevenue(Team team, int month) {
-        double localRevenue = FinanceUtilitary.getTeamLocalRevenueOfMonth(team, month);
+        double localRevenue = getRegularSeasonRevenueBase(team, month);
         double contextFactor = calculateRevenueContextFactor(team);
 
         if (contextFactor <= 0) {
@@ -197,6 +197,11 @@ public class RevenueSharingManager {
         }
 
         return localRevenue / contextFactor;
+    }
+
+    private double getRegularSeasonRevenueBase(Team team, int month) {
+        return FinanceUtilitary.getTeamIncomeOfMonthForRegularSeason(team, month)
+                + FinanceUtilitary.getTeamIncomeOfMonthForBoth(team, month);
     }
 
     private double calculateRevenueContextFactor(Team team) {

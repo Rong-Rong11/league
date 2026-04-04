@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 
 import data.finance.GameStat;
+import data.finance.budget.FinanceSeasonMoment;
 import data.sport.setup.Game;
 import process.service.finance.tools.game.GameExpenseCalculator;
 import process.service.finance.tools.game.GameRevenueCalculator;
@@ -14,14 +15,15 @@ public abstract class GameFinanceProcessor {
 
     public final void calculateGame(Game game, LocalDate date, int month) {
         GameStat gameStat = new GameStat(game);
+        FinanceSeasonMoment seasonMoment = getSeasonMoment();
 
         GameRevenueCalculator revenueCalculator = createRevenueCalculator(gameStat);
         revenueCalculator.calculateGameRevenue(game, date);
-        FinanceUtilitary.addGameRevenue(game, gameStat, month);
+        FinanceUtilitary.addGameRevenue(game, gameStat, month, seasonMoment);
 
         GameExpenseCalculator expenseCalculator = createExpenseCalculator(gameStat);
         expenseCalculator.calculateGameExpenses(game);
-        FinanceUtilitary.addGameExpense(game, gameStat, month);
+        FinanceUtilitary.addGameExpense(game, gameStat, month, seasonMoment);
 
         gameStats.put(game, gameStat);
     }
@@ -29,6 +31,8 @@ public abstract class GameFinanceProcessor {
     protected abstract GameRevenueCalculator createRevenueCalculator(GameStat gameStat);
 
     protected abstract GameExpenseCalculator createExpenseCalculator(GameStat gameStat);
+
+    protected abstract FinanceSeasonMoment getSeasonMoment();
 
     public GameStat getGameStat(Game game) {
         return gameStats.get(game);
