@@ -32,7 +32,7 @@ public class EconomicProfileFactory {
       }
 
       private static double getFinancialModifier(FinancialPolicy financialProfil) {
-            return 0.2; // simple version (à améliorer plus tard)
+            return 0.2; // simple version (a ameliorer plus tard)
       }
 
       private static double interval(double value) {

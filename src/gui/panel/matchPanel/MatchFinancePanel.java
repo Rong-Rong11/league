@@ -45,7 +45,7 @@ public class MatchFinancePanel extends JPanel {
 		content.add(buildMoneyRow("Merchandising", true));
 		content.add(buildMoneyRow("Concessions", true));
 		content.add(buildMoneyRow("Droits TV", true));
-		content.add(buildMoneyRow("Voyage équipe", false));
+		content.add(buildMoneyRow("Voyage equipe", false));
 		content.add(buildMoneyRow("Charges match", false));
 
 		add(content, BorderLayout.CENTER);
@@ -56,7 +56,7 @@ public class MatchFinancePanel extends JPanel {
 
 	public void showHiddenState() {
 		attendanceValueLabel.setText("-");
-		attendanceInfoLabel.setText("Capacité: -");
+		attendanceInfoLabel.setText("Capacite: -");
 		setPositiveValue(ticketValueLabel, "-");
 		setPositiveValue(merchandisingValueLabel, "-");
 		setPositiveValue(concessionsValueLabel, "-");
@@ -85,7 +85,7 @@ public class MatchFinancePanel extends JPanel {
 		int attendanceRate = capacity == 0 ? 0 : (int) Math.round((gameStat.getAttendees() * 100.0) / capacity);
 
 		attendanceValueLabel.setText(String.valueOf(gameStat.getAttendees()));
-		attendanceInfoLabel.setText("Capacité: " + attendanceRate + "%");
+		attendanceInfoLabel.setText("Capacite: " + attendanceRate + "%");
 		setPositiveValue(ticketValueLabel, formatMoney(home.getTicketRevenue()));
 		setPositiveValue(merchandisingValueLabel, formatMoney(home.getMerchRevenue()));
 		setPositiveValue(concessionsValueLabel, formatMoney(home.getConcessionsRevenue()));
@@ -114,7 +114,7 @@ public class MatchFinancePanel extends JPanel {
 		attendanceValueLabel.setForeground(TITLE_COLOR);
 		attendanceValueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
 
-		attendanceInfoLabel = new JLabel("Capacité: -", SwingConstants.RIGHT);
+		attendanceInfoLabel = new JLabel("Capacite: -", SwingConstants.RIGHT);
 		attendanceInfoLabel.setForeground(SUBTITLE_COLOR);
 		attendanceInfoLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 
@@ -151,7 +151,7 @@ public class MatchFinancePanel extends JPanel {
 			concessionsValueLabel = valueLabel;
 		} else if ("Droits TV".equals(name)) {
 			tvValueLabel = valueLabel;
-		} else if ("Voyage équipe".equals(name)) {
+		} else if ("Voyage equipe".equals(name)) {
 			travelValueLabel = valueLabel;
 		} else if ("Charges match".equals(name)) {
 			expenseValueLabel = valueLabel;
@@ -169,7 +169,7 @@ public class MatchFinancePanel extends JPanel {
 				BorderFactory.createMatteBorder(2, 0, 0, 0, SEPARATOR_COLOR),
 				BorderFactory.createEmptyBorder(18, 10, 18, 10)));
 
-		JLabel label = new JLabel("RÉSULTAT NET");
+		JLabel label = new JLabel("RESULTAT NET");
 		label.setForeground(TITLE_COLOR);
 		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
 
@@ -224,6 +224,6 @@ public class MatchFinancePanel extends JPanel {
 	}
 
 	private String formatMoney(double amount) {
-		return String.format("%.0fK€", amount * 1000);
+		return String.format("%.0fKEUR", amount * 1000);
 	}
 }

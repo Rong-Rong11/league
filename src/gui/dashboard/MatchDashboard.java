@@ -83,17 +83,17 @@ public class MatchDashboard extends JPanel {
 	}
 
 	private JPanel buildLeftColumn() {
-		JPanel leftColumn = new BuildBox("MATCHS DU JOUR", "Rencontres de la journée", matchDayListPanel);
+		JPanel leftColumn = new BuildBox("MATCHS DU JOUR", "Rencontres de la journee", matchDayListPanel);
 		leftColumn.setPreferredSize(new Dimension(LEFT_COLUMN_WIDTH, 10));
 		return leftColumn;
 	}
 
 	private JPanel buildCenterColumn() {
-		return new BuildBox("MATCH SÉLECTIONNÉ", "Score et statistiques", matchDetailPanel);
+		return new BuildBox("MATCH SELECTIONNE", "Score et statistiques", matchDetailPanel);
 	}
 
 	private JPanel buildRightColumn() {
-		JPanel rightColumn = new BuildBox("FINANCES DU MATCH", "Revenus et dépenses", matchFinancePanel);
+		JPanel rightColumn = new BuildBox("FINANCES DU MATCH", "Revenus et depenses", matchFinancePanel);
 		rightColumn.setPreferredSize(new Dimension(RIGHT_COLUMN_WIDTH, 10));
 		return rightColumn;
 	}

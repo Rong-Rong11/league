@@ -242,7 +242,7 @@ public class GameSimulator {
 	private void updateCurrentSeasonAsset(Team team, HashMap<Player, Asset> playersNewAssets) {
 		for (Player player : team.getCurrentPlayers().values()) {
 			PlayerUtilitary.updateAsset(player, playersNewAssets.get(player));
-			// faire màj note du joeur
+			// faire maj note du joueur
 		}
 	}
 

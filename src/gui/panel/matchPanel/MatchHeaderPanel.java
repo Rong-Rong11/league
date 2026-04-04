@@ -38,7 +38,7 @@ public class MatchHeaderPanel extends RoundedPanel {
 		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
 		setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
 
-		JLabel titleLabel = new JLabel("SAISON RÉGULIÈRE");
+		JLabel titleLabel = new JLabel("SAISON REGULIERE");
 		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
 		titleLabel.setForeground(TITLE_COLOR);
 		titleLabel.setAlignmentX(LEFT_ALIGNMENT);
