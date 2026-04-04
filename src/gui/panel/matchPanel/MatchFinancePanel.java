@@ -14,13 +14,13 @@ import javax.swing.SwingConstants;
 import data.finance.GameStat;
 import data.finance.TeamGameFinance;
 import data.sport.setup.Game;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 
-public class MatchFinancePanel extends JPanel {
+public class MatchFinancePanel extends JPanel implements ThemeAware {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
-	private static final Color POSITIVE_COLOR = new Color(0x2F, 0x80, 0xA9);
-	private static final Color NEGATIVE_COLOR = new Color(0xE0, 0x00, 0x00);
-	private static final Color SEPARATOR_COLOR = new Color(225, 225, 225);
+	private static final Color NEGATIVE_COLOR = DashboardPanelUtil.ACCENT_RED_COLOR;
 
 	private JLabel attendanceValueLabel;
 	private JLabel attendanceInfoLabel;
@@ -31,6 +31,12 @@ public class MatchFinancePanel extends JPanel {
 	private JLabel travelValueLabel;
 	private JLabel expenseValueLabel;
 	private JLabel netValueLabel;
+	private JLabel attendanceTitleLabel;
+	private JLabel[] moneyNameLabels;
+	private JLabel netTitleLabel;
+	private JPanel attendanceRowPanel;
+	private JPanel[] moneyRowPanels;
+	private JPanel netPanel;
 
 	public MatchFinancePanel() {
 		super(new BorderLayout());
@@ -52,6 +58,7 @@ public class MatchFinancePanel extends JPanel {
 		add(buildNetPanel(), BorderLayout.SOUTH);
 
 		showHiddenState();
+		applyTheme();
 	}
 
 	public void showHiddenState() {
@@ -100,28 +107,25 @@ public class MatchFinancePanel extends JPanel {
 	}
 
 	private JPanel buildAttendanceRow() {
-		JPanel row = new JPanel(new BorderLayout());
+		attendanceRowPanel = new JPanel(new BorderLayout());
+		JPanel row = attendanceRowPanel;
 		row.setOpaque(false);
-		row.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(1, 0, 0, 0, SEPARATOR_COLOR),
-				BorderFactory.createEmptyBorder(14, 10, 14, 10)));
+		applySectionBorder(row, 1, 14);
 
-		JLabel nameLabel = buildNameLabel("Spectateurs");
+		attendanceTitleLabel = buildNameLabel("Spectateurs");
 		JPanel rightPanel = new JPanel(new GridLayout(2, 1));
 		rightPanel.setOpaque(false);
 
 		attendanceValueLabel = new JLabel("-", SwingConstants.RIGHT);
-		attendanceValueLabel.setForeground(TITLE_COLOR);
 		attendanceValueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
 
 		attendanceInfoLabel = new JLabel("Capacite: -", SwingConstants.RIGHT);
-		attendanceInfoLabel.setForeground(SUBTITLE_COLOR);
 		attendanceInfoLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 
 		rightPanel.add(attendanceValueLabel);
 		rightPanel.add(attendanceInfoLabel);
 
-		row.add(nameLabel, BorderLayout.WEST);
+		row.add(attendanceTitleLabel, BorderLayout.WEST);
 		row.add(rightPanel, BorderLayout.EAST);
 		return row;
 	}
@@ -129,31 +133,35 @@ public class MatchFinancePanel extends JPanel {
 	private JPanel buildMoneyRow(String name, boolean positive) {
 		JPanel row = new JPanel(new BorderLayout());
 		row.setOpaque(false);
-		row.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(1, 0, 0, 0, SEPARATOR_COLOR),
-				BorderFactory.createEmptyBorder(16, 10, 16, 10)));
+		applySectionBorder(row, 1, 16);
 
 		JLabel nameLabel = buildNameLabel(name);
 		JLabel valueLabel = new JLabel("-", SwingConstants.RIGHT);
 		valueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
 
-		if (positive) {
-			valueLabel.setForeground(POSITIVE_COLOR);
-		} else {
-			valueLabel.setForeground(NEGATIVE_COLOR);
-		}
-
 		if ("Billetterie".equals(name)) {
+			storeMoneyRowPanel(0, row);
+			storeMoneyNameLabel(0, nameLabel);
 			ticketValueLabel = valueLabel;
 		} else if ("Merchandising".equals(name)) {
+			storeMoneyRowPanel(1, row);
+			storeMoneyNameLabel(1, nameLabel);
 			merchandisingValueLabel = valueLabel;
 		} else if ("Concessions".equals(name)) {
+			storeMoneyRowPanel(2, row);
+			storeMoneyNameLabel(2, nameLabel);
 			concessionsValueLabel = valueLabel;
 		} else if ("Droits TV".equals(name)) {
+			storeMoneyRowPanel(3, row);
+			storeMoneyNameLabel(3, nameLabel);
 			tvValueLabel = valueLabel;
 		} else if ("Voyage equipe".equals(name)) {
+			storeMoneyRowPanel(4, row);
+			storeMoneyNameLabel(4, nameLabel);
 			travelValueLabel = valueLabel;
 		} else if ("Charges match".equals(name)) {
+			storeMoneyRowPanel(5, row);
+			storeMoneyNameLabel(5, nameLabel);
 			expenseValueLabel = valueLabel;
 		}
 
@@ -163,21 +171,18 @@ public class MatchFinancePanel extends JPanel {
 	}
 
 	private JPanel buildNetPanel() {
-		JPanel panel = new JPanel(new BorderLayout());
+		netPanel = new JPanel(new BorderLayout());
+		JPanel panel = netPanel;
 		panel.setOpaque(false);
-		panel.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(2, 0, 0, 0, SEPARATOR_COLOR),
-				BorderFactory.createEmptyBorder(18, 10, 18, 10)));
+		applySectionBorder(panel, 2, 18);
 
-		JLabel label = new JLabel("RESULTAT NET");
-		label.setForeground(TITLE_COLOR);
-		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+		netTitleLabel = new JLabel("RESULTAT NET");
+		netTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
 
 		netValueLabel = new JLabel("-", SwingConstants.RIGHT);
-		netValueLabel.setForeground(POSITIVE_COLOR);
 		netValueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
 
-		panel.add(label, BorderLayout.WEST);
+		panel.add(netTitleLabel, BorderLayout.WEST);
 		panel.add(netValueLabel, BorderLayout.EAST);
 		return panel;
 	}
@@ -189,8 +194,22 @@ public class MatchFinancePanel extends JPanel {
 		return label;
 	}
 
+	private void storeMoneyNameLabel(int index, JLabel label) {
+		if (moneyNameLabels == null) {
+			moneyNameLabels = new JLabel[6];
+		}
+		moneyNameLabels[index] = label;
+	}
+
+	private void storeMoneyRowPanel(int index, JPanel row) {
+		if (moneyRowPanels == null) {
+			moneyRowPanels = new JPanel[6];
+		}
+		moneyRowPanels[index] = row;
+	}
+
 	private void setPositiveValue(JLabel label, String value) {
-		label.setForeground(POSITIVE_COLOR);
+		label.setForeground(getPositiveColor());
 		if ("-".equals(value)) {
 			label.setText("-");
 			return;
@@ -225,5 +244,65 @@ public class MatchFinancePanel extends JPanel {
 
 	private String formatMoney(double amount) {
 		return String.format("%.0fKEUR", amount * 1000);
+	}
+
+	@Override
+	public void applyTheme() {
+		applySectionBorder(attendanceRowPanel, 1, 14);
+		if (moneyRowPanels != null) {
+			for (int i = 0; i < moneyRowPanels.length; i++) {
+				if (moneyRowPanels[i] != null) {
+					applySectionBorder(moneyRowPanels[i], 1, 16);
+				}
+			}
+		}
+		if (netPanel != null) {
+			applySectionBorder(netPanel, 2, 18);
+		}
+		attendanceTitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		attendanceValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		attendanceInfoLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		if (moneyNameLabels != null) {
+			for (int i = 0; i < moneyNameLabels.length; i++) {
+				if (moneyNameLabels[i] != null) {
+					moneyNameLabels[i].setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+				}
+			}
+		}
+		netTitleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		setPositiveValue(ticketValueLabel, stripSign(ticketValueLabel.getText()));
+		setPositiveValue(merchandisingValueLabel, stripSign(merchandisingValueLabel.getText()));
+		setPositiveValue(concessionsValueLabel, stripSign(concessionsValueLabel.getText()));
+		setPositiveValue(tvValueLabel, stripSign(tvValueLabel.getText()));
+		setNegativeValue(travelValueLabel, stripSign(travelValueLabel.getText()));
+		setNegativeValue(expenseValueLabel, stripSign(expenseValueLabel.getText()));
+		if (netValueLabel.getText().startsWith("-")) {
+			setNegativeValue(netValueLabel, stripSign(netValueLabel.getText()));
+		} else {
+			setPositiveValue(netValueLabel, stripSign(netValueLabel.getText()));
+		}
+	}
+
+	private void applySectionBorder(JPanel panel, int topThickness, int verticalPadding) {
+		panel.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createMatteBorder(topThickness, 0, 0, 0, DashboardPanelUtil.BORDER_COLOR),
+				BorderFactory.createEmptyBorder(verticalPadding, 10, verticalPadding, 10)));
+	}
+
+	private Color getPositiveColor() {
+		if (DashboardPanelUtil.isDarkMode()) {
+			return new Color(120, 156, 255);
+		}
+		return TITLE_COLOR;
+	}
+
+	private String stripSign(String text) {
+		if (text == null || "-".equals(text)) {
+			return "-";
+		}
+		if (text.startsWith("+") || text.startsWith("-")) {
+			return text.substring(1);
+		}
+		return text;
 	}
 }

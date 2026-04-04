@@ -9,11 +9,12 @@ import javax.swing.JPanel;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 
 /**
  * Dashboard dedie a la page Classement.
  */
-public class RankingDashboard extends JPanel {
+public class RankingDashboard extends JPanel implements ThemeAware {
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 64;
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
@@ -66,5 +67,11 @@ public class RankingDashboard extends JPanel {
 																											// quand on aura la fonctionnalite
 
 		return column;
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		DashboardPanelUtil.refreshChildrenTheme(this);
 	}
 }

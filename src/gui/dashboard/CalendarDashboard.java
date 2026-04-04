@@ -19,9 +19,10 @@ import gui.panel.calendarPanel.HeaderPanel;
 import gui.panel.calendarPanel.MonthViewPanel;
 import gui.panel.calendarPanel.WeekViewPanel;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import process.orchestrator.GUIInterface;
 
-public class CalendarDashboard extends JPanel {
+public class CalendarDashboard extends JPanel implements ThemeAware {
 
 	private static final int DASHBOARD_SPACING = 16;
 	private static final String MONTH_VIEW = "MONTH_VIEW";
@@ -368,5 +369,12 @@ public class CalendarDashboard extends JPanel {
 			return false;
 		}
 		return month.getMonthValue() > CalendarConfiguration.REGULAR_SEASON_END_DATE.getMonthValue();
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		updateDashboardState();
+		DashboardPanelUtil.refreshChildrenTheme(this);
 	}
 }

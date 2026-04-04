@@ -3,6 +3,8 @@ package gui.panel.matchPanel;
 import data.sport.setup.Game;
 import data.sport.setup.GameResult;
 import data.team.Team;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import process.utility.TeamDisplayUtil;
 
@@ -17,10 +19,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class MatchResultPanel extends JPanel {
+public class MatchResultPanel extends JPanel implements ThemeAware {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
-	private static final Color PRIMARY_BAR_COLOR = new Color(0x2F, 0x80, 0xA9);
+	private static final Color PRIMARY_BAR_COLOR = new Color(0x17, 0x31, 0x74);
 
 	private JLabel titleLabel;
 	private JLabel matchStatusLabel;
@@ -38,12 +40,15 @@ public class MatchResultPanel extends JPanel {
 	private JLabel[] awayQuarterLabels;
 	private JLabel homeQuarterTotalLabel;
 	private JLabel awayQuarterTotalLabel;
+	private JLabel scoreSectionTitleLabel;
+	private JLabel[] quarterHeaderLabels;
 
 	public MatchResultPanel() {
 		super(new BorderLayout(0, 12));
 		setOpaque(false);
 		add(buildScoreHeaderPanel(), BorderLayout.NORTH);
 		add(buildQuarterPanel(), BorderLayout.CENTER);
+		applyTheme();
 	}
 
 	public void showHiddenState(Game game, String dayLabel) {
@@ -176,19 +181,24 @@ public class MatchResultPanel extends JPanel {
 		panel.setOpaque(false);
 		panel.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
 
-		JLabel title = new JLabel("SCORE PAR QUART-TEMPS");
-		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
-		title.setForeground(TITLE_COLOR);
-		panel.add(title, BorderLayout.NORTH);
+		scoreSectionTitleLabel = new JLabel("SCORE PAR QUART-TEMPS");
+		scoreSectionTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
+		scoreSectionTitleLabel.setForeground(TITLE_COLOR);
+		panel.add(scoreSectionTitleLabel, BorderLayout.NORTH);
 
 		JPanel table = new JPanel(new GridLayout(3, 6, 10, 6));
 		table.setOpaque(false);
-		table.add(new JLabel("EQUIPE"));
-		table.add(new JLabel("Q1", JLabel.CENTER));
-		table.add(new JLabel("Q2", JLabel.CENTER));
-		table.add(new JLabel("Q3", JLabel.CENTER));
-		table.add(new JLabel("Q4", JLabel.CENTER));
-		table.add(new JLabel("TOTAL", JLabel.CENTER));
+		quarterHeaderLabels = new JLabel[] {
+				new JLabel("EQUIPE"),
+				new JLabel("Q1", JLabel.CENTER),
+				new JLabel("Q2", JLabel.CENTER),
+				new JLabel("Q3", JLabel.CENTER),
+				new JLabel("Q4", JLabel.CENTER),
+				new JLabel("TOTAL", JLabel.CENTER)
+		};
+		for (int i = 0; i < quarterHeaderLabels.length; i++) {
+			table.add(quarterHeaderLabels[i]);
+		}
 
 		homeQuarterTeamLabel = new JLabel("Home");
 		awayQuarterTeamLabel = new JLabel("Away");
@@ -260,5 +270,29 @@ public class MatchResultPanel extends JPanel {
 		}
 		homeQuarterTotalLabel.setText("-");
 		awayQuarterTotalLabel.setText("-");
+	}
+
+	@Override
+	public void applyTheme() {
+		titleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		matchStatusLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		homeNameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		awayNameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		homeCityLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		awayCityLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		mainScoreLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		quarterTitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		scoreSectionTitleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		for (int i = 0; i < quarterHeaderLabels.length; i++) {
+			quarterHeaderLabels[i].setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		}
+		homeQuarterTeamLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		awayQuarterTeamLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		for (int i = 0; i < homeQuarterLabels.length; i++) {
+			homeQuarterLabels[i].setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+			awayQuarterLabels[i].setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		}
+		homeQuarterTotalLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		awayQuarterTotalLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 	}
 }

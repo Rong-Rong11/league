@@ -11,9 +11,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import process.orchestrator.TeamGetterInterface;
 
-public class TeamLogoPanel extends JPanel {
+public class TeamLogoPanel extends JPanel implements ThemeAware {
 	private static final String LOGO_FOLDER_PATH = "resources/nba_logos/";
 	private static final int DEFAULT_LOGO_SIZE = 64;
 
@@ -37,7 +39,6 @@ public class TeamLogoPanel extends JPanel {
 	private void create() {
 		logoLabel = new JLabel("", JLabel.CENTER);
 		logoLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		logoLabel.setForeground(new Color(80, 80, 80));
 	}
 
 	private void organize() {
@@ -45,6 +46,7 @@ public class TeamLogoPanel extends JPanel {
 		setOpaque(false);
 		setPreferredSize(new Dimension(logoSize, logoSize));
 		add(logoLabel, BorderLayout.CENTER);
+		applyTheme();
 	}
 
 	public void setTeamName(String teamName) {
@@ -104,5 +106,10 @@ public class TeamLogoPanel extends JPanel {
 			}
 		}
 		return abbreviation.length() == 0 ? "---" : abbreviation.toString();
+	}
+
+	@Override
+	public void applyTheme() {
+		logoLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 	}
 }

@@ -1,7 +1,6 @@
 package gui.panel.financePanel;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
@@ -16,13 +15,13 @@ import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.RoundedPanel;
+import gui.panel.common.ThemeAware;
 
-public class FinanceHeaderPanel extends RoundedPanel {
-	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
-	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
-
+public class FinanceHeaderPanel extends RoundedPanel implements ThemeAware {
 	private JButton leagueButton;
 	private JButton teamsButton;
+	private JLabel titleLabel;
+	private JLabel subtitleLabel;
 
 	public FinanceHeaderPanel() {
 		super(new BorderLayout(16, 0));
@@ -58,14 +57,12 @@ public class FinanceHeaderPanel extends RoundedPanel {
 		panel.setOpaque(false);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-		JLabel titleLabel = new JLabel("FINANCE");
+		titleLabel = new JLabel("FINANCE");
 		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
-		titleLabel.setForeground(TITLE_COLOR);
 		titleLabel.setAlignmentX(LEFT_ALIGNMENT);
 
-		JLabel subtitleLabel = new JLabel("Vue ligue et equipes");
+		subtitleLabel = new JLabel("Vue ligue et equipes");
 		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		subtitleLabel.setForeground(SUBTITLE_COLOR);
 		subtitleLabel.setAlignmentX(LEFT_ALIGNMENT);
 
 		panel.add(titleLabel);
@@ -81,5 +78,11 @@ public class FinanceHeaderPanel extends RoundedPanel {
 		panel.add(teamsButton);
 		return panel;
 	}
-}
 
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		titleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+	}
+}

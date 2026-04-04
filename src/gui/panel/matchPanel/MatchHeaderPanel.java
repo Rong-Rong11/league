@@ -3,6 +3,7 @@ import config.CalendarConfiguration;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.RoundedPanel;
+import gui.panel.common.ThemeAware;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,11 +23,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
-public class MatchHeaderPanel extends RoundedPanel {
-	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
-	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
+public class MatchHeaderPanel extends RoundedPanel implements ThemeAware {
+	private static final Color NAVIGATION_BUTTON_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final DateTimeFormatter HEADER_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM");
 
+	private JLabel titleLabel;
 	private JLabel dayNumberLabel;
 	private JLabel subtitleLabel;
 	private JButton previousDayButton;
@@ -38,25 +39,26 @@ public class MatchHeaderPanel extends RoundedPanel {
 		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
 		setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
 
-		JLabel titleLabel = new JLabel("SAISON REGULIERE");
+		titleLabel = new JLabel("SAISON REGULIERE");
 		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
-		titleLabel.setForeground(TITLE_COLOR);
 		titleLabel.setAlignmentX(LEFT_ALIGNMENT);
 
 		dayNumberLabel = new JLabel("Jour -");
 		dayNumberLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 22));
-		dayNumberLabel.setForeground(TITLE_COLOR);
 		dayNumberLabel.setAlignmentX(LEFT_ALIGNMENT);
 
 		subtitleLabel = new JLabel("-");
 		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
-		subtitleLabel.setForeground(SUBTITLE_COLOR);
 		subtitleLabel.setAlignmentX(LEFT_ALIGNMENT);
 
 		previousDayButton = new RoundedButton("<");
 		nextDayButton = new RoundedButton(">");
 		previousDayButton.setPreferredSize(new Dimension(42, 30));
 		nextDayButton.setPreferredSize(new Dimension(42, 30));
+		previousDayButton.setBackground(NAVIGATION_BUTTON_COLOR);
+		nextDayButton.setBackground(NAVIGATION_BUTTON_COLOR);
+		previousDayButton.setForeground(Color.WHITE);
+		nextDayButton.setForeground(Color.WHITE);
 
 		JPanel textPanel = new JPanel();
 		textPanel.setOpaque(false);
@@ -70,6 +72,7 @@ public class MatchHeaderPanel extends RoundedPanel {
 		add(textPanel, BorderLayout.WEST);
 		add(buildNavigationPanel(), BorderLayout.EAST);
 		setPreferredSize(new Dimension(320, 90));
+		applyTheme();
 	}
 
 	private JPanel buildNavigationPanel() {
@@ -97,5 +100,13 @@ public class MatchHeaderPanel extends RoundedPanel {
 
 	public void setNextDayAction(ActionListener actionListener) {
 		nextDayButton.addActionListener(actionListener);
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		titleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		dayNumberLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 	}
 }

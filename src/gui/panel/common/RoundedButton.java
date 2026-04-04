@@ -8,10 +8,12 @@ import java.awt.RenderingHints;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
-public class RoundedButton extends JButton {
+public class RoundedButton extends JButton implements ThemeAware {
 	private static final int DEFAULT_RADIUS = 18;
 
 	private final int cornerRadius;
+	private boolean customBackgroundSet;
+	private boolean customForegroundSet;
 
 	public RoundedButton() {
 		this("");
@@ -25,6 +27,20 @@ public class RoundedButton extends JButton {
 		setBorderPainted(false);
 		setBorder(BorderFactory.createEmptyBorder(8, 14, 8, 14));
 		cornerRadius = DEFAULT_RADIUS;
+		super.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
+		super.setForeground(DashboardPanelUtil.BUTTON_TEXT_COLOR);
+	}
+
+	@Override
+	public void setBackground(Color backgroundColor) {
+		customBackgroundSet = true;
+		super.setBackground(backgroundColor);
+	}
+
+	@Override
+	public void setForeground(Color textColor) {
+		customForegroundSet = true;
+		super.setForeground(textColor);
 	}
 
 	@Override
@@ -38,5 +54,15 @@ public class RoundedButton extends JButton {
 		}
 		g2.fillRoundRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius);
 		super.paintComponent(g);
+	}
+
+	@Override
+	public void applyTheme() {
+		if (!customBackgroundSet) {
+			super.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
+		}
+		if (!customForegroundSet) {
+			super.setForeground(DashboardPanelUtil.BUTTON_TEXT_COLOR);
+		}
 	}
 }

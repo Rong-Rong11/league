@@ -9,9 +9,10 @@ import javax.swing.JPanel;
 
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import gui.panel.financePanel.FinanceHeaderPanel;
 
-public class FinanceDashboard extends JPanel {
+public class FinanceDashboard extends JPanel implements ThemeAware {
 
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
@@ -123,5 +124,12 @@ public class FinanceDashboard extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			switchView(TEAM_VIEW);
 		}
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		refreshView();
+		DashboardPanelUtil.refreshChildrenTheme(this);
 	}
 }
