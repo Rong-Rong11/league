@@ -25,7 +25,7 @@ public class TeamPopularityUpdater {
       }
    }
 
-   // à varier car sinon on tous la même note
+   // a varier car sinon on tous la meme note
    private void updateTeamBeforeSeason(Team team) {
       double currentPopularity = team.getFormerPopularity();
       double variation = 0.0;

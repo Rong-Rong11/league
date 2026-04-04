@@ -100,8 +100,8 @@ public class MatchStatPanel extends JPanel {
 		title.setForeground(TITLE_COLOR);
 		title.setAlignmentX(CENTER_ALIGNMENT);
 
-		madeShotsBar = new ComparisonBarPanel("Tirs réussis");
-		threePointsBar = new ComparisonBarPanel("Tirs à 3 points");
+		madeShotsBar = new ComparisonBarPanel("Tirs reussis");
+		threePointsBar = new ComparisonBarPanel("Tirs a 3 points");
 		freeThrowsBar = new ComparisonBarPanel("Lancers francs");
 		reboundsBar = new ComparisonBarPanel("Rebonds");
 

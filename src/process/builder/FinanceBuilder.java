@@ -21,7 +21,7 @@ import process.visitor.marketsize.GenerateStadiumCapacityVisitor;
 public class FinanceBuilder {
     private TeamRepositery teamRepositery = TeamRepositery.getInstance();
 
-    // déjà un marketSize et un profil financier au moment de l'appel car choisi en
+    // deja un marketSize et un profil financier au moment de l'appel car choisi en
     // random
     public static TeamFinance buildTeamFinance(Team team) {
         Budget budget = team.getTeamFinance().getBudget();

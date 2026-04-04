@@ -4,7 +4,7 @@ import data.finance.budget.FinanceMoment;
 import data.finance.budget.FinanceScope;
 
 public enum IncomeType {
-      // finance league début de saison
+      // finance league debut de saison
       NATIONAL_TV(FinanceScope.NATIONAL, FinanceMoment.SEASON, IncomeCategory.MEDIA),
 
       NATIONAL_SPONSORING(FinanceScope.NATIONAL, FinanceMoment.SEASON, IncomeCategory.SPONSORING),

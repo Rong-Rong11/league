@@ -55,7 +55,7 @@ public class HeaderPanel extends RoundedPanel {
 
 	private void create() {
 		progressTitleLabel = new JLabel("Progression de la saison");
-		progressSubtitleLabel = new JLabel("0 jours complétés sur 0");
+		progressSubtitleLabel = new JLabel("0 jours completes sur 0");
 		percentageLabel = new JLabel("0%");
 		progressBar = new JProgressBar(0, 100);
 
@@ -163,7 +163,7 @@ public class HeaderPanel extends RoundedPanel {
 		if (totalDays > 0) {
 			percentage = (completedDays * 100) / totalDays;
 		}
-		progressSubtitleLabel.setText(completedDays + " jours complétés sur " + totalDays);
+		progressSubtitleLabel.setText(completedDays + " jours completes sur " + totalDays);
 		percentageLabel.setText(percentage + "%");
 		progressBar.setValue(percentage);
 	}

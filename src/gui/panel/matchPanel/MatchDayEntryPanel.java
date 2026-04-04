@@ -47,7 +47,7 @@ public class MatchDayEntryPanel extends JPanel {
 
 		textPanel.add(createTeamLabel(TeamDisplayUtil.getShortName(game.getGameContext().getHomeTeam())));
 		textPanel.add(createOpponentLabel(TeamDisplayUtil.getShortName(game.getGameContext().getAwayTeam())));
-		textPanel.add(createStatusLabel(displayed ? "Terminé" : "À venir", displayed));
+		textPanel.add(createStatusLabel(displayed ? "Termine" : "A venir", displayed));
 		centerPanel.add(textPanel, BorderLayout.CENTER);
 
 		if (displayed) {

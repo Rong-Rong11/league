@@ -72,12 +72,12 @@ public class FinanceDashboard extends JPanel {
 	private JPanel buildRightColumn() {
 		JPanel column = DashboardPanelUtil.createGridColumn(2, 1, 0, 12, IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH);
 
-		column.add(new BuildBox("DISTRIBUTION - ÉQUIPE", "Équipe sélectionnée", "DISTRIBUTION"));// ! À changer le string
+		column.add(new BuildBox("DISTRIBUTION - EQUIPE", "Equipe selectionnee", "DISTRIBUTION"));// ! A changer le string
 																																// par un jpanel quand
 																																// on aura la
-																																// fonctionnalité
-		column.add(new BuildBox("DÉPENSES", "Équipe sélectionnée", "DÉPENSES"));// ! À changer le string par un jpanel
-																										// quand on aura la fonctionnalité
+																																// fonctionnalite
+		column.add(new BuildBox("DEPENSES", "Equipe selectionnee", "DEPENSES"));// ! A changer le string par un jpanel
+																										// quand on aura la fonctionnalite
 
 		return column;
 	}

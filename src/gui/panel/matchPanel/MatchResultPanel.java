@@ -50,9 +50,9 @@ public class MatchResultPanel extends JPanel {
 		Team homeTeam = game.getGameContext().getHomeTeam();
 		Team awayTeam = game.getGameContext().getAwayTeam();
 		updateTeamLabels(homeTeam, awayTeam, dayLabel);
-		matchStatusLabel.setText("À venir");
+		matchStatusLabel.setText("A venir");
 		mainScoreLabel.setText("--");
-		quarterTitleLabel.setText("Résultats masqués");
+		quarterTitleLabel.setText("Resultats masques");
 		homeQuarterTeamLabel.setText(TeamDisplayUtil.getShortName(homeTeam));
 		awayQuarterTeamLabel.setText(TeamDisplayUtil.getShortName(awayTeam));
 		resetQuarterTable();
@@ -62,15 +62,15 @@ public class MatchResultPanel extends JPanel {
 		Team homeTeam = game.getGameContext().getHomeTeam();
 		Team awayTeam = game.getGameContext().getAwayTeam();
 		updateTeamLabels(homeTeam, awayTeam, dayLabel);
-		matchStatusLabel.setText("Terminé");
+		matchStatusLabel.setText("Termine");
 		mainScoreLabel.setText(game.getHomeFinalScore() + " - " + game.getAwayFinalScore());
-		quarterTitleLabel.setText("Match terminé");
+		quarterTitleLabel.setText("Match termine");
 		updateQuarterTable(game.getQuarterResults(), homeTeam, awayTeam);
 	}
 
 	public void showEmptyState() {
-		titleLabel.setText("SAISON RÉGULIÈRE");
-		matchStatusLabel.setText("À venir");
+		titleLabel.setText("SAISON REGULIERE");
+		matchStatusLabel.setText("A venir");
 		homeLogoPanel.setTeamName("");
 		awayLogoPanel.setTeamName("");
 		homeNameLabel.setText("Home");
@@ -78,7 +78,7 @@ public class MatchResultPanel extends JPanel {
 		homeCityLabel.setText("-");
 		awayCityLabel.setText("-");
 		mainScoreLabel.setText("--");
-		quarterTitleLabel.setText("Résultats masqués");
+		quarterTitleLabel.setText("Resultats masques");
 		homeQuarterTeamLabel.setText("Home");
 		awayQuarterTeamLabel.setText("Away");
 		resetQuarterTable();
@@ -91,10 +91,10 @@ public class MatchResultPanel extends JPanel {
 
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
 		topPanel.setOpaque(false);
-		titleLabel = new JLabel("SAISON RÉGULIÈRE");
+		titleLabel = new JLabel("SAISON REGULIERE");
 		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
 		titleLabel.setForeground(SUBTITLE_COLOR);
-		matchStatusLabel = new JLabel("À venir");
+		matchStatusLabel = new JLabel("A venir");
 		matchStatusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 		matchStatusLabel.setForeground(PRIMARY_BAR_COLOR);
 		topPanel.add(titleLabel);
@@ -158,7 +158,7 @@ public class MatchResultPanel extends JPanel {
 		mainScoreLabel.setAlignmentX(CENTER_ALIGNMENT);
 		mainScoreLabel.setHorizontalAlignment(JLabel.CENTER);
 
-		quarterTitleLabel = new JLabel("Résultat masqué");
+		quarterTitleLabel = new JLabel("Resultat masque");
 		quarterTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 		quarterTitleLabel.setForeground(SUBTITLE_COLOR);
 		quarterTitleLabel.setAlignmentX(CENTER_ALIGNMENT);
@@ -183,7 +183,7 @@ public class MatchResultPanel extends JPanel {
 
 		JPanel table = new JPanel(new GridLayout(3, 6, 10, 6));
 		table.setOpaque(false);
-		table.add(new JLabel("ÉQUIPE"));
+		table.add(new JLabel("EQUIPE"));
 		table.add(new JLabel("Q1", JLabel.CENTER));
 		table.add(new JLabel("Q2", JLabel.CENTER));
 		table.add(new JLabel("Q3", JLabel.CENTER));
@@ -223,7 +223,7 @@ public class MatchResultPanel extends JPanel {
 	}
 
 	private void updateTeamLabels(Team homeTeam, Team awayTeam, String dayLabel) {
-		titleLabel.setText("SAISON RÉGULIÈRE - " + dayLabel.toUpperCase());
+		titleLabel.setText("SAISON REGULIERE - " + dayLabel.toUpperCase());
 		homeLogoPanel.setTeamName(homeTeam.getName());
 		awayLogoPanel.setTeamName(awayTeam.getName());
 		homeNameLabel.setText(TeamDisplayUtil.getShortName(homeTeam));

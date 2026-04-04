@@ -114,7 +114,7 @@ public class SimulationManager implements GUIInterface {
 		financeManager.chooseMarketSize(team, new SmallSize());
 	}
 
-	// méthode à utiliser pour lancer la saison
+	// methode a utiliser pour lancer la saison
 	@Override
 	public void startSeason() {
 		financeManager.initializeFinance();
@@ -129,7 +129,7 @@ public class SimulationManager implements GUIInterface {
 		preSeasonTradeService.simulateTrade(config.FinanceConfiguration.PRESEASON_TRADE, 0);
 	}
 
-	// passe le prochain jour, méthode à utiliser pour la simulation et tout se fais
+	// passe le prochain jour, methode a utiliser pour la simulation et tout se fais
 	// tous seul
 	@Override
 	public void simulateDay(LocalDate date) {
@@ -229,7 +229,7 @@ public class SimulationManager implements GUIInterface {
 		league.getPlayoff().setNbaCalendar(firstRoundCalendarBuilder.buildCalendar());
 	}
 
-	// simuler la fin de saison régulière ou fin playoff
+	// simuler la fin de saison reguliere ou fin playoff
 	@Override
 	public void simulateRegularSeason() {
 		while (!clock.getCurrentDate().equals(CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
