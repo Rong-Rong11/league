@@ -22,11 +22,12 @@ import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.TeamMapPanel;
+import gui.panel.common.ThemeAware;
 import gui.panel.openningPanel.OpeningPolicyDetailPanel;
 import gui.panel.openningPanel.OpeningTeamSelectionPanel;
 import process.orchestrator.GUIInterface;
 
-public class OpeningDashboard extends JPanel {
+public class OpeningDashboard extends JPanel implements ThemeAware {
 
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 64;
@@ -38,6 +39,7 @@ public class OpeningDashboard extends JPanel {
 	private ArrayList<Team> teams;
 	private Team selectedTeam;
 	private JButton continueButton;
+	private JButton themeButton;
 	private JButton randomPoliciesButton;
 	private TeamMapPanel openingMapPanel;
 	private OpeningTeamSelectionPanel teamSelectionPanel;
@@ -54,6 +56,7 @@ public class OpeningDashboard extends JPanel {
 	private void create() {
 		teams = new ArrayList<Team>(guiInterface.getTeams());
 		continueButton = new RoundedButton("Continuer");
+		themeButton = new RoundedButton("Mode sombre");
 		randomPoliciesButton = new RoundedButton();
 		openingMapPanel = new TeamMapPanel();
 		teamSelectionPanel = new OpeningTeamSelectionPanel();
@@ -68,6 +71,13 @@ public class OpeningDashboard extends JPanel {
 		continueButton.setFont(new java.awt.Font(java.awt.Font.SANS_SERIF, java.awt.Font.BOLD, 16));
 		continueButton.setPreferredSize(new Dimension(170, 56));
 		continueButton.setBorder(BorderFactory.createEmptyBorder(14, 28, 14, 28));
+		continueButton.setBackground(new Color(0x17, 0x31, 0x74));
+		continueButton.setForeground(Color.WHITE);
+		themeButton.setFont(new java.awt.Font(java.awt.Font.SANS_SERIF, java.awt.Font.BOLD, 14));
+		themeButton.setPreferredSize(new Dimension(150, 44));
+		themeButton.setBackground(new Color(0x17, 0x31, 0x74));
+		themeButton.setForeground(Color.WHITE);
+		applyTheme();
 	}
 
 	private ImageIcon createRandomIcon() {
@@ -149,6 +159,7 @@ public class OpeningDashboard extends JPanel {
 		JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 		footer.setOpaque(false);
 
+		footer.add(themeButton);
 		footer.add(continueButton);
 
 		return footer;
@@ -284,6 +295,17 @@ public class OpeningDashboard extends JPanel {
 
 	public JButton getContinueButton() {
 		return continueButton;
+	}
+
+	public JButton getThemeButton() {
+		return themeButton;
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		themeButton.setText(DashboardPanelUtil.isDarkMode() ? "Mode clair" : "Mode sombre");
+		DashboardPanelUtil.refreshChildrenTheme(this);
 	}
 
 	public boolean hasSelectedProfil() {

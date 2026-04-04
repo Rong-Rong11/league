@@ -21,13 +21,11 @@ import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.RoundedPanel;
+import gui.panel.common.ThemeAware;
 
-public class HeaderPanel extends RoundedPanel {
+public class HeaderPanel extends RoundedPanel implements ThemeAware {
 
-	private static final Color BACKGROUND_COLOR = DashboardPanelUtil.PANEL_SURFACE_COLOR;
-	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
-	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
-	private static final Color PROGRESS_COLOR = new Color(0x2F, 0x80, 0xA9);
+	private static final Color NAVIGATION_BUTTON_COLOR = new Color(0x17, 0x31, 0x74);
 
 	private JLabel progressTitleLabel;
 	private JLabel progressSubtitleLabel;
@@ -47,6 +45,7 @@ public class HeaderPanel extends RoundedPanel {
 	private JButton monthButton;
 	private JButton weekButton;
 	private JPanel navigationLeftPanel;
+	private boolean monthViewSelectedState;
 
 	public HeaderPanel() {
 		create();
@@ -84,30 +83,41 @@ public class HeaderPanel extends RoundedPanel {
 		weekLabel.setPreferredSize(new Dimension(250, 36));
 		weekLabel.setMinimumSize(new Dimension(250, 36));
 
-		progressTitleLabel.setForeground(TITLE_COLOR);
-		progressSubtitleLabel.setForeground(SUBTITLE_COLOR);
-		percentageLabel.setForeground(TITLE_COLOR);
-		monthLabel.setForeground(TITLE_COLOR);
-		weekLabel.setForeground(TITLE_COLOR);
-
 		progressBar.setValue(0);
 		progressBar.setStringPainted(false);
-		progressBar.setForeground(PROGRESS_COLOR);
 		progressBar.setBackground(new Color(0xE3, 0xE8, 0xEE));
 		progressBar.setPreferredSize(new Dimension(260, 14));
 		progressBar.setBorder(BorderFactory.createEmptyBorder());
+
+		styleNavigationButton(previousMonthButton);
+		styleNavigationButton(nextMonthButton);
+		styleNavigationButton(previousWeekButton);
+		styleNavigationButton(nextWeekButton);
+
 		ButtonStyleUtil.styleToggleButton(monthButton);
 		ButtonStyleUtil.styleToggleButton(weekButton);
 	}
 
+	private void styleNavigationButton(JButton button) {
+		button.setBackground(NAVIGATION_BUTTON_COLOR);
+		button.setForeground(Color.WHITE);
+		button.setPreferredSize(new Dimension(42, 32));
+	}
+
+	private void stylePrimaryActionButton(JButton button) {
+		button.setBackground(new Color(0x17, 0x31, 0x74));
+		button.setForeground(Color.WHITE);
+	}
+
 	private void organize() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setBackground(BACKGROUND_COLOR);
+		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
 		setBorder(BorderFactory.createEmptyBorder(14, 16, 10, 16));
 
 		add(buildTopRow());
 		add(Box.createVerticalStrut(8));
 		add(buildNavigationRow());
+		applyTheme();
 	}
 
 	private JPanel buildTopRow() {
@@ -177,6 +187,7 @@ public class HeaderPanel extends RoundedPanel {
 	}
 
 	public void setMonthViewSelected(boolean selected) {
+		monthViewSelectedState = selected;
 		ButtonStyleUtil.setToggleButtonSelected(monthButton, selected);
 		ButtonStyleUtil.setToggleButtonSelected(weekButton, !selected);
 		refreshNavigation(selected);
@@ -231,5 +242,23 @@ public class HeaderPanel extends RoundedPanel {
 
 	public void setWeekToggleAction(ActionListener actionListener) {
 		weekButton.addActionListener(actionListener);
+	}
+
+	@Override
+	public void applyTheme() {
+		if (navigationLeftPanel == null) {
+			return;
+		}
+		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		progressTitleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		progressSubtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		percentageLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		monthLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		weekLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		progressBar.setForeground(new Color(0x17, 0x31, 0x74));
+		stylePrimaryActionButton(simulateDayButton);
+		stylePrimaryActionButton(simulateWeekButton);
+		stylePrimaryActionButton(simulateSeasonButton);
+		setMonthViewSelected(monthViewSelectedState);
 	}
 }

@@ -14,11 +14,13 @@ import javax.swing.JProgressBar;
 import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.sport.setup.GameResult;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 
-public class MatchStatPanel extends JPanel {
+public class MatchStatPanel extends JPanel implements ThemeAware {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
-	private static final Color PRIMARY_BAR_COLOR = new Color(0x2F, 0x80, 0xA9);
+	private static final Color PRIMARY_BAR_COLOR = new Color(0x17, 0x31, 0x74);
 
 	private ComparisonBarPanel madeShotsBar;
 	private ComparisonBarPanel threePointsBar;
@@ -27,12 +29,15 @@ public class MatchStatPanel extends JPanel {
 	private JLabel attendanceSummaryLabel;
 	private JLabel attendanceRateLabel;
 	private JProgressBar attendanceBar;
+	private JLabel statsTitleLabel;
+	private JLabel attendanceTitleLabel;
 
 	public MatchStatPanel() {
 		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		add(buildStatsPanel());
 		add(buildAttendancePanel());
+		applyTheme();
 	}
 
 	public void showStats(GameResult[] quarterResults) {
@@ -95,17 +100,17 @@ public class MatchStatPanel extends JPanel {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
 
-		JLabel title = new JLabel("STATISTIQUES DU MATCH");
-		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
-		title.setForeground(TITLE_COLOR);
-		title.setAlignmentX(CENTER_ALIGNMENT);
+		statsTitleLabel = new JLabel("STATISTIQUES DU MATCH");
+		statsTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+		statsTitleLabel.setForeground(TITLE_COLOR);
+		statsTitleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		madeShotsBar = new ComparisonBarPanel("Tirs reussis");
 		threePointsBar = new ComparisonBarPanel("Tirs a 3 points");
 		freeThrowsBar = new ComparisonBarPanel("Lancers francs");
 		reboundsBar = new ComparisonBarPanel("Rebonds");
 
-		panel.add(title);
+		panel.add(statsTitleLabel);
 		panel.add(Box.createVerticalStrut(8));
 		panel.add(madeShotsBar);
 		panel.add(Box.createVerticalStrut(8));
@@ -123,10 +128,10 @@ public class MatchStatPanel extends JPanel {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
 
-		JLabel title = new JLabel("AFFLUENCE");
-		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
-		title.setForeground(TITLE_COLOR);
-		title.setAlignmentX(CENTER_ALIGNMENT);
+		attendanceTitleLabel = new JLabel("AFFLUENCE");
+		attendanceTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+		attendanceTitleLabel.setForeground(TITLE_COLOR);
+		attendanceTitleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		JPanel summary = new JPanel(new BorderLayout());
 		summary.setOpaque(false);
@@ -143,7 +148,7 @@ public class MatchStatPanel extends JPanel {
 		attendanceBar.setBackground(new Color(225, 225, 225));
 		attendanceBar.setBorderPainted(false);
 
-		panel.add(title);
+		panel.add(attendanceTitleLabel);
 		panel.add(Box.createVerticalStrut(8));
 		panel.add(summary);
 		panel.add(Box.createVerticalStrut(8));
@@ -154,6 +159,7 @@ public class MatchStatPanel extends JPanel {
 	private class ComparisonBarPanel extends JPanel {
 		private JLabel leftValueLabel;
 		private JLabel rightValueLabel;
+		private JLabel titleLabel;
 		private JProgressBar progressBar;
 
 		private ComparisonBarPanel(String title) {
@@ -167,7 +173,7 @@ public class MatchStatPanel extends JPanel {
 			leftValueLabel.setForeground(TITLE_COLOR);
 			leftValueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 
-			JLabel titleLabel = new JLabel(title, JLabel.CENTER);
+			titleLabel = new JLabel(title, JLabel.CENTER);
 			titleLabel.setForeground(SUBTITLE_COLOR);
 			titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 
@@ -194,5 +200,23 @@ public class MatchStatPanel extends JPanel {
 			int total = homeValue + awayValue;
 			progressBar.setValue(total <= 0 ? 0 : (int) Math.round((homeValue * 100.0) / total));
 		}
+
+		private void applyTheme() {
+			leftValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+			rightValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+			titleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		}
+	}
+
+	@Override
+	public void applyTheme() {
+		statsTitleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		attendanceTitleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		attendanceSummaryLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		attendanceRateLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		madeShotsBar.applyTheme();
+		threePointsBar.applyTheme();
+		freeThrowsBar.applyTheme();
+		reboundsBar.applyTheme();
 	}
 }

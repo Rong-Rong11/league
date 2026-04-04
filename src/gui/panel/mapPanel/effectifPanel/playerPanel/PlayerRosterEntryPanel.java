@@ -13,10 +13,12 @@ import javax.swing.JPanel;
 import data.player.Player;
 import data.player.Asset;
 import gui.panel.common.DashboardCard;
+import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.PlayerDisplayUtil;
+import gui.panel.common.ThemeAware;
 import process.utility.PlayerStatUtil;
 
-public class PlayerRosterEntryPanel extends DashboardCard {
+public class PlayerRosterEntryPanel extends DashboardCard implements ThemeAware {
 	private PlayerPortraitPanel portraitPanel;
 	private JLabel nameLabel;
 	private JLabel positionLabel;
@@ -36,13 +38,10 @@ public class PlayerRosterEntryPanel extends DashboardCard {
 		salaryLabel = new JLabel("-");
 
 		nameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		nameLabel.setForeground(new Color(0x17, 0x31, 0x74));
 		positionLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
-		positionLabel.setForeground(new Color(0x37, 0x84, 0xB3));
 		statsLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
-		statsLabel.setForeground(new Color(90, 90, 90));
 		salaryLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
-		salaryLabel.setForeground(new Color(0x17, 0x31, 0x74));
+		applyTheme();
 	}
 
 	private void organize() {
@@ -98,5 +97,22 @@ public class PlayerRosterEntryPanel extends DashboardCard {
 		return PlayerDisplayUtil.formatOneDecimal(points) + " PPG  "
 				+ PlayerDisplayUtil.formatOneDecimal(assists) + " APG  "
 				+ PlayerDisplayUtil.formatOneDecimal(rebounds) + " RPG";
+	}
+
+	@Override
+	public void applyTheme() {
+		super.applyTheme();
+		if (nameLabel != null) {
+			nameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		}
+		if (positionLabel != null) {
+			positionLabel.setForeground(new Color(0x17, 0x31, 0x74));
+		}
+		if (statsLabel != null) {
+			statsLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		}
+		if (salaryLabel != null) {
+			salaryLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		}
 	}
 }

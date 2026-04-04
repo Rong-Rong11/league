@@ -8,16 +8,19 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import process.orchestrator.GUIInterface;
 import process.utility.TeamDisplayUtil;
 
-public class OpeningPolicyDetailPanel extends JPanel {
+public class OpeningPolicyDetailPanel extends JPanel implements ThemeAware {
 	private final GUIInterface guiInterface;
 
 	private JLabel teamValueLabel;
 	private JLabel cityValueLabel;
 	private JLabel conferenceValueLabel;
 	private JLabel divisionValueLabel;
+	private JLabel[] titleLabels;
 
 	public OpeningPolicyDetailPanel(GUIInterface guiInterface) {
 		this.guiInterface = guiInterface;
@@ -41,6 +44,7 @@ public class OpeningPolicyDetailPanel extends JPanel {
 		add(infoPanel, BorderLayout.CENTER);
 
 		updateTeam(null);
+		applyTheme();
 	}
 
 	private JLabel createValueLabel() {
@@ -59,11 +63,23 @@ public class OpeningPolicyDetailPanel extends JPanel {
 
 		JLabel titleLabel = new JLabel(title);
 		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		titleLabel.setForeground(new Color(110, 117, 131));
+		storeTitleLabel(titleLabel);
 
 		row.add(titleLabel);
 		row.add(valueLabel);
 		return row;
+	}
+
+	private void storeTitleLabel(JLabel titleLabel) {
+		if (titleLabels == null) {
+			titleLabels = new JLabel[4];
+		}
+		for (int i = 0; i < titleLabels.length; i++) {
+			if (titleLabels[i] == null) {
+				titleLabels[i] = titleLabel;
+				return;
+			}
+		}
 	}
 
 	public void updateTeam(Team team) {
@@ -86,6 +102,21 @@ public class OpeningPolicyDetailPanel extends JPanel {
 		cityValueLabel.setText(TeamDisplayUtil.getCityName(team));
 		conferenceValueLabel.setText(TeamDisplayUtil.getConferenceLabel(guiInterface.getConferenceName(team)));
 		divisionValueLabel.setText(guiInterface.getDivisionName(team));
+	}
+
+	@Override
+	public void applyTheme() {
+		teamValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		cityValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		conferenceValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		divisionValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		if (titleLabels != null) {
+			for (int i = 0; i < titleLabels.length; i++) {
+				if (titleLabels[i] != null) {
+					titleLabels[i].setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+				}
+			}
+		}
 	}
 
 }

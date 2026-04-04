@@ -1,7 +1,6 @@
 package gui.panel.matchPanel;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
@@ -10,9 +9,10 @@ import javax.swing.JPanel;
 
 import data.calendar.GameDay;
 import data.sport.setup.Game;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 
-public class MatchDayListPanel extends JPanel {
-	private static final Color SEPARATOR_COLOR = new Color(225, 225, 225);
+public class MatchDayListPanel extends JPanel implements ThemeAware {
 
 	public interface MatchSelectionListener {
 		void onMatchSelected(Game game);
@@ -59,10 +59,15 @@ public class MatchDayListPanel extends JPanel {
 	private JPanel buildEmptyRow(int index) {
 		JPanel emptyRow = new JPanel();
 		emptyRow.setOpaque(true);
-		emptyRow.setBackground(Color.WHITE);
+		emptyRow.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
 		emptyRow.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(index == 0 ? 1 : 0, 0, 1, 0, SEPARATOR_COLOR),
+				BorderFactory.createMatteBorder(index == 0 ? 1 : 0, 0, 1, 0, DashboardPanelUtil.BORDER_COLOR),
 				BorderFactory.createEmptyBorder(6, 8, 6, 8)));
 		return emptyRow;
+	}
+
+	@Override
+	public void applyTheme() {
+		repaint();
 	}
 }

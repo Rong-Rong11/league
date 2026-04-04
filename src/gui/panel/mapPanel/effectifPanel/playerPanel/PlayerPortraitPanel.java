@@ -10,8 +10,10 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 
-public class PlayerPortraitPanel extends JPanel {
+public class PlayerPortraitPanel extends JPanel implements ThemeAware {
 	private static final String PORTRAIT_FOLDER_PATH = "resources/portraits/";
 	private static final int DEFAULT_PORTRAIT_WIDTH = 80;
 	private static final int DEFAULT_PORTRAIT_HEIGHT = 58;
@@ -37,7 +39,6 @@ public class PlayerPortraitPanel extends JPanel {
 	private void create() {
 		portraitLabel = new JLabel("", JLabel.CENTER);
 		portraitLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
-		portraitLabel.setForeground(new Color(80, 80, 80));
 	}
 
 	private void organize() {
@@ -45,6 +46,7 @@ public class PlayerPortraitPanel extends JPanel {
 		setOpaque(false);
 		setPreferredSize(new Dimension(portraitWidth, portraitHeight));
 		add(portraitLabel, BorderLayout.CENTER);
+		applyTheme();
 	}
 
 	public void setPlayer(Player player) {
@@ -99,5 +101,10 @@ public class PlayerPortraitPanel extends JPanel {
 			abbreviation += "X";
 		}
 		return abbreviation;
+	}
+
+	@Override
+	public void applyTheme() {
+		portraitLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 	}
 }

@@ -15,6 +15,7 @@ import data.finance.GameStat;
 import data.sport.setup.Game;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import gui.panel.matchPanel.MatchDayListPanel;
 import gui.panel.matchPanel.MatchDayListPanel.MatchSelectionListener;
 import gui.panel.matchPanel.MatchDetailPanel;
@@ -22,7 +23,7 @@ import gui.panel.matchPanel.MatchFinancePanel;
 import gui.panel.matchPanel.MatchHeaderPanel;
 import process.orchestrator.GUIInterface;
 
-public class MatchDashboard extends JPanel {
+public class MatchDashboard extends JPanel implements ThemeAware {
 	private static final int DASHBOARD_SPACING = 16;
 	private static final int LEFT_COLUMN_WIDTH = 270;
 	private static final int RIGHT_COLUMN_WIDTH = 300;
@@ -247,5 +248,11 @@ public class MatchDashboard extends JPanel {
 			}
 			showAdjacentGameDay(guiInterface.getNextGameDay(selectedDate.plusDays(1)));
 		}
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		DashboardPanelUtil.refreshChildrenTheme(this);
 	}
 }
