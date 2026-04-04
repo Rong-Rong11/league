@@ -52,6 +52,12 @@ public class FinanceManager {
         applyRevenueSharing(month);
     }
 
+    public void applyPlayoffMonthlyFinance(int month) {
+        applyMonthlyFinanceForAllTeams(month);
+        distributeMonthlyCentralRevenue(month);
+        applyLeagueMonthlyExpenses(month);
+    }
+
     private void distributeMonthlyCentralRevenue(int month) {
         centralRevenueDistributor.distributeMonthlyCentralRevenue(month);
     }

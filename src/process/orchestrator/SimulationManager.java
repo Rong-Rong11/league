@@ -163,7 +163,12 @@ public class SimulationManager implements GUIInterface {
 
 	private void newMonth(int month) {
 		teamPopularityUpdater.updateMonthlyPopularity();
-		financeManager.applyMonthlyFinance(month);
+		if (isRegularSeasonDate(clock.getCurrentDate())) {
+			financeManager.applyMonthlyFinance(month);
+			return;
+		}
+
+		financeManager.applyPlayoffMonthlyFinance(month);
 	}
 
 	private void newWeek(LocalDate date, int month) {
