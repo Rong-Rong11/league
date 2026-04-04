@@ -56,9 +56,9 @@ public class RosterDashboard extends JPanel {
 
 	private void create() {
 		currentSeasonSelected = true;
-		backButton = new RoundedButton("Retour à la carte");
+		backButton = new RoundedButton("Retour a la carte");
 		currentSeasonButton = new RoundedButton("Saison actuelle");
-		previousSeasonButton = new RoundedButton("Saison passée");
+		previousSeasonButton = new RoundedButton("Saison passee");
 		teamNameLabel = new JLabel("Effectif");
 		subtitleLabel = new JLabel("-");
 		teamLogoPanel = new TeamLogoPanel("", 56);

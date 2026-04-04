@@ -48,7 +48,7 @@ public class FinanceManager {
         distributeMonthlyCentralRevenue(month);
         applyLeagueMonthlyExpenses(month);
 
-        // changer que ça pour les playoffs
+        // changer que ca pour les playoffs
         applyRevenueSharing(month);
     }
 

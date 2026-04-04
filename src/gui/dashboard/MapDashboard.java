@@ -19,7 +19,7 @@ import gui.panel.mapPanel.effectifPanel.MapTeamSummaryPanel;
 import process.orchestrator.GUIInterface;
 
 /**
- * Dashboard dédié à la page Carte.
+ * Dashboard dedie a la page Carte.
  */
 public class MapDashboard extends JPanel {
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
@@ -87,8 +87,8 @@ public class MapDashboard extends JPanel {
 		JPanel column = DashboardPanelUtil.createGridColumn(2, 1, 0, 12, IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH);
 
 		column.add(
-				new BuildBox("Détails de l'équipe", "Informations détaillées sur l'équipe sélectionnée", teamSummaryPanel));
-		column.add(new BuildBox("Joueurs de l'équipe", "", teamPlayersPanel));
+				new BuildBox("Details de l'equipe", "Informations detaillees sur l'equipe selectionnee", teamSummaryPanel));
+		column.add(new BuildBox("Joueurs de l'equipe", "", teamPlayersPanel));
 
 		return column;
 	}

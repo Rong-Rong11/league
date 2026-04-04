@@ -1,4 +1,5 @@
 {
+  "files.encoding": "utf8",
   "java.project.sourcePaths": [
     "src",
     "test"

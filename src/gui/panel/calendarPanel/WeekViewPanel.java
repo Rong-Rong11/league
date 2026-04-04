@@ -163,7 +163,7 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	private void showWaitingState() {
-		JLabel waitingLabel = new JLabel("Saison non initialisée.");
+		JLabel waitingLabel = new JLabel("Saison non initialisee.");
 		waitingLabel.setFont(TEXT_FONT);
 		waitingLabel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 		matchDisplayPanel.add(waitingLabel, BorderLayout.CENTER);

@@ -35,7 +35,7 @@ public class WeekScheduleGridPanel extends RoundedPanel {
 	private static final Font DAY_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 16);
 	private static final DateTimeFormatter DAY_FORMATTER = DateTimeFormatter.ofPattern("EEE d/M", Locale.FRENCH);
 	private static final String[] SLOT_KEYS = { "AFTERNOON", "EVENING", "NIGHT" };
-	private static final String[] SLOT_LABELS = { "Après-midi", "Soirée", "Night" };
+	private static final String[] SLOT_LABELS = { "Apres-midi", "Soiree", "Night" };
 
 	private final GUIInterface guiInterface;
 	private final LocalDate weekStart;
@@ -108,7 +108,7 @@ public class WeekScheduleGridPanel extends RoundedPanel {
 
 	private JPanel buildTopLeftCell() {
 		JPanel cell = buildGridCell(Color.WHITE, 76);
-		cell.add(new JLabel("Créneau", SwingConstants.CENTER), BorderLayout.CENTER);
+		cell.add(new JLabel("Creneau", SwingConstants.CENTER), BorderLayout.CENTER);
 		return cell;
 	}
 
@@ -147,7 +147,7 @@ public class WeekScheduleGridPanel extends RoundedPanel {
 			return actionsPanel;
 		}
 
-		actionsPanel.add(buildActionButton("Détail", 82, new DetailDayListener(gameDay, day)));
+		actionsPanel.add(buildActionButton("Detail", 82, new DetailDayListener(gameDay, day)));
 
 		if (!displayed) {
 			actionsPanel.add(buildActionButton("Simuler", 86, new SimulateDayListener(day)));

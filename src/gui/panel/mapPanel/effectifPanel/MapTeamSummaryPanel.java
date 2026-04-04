@@ -66,7 +66,7 @@ public class MapTeamSummaryPanel extends JPanel {
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
 		infoPanel.add(buildInfoLabel("Budget annuel", budgetLabel));
 		infoPanel.add(Box.createVerticalStrut(8));
-		infoPanel.add(buildInfoLabel("Capacité salle", capacityLabel));
+		infoPanel.add(buildInfoLabel("Capacite salle", capacityLabel));
 		infoPanel.add(Box.createVerticalStrut(8));
 		infoPanel.add(buildInfoLabel("Note moyenne", averageNoteLabel));
 
@@ -104,7 +104,7 @@ public class MapTeamSummaryPanel extends JPanel {
 
 	private void showEmptyState() {
 		teamLogoPanel.setTeamName("");
-		teamNameLabel.setText("Aucune équipe");
+		teamNameLabel.setText("Aucune equipe");
 		budgetLabel.setText("-");
 		capacityLabel.setText("-");
 		averageNoteLabel.setText("-");

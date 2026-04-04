@@ -55,7 +55,7 @@ public class LiveMatchHeaderPanel extends RoundedPanel {
 		homeNameLabel = createNameLabel();
 		awayNameLabel = createNameLabel();
 		homeRoleLabel = createRoleLabel("Domicile");
-		awayRoleLabel = createRoleLabel("Extérieur");
+		awayRoleLabel = createRoleLabel("Exterieur");
 		homeScoreLabel = createScoreLabel(PRIMARY_COLOR);
 		awayScoreLabel = createScoreLabel(TEXT_COLOR);
 		quarterLabel = new JLabel("Q1", JLabel.CENTER);

@@ -85,19 +85,19 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 		JPanel leftColumn = new JPanel(new BorderLayout());
 		leftColumn.setOpaque(false);
 		leftColumn.setPreferredSize(new Dimension(SIDE_COLUMN_WIDTH, 10));
-		leftColumn.add(new BuildBox("ÉQUIPE DOMICILE", "Statistiques", homeStatsPanel), BorderLayout.CENTER);
+		leftColumn.add(new BuildBox("EQUIPE DOMICILE", "Statistiques", homeStatsPanel), BorderLayout.CENTER);
 		return leftColumn;
 	}
 
 	private JPanel buildCenterColumn() {
-		return new BuildBox("ACTIONS EN DIRECT", "Déroulement du match", liveActionsPanel);
+		return new BuildBox("ACTIONS EN DIRECT", "Deroulement du match", liveActionsPanel);
 	}
 
 	private JPanel buildRightColumn() {
 		JPanel rightColumn = new JPanel(new BorderLayout());
 		rightColumn.setOpaque(false);
 		rightColumn.setPreferredSize(new Dimension(SIDE_COLUMN_WIDTH, 10));
-		rightColumn.add(new BuildBox("ÉQUIPE EXTÉRIEUR", "Statistiques", awayStatsPanel), BorderLayout.CENTER);
+		rightColumn.add(new BuildBox("EQUIPE EXTERIEUR", "Statistiques", awayStatsPanel), BorderLayout.CENTER);
 		return rightColumn;
 	}
 
