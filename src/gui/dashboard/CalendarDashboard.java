@@ -57,6 +57,7 @@ public class CalendarDashboard extends JPanel {
 	private void create() {
 		headerPanel = new HeaderPanel();
 		weekViewPanel = new WeekViewPanel(guiInterface);
+		weekViewPanel.setDisplayedDateChangeListener(new WeekDisplayedDateChangeListener());
 		OpenMatchDayAction openMatchDayAction = new OpenMatchDayAction(matchDashboard, showMatchDashboardAction);
 		weekViewPanel.setOpenMatchDayAction(openMatchDayAction);
 		monthViewPanel = new MonthViewPanel();
@@ -139,6 +140,7 @@ public class CalendarDashboard extends JPanel {
 
 	private void updateHeaderState() {
 		headerPanel.setMonthText(MonthViewPanel.buildMonthText(displayedMonth));
+		headerPanel.setWeekText(weekViewPanel.getWeekText());
 		headerPanel.setMonthViewSelected(monthViewSelected);
 		updateProgress();
 	}
@@ -188,6 +190,8 @@ public class CalendarDashboard extends JPanel {
 		headerPanel.setSimulateSeasonAction(new SimulateSeasonAction());
 		headerPanel.setPreviousMonthAction(new PreviousMonthAction());
 		headerPanel.setNextMonthAction(new NextMonthAction());
+		headerPanel.setPreviousWeekAction(new PreviousWeekAction());
+		headerPanel.setNextWeekAction(new NextWeekAction());
 		headerPanel.setMonthToggleAction(new ShowMonthViewAction());
 		headerPanel.setWeekToggleAction(new ShowWeekViewAction());
 		monthViewPanel.setMatchDashboard(matchDashboard, showMatchDashboardAction);
@@ -206,6 +210,15 @@ public class CalendarDashboard extends JPanel {
 		public void open(GameDay gameDay, LocalDate date) {
 			matchDashboard.showGameDay(gameDay, date);
 			showMatchDashboardAction.run();
+		}
+	}
+
+	private class WeekDisplayedDateChangeListener implements WeekViewPanel.DisplayedDateChangeListener {
+		@Override
+		public void onDisplayedDateChanged(LocalDate date) {
+			currentCalendarDate = date;
+			updateDisplayedMonth(currentCalendarDate);
+			updateDashboardState();
 		}
 	}
 
@@ -263,6 +276,30 @@ public class CalendarDashboard extends JPanel {
 			if (!isSeasonEndMonth(displayedMonth)) {
 				displayedMonth = displayedMonth.plusMonths(1);
 			}
+			updateDashboardState();
+		}
+	}
+
+	private class PreviousWeekAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			weekViewPanel.showPreviousWeek();
+			if (weekViewPanel.getCurrentDate() != null) {
+				currentCalendarDate = weekViewPanel.getCurrentDate();
+			}
+			updateDisplayedMonth(currentCalendarDate);
+			updateDashboardState();
+		}
+	}
+
+	private class NextWeekAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			weekViewPanel.showNextWeek();
+			if (weekViewPanel.getCurrentDate() != null) {
+				currentCalendarDate = weekViewPanel.getCurrentDate();
+			}
+			updateDisplayedMonth(currentCalendarDate);
 			updateDashboardState();
 		}
 	}

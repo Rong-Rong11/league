@@ -41,8 +41,12 @@ public class HeaderPanel extends RoundedPanel {
 	private JButton previousMonthButton;
 	private JButton nextMonthButton;
 	private JLabel monthLabel;
+	private JButton previousWeekButton;
+	private JButton nextWeekButton;
+	private JLabel weekLabel;
 	private JButton monthButton;
 	private JButton weekButton;
+	private JPanel navigationLeftPanel;
 
 	public HeaderPanel() {
 		create();
@@ -62,6 +66,9 @@ public class HeaderPanel extends RoundedPanel {
 		previousMonthButton = new RoundedButton("<");
 		nextMonthButton = new RoundedButton(">");
 		monthLabel = new JLabel("-");
+		previousWeekButton = new RoundedButton("<");
+		nextWeekButton = new RoundedButton(">");
+		weekLabel = new JLabel("-");
 		monthButton = new RoundedButton("Mois");
 		weekButton = new RoundedButton("Semaine");
 
@@ -69,14 +76,19 @@ public class HeaderPanel extends RoundedPanel {
 		progressSubtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 		percentageLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
 		monthLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+		weekLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
 		monthLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		weekLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		monthLabel.setPreferredSize(new Dimension(210, 36));
 		monthLabel.setMinimumSize(new Dimension(210, 36));
+		weekLabel.setPreferredSize(new Dimension(250, 36));
+		weekLabel.setMinimumSize(new Dimension(250, 36));
 
 		progressTitleLabel.setForeground(TITLE_COLOR);
 		progressSubtitleLabel.setForeground(SUBTITLE_COLOR);
 		percentageLabel.setForeground(TITLE_COLOR);
 		monthLabel.setForeground(TITLE_COLOR);
+		weekLabel.setForeground(TITLE_COLOR);
 
 		progressBar.setValue(0);
 		progressBar.setStringPainted(false);
@@ -133,18 +145,15 @@ public class HeaderPanel extends RoundedPanel {
 		JPanel row = new JPanel(new BorderLayout());
 		row.setOpaque(false);
 
-		JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 0));
-		leftPanel.setOpaque(false);
-		leftPanel.add(previousMonthButton);
-		leftPanel.add(monthLabel);
-		leftPanel.add(nextMonthButton);
+		navigationLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 0));
+		navigationLeftPanel.setOpaque(false);
 
 		JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
 		rightPanel.setOpaque(false);
 		rightPanel.add(monthButton);
 		rightPanel.add(weekButton);
 
-		row.add(leftPanel, BorderLayout.WEST);
+		row.add(navigationLeftPanel, BorderLayout.WEST);
 		row.add(rightPanel, BorderLayout.EAST);
 		return row;
 	}
@@ -163,9 +172,29 @@ public class HeaderPanel extends RoundedPanel {
 		monthLabel.setText(text);
 	}
 
+	public void setWeekText(String text) {
+		weekLabel.setText(text);
+	}
+
 	public void setMonthViewSelected(boolean selected) {
 		ButtonStyleUtil.setToggleButtonSelected(monthButton, selected);
 		ButtonStyleUtil.setToggleButtonSelected(weekButton, !selected);
+		refreshNavigation(selected);
+	}
+
+	private void refreshNavigation(boolean monthSelected) {
+		navigationLeftPanel.removeAll();
+		if (monthSelected) {
+			navigationLeftPanel.add(previousMonthButton);
+			navigationLeftPanel.add(monthLabel);
+			navigationLeftPanel.add(nextMonthButton);
+		} else {
+			navigationLeftPanel.add(previousWeekButton);
+			navigationLeftPanel.add(weekLabel);
+			navigationLeftPanel.add(nextWeekButton);
+		}
+		navigationLeftPanel.revalidate();
+		navigationLeftPanel.repaint();
 	}
 
 	public void setSimulateDayAction(ActionListener actionListener) {
@@ -186,6 +215,14 @@ public class HeaderPanel extends RoundedPanel {
 
 	public void setNextMonthAction(ActionListener actionListener) {
 		nextMonthButton.addActionListener(actionListener);
+	}
+
+	public void setPreviousWeekAction(ActionListener actionListener) {
+		previousWeekButton.addActionListener(actionListener);
+	}
+
+	public void setNextWeekAction(ActionListener actionListener) {
+		nextWeekButton.addActionListener(actionListener);
 	}
 
 	public void setMonthToggleAction(ActionListener actionListener) {

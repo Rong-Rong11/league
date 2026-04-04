@@ -6,4 +6,6 @@ public abstract class GameMoment {
 
    }
 
+   public abstract String getSlotKey();
+
 }

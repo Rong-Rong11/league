@@ -1,7 +1,9 @@
 package process.orchestrator;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.TreeMap;
 
 import config.CalendarConfiguration;
@@ -37,6 +39,7 @@ import process.utility.TeamStatUtil;
 
 //cerveau de la simulation 
 public class SimulationManager implements GUIInterface {
+	private static final DateTimeFormatter WEEK_FORMATTER = DateTimeFormatter.ofPattern("dd/MM");
 
 	private League league;
 	private LeagueBuilder leagueBuilder = new LeagueBuilder();
@@ -141,6 +144,55 @@ public class SimulationManager implements GUIInterface {
 		verifyTimeline();
 	}
 
+	@Override
+	public void simulateAndDisplayDay(LocalDate date) {
+		if (!isSeasonInitialized() || date == null) {
+			return;
+		}
+		simulateDay(date);
+		displayGameDay(date);
+	}
+
+	@Override
+	public boolean makeLiveMatchAvailable(Game game, LocalDate date) {
+		if (game == null || date == null) {
+			return false;
+		}
+		if (isLiveMatchAvailable(game)) {
+			return true;
+		}
+		simulateAndDisplayDay(date);
+		return isLiveMatchAvailable(game);
+	}
+
+	@Override
+	public void simulateWeek(LocalDate startDate) {
+		if (!isSeasonInitialized() || startDate == null) {
+			return;
+		}
+		LocalDate weekStart = getWeekStartDate(startDate);
+		LocalDate weekEnd = weekStart.plusDays(6);
+		for (LocalDate day = weekStart; !day.isAfter(weekEnd); day = day.plusDays(1)) {
+			GameDay gameDay = getGameDay(day);
+			if (gameDay != null && !gameDay.isEmpty()) {
+				simulateAndDisplayDay(day);
+			}
+		}
+	}
+
+	@Override
+	public void simulateSeasonFrom(LocalDate startDate) {
+		if (!isSeasonInitialized() || startDate == null) {
+			return;
+		}
+		for (LocalDate day : getSeasonCalendar().keySet()) {
+			if (day.isBefore(startDate)) {
+				continue;
+			}
+			simulateAndDisplayDay(day);
+		}
+	}
+
 	private boolean isRegularSeasonDate(LocalDate date) {
 		return !date.isAfter(getRegularSeasonEndDate());
 	}
@@ -229,6 +281,52 @@ public class SimulationManager implements GUIInterface {
 	}
 
 	@Override
+	public LocalDate getCurrentWeekIndicatorDate() {
+		if (!isSeasonInitialized()) {
+			return null;
+		}
+		return getCurrentCalendarOrSimulationDate();
+	}
+
+	@Override
+	public LocalDate getDisplayedDateAfterDaySimulation(LocalDate displayedDate) {
+		if (!isSeasonInitialized() || displayedDate == null) {
+			return null;
+		}
+		LocalDate nextGameDay = getNextGameDay(displayedDate.plusDays(1));
+		if (nextGameDay != null) {
+			return nextGameDay;
+		}
+		return displayedDate;
+	}
+
+	@Override
+	public LocalDate getDisplayedDateAfterWeekSimulation(LocalDate displayedDate) {
+		if (!isSeasonInitialized() || displayedDate == null) {
+			return null;
+		}
+		return getCurrentCalendarOrSimulationDate();
+	}
+
+	@Override
+	public LocalDate getDisplayedDateAfterSeasonSimulation(LocalDate displayedDate) {
+		if (!isSeasonInitialized()) {
+			return null;
+		}
+		LocalDate simulationDate = getCurrentDate();
+		return simulationDate != null ? simulationDate : displayedDate;
+	}
+
+	private LocalDate getCurrentCalendarOrSimulationDate() {
+		LocalDate simulationDate = getCurrentDate();
+		LocalDate calendarDisplayDate = getCalendarDisplayDate(simulationDate);
+		if (calendarDisplayDate != null) {
+			return calendarDisplayDate;
+		}
+		return simulationDate;
+	}
+
+	@Override
 	public LocalDate getNextGameDay(LocalDate startDate) {
 		if (!isSeasonInitialized() || startDate == null) {
 			return null;
@@ -242,6 +340,113 @@ public class SimulationManager implements GUIInterface {
 		}
 
 		return null;
+	}
+
+	@Override
+	public LocalDate getPreviousGameDay(LocalDate startDate) {
+		if (!isSeasonInitialized() || startDate == null) {
+			return null;
+		}
+		for (LocalDate day = startDate; !day.isBefore(getRegularSeasonStartDate()); day = day.minusDays(1)) {
+			GameDay gameDay = getGameDay(day);
+			if (gameDay != null && !gameDay.isEmpty()) {
+				return day;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public LocalDate getMatchDisplayDate() {
+		if (!isSeasonInitialized()) {
+			return getRegularSeasonStartDate();
+		}
+		LocalDate currentDate = getCurrentDate();
+		LocalDate previousGameDay = getPreviousGameDay(currentDate.minusDays(1));
+		if (previousGameDay != null) {
+			return previousGameDay;
+		}
+		LocalDate currentGameDay = getPreviousGameDay(currentDate);
+		if (currentGameDay != null) {
+			return currentGameDay;
+		}
+		return getNextGameDay(getRegularSeasonStartDate());
+	}
+
+	@Override
+	public LocalDate getWeekStartDate(LocalDate date) {
+		if (date == null) {
+			return null;
+		}
+		return date.minusDays(date.getDayOfWeek().getValue() - 1L);
+	}
+
+	@Override
+	public LocalDate getWeekDisplayDate(LocalDate weekStart) {
+		if (!isSeasonInitialized() || weekStart == null) {
+			return null;
+		}
+
+		LocalDate weekEnd = weekStart.plusDays(6);
+		LocalDate searchStart = weekStart;
+		if (searchStart.isBefore(getRegularSeasonStartDate())) {
+			searchStart = getRegularSeasonStartDate();
+		}
+
+		LocalDate nextGameDay = getNextGameDay(searchStart);
+		if (nextGameDay != null && !nextGameDay.isAfter(weekEnd)) {
+			return nextGameDay;
+		}
+		if (weekStart.isBefore(getRegularSeasonStartDate())) {
+			return getRegularSeasonStartDate();
+		}
+		return weekStart;
+	}
+
+	@Override
+	public LocalDate getPreviousWeekDisplayDate(LocalDate displayedDate) {
+		if (!isSeasonInitialized() || displayedDate == null) {
+			return null;
+		}
+		LocalDate currentWeekStart = getWeekStartDate(displayedDate);
+		LocalDate previousWeekStart = currentWeekStart.minusDays(7);
+		LocalDate firstSeasonWeekStart = getWeekStartDate(getRegularSeasonStartDate());
+		if (previousWeekStart.isBefore(firstSeasonWeekStart)) {
+			return displayedDate;
+		}
+		LocalDate weekDisplayDate = getWeekDisplayDate(previousWeekStart);
+		if (weekDisplayDate != null) {
+			return weekDisplayDate;
+		}
+		return displayedDate;
+	}
+
+	@Override
+	public LocalDate getNextWeekDisplayDate(LocalDate displayedDate) {
+		if (!isSeasonInitialized() || displayedDate == null) {
+			return null;
+		}
+		LocalDate currentWeekStart = getWeekStartDate(displayedDate);
+		LocalDate nextWeekStart = currentWeekStart.plusDays(7);
+		LocalDate endSeasonWeekStart = getWeekStartDate(getRegularSeasonEndDate());
+		if (nextWeekStart.isAfter(endSeasonWeekStart)) {
+			return displayedDate;
+		}
+		LocalDate weekDisplayDate = getWeekDisplayDate(nextWeekStart);
+		if (weekDisplayDate != null) {
+			return weekDisplayDate;
+		}
+		return displayedDate;
+	}
+
+	@Override
+	public String getWeekText(LocalDate displayedDate) {
+		if (displayedDate == null) {
+			return "Semaine -";
+		}
+		LocalDate weekStart = getWeekStartDate(displayedDate);
+		LocalDate weekEnd = weekStart.plusDays(6);
+		return "Semaine du " + WEEK_FORMATTER.format(weekStart) + " au " + WEEK_FORMATTER.format(weekEnd);
 	}
 
 	@Override
