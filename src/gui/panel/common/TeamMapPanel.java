@@ -11,8 +11,9 @@ import java.util.HashMap;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-public class TeamMapPanel extends JPanel {
-	private static final String MAP_IMAGE_PATH = "resources/map.png";
+public class TeamMapPanel extends JPanel implements ThemeAware {
+	private static final String LIGHT_MAP_IMAGE_PATH = "resources/map.png";
+	private static final String DARK_MAP_IMAGE_PATH = "resources/map(dark).png";
 	private static final Color POINT_COLOR = new Color(210, 48, 48);
 	private static final int TEAM_POINT_RADIUS = 6;
 	private static final double SOURCE_IMAGE_WIDTH = 1000.0;
@@ -39,7 +40,7 @@ public class TeamMapPanel extends JPanel {
 
 	private void organize() {
 		setOpaque(true);
-		setBackground(Color.WHITE);
+		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
 		setPreferredSize(new Dimension(PREFERRED_WIDTH, PREFERRED_HEIGHT));
 	}
 
@@ -48,8 +49,18 @@ public class TeamMapPanel extends JPanel {
 	}
 
 	private void loadImage() {
-		ImageIcon icon = new ImageIcon(MAP_IMAGE_PATH);
+		ImageIcon icon = new ImageIcon(getMapImagePath());
+		if (icon.getIconWidth() <= 0 || icon.getIconHeight() <= 0) {
+			icon = new ImageIcon(LIGHT_MAP_IMAGE_PATH);
+		}
 		mapImage = icon.getImage();
+	}
+
+	private String getMapImagePath() {
+		if (DashboardPanelUtil.isDarkMode()) {
+			return DARK_MAP_IMAGE_PATH;
+		}
+		return LIGHT_MAP_IMAGE_PATH;
 	}
 
 	private void createZones() {
@@ -173,6 +184,13 @@ public class TeamMapPanel extends JPanel {
 
 	public void setTeamSelectionAction(Runnable teamSelectionAction) {
 		this.teamSelectionAction = teamSelectionAction;
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		loadImage();
+		repaint();
 	}
 
 	private class MapMouseListener implements MouseListener {

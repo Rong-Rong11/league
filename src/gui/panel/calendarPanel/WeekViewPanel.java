@@ -10,9 +10,11 @@ import javax.swing.JPanel;
 import java.awt.Font;
 
 import data.calendar.GameDay;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import process.orchestrator.GUIInterface;
 
-public class WeekViewPanel extends JPanel {
+public class WeekViewPanel extends JPanel implements ThemeAware {
 	private static final long serialVersionUID = 1L;
 	private static final Font TEXT_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 11);
 
@@ -38,6 +40,7 @@ public class WeekViewPanel extends JPanel {
 
 	private void organize() {
 		setLayout(new BorderLayout());
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
 		add(matchDisplayPanel, BorderLayout.CENTER);
 	}
 
@@ -165,6 +168,7 @@ public class WeekViewPanel extends JPanel {
 	private void showWaitingState() {
 		JLabel waitingLabel = new JLabel("Saison non initialisee.");
 		waitingLabel.setFont(TEXT_FONT);
+		waitingLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		waitingLabel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 		matchDisplayPanel.add(waitingLabel, BorderLayout.CENTER);
 		matchDisplayPanel.revalidate();
@@ -212,5 +216,11 @@ public class WeekViewPanel extends JPanel {
 		public void open(GameDay gameDay, LocalDate day) {
 			openMatchDashboard(gameDay, day);
 		}
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		updateDisplay();
 	}
 }

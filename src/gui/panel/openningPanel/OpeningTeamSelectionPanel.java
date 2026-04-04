@@ -10,7 +10,9 @@ import data.team.finance.marketsize.MarketSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
 import gui.panel.common.ButtonStyleUtil;
+import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
+import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import process.utility.TeamDisplayUtil;
 
@@ -26,7 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class OpeningTeamSelectionPanel extends JPanel {
+public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 
 	private static final Color HEADER_BACKGROUND = new Color(0x17, 0x31, 0x74);
 	private static final Color TITLE_COLOR = new Color(110, 117, 131);
@@ -43,6 +45,7 @@ public class OpeningTeamSelectionPanel extends JPanel {
 	private JButton smallMarketButton;
 	private FinancialPolicy selectedPolicy;
 	private MarketSize selectedMarketSize;
+	private JLabel[] sectionTitleLabels;
 
 	public OpeningTeamSelectionPanel() {
 		create();
@@ -73,6 +76,7 @@ public class OpeningTeamSelectionPanel extends JPanel {
 		ButtonStyleUtil.styleToggleButton(mediumMarketButton);
 		ButtonStyleUtil.styleToggleButton(smallMarketButton);
 		enlargeSelectionButtons();
+		applyTheme();
 	}
 
 	private void enlargeSelectionButtons() {
@@ -138,7 +142,7 @@ public class OpeningTeamSelectionPanel extends JPanel {
 
 		JLabel titleLabel = new JLabel(title);
 		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
-		titleLabel.setForeground(TITLE_COLOR);
+		storeSectionTitleLabel(titleLabel);
 
 		JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 12, 0));
 		buttonPanel.setOpaque(false);
@@ -151,6 +155,18 @@ public class OpeningTeamSelectionPanel extends JPanel {
 		sectionPanel.add(titleLabel, BorderLayout.NORTH);
 		sectionPanel.add(buttonPanel, BorderLayout.CENTER);
 		return sectionPanel;
+	}
+
+	private void storeSectionTitleLabel(JLabel titleLabel) {
+		if (sectionTitleLabels == null) {
+			sectionTitleLabels = new JLabel[2];
+		}
+		for (int i = 0; i < sectionTitleLabels.length; i++) {
+			if (sectionTitleLabels[i] == null) {
+				sectionTitleLabels[i] = titleLabel;
+				return;
+			}
+		}
 	}
 
 	public void updateTeam(Team team) {
@@ -236,5 +252,18 @@ public class OpeningTeamSelectionPanel extends JPanel {
 
 	public JButton getSmallMarketButton() {
 		return smallMarketButton;
+	}
+
+	@Override
+	public void applyTheme() {
+		if (sectionTitleLabels != null) {
+			for (int i = 0; i < sectionTitleLabels.length; i++) {
+				if (sectionTitleLabels[i] != null) {
+					sectionTitleLabels[i].setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+				}
+			}
+		}
+		refreshPolicyButtons();
+		refreshMarketSizeButtons();
 	}
 }

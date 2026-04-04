@@ -10,9 +10,11 @@ import javax.swing.JPanel;
 
 import data.player.Player;
 import data.team.Team;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import process.utility.PlayerStatUtil;
 
-public class MapTeamPlayersPanel extends JPanel {
+public class MapTeamPlayersPanel extends JPanel implements ThemeAware {
 	private JLabel[] playerLabels;
 
 	public MapTeamPlayersPanel() {
@@ -26,7 +28,6 @@ public class MapTeamPlayersPanel extends JPanel {
 		for (int i = 0; i < playerLabels.length; i++) {
 			playerLabels[i] = new JLabel("-");
 			playerLabels[i].setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
-			playerLabels[i].setForeground(new Color(40, 40, 40));
 		}
 	}
 
@@ -36,6 +37,7 @@ public class MapTeamPlayersPanel extends JPanel {
 		for (int i = 0; i < playerLabels.length; i++) {
 			add(playerLabels[i]);
 		}
+		applyTheme();
 	}
 
 	public void updateTeam(Team team, boolean currentSeasonSelected) {
@@ -61,6 +63,13 @@ public class MapTeamPlayersPanel extends JPanel {
 			} else {
 				playerLabels[i].setText("-");
 			}
+		}
+	}
+
+	@Override
+	public void applyTheme() {
+		for (int i = 0; i < playerLabels.length; i++) {
+			playerLabels[i].setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		}
 	}
 

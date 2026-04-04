@@ -12,12 +12,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import data.team.Team;
+import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.common.RoundedButton;
+import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import process.orchestrator.GUIInterface;
 
-public class MapTeamSummaryPanel extends JPanel {
+public class MapTeamSummaryPanel extends JPanel implements ThemeAware {
 	private static final Color OPEN_ROSTER_BUTTON_COLOR = new Color(0x17, 0x31, 0x74);
 
 	private final GUIInterface guiInterface;
@@ -27,12 +29,14 @@ public class MapTeamSummaryPanel extends JPanel {
 	private JLabel averageNoteLabel;
 	private JButton openRosterButton;
 	private TeamLogoPanel teamLogoPanel;
+	private JLabel[] infoTitleLabels;
 
 	public MapTeamSummaryPanel(GUIInterface guiInterface) {
 		this.guiInterface = guiInterface;
 		create();
 		organize();
 		updateTeam(null, true);
+		applyTheme();
 	}
 
 	private void create() {
@@ -83,15 +87,26 @@ public class MapTeamSummaryPanel extends JPanel {
 
 		JLabel titleLabel = new JLabel(title);
 		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		titleLabel.setForeground(new Color(110, 117, 131));
 		valueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-		valueLabel.setForeground(new Color(0x17, 0x31, 0x74));
+		storeInfoTitleLabel(titleLabel);
 
 		row.add(titleLabel);
 		row.add(Box.createVerticalStrut(2));
 		row.add(valueLabel);
 		row.setBorder(BorderFactory.createEmptyBorder(0, 0, 4, 0));
 		return row;
+	}
+
+	private void storeInfoTitleLabel(JLabel titleLabel) {
+		if (infoTitleLabels == null) {
+			infoTitleLabels = new JLabel[3];
+		}
+		for (int i = 0; i < infoTitleLabels.length; i++) {
+			if (infoTitleLabels[i] == null) {
+				infoTitleLabels[i] = titleLabel;
+				return;
+			}
+		}
 	}
 
 	public void updateTeam(Team team, boolean currentSeasonSelected) {
@@ -135,5 +150,20 @@ public class MapTeamSummaryPanel extends JPanel {
 
 	public JButton getOpenRosterButton() {
 		return openRosterButton;
+	}
+
+	@Override
+	public void applyTheme() {
+		teamNameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		budgetLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		capacityLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		averageNoteLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		if (infoTitleLabels != null) {
+			for (int i = 0; i < infoTitleLabels.length; i++) {
+				if (infoTitleLabels[i] != null) {
+					infoTitleLabels[i].setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+				}
+			}
+		}
 	}
 }

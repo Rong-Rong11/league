@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 import data.calendar.GameDay;
 import data.sport.setup.Game;
+import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedPanel;
 import process.utility.TeamDisplayUtil;
 
@@ -23,6 +24,12 @@ public class WeekScheduleCardFactory {
 	private static final Color DISPLAYED_AFTERNOON_COLOR = new Color(0xF2, 0xE4, 0xB8);
 	private static final Color DISPLAYED_EVENING_COLOR = new Color(0xD9, 0xEC, 0xF0);
 	private static final Color DISPLAYED_NIGHT_COLOR = new Color(0x8C, 0x88, 0xE8);
+	private static final Color DARK_AFTERNOON_COLOR = new Color(0x7A, 0x6A, 0x33);
+	private static final Color DARK_EVENING_COLOR = new Color(0x2E, 0x53, 0x61);
+	private static final Color DARK_NIGHT_COLOR = new Color(0x33, 0x2F, 0x7A);
+	private static final Color DARK_DISPLAYED_AFTERNOON_COLOR = new Color(0x64, 0x57, 0x2A);
+	private static final Color DARK_DISPLAYED_EVENING_COLOR = new Color(0x2A, 0x49, 0x55);
+	private static final Color DARK_DISPLAYED_NIGHT_COLOR = new Color(0x2D, 0x2A, 0x67);
 
 	public ArrayList<Game> getGamesForSlot(GameDay gameDay, String slotKey) {
 		ArrayList<Game> slotGames = new ArrayList<Game>();
@@ -53,7 +60,7 @@ public class WeekScheduleCardFactory {
 		String homeTeam = TeamDisplayUtil.getAbbreviation(game.getGameContext().getHomeTeam());
 		JLabel matchupLabel = new JLabel(awayTeam + " vs " + homeTeam);
 		matchupLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
-		matchupLabel.setForeground(isDarkSlot(slotKey) && !game.isDisplayed() ? Color.WHITE : TITLE_COLOR);
+		matchupLabel.setForeground(getTitleColor(slotKey));
 		return matchupLabel;
 	}
 
@@ -64,7 +71,7 @@ public class WeekScheduleCardFactory {
 		if (game.isDisplayed()) {
 			JLabel scoreLabel = new JLabel(game.getAwayFinalScore() + " - " + game.getHomeFinalScore());
 			scoreLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
-			scoreLabel.setForeground(TITLE_COLOR);
+			scoreLabel.setForeground(getTitleColor(slotKey));
 			content.add(scoreLabel);
 		}
 		content.add(buildTeamsLabel(game, slotKey));
@@ -76,11 +83,20 @@ public class WeekScheduleCardFactory {
 				+ TeamDisplayUtil.getShortName(game.getGameContext().getHomeTeam());
 		JLabel teamsLabel = new JLabel(detailText);
 		teamsLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
-		teamsLabel.setForeground(isDarkSlot(slotKey) && !game.isDisplayed() ? Color.WHITE : SUBTITLE_COLOR);
+		teamsLabel.setForeground(getSubtitleColor(slotKey));
 		return teamsLabel;
 	}
 
 	private Color getSlotColor(String slotKey) {
+		if (DashboardPanelUtil.isDarkMode()) {
+			if ("AFTERNOON".equals(slotKey)) {
+				return DARK_AFTERNOON_COLOR;
+			}
+			if ("EVENING".equals(slotKey)) {
+				return DARK_EVENING_COLOR;
+			}
+			return DARK_NIGHT_COLOR;
+		}
 		if ("AFTERNOON".equals(slotKey)) {
 			return AFTERNOON_COLOR;
 		}
@@ -91,6 +107,18 @@ public class WeekScheduleCardFactory {
 	}
 
 	private Color getCardColor(Game game, String slotKey) {
+		if (DashboardPanelUtil.isDarkMode()) {
+			if (!game.isDisplayed()) {
+				return getSlotColor(slotKey);
+			}
+			if ("AFTERNOON".equals(slotKey)) {
+				return DARK_DISPLAYED_AFTERNOON_COLOR;
+			}
+			if ("EVENING".equals(slotKey)) {
+				return DARK_DISPLAYED_EVENING_COLOR;
+			}
+			return DARK_DISPLAYED_NIGHT_COLOR;
+		}
 		if (!game.isDisplayed()) {
 			return getSlotColor(slotKey);
 		}
@@ -105,5 +133,25 @@ public class WeekScheduleCardFactory {
 
 	private boolean isDarkSlot(String slotKey) {
 		return "NIGHT".equals(slotKey);
+	}
+
+	private Color getTitleColor(String slotKey) {
+		if (DashboardPanelUtil.isDarkMode()) {
+			return Color.WHITE;
+		}
+		if (isDarkSlot(slotKey)) {
+			return Color.WHITE;
+		}
+		return TITLE_COLOR;
+	}
+
+	private Color getSubtitleColor(String slotKey) {
+		if (DashboardPanelUtil.isDarkMode()) {
+			return new Color(230, 234, 240);
+		}
+		if (isDarkSlot(slotKey)) {
+			return Color.WHITE;
+		}
+		return SUBTITLE_COLOR;
 	}
 }

@@ -13,13 +13,14 @@ import javax.swing.SwingUtilities;
 import data.sport.setup.Game;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import gui.panel.matchPanel.liveMatchPanel.LiveActionsPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveMatchHeaderPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveTeamStatsPanel;
 import process.orchestrator.GUIInterface;
 import process.service.live.LiveMatchState;
 
-public class LiveMatchDashboard extends JPanel implements Runnable {
+public class LiveMatchDashboard extends JPanel implements Runnable, ThemeAware {
 	private static final int DASHBOARD_SPACING = 16;
 	private static final int SIDE_COLUMN_WIDTH = 270;
 	private static final int LIVE_ROWS = 10;
@@ -179,6 +180,12 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 				backToMatchAction.run();
 			}
 		}
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		DashboardPanelUtil.refreshChildrenTheme(this);
 	}
 
 	private class PlayAction implements ActionListener {

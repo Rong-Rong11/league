@@ -14,6 +14,7 @@ import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.TeamMapPanel;
+import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.MapTeamPlayersPanel;
 import gui.panel.mapPanel.effectifPanel.MapTeamSummaryPanel;
 import process.orchestrator.GUIInterface;
@@ -21,7 +22,7 @@ import process.orchestrator.GUIInterface;
 /**
  * Dashboard dedie a la page Carte.
  */
-public class MapDashboard extends JPanel {
+public class MapDashboard extends JPanel implements ThemeAware {
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 64;
 	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 270;
@@ -143,5 +144,11 @@ public class MapDashboard extends JPanel {
 		public void run() {
 			setSelectedTeam(guiInterface.getTeamByName(mapPanel.getSelectedTeamName()));
 		}
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		DashboardPanelUtil.refreshChildrenTheme(this);
 	}
 }

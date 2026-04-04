@@ -8,8 +8,10 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 
-public class LiveActionsPanel extends JPanel {
+public class LiveActionsPanel extends JPanel implements ThemeAware {
 	private JLabel[] actionRows;
 	private JLabel messageLabel;
 
@@ -31,6 +33,7 @@ public class LiveActionsPanel extends JPanel {
 
 		add(rowsPanel, BorderLayout.NORTH);
 		add(messageLabel, BorderLayout.CENTER);
+		applyTheme();
 	}
 
 	public void updateRows(String[] rows, String message) {
@@ -44,8 +47,16 @@ public class LiveActionsPanel extends JPanel {
 	private JLabel createRowLabel() {
 		JLabel row = new JLabel(" ");
 		row.setOpaque(true);
-		row.setBackground(new Color(236, 240, 245));
 		row.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
 		return row;
+	}
+
+	@Override
+	public void applyTheme() {
+		messageLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		for (int i = 0; i < actionRows.length; i++) {
+			actionRows[i].setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
+			actionRows[i].setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		}
 	}
 }

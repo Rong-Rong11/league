@@ -11,8 +11,10 @@ import javax.swing.JPanel;
 
 import data.player.Player;
 import gui.panel.common.DashboardCard;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 
-public class PlayerSummaryPanel extends DashboardCard {
+public class PlayerSummaryPanel extends DashboardCard implements ThemeAware {
 	private PlayerPortraitPanel portraitPanel;
 	private JLabel nameLabel;
 	private JLabel infoLabel;
@@ -47,6 +49,7 @@ public class PlayerSummaryPanel extends DashboardCard {
 		add(textPanel, BorderLayout.CENTER);
 
 		setPreferredSize(new Dimension(10, 84));
+		applyTheme();
 	}
 
 	public void updateSummary(Player player, int points) {
@@ -59,5 +62,19 @@ public class PlayerSummaryPanel extends DashboardCard {
 
 		nameLabel.setText(player.getName());
 		infoLabel.setText("Points : " + points);
+	}
+
+	@Override
+	public void applyTheme() {
+		super.applyTheme();
+		if (nameLabel != null) {
+			nameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		}
+		if (infoLabel != null) {
+			infoLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		}
+		if (portraitPanel != null) {
+			portraitPanel.applyTheme();
+		}
 	}
 }
