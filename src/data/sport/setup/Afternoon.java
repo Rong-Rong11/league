@@ -5,4 +5,9 @@ public class Afternoon extends GameMoment {
       super();
    }
 
+   @Override
+   public String getSlotKey() {
+      return "AFTERNOON";
+   }
+
 }

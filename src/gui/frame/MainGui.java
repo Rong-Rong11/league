@@ -147,7 +147,7 @@ public class MainGui extends JFrame {
 			}
 
 			calendarDashboard.startSeason();
-			matchDashboard.loadGamesOfDay(guiInterface.getCurrentDate());
+			matchDashboard.loadGamesOfDay(guiInterface.getMatchDisplayDate());
 			sidebar.setActiveSection("match");
 			dashboardLayout.show(dashboardPanel, "match");
 			rootLayout.show(rootPanel, "main");
@@ -172,7 +172,6 @@ public class MainGui extends JFrame {
 		@Override
 		public void run() {
 			calendarDashboard.refreshSeasonState();
-			matchDashboard.refreshSelectedGame();
 			sidebar.setActiveSection("match");
 			dashboardLayout.show(dashboardPanel, "match");
 		}

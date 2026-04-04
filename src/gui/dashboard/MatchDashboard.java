@@ -100,6 +100,8 @@ public class MatchDashboard extends JPanel {
 
 	private void actions() {
 		matchDayListPanel.setMatchSelectionListener(new DashboardMatchSelectionListener());
+		headerPanel.setPreviousDayAction(new PreviousDayAction());
+		headerPanel.setNextDayAction(new NextDayAction());
 	}
 
 	public LocalDate getSelectedDate() {
@@ -115,6 +117,10 @@ public class MatchDashboard extends JPanel {
 	}
 
 	public void loadGamesOfDay(LocalDate date) {
+		if (date == null) {
+			resetSelectedGame();
+			return;
+		}
 		selectedDate = date;
 		GameDay gameDay = guiInterface.getGameDay(date);
 		showGameDay(gameDay, date);
@@ -136,6 +142,13 @@ public class MatchDashboard extends JPanel {
 	}
 
 	public void refreshSelectedGame() {
+		if (guiInterface.isSeasonInitialized()) {
+			LocalDate matchDisplayDate = guiInterface.getMatchDisplayDate();
+			if (matchDisplayDate != null && !matchDisplayDate.equals(selectedDate)) {
+				loadGamesOfDay(matchDisplayDate);
+				return;
+			}
+		}
 		if (selectedGameDay != null) {
 			matchDayListPanel.showGameDay(selectedGameDay);
 		}
@@ -172,6 +185,12 @@ public class MatchDashboard extends JPanel {
 		return "Jour " + dayNumber;
 	}
 
+	private void showAdjacentGameDay(LocalDate date) {
+		if (date != null) {
+			loadGamesOfDay(date);
+		}
+	}
+
 	private class DashboardMatchSelectionListener implements MatchSelectionListener {
 		@Override
 		public void onMatchSelected(Game game) {
@@ -194,11 +213,10 @@ public class MatchDashboard extends JPanel {
 				if (choice != 0) {
 					return;
 				}
-				guiInterface.simulateDay(selectedDate);
-				guiInterface.displayGameDay(selectedDate);
+				boolean liveMatchAvailable = guiInterface.makeLiveMatchAvailable(game, selectedDate);
 				showGameDay(guiInterface.getGameDay(selectedDate), selectedDate);
 				updateSelectedGame(game);
-				if (!guiInterface.isLiveMatchAvailable(game)) {
+				if (!liveMatchAvailable) {
 					JOptionPane.showMessageDialog(MatchDashboard.this,
 							"Le live match reste indisponible apres la simulation de cette journee.",
 							"Live match indisponible", JOptionPane.WARNING_MESSAGE);
@@ -208,6 +226,26 @@ public class MatchDashboard extends JPanel {
 			if (openLiveMatchAction != null) {
 				openLiveMatchAction.run();
 			}
+		}
+	}
+
+	private class PreviousDayAction implements java.awt.event.ActionListener {
+		@Override
+		public void actionPerformed(java.awt.event.ActionEvent e) {
+			if (!guiInterface.isSeasonInitialized() || selectedDate == null) {
+				return;
+			}
+			showAdjacentGameDay(guiInterface.getPreviousGameDay(selectedDate.minusDays(1)));
+		}
+	}
+
+	private class NextDayAction implements java.awt.event.ActionListener {
+		@Override
+		public void actionPerformed(java.awt.event.ActionEvent e) {
+			if (!guiInterface.isSeasonInitialized() || selectedDate == null) {
+				return;
+			}
+			showAdjacentGameDay(guiInterface.getNextGameDay(selectedDate.plusDays(1)));
 		}
 	}
 }
