@@ -107,6 +107,18 @@ public class GameManager {
 		return league.getReagularSeason().getRanking().getEastRanking().get(1);
 	}
 
+	public ArrayList<Team> getGlobalRanking() {
+		return regularSeasonRankingManager.getGlobalRanking(league);
+	}
+
+	public ArrayList<Team> getEastRanking() {
+		return regularSeasonRankingManager.getEastRanking();
+	}
+
+	public ArrayList<Team> getWestRanking() {
+		return regularSeasonRankingManager.getWestRanking();
+	}
+
 	public void simulateFirstRoundDay(LocalDate date, int month) {
 		simulateManagedPlayoffDay(date, month, firstRoundPlayoffManager);
 	}

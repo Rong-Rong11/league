@@ -31,6 +31,7 @@ public class MainGui extends JFrame {
 	private CalendarDashboard calendarDashboard;
 	private MatchDashboard matchDashboard;
 	private LiveMatchDashboard liveMatchDashboard;
+	private RankingDashboard rankingDashboard;
 	private MapDashboard mapDashboard;
 	private RosterDashboard rosterDashboard;
 	private GUIInterface guiInterface;
@@ -89,7 +90,8 @@ public class MainGui extends JFrame {
 		calendarDashboard = new CalendarDashboard(guiInterface, matchDashboard, new ShowMatchDashboardAction(),
 				rosterDashboard, mapDashboard);
 		dashboardPanel.add(calendarDashboard, "calendar");
-		dashboardPanel.add(new RankingDashboard(), "ranking");
+		rankingDashboard = new RankingDashboard(guiInterface);
+		dashboardPanel.add(rankingDashboard, "ranking");
 		dashboardPanel.add(new FinanceDashboard(), "finance");
 		dashboardPanel.add(mapDashboard, "map");
 		dashboardPanel.add(rosterDashboard, "roster");
@@ -126,6 +128,9 @@ public class MainGui extends JFrame {
 			}
 			if ("match".equals(cardName)) {
 				matchDashboard.refreshSelectedGame();
+			}
+			if ("ranking".equals(cardName)) {
+				rankingDashboard.refreshRanking();
 			}
 			sidebar.setActiveSection(cardName);
 			dashboardLayout.show(dashboardPanel, cardName);

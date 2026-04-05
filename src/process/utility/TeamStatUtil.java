@@ -1,7 +1,10 @@
 package process.utility;
 
+import java.util.ArrayList;
+
 import data.league.League;
 import data.player.Player;
+import data.sport.setup.Game;
 import data.team.Team;
 import process.repositery.TeamRepositery;
 
@@ -35,6 +38,40 @@ public class TeamStatUtil {
          return 0;
       }
       return total / count;
+   }
+
+   public static ArrayList<Boolean> getLastResults(Team team, int numberOfGames) {
+      ArrayList<Boolean> results = new ArrayList<Boolean>();
+
+      if (team == null || team.getSchedule() == null || numberOfGames <= 0) {
+         return results;
+      }
+
+      for (Game game : team.getSchedule().getScheduledGames().descendingMap().values()) {
+         if (game.getWinner() == null) {
+            continue;
+         }
+
+         results.add(game.getWinner().equals(team));
+         if (results.size() == numberOfGames) {
+            break;
+         }
+      }
+      return results;
+   }
+
+   public static int getBestWinStreak(Team team) {
+      if (team == null || team.getTeamPerformance() == null) {
+         return 0;
+      }
+      return Math.max(team.getTeamPerformance().getCurrentWinStreak(), team.getTeamPerformance().getMaxWinsStreak());
+   }
+
+   public static int getBestLoseStreak(Team team) {
+      if (team == null || team.getTeamPerformance() == null) {
+         return 0;
+      }
+      return Math.max(team.getTeamPerformance().getCurrentLoseStreak(), team.getTeamPerformance().getMaxLoseStreak());
    }
 
    public static Team findTeamByName(String teamName) {

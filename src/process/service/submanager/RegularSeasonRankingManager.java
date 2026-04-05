@@ -51,6 +51,22 @@ public class RegularSeasonRankingManager {
         simulatedGameDay.add(gameDay);
     }
 
+    public ArrayList<Team> getGlobalRanking(League league) {
+        ArrayList<Team> globalRanking = new ArrayList<Team>();
+        globalRanking.addAll(westTeams);
+        globalRanking.addAll(eastTeams);
+        Collections.sort(globalRanking, new NbaRegularSeasonTeamComparator(getSimulatedGames(), league));
+        return globalRanking;
+    }
+
+    public ArrayList<Team> getEastRanking() {
+        return new ArrayList<Team>(eastTeams);
+    }
+
+    public ArrayList<Team> getWestRanking() {
+        return new ArrayList<Team>(westTeams);
+    }
+
     private ArrayList<Game> getSimulatedGames() {
         ArrayList<Game> games = new ArrayList<>();
         for (GameDay gameDay : simulatedGameDay) {

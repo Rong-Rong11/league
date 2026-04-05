@@ -11,6 +11,7 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.SectionTitle;
 import gui.panel.rankingPanel.RankingPerformancePanel;
 import gui.panel.rankingPanel.RankingTablePanel;
+import process.orchestrator.GUIInterface;
 
 /**
  * Dashboard dédié à la page Classement.
@@ -18,21 +19,28 @@ import gui.panel.rankingPanel.RankingTablePanel;
 public class RankingDashboard extends JPanel {
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
-	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
+	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 250;
 	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 300;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 
+	private GUIInterface guiInterface;
 	private RankingTablePanel rankingTablePanel;
 	private RankingPerformancePanel rankingPerformancePanel;
 
-	public RankingDashboard() {
+	public RankingDashboard(GUIInterface guiInterface) {
+		this.guiInterface = guiInterface;
 		create();
 		organize();
 	}
 
 	private void create() {
-		rankingTablePanel = new RankingTablePanel();
-		rankingPerformancePanel = new RankingPerformancePanel();
+		rankingTablePanel = new RankingTablePanel(guiInterface);
+		rankingPerformancePanel = new RankingPerformancePanel(guiInterface);
+	}
+
+	public void refreshRanking() {
+		rankingTablePanel.refreshRanking();
+		rankingPerformancePanel.refreshPerformance();
 	}
 
 	private void organize() {
@@ -50,7 +58,7 @@ public class RankingDashboard extends JPanel {
 	}
 
 	private JPanel buildHeader() {
-		JPanel header = new SectionTitle("CLASSEMENT GÉNÉRAL", "Conférence Est - Saison régulière");
+		JPanel header = new SectionTitle("CLASSEMENT GÉNÉRAL", "");
 		header.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, IDEAL_DASHBOARD_HEADER_HEIGHT));
 		return header;
 	}
@@ -63,7 +71,7 @@ public class RankingDashboard extends JPanel {
 	}
 
 	private JPanel buildCenterColumn() {
-		return new BuildBox("CLASSEMENT COMPLET", "12 équipes", rankingTablePanel);
+		return new BuildBox("", "", rankingTablePanel);
 	}
 
 	private JPanel buildRightColumn() {
