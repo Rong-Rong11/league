@@ -5,23 +5,34 @@ import data.team.finance.financialpolicy.AmbitiousPolicy;
 import data.team.finance.financialpolicy.BalancedPolicy;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.financialpolicy.ThriftyPolicy;
+import data.team.finance.marketsize.LargeSize;
+import data.team.finance.marketsize.MarketSize;
+import data.team.finance.marketsize.MediumSize;
+import data.team.finance.marketsize.SmallSize;
 import gui.panel.common.ButtonStyleUtil;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.RoundedButton;
+import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import process.utility.TeamDisplayUtil;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class OpeningTeamSelectionPanel extends JPanel {
+public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 
 	private static final Color HEADER_BACKGROUND = new Color(0x17, 0x31, 0x74);
 	private static final Color TITLE_COLOR = new Color(110, 117, 131);
+	private static final Dimension SELECTION_BUTTON_SIZE = new Dimension(156, 56);
 
 	private TeamLogoPanel logoPanel;
 	private JLabel cityLabel;
@@ -29,7 +40,12 @@ public class OpeningTeamSelectionPanel extends JPanel {
 	private JButton ambitiousButton;
 	private JButton balancedButton;
 	private JButton thriftyButton;
+	private JButton largeMarketButton;
+	private JButton mediumMarketButton;
+	private JButton smallMarketButton;
 	private FinancialPolicy selectedPolicy;
+	private MarketSize selectedMarketSize;
+	private JLabel[] sectionTitleLabels;
 
 	public OpeningTeamSelectionPanel() {
 		create();
@@ -41,9 +57,12 @@ public class OpeningTeamSelectionPanel extends JPanel {
 		logoPanel = new TeamLogoPanel("", 48);
 		cityLabel = new JLabel("-");
 		teamLabel = new JLabel("-");
-		ambitiousButton = new JButton("Ambitieux");
-		balancedButton = new JButton("Equilibre");
-		thriftyButton = new JButton("Economique");
+		ambitiousButton = new RoundedButton("Ambitieux");
+		balancedButton = new RoundedButton("Equilibre");
+		thriftyButton = new RoundedButton("Economique");
+		largeMarketButton = new RoundedButton("Grand");
+		mediumMarketButton = new RoundedButton("Moyen");
+		smallMarketButton = new RoundedButton("Petit");
 
 		cityLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 		cityLabel.setForeground(Color.WHITE);
@@ -53,11 +72,33 @@ public class OpeningTeamSelectionPanel extends JPanel {
 		ButtonStyleUtil.styleToggleButton(ambitiousButton);
 		ButtonStyleUtil.styleToggleButton(balancedButton);
 		ButtonStyleUtil.styleToggleButton(thriftyButton);
+		ButtonStyleUtil.styleToggleButton(largeMarketButton);
+		ButtonStyleUtil.styleToggleButton(mediumMarketButton);
+		ButtonStyleUtil.styleToggleButton(smallMarketButton);
+		enlargeSelectionButtons();
+		applyTheme();
+	}
+
+	private void enlargeSelectionButtons() {
+		applySelectionButtonSize(ambitiousButton);
+		applySelectionButtonSize(balancedButton);
+		applySelectionButtonSize(thriftyButton);
+		applySelectionButtonSize(largeMarketButton);
+		applySelectionButtonSize(mediumMarketButton);
+		applySelectionButtonSize(smallMarketButton);
+	}
+
+	private void applySelectionButtonSize(JButton button) {
+		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+		button.setPreferredSize(SELECTION_BUTTON_SIZE);
+		button.setMinimumSize(SELECTION_BUTTON_SIZE);
+		button.setBorder(BorderFactory.createEmptyBorder(12, 22, 12, 22));
 	}
 
 	private void organize() {
 		setLayout(new BorderLayout(0, 12));
 		setOpaque(false);
+		setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
 
 		JPanel headerPanel = new JPanel(new BorderLayout(12, 0));
 		headerPanel.setOpaque(true);
@@ -72,24 +113,60 @@ public class OpeningTeamSelectionPanel extends JPanel {
 		namePanel.add(teamLabel);
 		headerPanel.add(namePanel, BorderLayout.CENTER);
 
-		JPanel policyPanel = new JPanel(new BorderLayout(0, 8));
-		policyPanel.setOpaque(false);
+		JPanel contentPanel = new JPanel();
+		contentPanel.setOpaque(false);
+		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-		JLabel titleLabel = new JLabel("POLITIQUE FINANCIERE");
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		titleLabel.setForeground(TITLE_COLOR);
+		JPanel policyPanel = buildButtonSection(
+				"POLITIQUE FINANCIERE",
+				ambitiousButton,
+				balancedButton,
+				thriftyButton);
+		JPanel marketPanel = buildButtonSection(
+				"TAILLE DU MARCHE",
+				largeMarketButton,
+				mediumMarketButton,
+				smallMarketButton);
 
-		JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 8, 0));
-		buttonPanel.setOpaque(false);
-		buttonPanel.add(ambitiousButton);
-		buttonPanel.add(balancedButton);
-		buttonPanel.add(thriftyButton);
-
-		policyPanel.add(titleLabel, BorderLayout.NORTH);
-		policyPanel.add(buttonPanel, BorderLayout.CENTER);
+		contentPanel.add(policyPanel);
+		contentPanel.add(Box.createVerticalStrut(8));
+		contentPanel.add(marketPanel);
 
 		add(headerPanel, BorderLayout.NORTH);
-		add(policyPanel, BorderLayout.CENTER);
+		add(contentPanel, BorderLayout.CENTER);
+	}
+
+	private JPanel buildButtonSection(String title, JButton firstButton, JButton secondButton, JButton thirdButton) {
+		JPanel sectionPanel = new JPanel(new BorderLayout(0, 6));
+		sectionPanel.setOpaque(false);
+
+		JLabel titleLabel = new JLabel(title);
+		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+		storeSectionTitleLabel(titleLabel);
+
+		JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 12, 0));
+		buttonPanel.setOpaque(false);
+		buttonPanel.setPreferredSize(new Dimension(Integer.MAX_VALUE, 56));
+		buttonPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 56));
+		buttonPanel.add(firstButton);
+		buttonPanel.add(secondButton);
+		buttonPanel.add(thirdButton);
+
+		sectionPanel.add(titleLabel, BorderLayout.NORTH);
+		sectionPanel.add(buttonPanel, BorderLayout.CENTER);
+		return sectionPanel;
+	}
+
+	private void storeSectionTitleLabel(JLabel titleLabel) {
+		if (sectionTitleLabels == null) {
+			sectionTitleLabels = new JLabel[2];
+		}
+		for (int i = 0; i < sectionTitleLabels.length; i++) {
+			if (sectionTitleLabels[i] == null) {
+				sectionTitleLabels[i] = titleLabel;
+				return;
+			}
+		}
 	}
 
 	public void updateTeam(Team team) {
@@ -106,7 +183,9 @@ public class OpeningTeamSelectionPanel extends JPanel {
 		teamLabel.setText("selection");
 		setButtonsEnabled(false);
 		selectedPolicy = null;
+		selectedMarketSize = null;
 		refreshPolicyButtons();
+		refreshMarketSizeButtons();
 	}
 
 	private void showTeamState(Team team) {
@@ -115,7 +194,9 @@ public class OpeningTeamSelectionPanel extends JPanel {
 		teamLabel.setText(TeamDisplayUtil.getShortName(team));
 		setButtonsEnabled(true);
 		selectedPolicy = team.getTeamFinance().getFinancialProfil();
+		selectedMarketSize = team.getTeamFinance().getMarketSize();
 		refreshPolicyButtons();
+		refreshMarketSizeButtons();
 	}
 
 	public void setSelectedPolicy(FinancialPolicy selectedPolicy) {
@@ -123,16 +204,30 @@ public class OpeningTeamSelectionPanel extends JPanel {
 		refreshPolicyButtons();
 	}
 
+	public void setSelectedMarketSize(MarketSize selectedMarketSize) {
+		this.selectedMarketSize = selectedMarketSize;
+		refreshMarketSizeButtons();
+	}
+
 	private void setButtonsEnabled(boolean enabled) {
 		ambitiousButton.setEnabled(enabled);
 		balancedButton.setEnabled(enabled);
 		thriftyButton.setEnabled(enabled);
+		largeMarketButton.setEnabled(enabled);
+		mediumMarketButton.setEnabled(enabled);
+		smallMarketButton.setEnabled(enabled);
 	}
 
 	private void refreshPolicyButtons() {
 		ButtonStyleUtil.setToggleButtonSelected(ambitiousButton, selectedPolicy instanceof AmbitiousPolicy);
 		ButtonStyleUtil.setToggleButtonSelected(balancedButton, selectedPolicy instanceof BalancedPolicy);
 		ButtonStyleUtil.setToggleButtonSelected(thriftyButton, selectedPolicy instanceof ThriftyPolicy);
+	}
+
+	private void refreshMarketSizeButtons() {
+		ButtonStyleUtil.setToggleButtonSelected(largeMarketButton, selectedMarketSize instanceof LargeSize);
+		ButtonStyleUtil.setToggleButtonSelected(mediumMarketButton, selectedMarketSize instanceof MediumSize);
+		ButtonStyleUtil.setToggleButtonSelected(smallMarketButton, selectedMarketSize instanceof SmallSize);
 	}
 
 	public JButton getAmbitiousButton() {
@@ -145,5 +240,30 @@ public class OpeningTeamSelectionPanel extends JPanel {
 
 	public JButton getThriftyButton() {
 		return thriftyButton;
+	}
+
+	public JButton getLargeMarketButton() {
+		return largeMarketButton;
+	}
+
+	public JButton getMediumMarketButton() {
+		return mediumMarketButton;
+	}
+
+	public JButton getSmallMarketButton() {
+		return smallMarketButton;
+	}
+
+	@Override
+	public void applyTheme() {
+		if (sectionTitleLabels != null) {
+			for (int i = 0; i < sectionTitleLabels.length; i++) {
+				if (sectionTitleLabels[i] != null) {
+					sectionTitleLabels[i].setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+				}
+			}
+		}
+		refreshPolicyButtons();
+		refreshMarketSizeButtons();
 	}
 }

@@ -15,11 +15,17 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class LiveMatchHeaderPanel extends JPanel {
+import gui.panel.common.RoundedButton;
+import gui.panel.common.RoundedPanel;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
+
+public class LiveMatchHeaderPanel extends RoundedPanel implements ThemeAware {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
-	private static final Color PRIMARY_COLOR = new Color(0x2F, 0x80, 0xA9);
-	private static final Color DANGER_COLOR = new Color(0xE0, 0x00, 0x00);
+	private static final Color PRIMARY_COLOR = new Color(0x17, 0x31, 0x74);
+	private static final Color ACTION_BUTTON_COLOR = new Color(0x17, 0x31, 0x74);
+	private static final Color DANGER_COLOR = DashboardPanelUtil.ACCENT_RED_COLOR;
 	private static final Color TEXT_COLOR = new Color(90, 90, 90);
 
 	private JButton backButton;
@@ -36,25 +42,23 @@ public class LiveMatchHeaderPanel extends JPanel {
 	private JLabel awayScoreLabel;
 	private JLabel quarterLabel;
 	private JLabel quarterTimeLabel;
+	private JLabel dashLabel;
 
 	public LiveMatchHeaderPanel() {
 		super(new BorderLayout(16, 0));
-		setOpaque(true);
-		setBackground(Color.WHITE);
-		setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(225, 225, 225)),
-				BorderFactory.createEmptyBorder(12, 16, 12, 16)));
+		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
 
-		backButton = new JButton("Retour");
-		playButton = new JButton("Play");
-		nextQuarterButton = new JButton("Quart");
-		pauseButton = new JButton("Pause");
+		backButton = new RoundedButton("Retour");
+		playButton = new RoundedButton("Play");
+		nextQuarterButton = new RoundedButton("Quart");
+		pauseButton = new RoundedButton("Pause");
 		homeLogoPanel = new TeamLogoPanel("", 56);
 		awayLogoPanel = new TeamLogoPanel("", 56);
 		homeNameLabel = createNameLabel();
 		awayNameLabel = createNameLabel();
 		homeRoleLabel = createRoleLabel("Domicile");
-		awayRoleLabel = createRoleLabel("Extérieur");
+		awayRoleLabel = createRoleLabel("Exterieur");
 		homeScoreLabel = createScoreLabel(PRIMARY_COLOR);
 		awayScoreLabel = createScoreLabel(TEXT_COLOR);
 		quarterLabel = new JLabel("Q1", JLabel.CENTER);
@@ -66,6 +70,7 @@ public class LiveMatchHeaderPanel extends JPanel {
 		add(buildLeftPanel(), BorderLayout.WEST);
 		add(buildCenterPanel(), BorderLayout.CENTER);
 		add(buildRightPanel(), BorderLayout.EAST);
+		applyTheme();
 	}
 
 	public JButton getBackButton() {
@@ -121,7 +126,8 @@ public class LiveMatchHeaderPanel extends JPanel {
 		panel.add(homeLogoPanel);
 		panel.add(buildTeamPanel(homeNameLabel, homeRoleLabel));
 		panel.add(homeScoreLabel);
-		panel.add(buildDashLabel());
+		dashLabel = buildDashLabel();
+		panel.add(dashLabel);
 		panel.add(awayScoreLabel);
 		panel.add(buildTeamPanel(awayNameLabel, awayRoleLabel));
 		panel.add(awayLogoPanel);
@@ -196,20 +202,43 @@ public class LiveMatchHeaderPanel extends JPanel {
 		backButton.setForeground(TEXT_COLOR);
 		backButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
 
-		styleActionButton(playButton, PRIMARY_COLOR);
+		styleActionButton(playButton, ACTION_BUTTON_COLOR);
 		styleActionButton(nextQuarterButton, new Color(90, 90, 90));
 		styleActionButton(pauseButton, DANGER_COLOR);
 	}
 
 	private void styleActionButton(JButton button, Color background) {
 		button.setFocusPainted(false);
-		button.setOpaque(true);
-		button.setContentAreaFilled(true);
+		button.setOpaque(false);
+		button.setContentAreaFilled(false);
 		button.setBorderPainted(false);
 		button.setBackground(background);
 		button.setForeground(Color.WHITE);
 		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
 		button.setPreferredSize(new Dimension(84, 34));
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		homeNameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		awayNameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		homeRoleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		awayRoleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		homeScoreLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		awayScoreLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		quarterLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		quarterTimeLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		if (dashLabel != null) {
+			dashLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		}
+		if (DashboardPanelUtil.isDarkMode()) {
+			backButton.setBackground(new Color(72, 78, 90));
+			backButton.setForeground(Color.WHITE);
+		} else {
+			backButton.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
+			backButton.setForeground(DashboardPanelUtil.BUTTON_TEXT_COLOR);
+		}
 	}
 
 }

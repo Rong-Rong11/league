@@ -3,10 +3,16 @@ package gui.panel.calendarPanel;
 import data.calendar.GameDay;
 import data.sport.setup.Game;
 import gui.dashboard.MatchDashboard;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.RoundedPanel;
+import gui.panel.common.ThemeAware;
 import process.utility.CalendarUtilitary;
 import process.utility.TeamDisplayUtil;
 
 import java.awt.Color;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -21,15 +27,22 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class MonthViewPanel extends JPanel {
+public class MonthViewPanel extends JPanel implements ThemeAware {
 	private static final String[] DAY_NAMES = { "LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM" };
-	private static final Color CURRENT_DAY_COLOR = new Color(0x2F, 0x80, 0xA9);
+	private static final Color GRID_COLOR = new Color(220, 224, 230);
+	private static final Color HEADER_BACKGROUND = new Color(0x17, 0x31, 0x74);
+	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
+	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
+	private static final Color CURRENT_DAY_COLOR = DashboardPanelUtil.ACCENT_RED_COLOR;
+	private static final Color DISPLAYED_DAY_COLOR = new Color(245, 247, 250);
+	private static final Color OTHER_MONTH_COLOR = new Color(245, 246, 248);
+	private static final Color MATCH_CHIP_COLOR = new Color(236, 242, 250);
 	private MatchDashboard matchDashboard;
 	private Runnable showMatchDashboardAction;
 
 	public MonthViewPanel() {
 		setLayout(new GridLayout(0, 7));
-		setBackground(Color.WHITE);
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
 	}
 
 	public void showMonth(YearMonth displayedMonth, LocalDate currentDate, HashMap<LocalDate, GameDay> calendar) {
@@ -60,17 +73,18 @@ public class MonthViewPanel extends JPanel {
 	private JLabel buildDayNameLabel(String text) {
 		JLabel label = new JLabel(text, JLabel.CENTER);
 		label.setOpaque(true);
-		label.setBackground(Color.WHITE);
-		label.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
+		label.setBackground(HEADER_BACKGROUND);
+		label.setForeground(Color.WHITE);
+		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+		label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, getGridColor()));
 		return label;
 	}
 
 	private JPanel buildDayPanel(LocalDate date, YearMonth displayedMonth, GameDay gameDay, LocalDate currentDate) {
-		JPanel dayPanel = new JPanel();
-		dayPanel.setLayout(new BoxLayout(dayPanel, BoxLayout.Y_AXIS));
+		JPanel dayPanel = new JPanel(new BorderLayout(0, 8));
 		dayPanel.setOpaque(true);
-		dayPanel.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
-		dayPanel.setBackground(Color.WHITE);
+		dayPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, getGridColor()));
+		dayPanel.setBackground(getDefaultDayBackground());
 		boolean sameMonth = isSameMonth(date, displayedMonth);
 
 		if (sameMonth && gameDay != null && !gameDay.isEmpty()) {
@@ -78,36 +92,80 @@ public class MonthViewPanel extends JPanel {
 		}
 
 		if (gameDay != null && gameDay.isDisplayed()) {
-			dayPanel.setBackground(new Color(230, 230, 230));
+			dayPanel.setBackground(getDisplayedDayBackground());
+		}
+		if (!sameMonth) {
+			dayPanel.setBackground(getOtherMonthBackground());
 		}
 
-		JLabel dayNumberLabel = new JLabel(String.valueOf(date.getDayOfMonth()));
+		JPanel topPanel = new JPanel(new BorderLayout());
+		topPanel.setOpaque(false);
+		topPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 0, 8));
+
+		JLabel dayNumberLabel = new JLabel(String.valueOf(date.getDayOfMonth()), JLabel.CENTER);
+		dayNumberLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
 		if (!sameMonth) {
-			dayNumberLabel.setForeground(Color.LIGHT_GRAY);
+			dayNumberLabel.setForeground(getOutsideMonthTextColor());
+		} else {
+			dayNumberLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		}
 		if (date.equals(currentDate)) {
-			dayNumberLabel.setOpaque(true);
-			dayNumberLabel.setBackground(CURRENT_DAY_COLOR);
+			RoundedPanel currentDayBadge = new RoundedPanel(18);
+			currentDayBadge.setLayout(new BorderLayout());
+			currentDayBadge.setBackground(CURRENT_DAY_COLOR);
+			currentDayBadge.setPreferredSize(new Dimension(34, 28));
+			currentDayBadge.setMinimumSize(new Dimension(34, 28));
+			currentDayBadge.setMaximumSize(new Dimension(34, 28));
 			dayNumberLabel.setForeground(Color.WHITE);
+			currentDayBadge.add(dayNumberLabel, BorderLayout.CENTER);
+			topPanel.add(currentDayBadge, BorderLayout.WEST);
+		} else {
+			topPanel.add(dayNumberLabel, BorderLayout.WEST);
 		}
-		dayPanel.add(dayNumberLabel);
+		dayPanel.add(topPanel, BorderLayout.NORTH);
 
 		if (gameDay != null && !gameDay.isEmpty() && sameMonth) {
+			JPanel matchesPanel = new JPanel();
+			matchesPanel.setOpaque(false);
+			matchesPanel.setLayout(new BoxLayout(matchesPanel, BoxLayout.Y_AXIS));
+			matchesPanel.setBorder(BorderFactory.createEmptyBorder(0, 8, 8, 8));
+
 			ArrayList<Game> displayedGames = getBestGames(gameDay.getGames(), date);
-			int matchCount = Math.min(3, displayedGames.size());
+			int matchCount = Math.min(2, displayedGames.size());
 			for (int i = 0; i < matchCount; i++) {
 				String homeTeam = TeamDisplayUtil.getAbbreviation(displayedGames.get(i).getGameContext().getHomeTeam());
 				String awayTeam = TeamDisplayUtil.getAbbreviation(displayedGames.get(i).getGameContext().getAwayTeam());
-				dayPanel.add(new JLabel(homeTeam + " vs " + awayTeam));
+				boolean hasBottomSpacing = i < matchCount - 1 || gameDay.getGames().size() - matchCount > 0;
+				matchesPanel.add(buildMatchLabel(homeTeam + " vs " + awayTeam, hasBottomSpacing ? 4 : 0));
 			}
 
 			int remainingMatches = gameDay.getGames().size() - matchCount;
 			if (remainingMatches > 0) {
-				dayPanel.add(new JLabel("+" + remainingMatches + " autres"));
+				JLabel otherLabel = new JLabel("+" + remainingMatches + " autres");
+				otherLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+				otherLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+				int topPadding = 0;
+				if (matchCount > 0) {
+					topPadding = 2;
+				}
+				otherLabel.setBorder(BorderFactory.createEmptyBorder(topPadding, 0, 0, 0));
+				matchesPanel.add(otherLabel);
 			}
+			dayPanel.add(matchesPanel, BorderLayout.CENTER);
 		}
 
 		return dayPanel;
+	}
+
+	private JLabel buildMatchLabel(String text, int bottomSpacing) {
+		JLabel label = new JLabel(text);
+		label.setOpaque(true);
+		label.setBackground(getMatchChipColor());
+		label.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+		label.setBorder(BorderFactory.createEmptyBorder(3, 6, 3 + bottomSpacing, 6));
+		label.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
+		return label;
 	}
 
 	private boolean isSameMonth(LocalDate date, YearMonth displayedMonth) {
@@ -125,11 +183,40 @@ public class MonthViewPanel extends JPanel {
 		this.showMatchDashboardAction = showMatchDashboardAction;
 	}
 
+	private Color getGridColor() {
+		return DashboardPanelUtil.isDarkMode() ? new Color(58, 63, 72) : GRID_COLOR;
+	}
+
+	private Color getDefaultDayBackground() {
+		return DashboardPanelUtil.isDarkMode() ? new Color(34, 37, 43) : Color.WHITE;
+	}
+
+	private Color getDisplayedDayBackground() {
+		return DashboardPanelUtil.isDarkMode() ? new Color(42, 46, 54) : DISPLAYED_DAY_COLOR;
+	}
+
+	private Color getOtherMonthBackground() {
+		return DashboardPanelUtil.isDarkMode() ? new Color(30, 33, 39) : OTHER_MONTH_COLOR;
+	}
+
+	private Color getOutsideMonthTextColor() {
+		return DashboardPanelUtil.isDarkMode() ? new Color(111, 118, 128) : new Color(180, 185, 193);
+	}
+
+	private Color getMatchChipColor() {
+		return DashboardPanelUtil.isDarkMode() ? new Color(47, 53, 62) : MATCH_CHIP_COLOR;
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+	}
+
 	private ArrayList<Game> getBestGames(ArrayList<Game> games, LocalDate date) {
 		ArrayList<Game> remainingGames = new ArrayList<Game>(games);
 		ArrayList<Game> bestGames = new ArrayList<Game>();
 
-		while (!remainingGames.isEmpty() && bestGames.size() < 3) {
+		while (!remainingGames.isEmpty() && bestGames.size() < 2) {
 			Game bestGame = remainingGames.get(0);
 
 			for (int i = 1; i < remainingGames.size(); i++) {

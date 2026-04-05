@@ -1,4 +1,4 @@
-package process.service.finance.tools;
+package process.service.finance.tools.game;
 
 import java.time.LocalDate;
 
@@ -13,31 +13,31 @@ import process.utility.CalendarUtilitary;
 import process.utility.FinanceUtilitary;
 import process.visitor.marketsize.CalculateBaseTicketVisitor;
 
-public class GameRevenueSimulator {
+public abstract class GameRevenueCalculator {
 
-    private GameStat gameStat;
+    protected GameStat gameStat;
 
-    public GameRevenueSimulator(GameStat gameStat) {
+    public GameRevenueCalculator(GameStat gameStat) {
         this.gameStat = gameStat;
     }
 
-    public void calculateGameRevenue(Game game, LocalDate date) {
+    public final void calculateGameRevenue(Game game, LocalDate date) {
         Team homeTeam = game.getGameContext().getHomeTeam();
         double popularityRate = calculatePopularityRate(game, date);
         Stadium stadium = homeTeam.getStadium();
         int capacity = stadium.getCapacity();
         double attendanceRate = calculateAttendanceRate(date, homeTeam, popularityRate);
         int attendees = calculateAttendees(capacity, attendanceRate);
-        int ticketPrice = calculateTicketPrice(homeTeam, stadium, popularityRate, attendees);
+        int ticketPrice = calculateTicketPrice(homeTeam, stadium, popularityRate, attendees, game);
 
-        calculateTicketRevenue(attendees, ticketPrice);
-        calculateConcessionsRevenue(homeTeam, attendees, popularityRate);
-        calculateParkingRevenue(homeTeam, attendees);
-        calculateTVRevenue();
-        calculateMerchRevenue(homeTeam, popularityRate, attendees);
+        calculateTicketRevenue(attendees, ticketPrice, game);
+        calculateConcessionsRevenue(homeTeam, attendees, popularityRate, game);
+        calculateParkingRevenue(homeTeam, attendees, game);
+        calculateTVRevenue(game);
+        calculateMerchRevenue(homeTeam, popularityRate, attendees, game);
     }
 
-    private double calculatePopularityRate(Game game, LocalDate date) {
+    protected double calculatePopularityRate(Game game, LocalDate date) {
         Team homeTeam = game.getGameContext().getHomeTeam();
 
         double gamePopularity = CalendarUtilitary.popularityScoreGame(game, date);
@@ -51,12 +51,15 @@ public class GameRevenueSimulator {
         int winStreak = homeTeam.getTeamPerformance().getCurrentWinStreak();
         popularityRate += Math.min(winStreak, 8) * 0.01;
 
+        popularityRate += getPopularityBonusRate(game, date, homeTeam);
+
         popularityRate = Math.max(0.2, Math.min(1.0, popularityRate));
         gameStat.setPopularity(popularityRate);
         return popularityRate;
     }
 
-    private int calculateTicketPrice(Team homeTeam, Stadium stadium, double popularityRate, int attendees) {
+    protected int calculateTicketPrice(Team homeTeam, Stadium stadium, double popularityRate, int attendees,
+            Game game) {
         MarketSize marketSize = homeTeam.getTeamFinance().getMarketSize();
         MediaMarket mediaMarket = homeTeam.getTeamFinance().getMediaMarket();
         EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
@@ -69,10 +72,10 @@ public class GameRevenueSimulator {
         double price = base * popularityFactor;
 
         price *= (1 + mediaMarket.getPricingPowerModifier() * 0.12);
-
         price *= (1 + economicProfil.getHistoricalPrestige() * 0.05);
         price *= (1 - economicProfil.getPriceElasticity() * 0.18);
         price *= (1 + teamValueFactor * 0.08);
+        price *= (1 + getTicketPriceBonusRate(game, homeTeam, attendees, popularityRate));
 
         if (stadium.getCapacity() > 0) {
             double occupancyRate = (double) attendees / stadium.getCapacity();
@@ -86,13 +89,13 @@ public class GameRevenueSimulator {
         return newPrice;
     }
 
-    private int calculateAttendees(int capacity, double attendanceRate) {
+    protected int calculateAttendees(int capacity, double attendanceRate) {
         int attendees = (int) (capacity * attendanceRate);
         gameStat.setAttendees(attendees);
         return attendees;
     }
 
-    private double calculateAttendanceRate(LocalDate date, Team homeTeam, double popularityRate) {
+    protected double calculateAttendanceRate(LocalDate date, Team homeTeam, double popularityRate) {
         MediaMarket mediaMarket = homeTeam.getTeamFinance().getMediaMarket();
         EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
         double teamValueFactor = FinanceUtilitary.getNormalizedTeamValue(homeTeam);
@@ -104,10 +107,10 @@ public class GameRevenueSimulator {
                 + importantDayBonus);
 
         attendanceRate += mediaMarket.getFanBaseModifier() * 0.08;
-
         attendanceRate += economicProfil.getFanLoyalty() * 0.10;
         attendanceRate += economicProfil.getHistoricalPrestige() * 0.03;
         attendanceRate += teamValueFactor * 0.04;
+        attendanceRate += getAttendanceBonusRate(homeTeam, popularityRate);
 
         double volatility = 0.15;
 
@@ -130,12 +133,13 @@ public class GameRevenueSimulator {
         return attendanceRate;
     }
 
-    private void calculateTicketRevenue(int attendees, double ticketPrice) {
+    protected void calculateTicketRevenue(int attendees, double ticketPrice, Game game) {
         double ticketRevenue = (attendees * ticketPrice) / 1000000;
+        ticketRevenue *= (1 + getTicketRevenueBonusRate(game, attendees, ticketPrice));
         gameStat.getHomeFinance().setTicketRevenue(ticketRevenue);
     }
 
-    private void calculateConcessionsRevenue(Team homeTeam, int attendees, double popularityRate) {
+    protected void calculateConcessionsRevenue(Team homeTeam, int attendees, double popularityRate, Game game) {
         EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
         MediaMarket mediaMarket = homeTeam.getTeamFinance().getMediaMarket();
 
@@ -153,11 +157,12 @@ public class GameRevenueSimulator {
 
         averageSpend *= (1 + popularityRate * 0.03);
         double revenue = (attendees * purchaseRate * averageSpend) / 1000000;
+        revenue *= (1 + getConcessionsBonusRate(game, homeTeam, attendees, popularityRate));
 
         gameStat.getHomeFinance().setConcessionsRevenue(revenue);
     }
 
-    private void calculateParkingRevenue(Team homeTeam, int attendees) {
+    protected void calculateParkingRevenue(Team homeTeam, int attendees, Game game) {
         MediaMarket mediaMarket = homeTeam.getTeamFinance().getMediaMarket();
         EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
 
@@ -175,21 +180,25 @@ public class GameRevenueSimulator {
 
         double cars = attendees / peoplePerCar;
         double revenue = (cars * parkingRate * parkingPrice) / 1000000;
+        revenue *= (1 + getParkingBonusRate(game, homeTeam, attendees));
 
         gameStat.getHomeFinance().setParkingRevenue(revenue);
     }
 
-    private void calculateTVRevenue() {
+    protected void calculateTVRevenue(Game game) {
         double leagueTVPerGame = 0.7;
 
         double homeShare = leagueTVPerGame * 0.6;
         double awayShare = leagueTVPerGame * 0.4;
 
+        homeShare *= (1 + getHomeTvBonusRate(game));
+        awayShare *= (1 + getAwayTvBonusRate(game));
+
         gameStat.getHomeFinance().setTvRevenue(homeShare);
         gameStat.getAwayFinance().setTvRevenue(awayShare);
     }
 
-    private void calculateMerchRevenue(Team homeTeam, double popularityRate, int attendees) {
+    protected void calculateMerchRevenue(Team homeTeam, double popularityRate, int attendees, Game game) {
         MediaMarket mediaMarket = homeTeam.getTeamFinance().getMediaMarket();
         EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
         double teamValueFactor = FinanceUtilitary.getNormalizedTeamValue(homeTeam);
@@ -212,7 +221,26 @@ public class GameRevenueSimulator {
         averageSpend *= (1 + teamValueFactor * 0.06);
 
         double revenue = (attendees * purchaseRate * averageSpend) / 1000000;
+        revenue *= (1 + getMerchBonusRate(game, homeTeam, attendees, popularityRate));
+
         gameStat.getHomeFinance().setMerchRevenue(revenue);
     }
 
+    protected abstract double getPopularityBonusRate(Game game, LocalDate date, Team homeTeam);
+
+    protected abstract double getAttendanceBonusRate(Team homeTeam, double popularityRate);
+
+    protected abstract double getTicketPriceBonusRate(Game game, Team homeTeam, int attendees, double popularityRate);
+
+    protected abstract double getTicketRevenueBonusRate(Game game, int attendees, double ticketPrice);
+
+    protected abstract double getConcessionsBonusRate(Game game, Team homeTeam, int attendees, double popularityRate);
+
+    protected abstract double getParkingBonusRate(Game game, Team homeTeam, int attendees);
+
+    protected abstract double getHomeTvBonusRate(Game game);
+
+    protected abstract double getAwayTvBonusRate(Game game);
+
+    protected abstract double getMerchBonusRate(Game game, Team homeTeam, int attendees, double popularityRate);
 }

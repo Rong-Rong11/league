@@ -1,173 +1,112 @@
 package gui.panel.calendarPanel;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import java.awt.Font;
+
 import data.calendar.GameDay;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import process.orchestrator.GUIInterface;
 
-public class WeekViewPanel extends JPanel {
+public class WeekViewPanel extends JPanel implements ThemeAware {
 	private static final long serialVersionUID = 1L;
-	private static final Font DISPLAY_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 	private static final Font TEXT_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 11);
-	private static final DateTimeFormatter WEEK_FORMATTER = DateTimeFormatter.ofPattern("dd/MM");
-
-	private final JButton previousDayButton = new JButton("Semaine -");
-	private final JButton nextDayButton = new JButton("Semaine +");
-	private final JLabel currentDateLabel = new JLabel();
-	private final JPanel matchDisplayPanel = new JPanel();
 
 	private final GUIInterface guiInterface;
+	private final JPanel matchDisplayPanel = new JPanel();
+
 	private LocalDate displayedDate;
 	private LocalDate lastSimulatedDate;
 	private OpenMatchDayAction openMatchDayAction;
+	private DisplayedDateChangeListener displayedDateChangeListener;
 
 	public WeekViewPanel(GUIInterface guiInterface) {
 		this.guiInterface = guiInterface;
 		create();
 		organize();
-		actions();
 		showWaitingState();
 	}
 
 	private void create() {
-		currentDateLabel.setFont(DISPLAY_FONT);
-		currentDateLabel.setText("Date : -");
-		matchDisplayPanel.setLayout(new BoxLayout(matchDisplayPanel, BoxLayout.Y_AXIS));
+		matchDisplayPanel.setLayout(new BorderLayout());
 		matchDisplayPanel.setOpaque(false);
 	}
 
 	private void organize() {
 		setLayout(new BorderLayout());
-		JPanel topBarPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		topBarPanel.add(previousDayButton);
-		topBarPanel.add(currentDateLabel);
-		topBarPanel.add(nextDayButton);
-
-		add(topBarPanel, BorderLayout.NORTH);
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
 		add(matchDisplayPanel, BorderLayout.CENTER);
-	}
-
-	private void actions() {
-		previousDayButton.addActionListener(new PreviousWeekListener());
-		nextDayButton.addActionListener(new NextWeekListener());
 	}
 
 	public void loadSeasonState() {
 		if (!guiInterface.isSeasonInitialized()) {
-			displayedDate = null;
-			lastSimulatedDate = null;
-			updateDisplay();
+			clearDisplayedState();
 			return;
 		}
-		lastSimulatedDate = guiInterface.getRegularSeasonStartDate();
-		displayedDate = findNextGameDay(lastSimulatedDate);
+		syncToSimulationDate(guiInterface.getCurrentDate());
+	}
+
+	public void syncToSimulationDate(LocalDate simulationDate) {
+		if (!guiInterface.isSeasonInitialized() || simulationDate == null) {
+			clearDisplayedState();
+			return;
+		}
+		lastSimulatedDate = simulationDate;
+		displayedDate = guiInterface.getDisplayedDateAfterWeekSimulation(simulationDate);
 		updateDisplay();
 	}
 
 	public void advanceDay() {
-		if (!guiInterface.isSeasonInitialized() || displayedDate == null) {
+		if (!canDisplayWeek()) {
 			return;
 		}
-
 		LocalDate day = displayedDate;
 		simulateDisplayedDay(day);
 		lastSimulatedDate = day;
-		displayedDate = findNextGameDay(day.plusDays(1));
-		if (displayedDate == null) {
-			displayedDate = day;
-		}
+		displayedDate = guiInterface.getDisplayedDateAfterDaySimulation(day);
 		updateDisplay();
 	}
 
 	public void advanceWeek() {
-		if (!guiInterface.isSeasonInitialized() || displayedDate == null) {
+		if (!canDisplayWeek()) {
 			return;
 		}
-
-		LocalDate weekStart = getWeekStart(displayedDate);
-		LocalDate weekEnd = weekStart.plusDays(6);
-		LocalDate simulatedDay = lastSimulatedDate;
-
-		for (LocalDate day = weekStart; !day.isAfter(weekEnd); day = day.plusDays(1)) {
-			if (hasGame(day)) {
-				simulateDisplayedDay(day);
-				simulatedDay = day;
-			}
+		LocalDate simulationBaseDate = guiInterface.getCurrentWeekIndicatorDate();
+		if (simulationBaseDate == null) {
+			simulationBaseDate = displayedDate;
 		}
-
-		lastSimulatedDate = simulatedDay;
-		LocalDate nextWeekStart = weekEnd.plusDays(1);
-		if (!nextWeekStart.isAfter(guiInterface.getRegularSeasonEndDate())) {
-			displayedDate = findNextGameDay(nextWeekStart);
-		} else {
-			displayedDate = lastSimulatedDate;
-		}
-		if (displayedDate == null) {
-			displayedDate = lastSimulatedDate;
-		}
+		guiInterface.simulateWeek(simulationBaseDate);
+		lastSimulatedDate = guiInterface.getCurrentDate();
+		displayedDate = guiInterface.getDisplayedDateAfterWeekSimulation(simulationBaseDate);
 		updateDisplay();
 	}
 
 	public void advanceSeason() {
-		if (!guiInterface.isSeasonInitialized() || displayedDate == null) {
+		if (!canDisplayWeek()) {
 			return;
 		}
-
-		LocalDate simulatedDay = lastSimulatedDate;
-		for (LocalDate day : guiInterface.getSeasonCalendar().keySet()) {
-			if (day.isBefore(displayedDate)) {
-				continue;
-			}
-			simulateDisplayedDay(day);
-			simulatedDay = day;
-		}
-
-		lastSimulatedDate = simulatedDay;
-		displayedDate = lastSimulatedDate;
+		guiInterface.simulateSeasonFrom(displayedDate);
+		lastSimulatedDate = guiInterface.getCurrentDate();
+		displayedDate = guiInterface.getDisplayedDateAfterSeasonSimulation(displayedDate);
 		updateDisplay();
 	}
 
-	private void updateDisplay() {
-		if (!guiInterface.isSeasonInitialized() || displayedDate == null) {
-			showWaitingState();
-			return;
-		}
-		currentDateLabel.setText(buildWeekLabel());
-		updateWeekRows();
-		repaint();
-	}
-
-	private String buildWeekLabel() {
-		LocalDate weekStart = getWeekStart(displayedDate);
-		LocalDate weekEnd = weekStart.plusDays(6);
-		return "Semaine du " + WEEK_FORMATTER.format(weekStart) + " au " + WEEK_FORMATTER.format(weekEnd);
-	}
-
-	private void showWaitingState() {
-		matchDisplayPanel.removeAll();
-		JLabel waitingLabel = new JLabel("Saison non initialisée.");
-		waitingLabel.setFont(TEXT_FONT);
-		waitingLabel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
-		matchDisplayPanel.add(waitingLabel);
-		matchDisplayPanel.revalidate();
-		matchDisplayPanel.repaint();
+	public String getWeekText() {
+		return guiInterface.getWeekText(displayedDate);
 	}
 
 	public void setOpenMatchDayAction(OpenMatchDayAction openMatchDayAction) {
 		this.openMatchDayAction = openMatchDayAction;
+	}
+
+	public void setDisplayedDateChangeListener(DisplayedDateChangeListener displayedDateChangeListener) {
+		this.displayedDateChangeListener = displayedDateChangeListener;
 	}
 
 	public LocalDate getCurrentDate() {
@@ -184,71 +123,60 @@ public class WeekViewPanel extends JPanel {
 		updateDisplay();
 	}
 
-	private void simulateDisplayedDay(LocalDate day) {
-		guiInterface.simulateDay(day);
-		guiInterface.displayGameDay(day);
+	public void showPreviousWeek() {
+		if (!canDisplayWeek()) {
+			return;
+		}
+		displayedDate = guiInterface.getPreviousWeekDisplayDate(displayedDate);
+		updateDisplay();
 	}
 
-	private boolean hasGame(LocalDate day) {
-		GameDay gameDay = getGameDay(day);
-		return gameDay != null && !gameDay.isEmpty();
+	public void showNextWeek() {
+		if (!canDisplayWeek()) {
+			return;
+		}
+		displayedDate = guiInterface.getNextWeekDisplayDate(displayedDate);
+		updateDisplay();
 	}
 
-	private GameDay getGameDay(LocalDate day) {
-		return guiInterface.getGameDay(day);
+	private boolean canDisplayWeek() {
+		return guiInterface.isSeasonInitialized() && displayedDate != null;
 	}
 
-	private void updateWeekRows() {
+	private void clearDisplayedState() {
+		displayedDate = null;
+		lastSimulatedDate = null;
+		updateDisplay();
+	}
+
+	private void updateDisplay() {
 		matchDisplayPanel.removeAll();
-		LocalDate weekStart = getWeekStart(displayedDate);
-		for (int offset = 0; offset < 7; offset++) {
-			LocalDate day = weekStart.plusDays(offset);
-			if (day.isBefore(guiInterface.getRegularSeasonStartDate())
-					|| day.isAfter(guiInterface.getRegularSeasonEndDate())) {
-				continue;
-			}
-			GameDay gameDay = getGameDay(day);
-			if (gameDay == null || gameDay.isEmpty()) {
-				continue;
-			}
-			matchDisplayPanel.add(buildDayRow(day));
+		if (!canDisplayWeek()) {
+			showWaitingState();
+			return;
 		}
-		if (matchDisplayPanel.getComponentCount() == 0) {
-			JLabel emptyLabel = new JLabel("Aucun match sur cette semaine.");
-			emptyLabel.setFont(TEXT_FONT);
-			emptyLabel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
-			matchDisplayPanel.add(emptyLabel);
-		}
+
+		LocalDate weekStart = guiInterface.getWeekStartDate(displayedDate);
+		LocalDate indicatorDay = guiInterface.getCurrentWeekIndicatorDate();
+		WeekScheduleGridPanel gridPanel = new WeekScheduleGridPanel(guiInterface, weekStart, indicatorDay,
+				new OpenDayAction(), new DaySimulationAction());
+		matchDisplayPanel.add(gridPanel, BorderLayout.CENTER);
 		matchDisplayPanel.revalidate();
 		matchDisplayPanel.repaint();
 	}
 
-	private JPanel buildDayRow(LocalDate day) {
-		GameDay gameDay = getGameDay(day);
-		boolean displayed = gameDay.isDisplayed();
-
-		ActionListener simulateAction = new SimulateDayListener(day, displayed);
-		ActionListener detailAction = new DetailDayListener(gameDay, day);
-		return new WeekDayRowPanel(day, gameDay, displayed, simulateAction, detailAction);
+	private void showWaitingState() {
+		JLabel waitingLabel = new JLabel("Saison non initialisee.");
+		waitingLabel.setFont(TEXT_FONT);
+		waitingLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		waitingLabel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+		matchDisplayPanel.add(waitingLabel, BorderLayout.CENTER);
+		matchDisplayPanel.revalidate();
+		matchDisplayPanel.repaint();
 	}
 
-	private LocalDate getWeekStart(LocalDate date) {
-		return date.minusDays(date.getDayOfWeek().getValue() - 1L);
-	}
-
-	private LocalDate findNextGameDay(LocalDate startDate) {
-		if (!guiInterface.isSeasonInitialized() || startDate == null) {
-			return null;
-		}
-
-		TreeMap<LocalDate, GameDay> seasonCalendar = guiInterface.getSeasonCalendar();
-		for (LocalDate day = startDate; !day.isAfter(guiInterface.getRegularSeasonEndDate()); day = day.plusDays(1)) {
-			if (hasGame(day)) {
-				return day;
-			}
-		}
-
-		return null;
+	private void simulateDisplayedDay(LocalDate day) {
+		guiInterface.simulateAndDisplayDay(day);
 	}
 
 	private void openMatchDashboard(GameDay gameDay, LocalDate date) {
@@ -257,17 +185,9 @@ public class WeekViewPanel extends JPanel {
 		}
 	}
 
-	private void showPreviousWeek() {
-		if (!guiInterface.isSeasonInitialized() || displayedDate == null) {
-			return;
-		}
-		LocalDate previousWeek = displayedDate.minusDays(7);
-		if (!previousWeek.isBefore(guiInterface.getRegularSeasonStartDate())) {
-			displayedDate = findNextGameDay(previousWeek);
-			if (displayedDate == null) {
-				displayedDate = previousWeek;
-			}
-			updateDisplay();
+	private void notifyDisplayedDateChanged() {
+		if (displayedDateChangeListener != null && displayedDate != null) {
+			displayedDateChangeListener.onDisplayedDateChanged(displayedDate);
 		}
 	}
 
@@ -276,53 +196,31 @@ public class WeekViewPanel extends JPanel {
 		}
 	}
 
-	private class PreviousWeekListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			showPreviousWeek();
-		}
+	public interface DisplayedDateChangeListener {
+		void onDisplayedDateChanged(LocalDate date);
 	}
 
-	private class NextWeekListener implements ActionListener {
+	private class DaySimulationAction implements WeekScheduleGridPanel.DaySimulationAction {
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			advanceWeek();
-		}
-	}
-
-	private class SimulateDayListener implements ActionListener {
-		private final LocalDate day;
-		private final boolean displayed;
-
-		private SimulateDayListener(LocalDate day, boolean displayed) {
-			this.day = day;
-			this.displayed = displayed;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (displayed) {
-				return;
-			}
+		public void simulate(LocalDate day) {
 			simulateDisplayedDay(day);
 			lastSimulatedDate = day;
 			displayedDate = day;
 			updateDisplay();
+			notifyDisplayedDateChanged();
 		}
 	}
 
-	private class DetailDayListener implements ActionListener {
-		private final GameDay gameDay;
-		private final LocalDate day;
-
-		private DetailDayListener(GameDay gameDay, LocalDate day) {
-			this.gameDay = gameDay;
-			this.day = day;
-		}
-
+	private class OpenDayAction implements WeekScheduleGridPanel.OpenDayAction {
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void open(GameDay gameDay, LocalDate day) {
 			openMatchDashboard(gameDay, day);
 		}
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		updateDisplay();
 	}
 }

@@ -11,17 +11,23 @@ import data.sport.setup.PlayoffSeries;
 import data.team.Team;
 import process.builder.calendar.PlayoffCalendarBuilder;
 import process.builder.league.PlayoffBuilder;
+import process.service.finance.FinanceManager;
+import process.service.leaguetools.TeamPopularityUpdater;
 
 public abstract class PlayoffManager {
    private League league;
    private PlayoffCalendarBuilder currentRoundCalendarBuilder;
    private PlayoffBuilder playoffBuilder;
+   private FinanceManager financeManager;
+   private TeamPopularityUpdater teamPopularityUpdater;
 
    public PlayoffManager(League league, PlayoffCalendarBuilder currentRoundCalendarBuilder,
-         PlayoffBuilder playoffBuilder) {
+         PlayoffBuilder playoffBuilder, FinanceManager financeManager, TeamPopularityUpdater teamPopularityUpdater) {
       this.league = league;
       this.currentRoundCalendarBuilder = currentRoundCalendarBuilder;
       this.playoffBuilder = playoffBuilder;
+      this.financeManager = financeManager;
+      this.teamPopularityUpdater = teamPopularityUpdater;
    }
 
    public void handlePlayedGame(Game game, LocalDate gameDate) {
@@ -33,6 +39,17 @@ public abstract class PlayoffManager {
       updateSeries(series, game);
 
       if (series.isFinished()) {
+         Team winner = getSeriesWinner(series);
+         if (winner != null) {
+            financeManager.applyPlayoffRoundBonus(
+                  winner,
+                  gameDate.getMonthValue(),
+                  league.getPlayoff().getCurrentRound());
+            teamPopularityUpdater.applyPlayoffRoundBonus(
+                  winner,
+                  league.getPlayoff().getCurrentRound());
+         }
+
          if (isManagedRoundFinished()) {
             advanceToNextRound(gameDate);
          }

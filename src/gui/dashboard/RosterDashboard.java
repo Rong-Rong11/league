@@ -2,6 +2,7 @@ package gui.dashboard;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -17,14 +18,18 @@ import javax.swing.JPanel;
 import data.team.Team;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardCard;
+import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.PlayerDisplayUtil;
+import gui.panel.common.RoundedButton;
+import gui.panel.common.RoundedPanel;
+import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamRosterPanel;
 import process.orchestrator.GUIInterface;
 
-public class RosterDashboard extends JPanel {
+public class RosterDashboard extends JPanel implements ThemeAware {
 	private static final int DASHBOARD_SPACING = 16;
-	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final Color BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 
 	private Team selectedTeam;
 	private GUIInterface guiInterface;
@@ -36,6 +41,7 @@ public class RosterDashboard extends JPanel {
 	private JButton previousSeasonButton;
 	private JLabel teamNameLabel;
 	private JLabel subtitleLabel;
+	private JPanel headerPanel;
 	private TeamLogoPanel teamLogoPanel;
 	private JLabel playersCountValueLabel;
 	private JLabel payrollValueLabel;
@@ -53,9 +59,9 @@ public class RosterDashboard extends JPanel {
 
 	private void create() {
 		currentSeasonSelected = true;
-		backButton = new JButton("Retour à la carte");
-		currentSeasonButton = new JButton("Saison actuelle");
-		previousSeasonButton = new JButton("Saison passée");
+		backButton = new RoundedButton("Retour a la carte");
+		currentSeasonButton = new RoundedButton("Saison actuelle");
+		previousSeasonButton = new RoundedButton("Saison precedente");
 		teamNameLabel = new JLabel("Effectif");
 		subtitleLabel = new JLabel("-");
 		teamLogoPanel = new TeamLogoPanel("", 56);
@@ -70,7 +76,11 @@ public class RosterDashboard extends JPanel {
 		currentSeasonButton.setFocusPainted(false);
 		previousSeasonButton.setFocusPainted(false);
 		backButton.setAlignmentX(LEFT_ALIGNMENT);
-		teamNameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 28));
+		currentSeasonButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+		previousSeasonButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+		currentSeasonButton.setPreferredSize(new Dimension(170, 44));
+		previousSeasonButton.setPreferredSize(new Dimension(170, 44));
+		teamNameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
 		teamNameLabel.setForeground(new Color(0x17, 0x31, 0x74));
 		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
 		subtitleLabel.setForeground(new Color(110, 117, 131));
@@ -92,15 +102,16 @@ public class RosterDashboard extends JPanel {
 	}
 
 	private JPanel buildHeader() {
-		JPanel header = new JPanel(new BorderLayout(12, 0));
-		header.setOpaque(false);
+		headerPanel = new RoundedPanel(new BorderLayout(12, 0), 24);
+		headerPanel.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		headerPanel.setBorder(BorderFactory.createEmptyBorder(14, 16, 14, 16));
 
 		JPanel titlePanel = new JPanel();
 		titlePanel.setOpaque(false);
 		titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
 		titlePanel.setAlignmentX(LEFT_ALIGNMENT);
 		titlePanel.add(backButton);
-		titlePanel.add(Box.createVerticalStrut(10));
+		titlePanel.add(Box.createVerticalStrut(12));
 
 		JPanel teamLine = new JPanel(new BorderLayout(12, 0));
 		teamLine.setOpaque(false);
@@ -109,11 +120,12 @@ public class RosterDashboard extends JPanel {
 		teamLine.add(teamNameLabel, BorderLayout.CENTER);
 
 		titlePanel.add(teamLine);
-		titlePanel.add(Box.createVerticalStrut(4));
+		titlePanel.add(Box.createVerticalStrut(6));
 		titlePanel.add(subtitleLabel);
 
-		header.add(titlePanel, BorderLayout.WEST);
-		return header;
+		headerPanel.add(titlePanel, BorderLayout.WEST);
+		headerPanel.setPreferredSize(new java.awt.Dimension(420, 124));
+		return headerPanel;
 	}
 
 	private JPanel buildBody() {
@@ -240,13 +252,15 @@ public class RosterDashboard extends JPanel {
 	}
 
 	private void updateSeasonButtonsStyle() {
-		Color activeBackground = new Color(0x37, 0x84, 0xB3);
-		Color inactiveBackground = new Color(240, 240, 240);
+		Color activeBackground = new Color(0x17, 0x31, 0x74);
+		Color inactiveBackground = DashboardPanelUtil.BUTTON_SURFACE_COLOR;
 		Color activeForeground = Color.WHITE;
-		Color inactiveForeground = new Color(60, 60, 60);
+		Color inactiveForeground = DashboardPanelUtil.BUTTON_TEXT_COLOR;
 
-		currentSeasonButton.setOpaque(true);
-		previousSeasonButton.setOpaque(true);
+		currentSeasonButton.setOpaque(false);
+		previousSeasonButton.setOpaque(false);
+		currentSeasonButton.setContentAreaFilled(false);
+		previousSeasonButton.setContentAreaFilled(false);
 		currentSeasonButton.setBorderPainted(false);
 		previousSeasonButton.setBorderPainted(false);
 
@@ -290,6 +304,24 @@ public class RosterDashboard extends JPanel {
 
 	public void refreshSelectedTeam() {
 		updateDashboard();
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		if (headerPanel != null) {
+			headerPanel.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		}
+		backButton.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
+		backButton.setForeground(DashboardPanelUtil.BUTTON_TEXT_COLOR);
+		teamNameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		playersCountValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		payrollValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		averageNoteValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		averagePointsValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		updateSeasonButtonsStyle();
+		DashboardPanelUtil.refreshChildrenTheme(this);
 	}
 
 }

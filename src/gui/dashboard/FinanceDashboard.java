@@ -9,13 +9,14 @@ import javax.swing.JPanel;
 
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import gui.panel.financePanel.FinanceHeaderPanel;
 
-public class FinanceDashboard extends JPanel {
+public class FinanceDashboard extends JPanel implements ThemeAware {
 
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
-	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 	private static final String LEAGUE_VIEW = "league";
 	private static final String TEAM_VIEW = "team";
 
@@ -72,12 +73,12 @@ public class FinanceDashboard extends JPanel {
 	private JPanel buildRightColumn() {
 		JPanel column = DashboardPanelUtil.createGridColumn(2, 1, 0, 12, IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH);
 
-		column.add(new BuildBox("DISTRIBUTION - ÉQUIPE", "Équipe sélectionnée", "DISTRIBUTION"));// ! À changer le string
+		column.add(new BuildBox("DISTRIBUTION - EQUIPE", "Equipe selectionnee", "DISTRIBUTION"));// ! A changer le string
 																																// par un jpanel quand
 																																// on aura la
-																																// fonctionnalité
-		column.add(new BuildBox("DÉPENSES", "Équipe sélectionnée", "DÉPENSES"));// ! À changer le string par un jpanel
-																										// quand on aura la fonctionnalité
+																																// fonctionnalite
+		column.add(new BuildBox("DEPENSES", "Equipe selectionnee", "DEPENSES"));// ! A changer le string par un jpanel
+																										// quand on aura la fonctionnalite
 
 		return column;
 	}
@@ -123,5 +124,12 @@ public class FinanceDashboard extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			switchView(TEAM_VIEW);
 		}
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		refreshView();
+		DashboardPanelUtil.refreshChildrenTheme(this);
 	}
 }

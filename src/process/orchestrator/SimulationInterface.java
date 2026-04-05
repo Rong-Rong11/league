@@ -2,6 +2,7 @@ package process.orchestrator;
 
 import java.time.LocalDate;
 
+import data.sport.setup.Game;
 import data.team.Team;
 
 public interface SimulationInterface {
@@ -25,6 +26,14 @@ public interface SimulationInterface {
    void startSeason();
 
    void simulateDay(LocalDate date);
+
+   void simulateAndDisplayDay(LocalDate date);
+
+   boolean makeLiveMatchAvailable(Game game, LocalDate date);
+
+   void simulateWeek(LocalDate startDate);
+
+   void simulateSeasonFrom(LocalDate startDate);
 
    void endRegularSeason();
 

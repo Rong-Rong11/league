@@ -15,6 +15,7 @@ import data.finance.GameStat;
 import data.sport.setup.Game;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import gui.panel.matchPanel.MatchDayListPanel;
 import gui.panel.matchPanel.MatchDayListPanel.MatchSelectionListener;
 import gui.panel.matchPanel.MatchDetailPanel;
@@ -22,11 +23,11 @@ import gui.panel.matchPanel.MatchFinancePanel;
 import gui.panel.matchPanel.MatchHeaderPanel;
 import process.orchestrator.GUIInterface;
 
-public class MatchDashboard extends JPanel {
+public class MatchDashboard extends JPanel implements ThemeAware {
 	private static final int DASHBOARD_SPACING = 16;
 	private static final int LEFT_COLUMN_WIDTH = 270;
 	private static final int RIGHT_COLUMN_WIDTH = 300;
-	private static final Color BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final Color BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 
 	private GUIInterface guiInterface;
 	private LocalDate selectedDate;
@@ -83,23 +84,25 @@ public class MatchDashboard extends JPanel {
 	}
 
 	private JPanel buildLeftColumn() {
-		JPanel leftColumn = new BuildBox("MATCHS DU JOUR", "Rencontres de la journée", matchDayListPanel);
+		JPanel leftColumn = new BuildBox("MATCHS DU JOUR", "Rencontres de la journee", matchDayListPanel);
 		leftColumn.setPreferredSize(new Dimension(LEFT_COLUMN_WIDTH, 10));
 		return leftColumn;
 	}
 
 	private JPanel buildCenterColumn() {
-		return new BuildBox("MATCH SÉLECTIONNÉ", "Score et statistiques", matchDetailPanel);
+		return new BuildBox("MATCH SELECTIONNE", "Score et statistiques", matchDetailPanel);
 	}
 
 	private JPanel buildRightColumn() {
-		JPanel rightColumn = new BuildBox("FINANCES DU MATCH", "Revenus et dépenses", matchFinancePanel);
+		JPanel rightColumn = new BuildBox("FINANCES DU MATCH", "Revenus et depenses", matchFinancePanel);
 		rightColumn.setPreferredSize(new Dimension(RIGHT_COLUMN_WIDTH, 10));
 		return rightColumn;
 	}
 
 	private void actions() {
 		matchDayListPanel.setMatchSelectionListener(new DashboardMatchSelectionListener());
+		headerPanel.setPreviousDayAction(new PreviousDayAction());
+		headerPanel.setNextDayAction(new NextDayAction());
 	}
 
 	public LocalDate getSelectedDate() {
@@ -115,6 +118,10 @@ public class MatchDashboard extends JPanel {
 	}
 
 	public void loadGamesOfDay(LocalDate date) {
+		if (date == null) {
+			resetSelectedGame();
+			return;
+		}
 		selectedDate = date;
 		GameDay gameDay = guiInterface.getGameDay(date);
 		showGameDay(gameDay, date);
@@ -136,6 +143,13 @@ public class MatchDashboard extends JPanel {
 	}
 
 	public void refreshSelectedGame() {
+		if (guiInterface.isSeasonInitialized()) {
+			LocalDate matchDisplayDate = guiInterface.getMatchDisplayDate();
+			if (matchDisplayDate != null && !matchDisplayDate.equals(selectedDate)) {
+				loadGamesOfDay(matchDisplayDate);
+				return;
+			}
+		}
 		if (selectedGameDay != null) {
 			matchDayListPanel.showGameDay(selectedGameDay);
 		}
@@ -172,6 +186,12 @@ public class MatchDashboard extends JPanel {
 		return "Jour " + dayNumber;
 	}
 
+	private void showAdjacentGameDay(LocalDate date) {
+		if (date != null) {
+			loadGamesOfDay(date);
+		}
+	}
+
 	private class DashboardMatchSelectionListener implements MatchSelectionListener {
 		@Override
 		public void onMatchSelected(Game game) {
@@ -194,11 +214,10 @@ public class MatchDashboard extends JPanel {
 				if (choice != 0) {
 					return;
 				}
-				guiInterface.simulateDay(selectedDate);
-				guiInterface.displayGameDay(selectedDate);
+				boolean liveMatchAvailable = guiInterface.makeLiveMatchAvailable(game, selectedDate);
 				showGameDay(guiInterface.getGameDay(selectedDate), selectedDate);
 				updateSelectedGame(game);
-				if (!guiInterface.isLiveMatchAvailable(game)) {
+				if (!liveMatchAvailable) {
 					JOptionPane.showMessageDialog(MatchDashboard.this,
 							"Le live match reste indisponible apres la simulation de cette journee.",
 							"Live match indisponible", JOptionPane.WARNING_MESSAGE);
@@ -209,5 +228,31 @@ public class MatchDashboard extends JPanel {
 				openLiveMatchAction.run();
 			}
 		}
+	}
+
+	private class PreviousDayAction implements java.awt.event.ActionListener {
+		@Override
+		public void actionPerformed(java.awt.event.ActionEvent e) {
+			if (!guiInterface.isSeasonInitialized() || selectedDate == null) {
+				return;
+			}
+			showAdjacentGameDay(guiInterface.getPreviousGameDay(selectedDate.minusDays(1)));
+		}
+	}
+
+	private class NextDayAction implements java.awt.event.ActionListener {
+		@Override
+		public void actionPerformed(java.awt.event.ActionEvent e) {
+			if (!guiInterface.isSeasonInitialized() || selectedDate == null) {
+				return;
+			}
+			showAdjacentGameDay(guiInterface.getNextGameDay(selectedDate.plusDays(1)));
+		}
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		DashboardPanelUtil.refreshChildrenTheme(this);
 	}
 }

@@ -3,11 +3,14 @@ package process.utility;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 
 import config.CalendarConfiguration;
+import data.league.Playoff;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
 import data.sport.setup.GameContext;
+import data.sport.setup.PlayoffSeries;
 import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.marketsize.MarketSize;
@@ -40,7 +43,6 @@ public class CalendarUtilitary {
     public static LocalDate getMLKDay() {
         LocalDate localDate = LocalDate.of(2026, Month.JANUARY, 1);
         int mondayCount = 0;
-
         while (localDate.getMonth() == Month.JANUARY) {
             if (localDate.getDayOfWeek() == DayOfWeek.MONDAY) {
                 mondayCount++;
@@ -125,6 +127,39 @@ public class CalendarUtilitary {
 
     public static boolean isImportantMonth(int month) {
         return month == 1 || month == 6 || month == 10;
+    }
+
+    public static boolean isPlayoffPeriod(LocalDate date, LocalDate regularSeasonEnd) {
+        return date.isAfter(regularSeasonEnd);
+    }
+
+    public static boolean isRegularSeasonPeriod(LocalDate date, LocalDate regularSeasonStart,
+            LocalDate regularSeasonEnd) {
+        return checkDate(date, regularSeasonStart, regularSeasonEnd);
+    }
+
+    public static ArrayList<PlayoffSeries> getCurrentRoundSeries(Playoff playoff) {
+        switch (playoff.getCurrentRound()) {
+            case FIRST_ROUND:
+                ArrayList<PlayoffSeries> firstRoundSeries = new ArrayList<PlayoffSeries>();
+                firstRoundSeries.addAll(playoff.getEastFirstRound());
+                firstRoundSeries.addAll(playoff.getWestFirstRound());
+                return firstRoundSeries;
+            case CONFERENCE_SEMIFINALS:
+                ArrayList<PlayoffSeries> semiSeries = new ArrayList<PlayoffSeries>();
+                semiSeries.addAll(playoff.getEastConferenceSemis());
+                semiSeries.addAll(playoff.getWestConferenceSemis());
+                return semiSeries;
+            case CONFERENCE_FINALS:
+                ArrayList<PlayoffSeries> conferenceFinalSeries = new ArrayList<PlayoffSeries>();
+                conferenceFinalSeries.addAll(playoff.getEastConferenceFinals());
+                conferenceFinalSeries.addAll(playoff.getWestConferenceFinals());
+                return conferenceFinalSeries;
+            case NBA_FINALS:
+                return playoff.getNbaFinals();
+            default:
+                return new ArrayList<PlayoffSeries>();
+        }
     }
 
 }

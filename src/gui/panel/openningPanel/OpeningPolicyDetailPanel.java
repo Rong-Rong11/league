@@ -1,14 +1,6 @@
 package gui.panel.openningPanel;
 
 import data.team.Team;
-import data.team.finance.financialpolicy.AmbitiousPolicy;
-import data.team.finance.financialpolicy.BalancedPolicy;
-import data.team.finance.financialpolicy.FinancialPolicy;
-import data.team.finance.marketsize.LargeSize;
-import data.team.finance.marketsize.MarketSize;
-import data.team.finance.marketsize.MediumSize;
-import data.team.finance.marketsize.SmallSize;
-import gui.panel.common.PlayerDisplayUtil;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -16,64 +8,43 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import process.orchestrator.GUIInterface;
 import process.utility.TeamDisplayUtil;
 
-public class OpeningPolicyDetailPanel extends JPanel {
+public class OpeningPolicyDetailPanel extends JPanel implements ThemeAware {
 	private final GUIInterface guiInterface;
 
-	private JLabel policyLabel;
 	private JLabel teamValueLabel;
 	private JLabel cityValueLabel;
 	private JLabel conferenceValueLabel;
 	private JLabel divisionValueLabel;
-	private JLabel marketSizeValueLabel;
-	private JLabel budgetValueLabel;
-	private JLabel capacityValueLabel;
-	private JLabel noteValueLabel;
+	private JLabel[] titleLabels;
 
 	public OpeningPolicyDetailPanel(GUIInterface guiInterface) {
 		this.guiInterface = guiInterface;
-		setLayout(new BorderLayout(0, 14));
+		setLayout(new BorderLayout());
 		setOpaque(false);
-		setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
+		setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
-		policyLabel = new JLabel("-", JLabel.CENTER);
-		policyLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-		policyLabel.setForeground(new Color(90, 90, 90));
-
-		JPanel policyPanel = new JPanel(new BorderLayout());
-		policyPanel.setOpaque(false);
-		policyPanel.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(new Color(210, 214, 220)),
-				BorderFactory.createEmptyBorder(12, 16, 12, 16)));
-		policyPanel.add(policyLabel, BorderLayout.CENTER);
-
-		JPanel infoPanel = new JPanel(new GridLayout(8, 1, 0, 0));
+		JPanel infoPanel = new JPanel(new GridLayout(4, 1, 0, 0));
 		infoPanel.setOpaque(false);
 
 		teamValueLabel = createValueLabel();
 		cityValueLabel = createValueLabel();
 		conferenceValueLabel = createValueLabel();
 		divisionValueLabel = createValueLabel();
-		marketSizeValueLabel = createValueLabel();
-		budgetValueLabel = createValueLabel();
-		capacityValueLabel = createValueLabel();
-		noteValueLabel = createValueLabel();
 
 		infoPanel.add(createRow("Equipe", teamValueLabel));
 		infoPanel.add(createRow("Ville", cityValueLabel));
 		infoPanel.add(createRow("Conference", conferenceValueLabel));
 		infoPanel.add(createRow("Division", divisionValueLabel));
-		infoPanel.add(createRow("Market size", marketSizeValueLabel));
-		infoPanel.add(createRow("Budget annuel", budgetValueLabel));
-		infoPanel.add(createRow("Capacite Stade", capacityValueLabel));
-		infoPanel.add(createRow("Note globale", noteValueLabel));
 
-		add(policyPanel, BorderLayout.NORTH);
 		add(infoPanel, BorderLayout.CENTER);
 
 		updateTeam(null);
+		applyTheme();
 	}
 
 	private JLabel createValueLabel() {
@@ -86,15 +57,29 @@ public class OpeningPolicyDetailPanel extends JPanel {
 	private JPanel createRow(String title, JLabel valueLabel) {
 		JPanel row = new JPanel(new GridLayout(2, 1, 0, 2));
 		row.setOpaque(false);
-		row.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(235, 238, 242)));
+		row.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(235, 238, 242)),
+				BorderFactory.createEmptyBorder(0, 12, 0, 12)));
 
 		JLabel titleLabel = new JLabel(title);
 		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		titleLabel.setForeground(new Color(110, 117, 131));
+		storeTitleLabel(titleLabel);
 
 		row.add(titleLabel);
 		row.add(valueLabel);
 		return row;
+	}
+
+	private void storeTitleLabel(JLabel titleLabel) {
+		if (titleLabels == null) {
+			titleLabels = new JLabel[4];
+		}
+		for (int i = 0; i < titleLabels.length; i++) {
+			if (titleLabels[i] == null) {
+				titleLabels[i] = titleLabel;
+				return;
+			}
+		}
 	}
 
 	public void updateTeam(Team team) {
@@ -106,52 +91,32 @@ public class OpeningPolicyDetailPanel extends JPanel {
 	}
 
 	private void showEmptyState() {
-		policyLabel.setText("-");
 		teamValueLabel.setText("-");
 		cityValueLabel.setText("-");
 		conferenceValueLabel.setText("-");
 		divisionValueLabel.setText("-");
-		marketSizeValueLabel.setText("-");
-		budgetValueLabel.setText("-");
-		capacityValueLabel.setText("-");
-		noteValueLabel.setText("-");
 	}
 
 	private void showTeamState(Team team) {
-		policyLabel.setText(getPolicyName(team.getTeamFinance().getFinancialProfil()));
 		teamValueLabel.setText(TeamDisplayUtil.getShortName(team));
 		cityValueLabel.setText(TeamDisplayUtil.getCityName(team));
 		conferenceValueLabel.setText(TeamDisplayUtil.getConferenceLabel(guiInterface.getConferenceName(team)));
 		divisionValueLabel.setText(guiInterface.getDivisionName(team));
-		marketSizeValueLabel.setText(getMarketSizeName(team.getTeamFinance().getMarketSize()));
-		budgetValueLabel.setText(PlayerDisplayUtil.formatSalary(team.getTeamFinance().getBudget().getRemainingAmount()));
-		capacityValueLabel.setText(team.getStadium().getCapacity() + " places");
-
-		int note = (int) Math.round(guiInterface.getAverageNote(team));
-		noteValueLabel.setText(note + "/100");
 	}
 
-	private String getPolicyName(FinancialPolicy policy) {
-		if (policy instanceof AmbitiousPolicy) {
-			return "Ambitieux";
+	@Override
+	public void applyTheme() {
+		teamValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		cityValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		conferenceValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		divisionValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		if (titleLabels != null) {
+			for (int i = 0; i < titleLabels.length; i++) {
+				if (titleLabels[i] != null) {
+					titleLabels[i].setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+				}
+			}
 		}
-		if (policy instanceof BalancedPolicy) {
-			return "Equilibre";
-		}
-		return "Economique";
-	}
-
-	private String getMarketSizeName(MarketSize marketSize) {
-		if (marketSize instanceof LargeSize) {
-			return "Grand";
-		}
-		if (marketSize instanceof MediumSize) {
-			return "Moyen";
-		}
-		if (marketSize instanceof SmallSize) {
-			return "Petit";
-		}
-		return "-";
 	}
 
 }

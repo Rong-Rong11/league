@@ -12,13 +12,15 @@ import javax.swing.SwingUtilities;
 
 import data.sport.setup.Game;
 import gui.panel.common.BuildBox;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import gui.panel.matchPanel.liveMatchPanel.LiveActionsPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveMatchHeaderPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveTeamStatsPanel;
 import process.orchestrator.GUIInterface;
 import process.service.live.LiveMatchState;
 
-public class LiveMatchDashboard extends JPanel implements Runnable {
+public class LiveMatchDashboard extends JPanel implements Runnable, ThemeAware {
 	private static final int DASHBOARD_SPACING = 16;
 	private static final int SIDE_COLUMN_WIDTH = 270;
 	private static final int LIVE_ROWS = 10;
@@ -84,19 +86,19 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 		JPanel leftColumn = new JPanel(new BorderLayout());
 		leftColumn.setOpaque(false);
 		leftColumn.setPreferredSize(new Dimension(SIDE_COLUMN_WIDTH, 10));
-		leftColumn.add(new BuildBox("ÉQUIPE DOMICILE", "Statistiques", homeStatsPanel), BorderLayout.CENTER);
+		leftColumn.add(new BuildBox("EQUIPE DOMICILE", "Statistiques", homeStatsPanel), BorderLayout.CENTER);
 		return leftColumn;
 	}
 
 	private JPanel buildCenterColumn() {
-		return new BuildBox("ACTIONS EN DIRECT", "Déroulement du match", liveActionsPanel);
+		return new BuildBox("ACTIONS EN DIRECT", "Deroulement du match", liveActionsPanel);
 	}
 
 	private JPanel buildRightColumn() {
 		JPanel rightColumn = new JPanel(new BorderLayout());
 		rightColumn.setOpaque(false);
 		rightColumn.setPreferredSize(new Dimension(SIDE_COLUMN_WIDTH, 10));
-		rightColumn.add(new BuildBox("ÉQUIPE EXTÉRIEUR", "Statistiques", awayStatsPanel), BorderLayout.CENTER);
+		rightColumn.add(new BuildBox("EQUIPE EXTERIEUR", "Statistiques", awayStatsPanel), BorderLayout.CENTER);
 		return rightColumn;
 	}
 
@@ -178,6 +180,12 @@ public class LiveMatchDashboard extends JPanel implements Runnable {
 				backToMatchAction.run();
 			}
 		}
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		DashboardPanelUtil.refreshChildrenTheme(this);
 	}
 
 	private class PlayAction implements ActionListener {

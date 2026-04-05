@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 
 import gui.panel.common.BuildBox;
+import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.SectionTitle;
 import gui.panel.rankingPanel.RankingPerformancePanel;
@@ -14,14 +15,14 @@ import gui.panel.rankingPanel.RankingTablePanel;
 import process.orchestrator.GUIInterface;
 
 /**
- * Dashboard dédié à la page Classement.
+ * Dashboard dedie a la page Classement.
  */
-public class RankingDashboard extends JPanel {
+public class RankingDashboard extends JPanel implements ThemeAware {
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 250;
 	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 300;
-	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
+	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 
 	private GUIInterface guiInterface;
 	private RankingTablePanel rankingTablePanel;
@@ -79,5 +80,11 @@ public class RankingDashboard extends JPanel {
 		column.add(new BuildBox("PERFORMANCES", "Forme récente", rankingPerformancePanel));
 
 		return column;
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		DashboardPanelUtil.refreshChildrenTheme(this);
 	}
 }

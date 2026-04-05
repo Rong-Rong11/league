@@ -1,6 +1,7 @@
 package process.orchestrator;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -8,9 +9,11 @@ import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.finance.GameStat;
 import data.league.League;
-import data.league.finance.LeagueFinancialRules;
+import data.league.Playoff;
 import data.league.PlayoffRound;
+import data.league.finance.LeagueFinancialRules;
 import data.sport.setup.Game;
+import data.sport.setup.PlayoffSeries;
 import data.team.Team;
 import data.team.finance.financialpolicy.AmbitiousPolicy;
 import data.team.finance.financialpolicy.BalancedPolicy;
@@ -24,19 +27,21 @@ import process.builder.league.LeagueBuilder;
 import process.builder.league.PlayoffBuilder;
 import process.repositery.TeamRepositery;
 import process.service.finance.FinanceManager;
+import process.service.game.GameManager;
+import process.service.leaguetools.TeamPopularityUpdater;
 import process.service.live.LiveMatchService;
 import process.service.live.LiveMatchState;
-import process.service.leaguetools.TeamPopularityUpdater;
-import process.service.submanager.GameManager;
 import process.service.trade.PreSeasonTradeService;
 import process.service.trade.RegularSeasonTradeService;
 import process.service.trade.TradeService;
+import process.utility.CalendarUtilitary;
 import process.utility.FinanceUtilitary;
 import process.utility.TeamDisplayUtil;
 import process.utility.TeamStatUtil;
 
 //cerveau de la simulation 
 public class SimulationManager implements GUIInterface {
+	private static final DateTimeFormatter WEEK_FORMATTER = DateTimeFormatter.ofPattern("dd/MM");
 
 	private League league;
 	private LeagueBuilder leagueBuilder = new LeagueBuilder();
@@ -63,7 +68,7 @@ public class SimulationManager implements GUIInterface {
 		regularSeasonCalendarBuilder = new RegularSeasonCalendarBuilder(league);
 		financeManager = new FinanceManager(league);
 		gameManager = new GameManager(league, financeManager, regularSeasonCalendarBuilder, playoffBuilder,
-				firstRoundCalendarBuilder);
+				firstRoundCalendarBuilder, teamPopularityUpdater);
 		LeagueFinancialRules leagueFinancialRules = league.getLeagueFinance().getLeagueFinancialRules();
 		preSeasonTradeService = new PreSeasonTradeService(leagueFinancialRules.getSalaryCap(),
 				leagueFinancialRules.getLuxuryTaxLine());
@@ -111,7 +116,7 @@ public class SimulationManager implements GUIInterface {
 		financeManager.chooseMarketSize(team, new SmallSize());
 	}
 
-	// méthode à utiliser pour lancer la saison
+	// methode a utiliser pour lancer la saison
 	@Override
 	public void startSeason() {
 		financeManager.initializeFinance();
@@ -126,23 +131,67 @@ public class SimulationManager implements GUIInterface {
 		preSeasonTradeService.simulateTrade(config.FinanceConfiguration.PRESEASON_TRADE, 0);
 	}
 
-	// passe le prochain jour, méthode à utiliser pour la simulation et tout se fais
+	// passe le prochain jour, methode a utiliser pour la simulation et tout se fais
 	// tous seul
 	@Override
 	public void simulateDay(LocalDate date) {
-		if (date == null) {
-			return;
-		}
-
 		clock.setDate(date);
 		if (isRegularSeasonDate(date)) {
 			gameManager.simulateRegularSeasonDay(date, clock.getCurrentMonth());
-			verifyTimeline();
-			return;
 		}
 
 		if (isPlayoffDate(date)) {
 			gameManager.simulatePlayoffDay(date, clock.getCurrentMonth(), league.getPlayoff().getCurrentRound());
+		}
+		verifyTimeline();
+	}
+
+	@Override
+	public void simulateAndDisplayDay(LocalDate date) {
+		if (!isSeasonInitialized() || date == null) {
+			return;
+		}
+		simulateDay(date);
+		displayGameDay(date);
+	}
+
+	@Override
+	public boolean makeLiveMatchAvailable(Game game, LocalDate date) {
+		if (game == null || date == null) {
+			return false;
+		}
+		if (isLiveMatchAvailable(game)) {
+			return true;
+		}
+		simulateAndDisplayDay(date);
+		return isLiveMatchAvailable(game);
+	}
+
+	@Override
+	public void simulateWeek(LocalDate startDate) {
+		if (!isSeasonInitialized() || startDate == null) {
+			return;
+		}
+		LocalDate weekStart = getWeekStartDate(startDate);
+		LocalDate weekEnd = weekStart.plusDays(6);
+		for (LocalDate day = weekStart; !day.isAfter(weekEnd); day = day.plusDays(1)) {
+			GameDay gameDay = getGameDay(day);
+			if (gameDay != null && !gameDay.isEmpty()) {
+				simulateAndDisplayDay(day);
+			}
+		}
+	}
+
+	@Override
+	public void simulateSeasonFrom(LocalDate startDate) {
+		if (!isSeasonInitialized() || startDate == null) {
+			return;
+		}
+		for (LocalDate day : getSeasonCalendar().keySet()) {
+			if (day.isBefore(startDate)) {
+				continue;
+			}
+			simulateAndDisplayDay(day);
 		}
 	}
 
@@ -151,11 +200,7 @@ public class SimulationManager implements GUIInterface {
 	}
 
 	private boolean isPlayoffDate(LocalDate date) {
-		return league != null
-				&& league.getPlayoff() != null
-				&& league.getPlayoff().getCurrentRound() != null
-				&& league.getPlayoff().getNbaCalendar() != null
-				&& !date.isBefore(league.getPlayoff().getDebutDate());
+		return !date.isBefore(league.getPlayoff().getDebutDate());
 	}
 
 	private void verifyTimeline() {
@@ -172,7 +217,29 @@ public class SimulationManager implements GUIInterface {
 
 	private void newMonth(int month) {
 		teamPopularityUpdater.updateMonthlyPopularity();
-		financeManager.applyMonthlyFinance(month);
+		if (isRegularSeasonDate(clock.getCurrentDate())) {
+			financeManager.applyMonthlyFinance(month);
+			return;
+		}
+
+		financeManager.applyPlayoffMonthlyFinance(month, getActivePlayoffTeams());
+	}
+
+	private ArrayList<Team> getActivePlayoffTeams() {
+		ArrayList<Team> activeTeams = new ArrayList<>();
+		Playoff playoff = league.getPlayoff();
+
+		if (playoff == null || playoff.getCurrentRound() == null) {
+			return new ArrayList<>(activeTeams);
+		}
+		for (PlayoffSeries series : CalendarUtilitary.getCurrentRoundSeries(playoff)) {
+			if (series == null || series.isFinished()) {
+				continue;
+			}
+			activeTeams.add(series.getHigherTeam());
+			activeTeams.add(series.getLowerTeam());
+		}
+		return activeTeams;
 	}
 
 	private void newWeek(LocalDate date, int month) {
@@ -182,8 +249,41 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public void endRegularSeason() {
 		league.setPlayoff(playoffBuilder.buldFirstRoundPlayoffs());
+		applyPlayoffQualificationBonuses(clock.getCurrentMonth());
+		applyPlayoffQualificationPopularityBonuses();
+		applyMissedPlayoffPenalties();
 		league.getPlayoff().setCurrentRound(PlayoffRound.FIRST_ROUND);
 		league.getPlayoff().setNbaCalendar(firstRoundCalendarBuilder.buildCalendar());
+	}
+
+	private void applyPlayoffQualificationBonuses(int month) {
+		ArrayList<Team> qualifiedTeams = new ArrayList<Team>();
+		qualifiedTeams.addAll(league.getPlayoff().getQualifiedEastTeams());
+		qualifiedTeams.addAll(league.getPlayoff().getQualifiedWestTeams());
+
+		financeManager.applyPlayoffQualificationBonus(qualifiedTeams, month);
+	}
+
+	private void applyPlayoffQualificationPopularityBonuses() {
+		ArrayList<Team> qualifiedTeams = new ArrayList<Team>();
+		qualifiedTeams.addAll(league.getPlayoff().getQualifiedEastTeams());
+		qualifiedTeams.addAll(league.getPlayoff().getQualifiedWestTeams());
+
+		for (Team team : qualifiedTeams) {
+			teamPopularityUpdater.applyPlayoffQualificationBonus(team);
+		}
+	}
+
+	private void applyMissedPlayoffPenalties() {
+		ArrayList<Team> qualifiedTeams = new ArrayList<Team>();
+		qualifiedTeams.addAll(league.getPlayoff().getQualifiedEastTeams());
+		qualifiedTeams.addAll(league.getPlayoff().getQualifiedWestTeams());
+
+		for (Team team : TeamRepositery.getInstance().getAllTeams()) {
+			if (!qualifiedTeams.contains(team)) {
+				teamPopularityUpdater.applyMissedPlayoffPenalty(team);
+			}
+		}
 	}
 
 	// simuler la fin de saison régulière ou fin playoff
@@ -213,6 +313,197 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public LocalDate getRegularSeasonEndDate() {
 		return league.getReagularSeason().getEndDate();
+	}
+
+	@Override
+	public LocalDate getCalendarDisplayDate(LocalDate simulationDate) {
+		if (!isSeasonInitialized() || simulationDate == null) {
+			return null;
+		}
+
+		GameDay currentGameDay = getGameDay(simulationDate);
+		if (currentGameDay == null || currentGameDay.isEmpty()) {
+			return getNextGameDay(simulationDate);
+		}
+
+		if (!currentGameDay.isDisplayed()) {
+			return simulationDate;
+		}
+
+		LocalDate nextGameDay = getNextGameDay(simulationDate.plusDays(1));
+		if (nextGameDay != null) {
+			return nextGameDay;
+		}
+		return simulationDate;
+	}
+
+	@Override
+	public LocalDate getCurrentWeekIndicatorDate() {
+		if (!isSeasonInitialized()) {
+			return null;
+		}
+		return getCurrentCalendarOrSimulationDate();
+	}
+
+	@Override
+	public LocalDate getDisplayedDateAfterDaySimulation(LocalDate displayedDate) {
+		if (!isSeasonInitialized() || displayedDate == null) {
+			return null;
+		}
+		LocalDate nextGameDay = getNextGameDay(displayedDate.plusDays(1));
+		if (nextGameDay != null) {
+			return nextGameDay;
+		}
+		return displayedDate;
+	}
+
+	@Override
+	public LocalDate getDisplayedDateAfterWeekSimulation(LocalDate displayedDate) {
+		if (!isSeasonInitialized() || displayedDate == null) {
+			return null;
+		}
+		return getCurrentCalendarOrSimulationDate();
+	}
+
+	@Override
+	public LocalDate getDisplayedDateAfterSeasonSimulation(LocalDate displayedDate) {
+		if (!isSeasonInitialized()) {
+			return null;
+		}
+		LocalDate simulationDate = getCurrentDate();
+		return simulationDate != null ? simulationDate : displayedDate;
+	}
+
+	private LocalDate getCurrentCalendarOrSimulationDate() {
+		LocalDate simulationDate = getCurrentDate();
+		LocalDate calendarDisplayDate = getCalendarDisplayDate(simulationDate);
+		if (calendarDisplayDate != null) {
+			return calendarDisplayDate;
+		}
+		return simulationDate;
+	}
+
+	@Override
+	public LocalDate getNextGameDay(LocalDate startDate) {
+		if (!isSeasonInitialized() || startDate == null) {
+			return null;
+		}
+
+		for (LocalDate day = startDate; !day.isAfter(getRegularSeasonEndDate()); day = day.plusDays(1)) {
+			GameDay gameDay = getGameDay(day);
+			if (gameDay != null && !gameDay.isEmpty()) {
+				return day;
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public LocalDate getPreviousGameDay(LocalDate startDate) {
+		if (!isSeasonInitialized() || startDate == null) {
+			return null;
+		}
+		for (LocalDate day = startDate; !day.isBefore(getRegularSeasonStartDate()); day = day.minusDays(1)) {
+			GameDay gameDay = getGameDay(day);
+			if (gameDay != null && !gameDay.isEmpty()) {
+				return day;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public LocalDate getMatchDisplayDate() {
+		if (!isSeasonInitialized()) {
+			return getRegularSeasonStartDate();
+		}
+		LocalDate currentDate = getCurrentDate();
+		LocalDate previousGameDay = getPreviousGameDay(currentDate.minusDays(1));
+		if (previousGameDay != null) {
+			return previousGameDay;
+		}
+		LocalDate currentGameDay = getPreviousGameDay(currentDate);
+		if (currentGameDay != null) {
+			return currentGameDay;
+		}
+		return getNextGameDay(getRegularSeasonStartDate());
+	}
+
+	@Override
+	public LocalDate getWeekStartDate(LocalDate date) {
+		if (date == null) {
+			return null;
+		}
+		return date.minusDays(date.getDayOfWeek().getValue() - 1L);
+	}
+
+	@Override
+	public LocalDate getWeekDisplayDate(LocalDate weekStart) {
+		if (!isSeasonInitialized() || weekStart == null) {
+			return null;
+		}
+
+		LocalDate weekEnd = weekStart.plusDays(6);
+		LocalDate searchStart = weekStart;
+		if (searchStart.isBefore(getRegularSeasonStartDate())) {
+			searchStart = getRegularSeasonStartDate();
+		}
+
+		LocalDate nextGameDay = getNextGameDay(searchStart);
+		if (nextGameDay != null && !nextGameDay.isAfter(weekEnd)) {
+			return nextGameDay;
+		}
+		if (weekStart.isBefore(getRegularSeasonStartDate())) {
+			return getRegularSeasonStartDate();
+		}
+		return weekStart;
+	}
+
+	@Override
+	public LocalDate getPreviousWeekDisplayDate(LocalDate displayedDate) {
+		if (!isSeasonInitialized() || displayedDate == null) {
+			return null;
+		}
+		LocalDate currentWeekStart = getWeekStartDate(displayedDate);
+		LocalDate previousWeekStart = currentWeekStart.minusDays(7);
+		LocalDate firstSeasonWeekStart = getWeekStartDate(getRegularSeasonStartDate());
+		if (previousWeekStart.isBefore(firstSeasonWeekStart)) {
+			return displayedDate;
+		}
+		LocalDate weekDisplayDate = getWeekDisplayDate(previousWeekStart);
+		if (weekDisplayDate != null) {
+			return weekDisplayDate;
+		}
+		return displayedDate;
+	}
+
+	@Override
+	public LocalDate getNextWeekDisplayDate(LocalDate displayedDate) {
+		if (!isSeasonInitialized() || displayedDate == null) {
+			return null;
+		}
+		LocalDate currentWeekStart = getWeekStartDate(displayedDate);
+		LocalDate nextWeekStart = currentWeekStart.plusDays(7);
+		LocalDate endSeasonWeekStart = getWeekStartDate(getRegularSeasonEndDate());
+		if (nextWeekStart.isAfter(endSeasonWeekStart)) {
+			return displayedDate;
+		}
+		LocalDate weekDisplayDate = getWeekDisplayDate(nextWeekStart);
+		if (weekDisplayDate != null) {
+			return weekDisplayDate;
+		}
+		return displayedDate;
+	}
+
+	@Override
+	public String getWeekText(LocalDate displayedDate) {
+		if (displayedDate == null) {
+			return "Semaine -";
+		}
+		LocalDate weekStart = getWeekStartDate(displayedDate);
+		LocalDate weekEnd = weekStart.plusDays(6);
+		return "Semaine du " + WEEK_FORMATTER.format(weekStart) + " au " + WEEK_FORMATTER.format(weekEnd);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package process.service.submanager;
+package process.service.game;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,9 +9,7 @@ import data.calendar.GameDay;
 import data.league.League;
 import data.league.Playoff;
 import data.league.PlayoffRound;
-import data.league.Ranking;
 import data.league.RegularSeason;
-import data.sport.setup.Game;
 import data.team.Team;
 import process.builder.calendar.CalendarBuilder;
 import process.builder.calendar.ConferenceFinalCalendarBuilder;
@@ -20,11 +18,16 @@ import process.builder.calendar.NbaFinalCalendarBuilder;
 import process.builder.calendar.SemiCalendarBuilder;
 import process.builder.league.PlayoffBuilder;
 import process.service.finance.FinanceManager;
+import process.service.game.tools.GameDaySimulationProcessor;
+import process.service.game.tools.PlayoffGameDaySimulationProcessor;
+import process.service.game.tools.RegularSeasonGameDaySimulationProcessor;
+import process.service.leaguetools.TeamPopularityUpdater;
 import process.service.playoff.ConferenceFinalPlayoffManager;
 import process.service.playoff.FirstRoundPlayoffManager;
 import process.service.playoff.NbaFinalPlayoffManager;
 import process.service.playoff.PlayoffManager;
 import process.service.playoff.SemiPlayoffManager;
+import process.service.submanager.RegularSeasonRankingManager;
 import process.simulator.GameSimulator;
 import process.utility.LeagueUtility;
 
@@ -40,7 +43,8 @@ public class GameManager {
 	private NbaFinalPlayoffManager nbaFinalPlayoffManager;
 
 	public GameManager(League league, FinanceManager financeManager, CalendarBuilder calendarBuilder,
-			PlayoffBuilder playoffBuilder, FirstRoundCalendarBuilder firstRoundCalendarBuilder) {
+			PlayoffBuilder playoffBuilder, FirstRoundCalendarBuilder firstRoundCalendarBuilder,
+			TeamPopularityUpdater teamPopularityUpdater) {
 		this.league = league;
 		ArrayList<Team> eastTeams = new ArrayList<>();
 		ArrayList<Team> westTeams = new ArrayList<>();
@@ -49,53 +53,78 @@ public class GameManager {
 		this.financeManager = financeManager;
 		this.firstRoundPlayoffManager = new FirstRoundPlayoffManager(league,
 				firstRoundCalendarBuilder,
-				playoffBuilder);
+				playoffBuilder,
+				financeManager,
+				teamPopularityUpdater);
 		this.semiPlayoffManager = new SemiPlayoffManager(league,
 				new SemiCalendarBuilder(league, CalendarConfiguration.PLAYOFF_DEBUT_DATE),
-				playoffBuilder);
+				playoffBuilder,
+				financeManager,
+				teamPopularityUpdater);
 		this.conferenceFinalPlayoffManager = new ConferenceFinalPlayoffManager(league,
 				new ConferenceFinalCalendarBuilder(league, CalendarConfiguration.PLAYOFF_DEBUT_DATE),
-				playoffBuilder);
+				playoffBuilder,
+				financeManager,
+				teamPopularityUpdater);
 		this.nbaFinalPlayoffManager = new NbaFinalPlayoffManager(league,
 				new NbaFinalCalendarBuilder(league, CalendarConfiguration.PLAYOFF_DEBUT_DATE),
-				playoffBuilder);
+				playoffBuilder,
+				financeManager,
+				teamPopularityUpdater);
 	}
 
 	public boolean simulateRegularSeasonDay(LocalDate date, int month) {
 		RegularSeason regularSeason = league.getReagularSeason();
 		TreeMap<LocalDate, GameDay> regularSeasonCalendar = regularSeason.getNbaCalendar().getCalendar();
-		Ranking ranking = regularSeason.getRanking();
 		GameDay gameDay = regularSeasonCalendar.get(date);
+
 		if (gameDay != null && !gameDay.isSimulated()) {
-			simulateGameDay(gameDay, date, month);
-			regularSeasonRankingManager.addSimulatedGameDay(gameDay);
-			regularSeason.setRanking(
-					regularSeasonRankingManager.updateRanking(league, ranking, regularSeasonCalendar, date));
+			GameDaySimulationProcessor processor = new RegularSeasonGameDaySimulationProcessor(
+					league,
+					gameSimulator,
+					financeManager,
+					regularSeasonRankingManager);
+
+			processor.simulateGameDay(gameDay, date, month);
 			return true;
 		}
-		return false;
 
+		return false;
 	}
 
 	public void simulatePlayoffDay(LocalDate date, int month, PlayoffRound currentRound) {
 		if (currentRound == null) {
 			return;
 		}
+
 		switch (currentRound) {
 			case FIRST_ROUND:
-				simulateFirstRoundDay(date, month);
+				simulateManagedPlayoffDay(date, month, firstRoundPlayoffManager, currentRound);
 				break;
 			case CONFERENCE_SEMIFINALS:
-				simulateSemiRoundDay(date, month);
+				simulateManagedPlayoffDay(date, month, semiPlayoffManager, currentRound);
 				break;
 			case CONFERENCE_FINALS:
-				simulateConferenceFinalRoundDay(date, month);
+				simulateManagedPlayoffDay(date, month, conferenceFinalPlayoffManager, currentRound);
 				break;
 			case NBA_FINALS:
-				simulateNbaFinalRoundDay(date, month);
+				simulateManagedPlayoffDay(date, month, nbaFinalPlayoffManager, currentRound);
 				break;
 			default:
 				break;
+		}
+	}
+
+	private void simulateManagedPlayoffDay(LocalDate date, int month, PlayoffManager playoffManager,
+			PlayoffRound round) {
+		Playoff playoff = league.getPlayoff();
+		TreeMap<LocalDate, GameDay> playoffCalendar = playoff.getNbaCalendar().getCalendar();
+		GameDay gameDay = playoffCalendar.get(date);
+
+		if (gameDay != null && !gameDay.isSimulated()) {
+			GameDaySimulationProcessor processor = new PlayoffGameDaySimulationProcessor(
+					gameSimulator, financeManager, playoffManager, round);
+			processor.simulateGameDay(gameDay, date, month);
 		}
 	}
 

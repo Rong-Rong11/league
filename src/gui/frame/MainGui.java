@@ -18,6 +18,7 @@ import gui.dashboard.OpeningDashboard;
 import gui.dashboard.RankingDashboard;
 import gui.dashboard.RosterDashboard;
 import gui.layout.SidebarPanel;
+import gui.panel.common.DashboardPanelUtil;
 import process.orchestrator.GUIInterface;
 
 public class MainGui extends JFrame {
@@ -34,6 +35,8 @@ public class MainGui extends JFrame {
 	private RankingDashboard rankingDashboard;
 	private MapDashboard mapDashboard;
 	private RosterDashboard rosterDashboard;
+	private RankingDashboard rankingDashboard;
+	private FinanceDashboard financeDashboard;
 	private GUIInterface guiInterface;
 	private SidebarPanel sidebar;
 
@@ -75,6 +78,7 @@ public class MainGui extends JFrame {
 
 	private void actions() {
 		openingPanel.getContinueButton().addActionListener(new OpenApplicationAction(openingPanel));
+		openingPanel.getThemeButton().addActionListener(new ToggleThemeAction());
 	}
 
 	private JPanel buildApplicationPanel() {
@@ -106,6 +110,7 @@ public class MainGui extends JFrame {
 		sidebar.getRankingButton().addActionListener(new SwitchDashboardAction("ranking"));
 		sidebar.getFinanceButton().addActionListener(new SwitchDashboardAction("finance"));
 		sidebar.getMapButton().addActionListener(new SwitchDashboardAction("map"));
+		sidebar.getThemeButton().addActionListener(new ToggleThemeAction());
 		sidebar.getExitButton().addActionListener(new QuitAction());
 
 		mainPanel.add(sidebar, BorderLayout.WEST);
@@ -152,7 +157,7 @@ public class MainGui extends JFrame {
 			}
 
 			calendarDashboard.startSeason();
-			matchDashboard.loadGamesOfDay(guiInterface.getCurrentDate());
+			matchDashboard.loadGamesOfDay(guiInterface.getMatchDisplayDate());
 			sidebar.setActiveSection("match");
 			dashboardLayout.show(dashboardPanel, "match");
 			rootLayout.show(rootPanel, "main");
@@ -177,7 +182,6 @@ public class MainGui extends JFrame {
 		@Override
 		public void run() {
 			calendarDashboard.refreshSeasonState();
-			matchDashboard.refreshSelectedGame();
 			sidebar.setActiveSection("match");
 			dashboardLayout.show(dashboardPanel, "match");
 		}
@@ -205,6 +209,47 @@ public class MainGui extends JFrame {
 		public void run() {
 			sidebar.setActiveSection("map");
 			dashboardLayout.show(dashboardPanel, "map");
+		}
+	}
+
+	private class ToggleThemeAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			DashboardPanelUtil.toggleDarkMode();
+			applyCurrentTheme();
+			rootPanel.revalidate();
+			rootPanel.repaint();
+		}
+	}
+
+	private void applyCurrentTheme() {
+		rootPanel.setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		mainPanel.setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		dashboardPanel.setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
+		openingPanel.applyTheme();
+		if (sidebar != null) {
+			sidebar.applyTheme();
+		}
+		if (matchDashboard != null) {
+			matchDashboard.applyTheme();
+		}
+		if (liveMatchDashboard != null) {
+			liveMatchDashboard.applyTheme();
+		}
+		if (calendarDashboard != null) {
+			calendarDashboard.applyTheme();
+		}
+		if (mapDashboard != null) {
+			mapDashboard.applyTheme();
+		}
+		if (rosterDashboard != null) {
+			rosterDashboard.applyTheme();
+		}
+		if (rankingDashboard != null) {
+			rankingDashboard.applyTheme();
+		}
+		if (financeDashboard != null) {
+			financeDashboard.applyTheme();
 		}
 	}
 }

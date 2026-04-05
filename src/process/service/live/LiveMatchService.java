@@ -251,7 +251,7 @@ public class LiveMatchService {
 
    private String buildCenterMessage() {
       if (game == null) {
-         return "Aucun match sélectionné.";
+         return "Aucun match selectionne.";
       }
       if (!isMatchAvailable()) {
          return "Match non disponible.";

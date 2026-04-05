@@ -9,11 +9,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.SectionTitle;
+import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.playerPanel.PlayerSummaryPanel;
 import process.service.LiveMatchStatistics.PlayerLiveSummary;
 
-public class LiveTeamStatsPanel extends JPanel {
+public class LiveTeamStatsPanel extends JPanel implements ThemeAware {
 	private JLabel pointsLabel;
 	private JLabel reboundsLabel;
 	private JLabel assistsLabel;
@@ -52,6 +54,7 @@ public class LiveTeamStatsPanel extends JPanel {
 		statsPanel.add(threeLabel);
 		add(statsPanel, BorderLayout.NORTH);
 		add(buildBestPlayersPanel(), BorderLayout.CENTER);
+		applyTheme();
 	}
 
 	private void organize() {
@@ -93,5 +96,17 @@ public class LiveTeamStatsPanel extends JPanel {
 			return;
 		}
 		playerPanel.updateSummary(bestPlayers[index].getPlayer(), bestPlayers[index].getPoints());
+	}
+
+	@Override
+	public void applyTheme() {
+		pointsLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		reboundsLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		assistsLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		turnoversLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		fgLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		threeLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		firstBestPlayerPanel.applyTheme();
+		secondBestPlayerPanel.applyTheme();
 	}
 }
