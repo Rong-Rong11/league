@@ -21,4 +21,20 @@ public interface TeamGetterInterface {
    String getTeamAbbreviation(String teamName);
 
    double getTeamCurrentPayroll(Team team);
+
+   double getTeamCurrentWinStreak(Team team);
+
+   double getTeamCurrentLoseStreak(Team team);
+
+   double getTeamMaxWinStreak(Team team);
+
+   double getTeamMaxLoseStreak(Team team);
+
+   int getTeamNumberWin(Team team);
+
+   int getTeamNumberLose(Team team);
+
+   int getTeamNumberPlayedGames(Team team);
+
+   ArrayList<Boolean> getTeamLast4GamesResults(Team team, int numberOfGames);
 }

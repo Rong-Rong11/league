@@ -652,4 +652,52 @@ public class SimulationManager implements GUIInterface {
 		return liveMatchService.getCurrentState();
 	}
 
+	@Override
+	public double getTeamCurrentLoseStreak(Team team) {
+		// TODO Auto-generated method stub
+		return team.getTeamPerformance().getCurrentLoseStreak();
+	}
+
+	@Override
+	public double getTeamCurrentWinStreak(Team team) {
+		// TODO Auto-generated method stub
+		return team.getTeamPerformance().getCurrentWinStreak();
+	}
+
+	@Override
+	public double getTeamMaxLoseStreak(Team team) {
+		// TODO Auto-generated method stub
+		return team.getTeamPerformance().getMaxLoseStreak();
+	}
+
+	@Override
+	public double getTeamMaxWinStreak(Team team) {
+		// TODO Auto-generated method stub
+		return team.getTeamPerformance().getMaxWinsStreak();
+	}
+
+	@Override
+	public int getTeamNumberLose(Team team) {
+		// TODO Auto-generated method stub
+		return team.getTeamPerformance().getNumberLose();
+	}
+
+	@Override
+	public int getTeamNumberPlayedGames(Team team) {
+		// TODO Auto-generated method stub
+		return team.getTeamPerformance().getNumberPlayedGames();
+	}
+
+	@Override
+	public int getTeamNumberWin(Team team) {
+		// TODO Auto-generated method stub
+		return team.getTeamPerformance().getNumberWin();
+	}
+
+	@Override
+	public ArrayList<Boolean> getTeamLast4GamesResults(Team team, int numberOfGames) {
+		// TODO Auto-generated method stub
+		return TeamStatUtil.getLast4Results(team);
+	}
+
 }
