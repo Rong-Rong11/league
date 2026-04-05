@@ -10,6 +10,7 @@ import data.league.League;
 import data.league.Playoff;
 import data.league.PlayoffRound;
 import data.league.RegularSeason;
+import data.sport.setup.Game;
 import data.team.Team;
 import process.builder.calendar.CalendarBuilder;
 import process.builder.calendar.ConferenceFinalCalendarBuilder;
@@ -179,7 +180,7 @@ public class GameManager {
 	private void simulateGameDay(GameDay gameDay, LocalDate date, int month) {
 		for (Game game : gameDay.getGames()) {
 			gameSimulator.simulateGame(game);
-			financeManager.calculateGame(game, date, month);
+			financeManager.calculatePlayoffGame(game, date, month, league.getPlayoff().getCurrentRound());
 		}
 		gameDay.setSimulated(true);
 

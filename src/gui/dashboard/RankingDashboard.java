@@ -7,9 +7,9 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 
 import gui.panel.common.BuildBox;
-import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.SectionTitle;
+import gui.panel.common.ThemeAware;
 import gui.panel.rankingPanel.RankingPerformancePanel;
 import gui.panel.rankingPanel.RankingTablePanel;
 import process.orchestrator.GUIInterface;

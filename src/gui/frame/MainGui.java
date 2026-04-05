@@ -35,7 +35,6 @@ public class MainGui extends JFrame {
 	private RankingDashboard rankingDashboard;
 	private MapDashboard mapDashboard;
 	private RosterDashboard rosterDashboard;
-	private RankingDashboard rankingDashboard;
 	private FinanceDashboard financeDashboard;
 	private GUIInterface guiInterface;
 	private SidebarPanel sidebar;

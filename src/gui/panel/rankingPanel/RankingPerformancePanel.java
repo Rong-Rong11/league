@@ -2,6 +2,7 @@ package gui.panel.rankingPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -11,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import data.team.Team;
 import gui.panel.common.DashboardCard;
@@ -22,18 +24,19 @@ public class RankingPerformancePanel extends JPanel {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color SUBTITLE_COLOR = new Color(110, 117, 131);
 	private static final Color BORDER_COLOR = new Color(229, 232, 238);
-	private static final int CARD_HEIGHT = 120;
+	private static final Color VALUE_FIELD_BACKGROUND = new Color(243, 246, 250);
+	private static final int CARD_HEIGHT = 108;
 
 	private GUIInterface guiInterface;
 	private TeamLogoPanel leaderLogoPanel;
 	private JLabel leaderTeamValue;
-	private JLabel leaderDetailValue;
+	private JTextField leaderDetailField;
 	private TeamLogoPanel streakLogoPanel;
 	private JLabel streakTeamValue;
-	private JLabel streakDetailValue;
+	private JTextField streakDetailField;
 	private TeamLogoPanel lastLogoPanel;
 	private JLabel lastTeamValue;
-	private JLabel lastDetailValue;
+	private JTextField lastDetailField;
 
 	public RankingPerformancePanel(GUIInterface guiInterface) {
 		this.guiInterface = guiInterface;
@@ -42,17 +45,17 @@ public class RankingPerformancePanel extends JPanel {
 
 		leaderLogoPanel = createLogoPanel();
 		leaderTeamValue = new JLabel("-");
-		leaderDetailValue = new JLabel("-");
+		leaderDetailField = createValueField();
 		streakLogoPanel = createLogoPanel();
 		streakTeamValue = new JLabel("-");
-		streakDetailValue = new JLabel("-");
+		streakDetailField = createValueField();
 		lastLogoPanel = createLogoPanel();
 		lastTeamValue = new JLabel("-");
-		lastDetailValue = new JLabel("-");
+		lastDetailField = createValueField();
 
-		add(createPerformanceCard("Leader", leaderLogoPanel, leaderTeamValue, leaderDetailValue));
-		add(createPerformanceCard("Meilleure serie", streakLogoPanel, streakTeamValue, streakDetailValue));
-		add(createPerformanceCard("Derniere place", lastLogoPanel, lastTeamValue, lastDetailValue));
+		add(createPerformanceCard("Leader", leaderLogoPanel, leaderTeamValue, leaderDetailField));
+		add(createPerformanceCard("Meilleure serie", streakLogoPanel, streakTeamValue, streakDetailField));
+		add(createPerformanceCard("Derniere place", lastLogoPanel, lastTeamValue, lastDetailField));
 		refreshPerformance();
 	}
 
@@ -67,30 +70,30 @@ public class RankingPerformancePanel extends JPanel {
 		Team last = teams.get(teams.size() - 1);
 		Team bestStreakTeam = findBestStreakTeam(teams);
 
-		updateTeamBlock(leaderLogoPanel, leaderTeamValue, leaderDetailValue, leader);
-		updateTeamBlock(lastLogoPanel, lastTeamValue, lastDetailValue, last);
+		updateTeamBlock(leaderLogoPanel, leaderTeamValue, leaderDetailField, leader);
+		updateTeamBlock(lastLogoPanel, lastTeamValue, lastDetailField, last);
 
 		if (bestStreakTeam == null) {
 			streakLogoPanel.setTeamName("");
 			streakTeamValue.setText("-");
-			streakDetailValue.setText("-");
+			streakDetailField.setText("-");
 		} else {
 			streakLogoPanel.setTeamName(bestStreakTeam.getName());
 			streakTeamValue.setText(TeamDisplayUtil.getShortName(bestStreakTeam));
-			streakDetailValue.setText(guiInterface.getTeamMaxWinStreak(bestStreakTeam) + " victoires");
+			streakDetailField.setText(guiInterface.getTeamMaxWinStreak(bestStreakTeam) + " victoires");
 		}
 	}
 
 	private void showEmptyState() {
 		leaderLogoPanel.setTeamName("");
 		leaderTeamValue.setText("-");
-		leaderDetailValue.setText("-");
+		leaderDetailField.setText("-");
 		streakLogoPanel.setTeamName("");
 		streakTeamValue.setText("-");
-		streakDetailValue.setText("-");
+		streakDetailField.setText("-");
 		lastLogoPanel.setTeamName("");
 		lastTeamValue.setText("-");
-		lastDetailValue.setText("-");
+		lastDetailField.setText("-");
 	}
 
 	private Team findBestStreakTeam(ArrayList<Team> teams) {
@@ -106,10 +109,10 @@ public class RankingPerformancePanel extends JPanel {
 		return bestTeam;
 	}
 
-	private void updateTeamBlock(TeamLogoPanel logoPanel, JLabel teamValue, JLabel detailValue, Team team) {
+	private void updateTeamBlock(TeamLogoPanel logoPanel, JLabel teamValue, JTextField detailField, Team team) {
 		logoPanel.setTeamName(team.getName());
 		teamValue.setText(TeamDisplayUtil.getShortName(team));
-		detailValue.setText(guiInterface.getTeamNumberWin(team) + "-" + guiInterface.getTeamNumberLose(team));
+		detailField.setText("V " + guiInterface.getTeamNumberWin(team) + "  |  D " + guiInterface.getTeamNumberLose(team));
 	}
 
 	private TeamLogoPanel createLogoPanel() {
@@ -118,38 +121,57 @@ public class RankingPerformancePanel extends JPanel {
 		return logoPanel;
 	}
 
-	private JPanel createPerformanceCard(String label, TeamLogoPanel logoPanel, JLabel teamValue, JLabel detailValue) {
+	private JTextField createValueField() {
+		JTextField field = new JTextField("-");
+		field.setEditable(false);
+		field.setHorizontalAlignment(JTextField.CENTER);
+		field.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+		field.setForeground(TITLE_COLOR);
+		field.setBackground(VALUE_FIELD_BACKGROUND);
+		field.setBorder(BorderFactory.createEmptyBorder(6, 10, 6, 10));
+		return field;
+	}
+
+	private JPanel createPerformanceCard(String label, TeamLogoPanel logoPanel, JLabel teamValue, JTextField detailField) {
 		DashboardCard card = new DashboardCard();
-		card.setLayout(new BorderLayout(0, 10));
+		card.setLayout(new BorderLayout(0, 8));
 		card.setPreferredSize(new java.awt.Dimension(10, CARD_HEIGHT));
 		card.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER_COLOR),
 				BorderFactory.createEmptyBorder(10, 12, 10, 12)));
+
+		JPanel topPanel = new JPanel(new BorderLayout(8, 0));
+		topPanel.setOpaque(false);
 
 		JPanel textPanel = new JPanel();
 		textPanel.setOpaque(false);
 		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 
 		JLabel labelValue = new JLabel(label);
-		labelValue.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+		labelValue.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
 		labelValue.setForeground(SUBTITLE_COLOR);
 
-		teamValue.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+		teamValue.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
 		teamValue.setForeground(TITLE_COLOR);
-
-		detailValue.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
-		detailValue.setForeground(SUBTITLE_COLOR);
 
 		textPanel.add(labelValue);
 		textPanel.add(teamValue);
-		textPanel.add(detailValue);
 
 		JPanel logoWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		logoWrapper.setOpaque(false);
+		logoWrapper.setPreferredSize(new Dimension(88, 52));
 		logoWrapper.add(logoPanel);
 
-		card.add(textPanel, BorderLayout.NORTH);
-		card.add(logoWrapper, BorderLayout.CENTER);
+		JPanel fieldWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		fieldWrapper.setOpaque(false);
+		detailField.setPreferredSize(new Dimension(120, 28));
+		fieldWrapper.add(detailField);
+
+		topPanel.add(textPanel, BorderLayout.CENTER);
+		topPanel.add(logoWrapper, BorderLayout.EAST);
+
+		card.add(topPanel, BorderLayout.CENTER);
+		card.add(fieldWrapper, BorderLayout.SOUTH);
 		return card;
 	}
 }
