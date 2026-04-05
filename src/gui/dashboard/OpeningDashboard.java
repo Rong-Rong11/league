@@ -75,8 +75,6 @@ public class OpeningDashboard extends JPanel implements ThemeAware {
 		continueButton.setForeground(Color.WHITE);
 		themeButton.setFont(new java.awt.Font(java.awt.Font.SANS_SERIF, java.awt.Font.BOLD, 14));
 		themeButton.setPreferredSize(new Dimension(150, 44));
-		themeButton.setBackground(new Color(0x17, 0x31, 0x74));
-		themeButton.setForeground(Color.WHITE);
 		applyTheme();
 	}
 
@@ -305,6 +303,8 @@ public class OpeningDashboard extends JPanel implements ThemeAware {
 	public void applyTheme() {
 		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
 		themeButton.setText(DashboardPanelUtil.isDarkMode() ? "Mode clair" : "Mode sombre");
+		themeButton.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
+		themeButton.setForeground(DashboardPanelUtil.BUTTON_TEXT_COLOR);
 		DashboardPanelUtil.refreshChildrenTheme(this);
 	}
 

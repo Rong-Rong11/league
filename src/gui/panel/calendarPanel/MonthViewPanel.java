@@ -135,21 +135,8 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 			for (int i = 0; i < matchCount; i++) {
 				String homeTeam = TeamDisplayUtil.getAbbreviation(displayedGames.get(i).getGameContext().getHomeTeam());
 				String awayTeam = TeamDisplayUtil.getAbbreviation(displayedGames.get(i).getGameContext().getAwayTeam());
-				boolean hasBottomSpacing = i < matchCount - 1 || gameDay.getGames().size() - matchCount > 0;
+				boolean hasBottomSpacing = i < matchCount - 1;
 				matchesPanel.add(buildMatchLabel(homeTeam + " vs " + awayTeam, hasBottomSpacing ? 4 : 0));
-			}
-
-			int remainingMatches = gameDay.getGames().size() - matchCount;
-			if (remainingMatches > 0) {
-				JLabel otherLabel = new JLabel("+" + remainingMatches + " autres");
-				otherLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
-				otherLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
-				int topPadding = 0;
-				if (matchCount > 0) {
-					topPadding = 2;
-				}
-				otherLabel.setBorder(BorderFactory.createEmptyBorder(topPadding, 0, 0, 0));
-				matchesPanel.add(otherLabel);
 			}
 			dayPanel.add(matchesPanel, BorderLayout.CENTER);
 		}
