@@ -94,7 +94,7 @@ public class MainGui extends JFrame {
 				rosterDashboard, mapDashboard);
 		dashboardPanel.add(calendarDashboard, "calendar");
 		rankingDashboard = new RankingDashboard();
-		financeDashboard = new FinanceDashboard();
+		financeDashboard = new FinanceDashboard(guiInterface);
 		dashboardPanel.add(rankingDashboard, "ranking");
 		dashboardPanel.add(financeDashboard, "finance");
 		dashboardPanel.add(mapDashboard, "map");
@@ -133,6 +133,9 @@ public class MainGui extends JFrame {
 			}
 			if ("match".equals(cardName)) {
 				matchDashboard.refreshSelectedGame();
+			}
+			if ("finance".equals(cardName)) {
+				financeDashboard.refreshData();
 			}
 			sidebar.setActiveSection(cardName);
 			dashboardLayout.show(dashboardPanel, cardName);

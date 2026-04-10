@@ -61,10 +61,12 @@ public class TestFinanceBuilder {
    @Test
    public void shouldInitializeBudgetMonthlyMapsForEachFinancialMonth() {
       for (Team team : league.getAllTeam()) {
-         assertEquals(10, team.getTeamFinance().getBudget().getMonthlyIncomes().size());
-         assertEquals(10, team.getTeamFinance().getBudget().getMonthlyExpenses().size());
+         assertEquals(FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS,
+               team.getTeamFinance().getBudget().getMonthlyIncomes().size());
+         assertEquals(FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS,
+               team.getTeamFinance().getBudget().getMonthlyExpenses().size());
 
-         for (int month = 0; month < 10; month++) {
+         for (int month = 0; month < FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS; month++) {
             assertTrue(team.getTeamFinance().getBudget().getMonthlyIncomes().containsKey(month));
             assertTrue(team.getTeamFinance().getBudget().getMonthlyExpenses().containsKey(month));
             assertNotNull(team.getTeamFinance().getBudget().getIncomesForMonth(month));

@@ -78,6 +78,16 @@ public class SimulationManager implements GUIInterface {
 		firstRoundCalendarBuilder = new FirstRoundCalendarBuilder(league);
 	}
 
+	@Override
+	public League getLeague() {
+		return league;
+	}
+
+	@Override
+	public int getCurrentFinanceMonth() {
+		return clock == null ? 1 : clock.getCurrentMonth();
+	}
+
 	// methddes pour la presaison
 	// pour page de garde
 	@Override
