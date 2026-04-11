@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -48,13 +49,14 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 
 	private void create() {
 		menuButtons = new JButton[] { matchButton, calendarButton, rankingButton, financeButton, mapButton };
+		applySidebarIcons();
 		initializeHighlightStrategies();
 		applyTheme();
 	}
 
 	private void organize() {
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(240, 0));
+		setPreferredSize(new Dimension(300, 0));
 		setBackground(DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR);
 
 		add(buildTopSection(), BorderLayout.NORTH);
@@ -73,11 +75,11 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 		logoLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		titleLabel = new JLabel("NBA League");
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
+		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
 		titleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		subtitleLabel = new JLabel("Management");
-		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
+		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
 		subtitleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		panel.add(logoLabel);
@@ -137,6 +139,8 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 
 	private void configureMenuButton(JButton button) {
 		button.setHorizontalAlignment(SwingConstants.LEFT);
+		button.setHorizontalTextPosition(SwingConstants.RIGHT);
+		button.setIconTextGap(12);
 		button.setFocusPainted(false);
 		button.setBorderPainted(false);
 		button.setContentAreaFilled(false);
@@ -144,11 +148,37 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 
 		button.setBackground(DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR);
 		button.setForeground(DashboardPanelUtil.SIDEBAR_TEXT_COLOR);
-		button.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
+		button.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 22));
 
-		button.setPreferredSize(new Dimension(200, 50));
-		button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
-		button.setMargin(new Insets(0, 20, 0, 10));
+		button.setPreferredSize(new Dimension(260, 74));
+		button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 74));
+		button.setMargin(new Insets(0, 28, 0, 14));
+	}
+
+	private void applySidebarIcons() {
+		matchButton.setIcon(loadSidebarIcon("resources/logo_dash/match.png"));
+		calendarButton.setIcon(loadSidebarIcon("resources/logo_dash/calendar.png"));
+		rankingButton.setIcon(loadSidebarIcon("resources/logo_dash/classement.png"));
+		financeButton.setIcon(loadSidebarIcon("resources/logo_dash/finance.png"));
+		mapButton.setIcon(loadSidebarIcon("resources/logo_dash/map.png"));
+		themeButton.setIcon(loadSidebarIcon(
+				DashboardPanelUtil.isDarkMode() ? "resources/logo_dash/sun_mode_icon.png"
+						: "resources/logo_dash/moon_mode_icon.png"));
+		exitButton.setIcon(loadSidebarIcon(
+				DashboardPanelUtil.isDarkMode() ? "resources/logo_dash/exit_dark.png"
+						: "resources/logo_dash/exit_light.png"));
+	}
+
+	private ImageIcon loadSidebarIcon(String path) {
+		if (path == null) {
+			return null;
+		}
+		ImageIcon icon = new ImageIcon(path);
+		if (icon.getIconWidth() <= 0) {
+			return null;
+		}
+		Image scaledImage = icon.getImage().getScaledInstance(28, 28, Image.SCALE_SMOOTH);
+		return new ImageIcon(scaledImage);
 	}
 
 	private class HighlightAction implements ActionListener {
@@ -247,9 +277,10 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 		if (subtitleLabel != null) {
 			subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 		}
+		applySidebarIcons();
 		themeButton.setText(DashboardPanelUtil.isDarkMode() ? "Mode clair" : "Mode sombre");
-		themeButton.setBackground(new Color(0x17, 0x31, 0x74));
-		themeButton.setForeground(Color.WHITE);
+		themeButton.setBackground(DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR);
+		themeButton.setForeground(DashboardPanelUtil.SIDEBAR_TEXT_COLOR);
 		exitButton.setBackground(DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR);
 		exitButton.setForeground(DashboardPanelUtil.SIDEBAR_TEXT_COLOR);
 		initializeHighlightStrategies();

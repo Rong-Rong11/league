@@ -15,9 +15,9 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 
 import gui.panel.common.ButtonStyleUtil;
+import gui.panel.common.CustomProgressBar;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.RoundedPanel;
@@ -26,11 +26,12 @@ import gui.panel.common.ThemeAware;
 public class HeaderPanel extends RoundedPanel implements ThemeAware {
 
 	private static final Color NAVIGATION_BUTTON_COLOR = new Color(0x17, 0x31, 0x74);
+	private static final Color CALENDAR_PROGRESS_COLOR = DashboardPanelUtil.ACCENT_RED_COLOR;
 
 	private JLabel progressTitleLabel;
 	private JLabel progressSubtitleLabel;
 	private JLabel percentageLabel;
-	private JProgressBar progressBar;
+	private CustomProgressBar progressBar;
 
 	private JButton simulateDayButton;
 	private JButton simulateWeekButton;
@@ -56,7 +57,7 @@ public class HeaderPanel extends RoundedPanel implements ThemeAware {
 		progressTitleLabel = new JLabel("Progression de la saison");
 		progressSubtitleLabel = new JLabel("0 jours completes sur 0");
 		percentageLabel = new JLabel("0%");
-		progressBar = new JProgressBar(0, 100);
+		progressBar = new CustomProgressBar(0, 100);
 
 		simulateDayButton = new RoundedButton("Simuler Jour");
 		simulateWeekButton = new RoundedButton("Simuler Semaine");
@@ -84,10 +85,9 @@ public class HeaderPanel extends RoundedPanel implements ThemeAware {
 		weekLabel.setMinimumSize(new Dimension(250, 36));
 
 		progressBar.setValue(0);
-		progressBar.setStringPainted(false);
-		progressBar.setBackground(new Color(0xE3, 0xE8, 0xEE));
 		progressBar.setPreferredSize(new Dimension(260, 14));
-		progressBar.setBorder(BorderFactory.createEmptyBorder());
+		progressBar.setFillColor(CALENDAR_PROGRESS_COLOR);
+		progressBar.setCornerRadius(14);
 
 		styleNavigationButton(previousMonthButton);
 		styleNavigationButton(nextMonthButton);
@@ -255,7 +255,8 @@ public class HeaderPanel extends RoundedPanel implements ThemeAware {
 		percentageLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		monthLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		weekLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		progressBar.setForeground(new Color(0x17, 0x31, 0x74));
+		progressBar.setFillColor(CALENDAR_PROGRESS_COLOR);
+		progressBar.applyTheme();
 		stylePrimaryActionButton(simulateDayButton);
 		stylePrimaryActionButton(simulateWeekButton);
 		stylePrimaryActionButton(simulateSeasonButton);

@@ -16,15 +16,13 @@ import javax.swing.JTextField;
 
 import data.team.Team;
 import gui.panel.common.DashboardCard;
+import gui.panel.common.DashboardPanelUtil;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
+import gui.panel.common.ThemeAware;
 import process.orchestrator.GUIInterface;
 import process.utility.TeamDisplayUtil;
 
-public class RankingPerformancePanel extends JPanel {
-	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
-	private static final Color SUBTITLE_COLOR = new Color(110, 117, 131);
-	private static final Color BORDER_COLOR = new Color(229, 232, 238);
-	private static final Color VALUE_FIELD_BACKGROUND = new Color(243, 246, 250);
+public class RankingPerformancePanel extends JPanel implements ThemeAware {
 	private static final int CARD_HEIGHT = 108;
 
 	private GUIInterface guiInterface;
@@ -57,6 +55,7 @@ public class RankingPerformancePanel extends JPanel {
 		add(createPerformanceCard("Meilleure serie", streakLogoPanel, streakTeamValue, streakDetailField));
 		add(createPerformanceCard("Derniere place", lastLogoPanel, lastTeamValue, lastDetailField));
 		refreshPerformance();
+		applyTheme();
 	}
 
 	public void refreshPerformance() {
@@ -126,8 +125,8 @@ public class RankingPerformancePanel extends JPanel {
 		field.setEditable(false);
 		field.setHorizontalAlignment(JTextField.CENTER);
 		field.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
-		field.setForeground(TITLE_COLOR);
-		field.setBackground(VALUE_FIELD_BACKGROUND);
+		field.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		field.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
 		field.setBorder(BorderFactory.createEmptyBorder(6, 10, 6, 10));
 		return field;
 	}
@@ -137,7 +136,7 @@ public class RankingPerformancePanel extends JPanel {
 		card.setLayout(new BorderLayout(0, 8));
 		card.setPreferredSize(new java.awt.Dimension(10, CARD_HEIGHT));
 		card.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER_COLOR),
+				BorderFactory.createMatteBorder(0, 0, 1, 0, DashboardPanelUtil.BORDER_COLOR),
 				BorderFactory.createEmptyBorder(10, 12, 10, 12)));
 
 		JPanel topPanel = new JPanel(new BorderLayout(8, 0));
@@ -149,10 +148,10 @@ public class RankingPerformancePanel extends JPanel {
 
 		JLabel labelValue = new JLabel(label);
 		labelValue.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
-		labelValue.setForeground(SUBTITLE_COLOR);
+		labelValue.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 
 		teamValue.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-		teamValue.setForeground(TITLE_COLOR);
+		teamValue.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 
 		textPanel.add(labelValue);
 		textPanel.add(teamValue);
@@ -173,5 +172,24 @@ public class RankingPerformancePanel extends JPanel {
 		card.add(topPanel, BorderLayout.CENTER);
 		card.add(fieldWrapper, BorderLayout.SOUTH);
 		return card;
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		leaderTeamValue.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		streakTeamValue.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		lastTeamValue.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		applyValueFieldTheme(leaderDetailField);
+		applyValueFieldTheme(streakDetailField);
+		applyValueFieldTheme(lastDetailField);
+		revalidate();
+		repaint();
+	}
+
+	private void applyValueFieldTheme(JTextField field) {
+		field.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		field.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
+		field.setCaretColor(DashboardPanelUtil.TITLE_TEXT_COLOR);
 	}
 }

@@ -11,11 +11,14 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class DashboardPanelUtil {
+	private static final ThemePalette LIGHT_THEME_PALETTE = new LightThemePalette();
+	private static final ThemePalette DARK_THEME_PALETTE = new DarkThemePalette();
+
 	public static Color DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
 	public static Color PANEL_SURFACE_COLOR = Color.WHITE;
 	public static Color BUTTON_SURFACE_COLOR = new Color(220, 226, 234);
 	public static Color BUTTON_TEXT_COLOR = new Color(40, 40, 40);
-	public static final java.awt.Color ACCENT_RED_COLOR = new java.awt.Color(0xA6, 0x4D, 0x5A);
+	public static Color ACCENT_RED_COLOR = new Color(0xA6, 0x4D, 0x5A);
 	public static Color TITLE_TEXT_COLOR = new Color(0x17, 0x31, 0x74);
 	public static Color SUBTITLE_TEXT_COLOR = new Color(0x6D, 0x75, 0x83);
 	public static Color BORDER_COLOR = new Color(220, 224, 230);
@@ -23,6 +26,7 @@ public class DashboardPanelUtil {
 	public static Color SIDEBAR_BACKGROUND_COLOR = Color.WHITE;
 	public static Color SIDEBAR_TEXT_COLOR = new Color(40, 40, 40);
 	private static boolean darkMode;
+	private static ThemePalette currentPalette;
 
 	static {
 		setDarkMode(false);
@@ -35,32 +39,33 @@ public class DashboardPanelUtil {
 	public static void setDarkMode(boolean darkEnabled) {
 		darkMode = darkEnabled;
 		if (darkMode) {
-			DASHBOARD_BACKGROUND_COLOR = new Color(24, 26, 31);
-			PANEL_SURFACE_COLOR = new Color(34, 37, 43);
-			BUTTON_SURFACE_COLOR = new Color(52, 57, 66);
-			BUTTON_TEXT_COLOR = new Color(228, 233, 240);
-			TITLE_TEXT_COLOR = new Color(238, 242, 247);
-			SUBTITLE_TEXT_COLOR = new Color(172, 179, 189);
-			BORDER_COLOR = new Color(58, 63, 72);
-			PLACEHOLDER_BACKGROUND_COLOR = new Color(52, 56, 64);
-			SIDEBAR_BACKGROUND_COLOR = new Color(29, 32, 38);
-			SIDEBAR_TEXT_COLOR = new Color(228, 233, 240);
-			return;
+			currentPalette = DARK_THEME_PALETTE;
+		} else {
+			currentPalette = LIGHT_THEME_PALETTE;
 		}
-		DASHBOARD_BACKGROUND_COLOR = new Color(247, 248, 250);
-		PANEL_SURFACE_COLOR = Color.WHITE;
-		BUTTON_SURFACE_COLOR = new Color(220, 226, 234);
-		BUTTON_TEXT_COLOR = new Color(40, 40, 40);
-		TITLE_TEXT_COLOR = new Color(0x17, 0x31, 0x74);
-		SUBTITLE_TEXT_COLOR = new Color(0x6D, 0x75, 0x83);
-		BORDER_COLOR = new Color(220, 224, 230);
-		PLACEHOLDER_BACKGROUND_COLOR = new Color(226, 226, 226);
-		SIDEBAR_BACKGROUND_COLOR = Color.WHITE;
-		SIDEBAR_TEXT_COLOR = new Color(40, 40, 40);
+		applyPalette(currentPalette);
 	}
 
 	public static boolean isDarkMode() {
 		return darkMode;
+	}
+
+	public static ThemePalette getCurrentPalette() {
+		return currentPalette;
+	}
+
+	private static void applyPalette(ThemePalette palette) {
+		DASHBOARD_BACKGROUND_COLOR = palette.getDashboardBackgroundColor();
+		PANEL_SURFACE_COLOR = palette.getPanelSurfaceColor();
+		BUTTON_SURFACE_COLOR = palette.getButtonSurfaceColor();
+		BUTTON_TEXT_COLOR = palette.getButtonTextColor();
+		ACCENT_RED_COLOR = palette.getAccentRedColor();
+		TITLE_TEXT_COLOR = palette.getTitleTextColor();
+		SUBTITLE_TEXT_COLOR = palette.getSubtitleTextColor();
+		BORDER_COLOR = palette.getBorderColor();
+		PLACEHOLDER_BACKGROUND_COLOR = palette.getPlaceholderBackgroundColor();
+		SIDEBAR_BACKGROUND_COLOR = palette.getSidebarBackgroundColor();
+		SIDEBAR_TEXT_COLOR = palette.getSidebarTextColor();
 	}
 
 	public static void refreshTheme(Component component) {

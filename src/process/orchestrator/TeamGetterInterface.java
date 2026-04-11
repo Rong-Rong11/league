@@ -1,8 +1,7 @@
 package process.orchestrator;
 
-import java.util.ArrayList;
-
 import data.team.Team;
+import java.util.ArrayList;
 
 public interface TeamGetterInterface {
 

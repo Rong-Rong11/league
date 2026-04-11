@@ -3,17 +3,21 @@ package gui.panel.matchPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 
 import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.sport.setup.GameResult;
+import gui.panel.common.CustomProgressBar;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
 
@@ -21,6 +25,7 @@ public class MatchStatPanel extends JPanel implements ThemeAware {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
 	private static final Color PRIMARY_BAR_COLOR = new Color(0x17, 0x31, 0x74);
+	private static final Color SECONDARY_BAR_COLOR = DashboardPanelUtil.ACCENT_RED_COLOR;
 
 	private ComparisonBarPanel madeShotsBar;
 	private ComparisonBarPanel threePointsBar;
@@ -28,7 +33,7 @@ public class MatchStatPanel extends JPanel implements ThemeAware {
 	private ComparisonBarPanel reboundsBar;
 	private JLabel attendanceSummaryLabel;
 	private JLabel attendanceRateLabel;
-	private JProgressBar attendanceBar;
+	private CustomProgressBar attendanceBar;
 	private JLabel statsTitleLabel;
 	private JLabel attendanceTitleLabel;
 
@@ -142,11 +147,10 @@ public class MatchStatPanel extends JPanel implements ThemeAware {
 		summary.add(attendanceSummaryLabel, BorderLayout.WEST);
 		summary.add(attendanceRateLabel, BorderLayout.EAST);
 
-		attendanceBar = new JProgressBar(0, 100);
+		attendanceBar = new CustomProgressBar(0, 100);
 		attendanceBar.setValue(0);
-		attendanceBar.setForeground(PRIMARY_BAR_COLOR);
-		attendanceBar.setBackground(new Color(225, 225, 225));
-		attendanceBar.setBorderPainted(false);
+		attendanceBar.setFillColor(PRIMARY_BAR_COLOR);
+		attendanceBar.setCornerRadius(10);
 
 		panel.add(attendanceTitleLabel);
 		panel.add(Box.createVerticalStrut(8));
@@ -160,7 +164,7 @@ public class MatchStatPanel extends JPanel implements ThemeAware {
 		private JLabel leftValueLabel;
 		private JLabel rightValueLabel;
 		private JLabel titleLabel;
-		private JProgressBar progressBar;
+		private ComparisonProgressBar progressBar;
 
 		private ComparisonBarPanel(String title) {
 			super(new BorderLayout(0, 6));
@@ -185,10 +189,7 @@ public class MatchStatPanel extends JPanel implements ThemeAware {
 			header.add(titleLabel, BorderLayout.CENTER);
 			header.add(rightValueLabel, BorderLayout.EAST);
 
-			progressBar = new JProgressBar(0, 100);
-			progressBar.setForeground(PRIMARY_BAR_COLOR);
-			progressBar.setBackground(new Color(225, 225, 225));
-			progressBar.setBorderPainted(false);
+			progressBar = new ComparisonProgressBar();
 
 			add(header, BorderLayout.NORTH);
 			add(progressBar, BorderLayout.CENTER);
@@ -197,14 +198,76 @@ public class MatchStatPanel extends JPanel implements ThemeAware {
 		private void updateValues(int homeValue, int awayValue) {
 			leftValueLabel.setText(String.valueOf(homeValue));
 			rightValueLabel.setText(String.valueOf(awayValue));
-			int total = homeValue + awayValue;
-			progressBar.setValue(total <= 0 ? 0 : (int) Math.round((homeValue * 100.0) / total));
+			progressBar.setValues(homeValue, awayValue);
 		}
 
 		private void applyTheme() {
 			leftValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 			rightValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 			titleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+			progressBar.applyTheme();
+		}
+	}
+
+	private class ComparisonProgressBar extends JPanel implements ThemeAware {
+		private int homeValue;
+		private int awayValue;
+
+		private ComparisonProgressBar() {
+			setOpaque(false);
+			setPreferredSize(new Dimension(260, 12));
+		}
+
+		private void setValues(int homeValue, int awayValue) {
+			this.homeValue = homeValue;
+			this.awayValue = awayValue;
+			repaint();
+		}
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+			int width = getWidth();
+			int height = getHeight();
+			if (width <= 0 || height <= 0) {
+				return;
+			}
+
+			g2.setColor(getTrackColor());
+			g2.fillRoundRect(0, 0, width, height, 10, 10);
+
+			int total = homeValue + awayValue;
+			if (total <= 0) {
+				return;
+			}
+
+			int homeWidth = (int) Math.round((homeValue * width) / (double) total);
+			int awayWidth = width - homeWidth;
+
+			if (homeWidth > 0) {
+				g2.setColor(PRIMARY_BAR_COLOR);
+				g2.fillRoundRect(0, 0, homeWidth, height, 10, 10);
+			}
+			if (awayWidth > 0) {
+				g2.setColor(SECONDARY_BAR_COLOR);
+				g2.fillRoundRect(width - awayWidth, 0, awayWidth, height, 10, 10);
+			}
+		}
+
+		private Color getTrackColor() {
+			if (DashboardPanelUtil.isDarkMode()) {
+				return new Color(53, 58, 68);
+			}
+			return new Color(227, 232, 238);
+		}
+
+		@Override
+		public void applyTheme() {
+			repaint();
 		}
 	}
 
@@ -214,6 +277,7 @@ public class MatchStatPanel extends JPanel implements ThemeAware {
 		attendanceTitleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		attendanceSummaryLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 		attendanceRateLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		attendanceBar.applyTheme();
 		madeShotsBar.applyTheme();
 		threePointsBar.applyTheme();
 		freeThrowsBar.applyTheme();

@@ -11,6 +11,7 @@ import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
 import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.InfoPopupUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
@@ -21,6 +22,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -43,6 +47,8 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 	private JButton largeMarketButton;
 	private JButton mediumMarketButton;
 	private JButton smallMarketButton;
+	private JButton policyInfoButton;
+	private JButton marketInfoButton;
 	private FinancialPolicy selectedPolicy;
 	private MarketSize selectedMarketSize;
 	private JLabel[] sectionTitleLabels;
@@ -63,6 +69,8 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 		largeMarketButton = new RoundedButton("Grand");
 		mediumMarketButton = new RoundedButton("Moyen");
 		smallMarketButton = new RoundedButton("Petit");
+		policyInfoButton = createInfoButton();
+		marketInfoButton = createInfoButton();
 
 		cityLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 		cityLabel.setForeground(Color.WHITE);
@@ -76,7 +84,19 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 		ButtonStyleUtil.styleToggleButton(mediumMarketButton);
 		ButtonStyleUtil.styleToggleButton(smallMarketButton);
 		enlargeSelectionButtons();
+		policyInfoButton.addActionListener(new PolicyInfoListener());
+		marketInfoButton.addActionListener(new MarketInfoListener());
 		applyTheme();
+	}
+
+	private JButton createInfoButton() {
+		JButton button = new RoundedButton("i");
+		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
+		button.setPreferredSize(new Dimension(24, 24));
+		button.setMinimumSize(new Dimension(24, 24));
+		button.setMaximumSize(new Dimension(24, 24));
+		button.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+		return button;
 	}
 
 	private void enlargeSelectionButtons() {
@@ -143,6 +163,7 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 		JLabel titleLabel = new JLabel(title);
 		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
 		storeSectionTitleLabel(titleLabel);
+		JPanel titlePanel = buildTitlePanel(titleLabel, title.equals("POLITIQUE FINANCIERE") ? policyInfoButton : marketInfoButton);
 
 		JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 12, 0));
 		buttonPanel.setOpaque(false);
@@ -152,9 +173,17 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 		buttonPanel.add(secondButton);
 		buttonPanel.add(thirdButton);
 
-		sectionPanel.add(titleLabel, BorderLayout.NORTH);
+		sectionPanel.add(titlePanel, BorderLayout.NORTH);
 		sectionPanel.add(buttonPanel, BorderLayout.CENTER);
 		return sectionPanel;
+	}
+
+	private JPanel buildTitlePanel(JLabel titleLabel, JButton infoButton) {
+		JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
+		titlePanel.setOpaque(false);
+		titlePanel.add(titleLabel);
+		titlePanel.add(infoButton);
+		return titlePanel;
 	}
 
 	private void storeSectionTitleLabel(JLabel titleLabel) {
@@ -254,6 +283,27 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 		return smallMarketButton;
 	}
 
+	private class PolicyInfoListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String message = "Ambitieux : depense plus pour accelerer la croissance de l'equipe.\n"
+					+ "Equilibre : garde un compromis entre investissement et prudence.\n"
+					+ "Economique : limite les depenses pour proteger les finances.";
+			InfoPopupUtil.showInfoPopup(OpeningTeamSelectionPanel.this, "Politique financiere", message);
+		}
+	}
+
+	private class MarketInfoListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String message = "La taille du marche represente le potentiel economique autour de la franchise.\n\n"
+					+ "Grand : plus de supporters, plus de visibilite et de revenus potentiels.\n"
+					+ "Moyen : potentiel correct, mais moins fort qu'un grand marche.\n"
+					+ "Petit : moins de public, moins d'exposition et revenus plus limites.";
+			InfoPopupUtil.showInfoPopup(OpeningTeamSelectionPanel.this, "Taille du marche", message);
+		}
+	}
+
 	@Override
 	public void applyTheme() {
 		if (sectionTitleLabels != null) {
@@ -263,6 +313,10 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 				}
 			}
 		}
+		policyInfoButton.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
+		policyInfoButton.setForeground(DashboardPanelUtil.BUTTON_TEXT_COLOR);
+		marketInfoButton.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
+		marketInfoButton.setForeground(DashboardPanelUtil.BUTTON_TEXT_COLOR);
 		refreshPolicyButtons();
 		refreshMarketSizeButtons();
 	}

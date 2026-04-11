@@ -14,18 +14,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import data.team.Team;
+import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
+import gui.panel.common.ThemeAware;
 import process.orchestrator.GUIInterface;
 import process.utility.TeamDisplayUtil;
 
-public class RankingTablePanel extends JPanel {
-	private static final Color HEADER_BACKGROUND = new Color(245, 247, 250);
-	private static final Color HEADER_TEXT_COLOR = new Color(110, 117, 131);
-	private static final Color PRIMARY_TEXT_COLOR = new Color(0x17, 0x31, 0x74);
+public class RankingTablePanel extends JPanel implements ThemeAware {
 	private static final Color PRIMARY_ACCENT = new Color(0x17, 0x31, 0x74);
-	private static final Color SECONDARY_ACCENT = new Color(220, 226, 234);
-	private static final Color MUTED_TEXT_COLOR = new Color(90, 90, 90);
-	private static final Color BORDER_COLOR = new Color(229, 232, 238);
 	private static final String GLOBAL_MODE = "global";
 	private static final String EAST_MODE = "east";
 	private static final String WEST_MODE = "west";
@@ -48,6 +44,7 @@ public class RankingTablePanel extends JPanel {
 		add(buildTopBar(), BorderLayout.NORTH);
 		add(buildTableContent(), BorderLayout.CENTER);
 		refreshRanking();
+		applyTheme();
 	}
 
 	private JPanel buildTopBar() {
@@ -81,8 +78,7 @@ public class RankingTablePanel extends JPanel {
 	private JButton createFilterButton(String text, boolean selected) {
 		JButton button = new RoundedButton(text);
 		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		button.setBackground(selected ? PRIMARY_ACCENT : SECONDARY_ACCENT);
-		button.setForeground(selected ? Color.WHITE : MUTED_TEXT_COLOR);
+		applyFilterButtonTheme(button, selected);
 		return button;
 	}
 
@@ -95,9 +91,9 @@ public class RankingTablePanel extends JPanel {
 	private JPanel buildHeaderRow() {
 		JPanel header = new JPanel(new GridLayout(1, 7, 12, 0));
 		header.setOpaque(true);
-		header.setBackground(HEADER_BACKGROUND);
+		header.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
 		header.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(1, 0, 1, 0, BORDER_COLOR),
+				BorderFactory.createMatteBorder(1, 0, 1, 0, DashboardPanelUtil.BORDER_COLOR),
 				BorderFactory.createEmptyBorder(8, 12, 8, 12)));
 
 		header.add(createHeaderLabel("RANG"));
@@ -112,7 +108,7 @@ public class RankingTablePanel extends JPanel {
 
 	private JLabel createHeaderLabel(String text) {
 		JLabel label = new JLabel(text);
-		label.setForeground(HEADER_TEXT_COLOR);
+		label.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
 		return label;
 	}
@@ -198,8 +194,7 @@ public class RankingTablePanel extends JPanel {
 
 	private void styleFilterButton(JButton button, boolean selected) {
 		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		button.setBackground(selected ? PRIMARY_ACCENT : SECONDARY_ACCENT);
-		button.setForeground(selected ? Color.WHITE : MUTED_TEXT_COLOR);
+		applyFilterButtonTheme(button, selected);
 	}
 
 	private JPanel createTeamRow(int rank, Team team) {
@@ -215,9 +210,9 @@ public class RankingTablePanel extends JPanel {
 			String bestWinStreak) {
 		JPanel row = new JPanel(new GridLayout(1, 7, 12, 0));
 		row.setOpaque(true);
-		row.setBackground(Color.WHITE);
+		row.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
 		row.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(0, 0, 1, 0, BORDER_COLOR),
+				BorderFactory.createMatteBorder(0, 0, 1, 0, DashboardPanelUtil.BORDER_COLOR),
 				BorderFactory.createEmptyBorder(8, 12, 8, 12)));
 
 		row.add(createValueLabel(String.valueOf(rank), true));
@@ -242,8 +237,20 @@ public class RankingTablePanel extends JPanel {
 
 	private JLabel createValueLabel(String text, boolean accented) {
 		JLabel label = new JLabel(text);
-		label.setForeground(accented ? PRIMARY_TEXT_COLOR : MUTED_TEXT_COLOR);
+		label.setForeground(accented ? DashboardPanelUtil.TITLE_TEXT_COLOR : DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 		label.setFont(new Font(Font.SANS_SERIF, accented ? Font.BOLD : Font.PLAIN, 12));
 		return label;
+	}
+
+	private void applyFilterButtonTheme(JButton button, boolean selected) {
+		button.setBackground(selected ? PRIMARY_ACCENT : DashboardPanelUtil.BUTTON_SURFACE_COLOR);
+		button.setForeground(selected ? Color.WHITE : DashboardPanelUtil.BUTTON_TEXT_COLOR);
+	}
+
+	@Override
+	public void applyTheme() {
+		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		updateModeButtons();
+		refreshRanking();
 	}
 }
