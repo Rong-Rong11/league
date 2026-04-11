@@ -27,6 +27,10 @@ public interface TeamGetterInterface {
 
    double getTeamCurrentPayroll(Team team);
 
+   String getTeamFinancialPolicyLabel(Team team);
+
+   String getTeamMarketSizeLabel(Team team);
+
    int getTeamCurrentWinStreak(Team team);
 
    int getTeamCurrentLoseStreak(Team team);

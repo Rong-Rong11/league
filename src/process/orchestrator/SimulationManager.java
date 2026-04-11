@@ -586,6 +586,42 @@ public class SimulationManager implements GUIInterface {
 	}
 
 	@Override
+	public String getTeamFinancialPolicyLabel(Team team) {
+		if (team == null || team.getTeamFinance() == null || team.getTeamFinance().getFinancialProfil() == null) {
+			return "-";
+		}
+		String className = team.getTeamFinance().getFinancialProfil().getClass().getSimpleName();
+		if ("AmbitiousPolicy".equals(className)) {
+			return "Ambitieuse";
+		}
+		if ("BalancedPolicy".equals(className)) {
+			return "Equilibree";
+		}
+		if ("ThriftyPolicy".equals(className)) {
+			return "Economique";
+		}
+		return className;
+	}
+
+	@Override
+	public String getTeamMarketSizeLabel(Team team) {
+		if (team == null || team.getTeamFinance() == null || team.getTeamFinance().getMarketSize() == null) {
+			return "-";
+		}
+		String className = team.getTeamFinance().getMarketSize().getClass().getSimpleName();
+		if ("LargeSize".equals(className)) {
+			return "Grand";
+		}
+		if ("MediumSize".equals(className)) {
+			return "Moyen";
+		}
+		if ("SmallSize".equals(className)) {
+			return "Petit";
+		}
+		return className;
+	}
+
+	@Override
 	public int getTeamCurrentWinStreak(Team team) {
 		return team.getTeamPerformance().getCurrentWinStreak();
 	}
