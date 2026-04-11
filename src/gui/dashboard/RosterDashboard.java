@@ -81,9 +81,9 @@ public class RosterDashboard extends JPanel implements ThemeAware {
 		currentSeasonButton.setPreferredSize(new Dimension(170, 44));
 		previousSeasonButton.setPreferredSize(new Dimension(170, 44));
 		teamNameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
-		teamNameLabel.setForeground(new Color(0x17, 0x31, 0x74));
+		teamNameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
-		subtitleLabel.setForeground(new Color(110, 117, 131));
+		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 		subtitleLabel.setAlignmentX(LEFT_ALIGNMENT);
 	}
 
@@ -173,9 +173,9 @@ public class RosterDashboard extends JPanel implements ThemeAware {
 
 		JLabel titleLabel = new JLabel(title);
 		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		titleLabel.setForeground(new Color(110, 117, 131));
+		titleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 		valueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 22));
-		valueLabel.setForeground(new Color(0x17, 0x31, 0x74));
+		valueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 
 		card.add(titleLabel);
 		card.add(Box.createVerticalStrut(4));
@@ -252,9 +252,9 @@ public class RosterDashboard extends JPanel implements ThemeAware {
 	}
 
 	private void updateSeasonButtonsStyle() {
-		Color activeBackground = new Color(0x17, 0x31, 0x74);
+		Color activeBackground = DashboardPanelUtil.getPrimaryActionColor();
 		Color inactiveBackground = DashboardPanelUtil.BUTTON_SURFACE_COLOR;
-		Color activeForeground = Color.WHITE;
+		Color activeForeground = DashboardPanelUtil.getPrimaryActionTextColor();
 		Color inactiveForeground = DashboardPanelUtil.BUTTON_TEXT_COLOR;
 
 		currentSeasonButton.setOpaque(false);

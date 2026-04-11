@@ -6,7 +6,6 @@ import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -24,7 +23,6 @@ import javax.swing.JPanel;
 
 
 public class MatchHeaderPanel extends RoundedPanel implements ThemeAware {
-	private static final Color NAVIGATION_BUTTON_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final DateTimeFormatter HEADER_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM");
 
 	private JLabel titleLabel;
@@ -55,10 +53,10 @@ public class MatchHeaderPanel extends RoundedPanel implements ThemeAware {
 		nextDayButton = new RoundedButton(">");
 		previousDayButton.setPreferredSize(new Dimension(42, 30));
 		nextDayButton.setPreferredSize(new Dimension(42, 30));
-		previousDayButton.setBackground(NAVIGATION_BUTTON_COLOR);
-		nextDayButton.setBackground(NAVIGATION_BUTTON_COLOR);
-		previousDayButton.setForeground(Color.WHITE);
-		nextDayButton.setForeground(Color.WHITE);
+		previousDayButton.setBackground(DashboardPanelUtil.getNavigationButtonColor());
+		nextDayButton.setBackground(DashboardPanelUtil.getNavigationButtonColor());
+		previousDayButton.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
+		nextDayButton.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 
 		JPanel textPanel = new JPanel();
 		textPanel.setOpaque(false);
@@ -108,5 +106,9 @@ public class MatchHeaderPanel extends RoundedPanel implements ThemeAware {
 		titleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		dayNumberLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		previousDayButton.setBackground(DashboardPanelUtil.getNavigationButtonColor());
+		nextDayButton.setBackground(DashboardPanelUtil.getNavigationButtonColor());
+		previousDayButton.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
+		nextDayButton.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 	}
 }

@@ -1,12 +1,13 @@
 package gui.dashboard;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
-import gui.panel.financePanel.CompareFinanceViewPanel;
 import gui.panel.financePanel.FinanceHeaderPanel;
 import gui.panel.financePanel.LeagueFinanceViewPanel;
 import gui.panel.financePanel.TeamFinanceViewPanel;
@@ -17,13 +18,11 @@ public class FinanceDashboard extends JPanel implements ThemeAware {
 	private static final int DASHBOARD_SPACING = 16;
 	private static final String LEAGUE_VIEW = "league";
 	private static final String TEAM_VIEW = "team";
-	private static final String COMPARE_VIEW = "compare";
 
 	private final FinanceHeaderPanel headerPanel;
 	private final JPanel centerContentPanel;
 	private final LeagueFinanceViewPanel leagueViewPanel;
 	private final TeamFinanceViewPanel teamViewPanel;
-	private final CompareFinanceViewPanel compareViewPanel;
 
 	private String selectedView;
 
@@ -34,7 +33,6 @@ public class FinanceDashboard extends JPanel implements ThemeAware {
 		centerContentPanel.setOpaque(false);
 		leagueViewPanel = new LeagueFinanceViewPanel(guiInterface);
 		teamViewPanel = new TeamFinanceViewPanel(guiInterface);
-		compareViewPanel = new CompareFinanceViewPanel(guiInterface);
 
 		organize();
 		actions();
@@ -52,9 +50,8 @@ public class FinanceDashboard extends JPanel implements ThemeAware {
 	}
 
 	private void actions() {
-		headerPanel.getLeagueButton().addActionListener(e -> switchView(LEAGUE_VIEW));
-		headerPanel.getTeamsButton().addActionListener(e -> switchView(TEAM_VIEW));
-		headerPanel.getCompareButton().addActionListener(e -> switchView(COMPARE_VIEW));
+		headerPanel.getLeagueButton().addActionListener(new ShowLeagueViewAction());
+		headerPanel.getTeamsButton().addActionListener(new ShowTeamViewAction());
 	}
 
 	private void switchView(String view) {
@@ -68,7 +65,6 @@ public class FinanceDashboard extends JPanel implements ThemeAware {
 	public void refreshData() {
 		leagueViewPanel.refreshData();
 		teamViewPanel.refreshData();
-		compareViewPanel.refreshData();
 		refreshView();
 	}
 
@@ -86,9 +82,6 @@ public class FinanceDashboard extends JPanel implements ThemeAware {
 		if (TEAM_VIEW.equals(selectedView)) {
 			return teamViewPanel;
 		}
-		if (COMPARE_VIEW.equals(selectedView)) {
-			return compareViewPanel;
-		}
 		return leagueViewPanel;
 	}
 
@@ -98,8 +91,21 @@ public class FinanceDashboard extends JPanel implements ThemeAware {
 		headerPanel.applyTheme();
 		leagueViewPanel.applyTheme();
 		teamViewPanel.applyTheme();
-		compareViewPanel.applyTheme();
 		refreshData();
 		DashboardPanelUtil.refreshChildrenTheme(this);
+	}
+
+	private class ShowLeagueViewAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			switchView(LEAGUE_VIEW);
+		}
+	}
+
+	private class ShowTeamViewAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			switchView(TEAM_VIEW);
+		}
 	}
 }

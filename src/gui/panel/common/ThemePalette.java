@@ -24,4 +24,32 @@ public interface ThemePalette {
 	Color getSidebarBackgroundColor();
 
 	Color getSidebarTextColor();
+
+	Color getRevenueColor();
+
+	Color getExpenseColor();
+
+	Color getPositiveValueColor();
+
+	Color getNegativeValueColor();
+
+	Color getNeutralAccentColor();
+
+	Color getPolicyThriftyColor();
+
+	Color getPolicyBalancedColor();
+
+	Color getPolicyAmbitiousColor();
+
+	Color getStrategyRebuildColor();
+
+	Color getStrategyAllInColor();
+
+	Color getStrategyBalancedColor();
+
+	Color getMarketSmallColor();
+
+	Color getMarketMediumColor();
+
+	Color getMarketLargeColor();
 }

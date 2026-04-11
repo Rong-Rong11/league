@@ -1,7 +1,6 @@
 package gui.panel.mapPanel.effectifPanel;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
@@ -20,7 +19,6 @@ import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import process.orchestrator.GUIInterface;
 
 public class MapTeamSummaryPanel extends JPanel implements ThemeAware {
-	private static final Color OPEN_ROSTER_BUTTON_COLOR = new Color(0x17, 0x31, 0x74);
 
 	private final GUIInterface guiInterface;
 	private JLabel teamNameLabel;
@@ -49,10 +47,10 @@ public class MapTeamSummaryPanel extends JPanel implements ThemeAware {
 		teamLogoPanel.setTeamQueryInterface(guiInterface);
 
 		teamNameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-		teamNameLabel.setForeground(new Color(0x17, 0x31, 0x74));
+		teamNameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		openRosterButton.setFocusPainted(false);
-		openRosterButton.setBackground(OPEN_ROSTER_BUTTON_COLOR);
-		openRosterButton.setForeground(Color.WHITE);
+		openRosterButton.setBackground(DashboardPanelUtil.getPrimaryActionColor());
+		openRosterButton.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 	}
 
 	private void organize() {
@@ -158,6 +156,8 @@ public class MapTeamSummaryPanel extends JPanel implements ThemeAware {
 		budgetLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		capacityLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		averageNoteLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		openRosterButton.setBackground(DashboardPanelUtil.getPrimaryActionColor());
+		openRosterButton.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 		if (infoTitleLabels != null) {
 			for (int i = 0; i < infoTitleLabels.length; i++) {
 				if (infoTitleLabels[i] != null) {

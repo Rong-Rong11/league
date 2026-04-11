@@ -1,7 +1,6 @@
 package gui.panel.common;
 
 import gui.panel.mapPanel.TeamZone;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -14,7 +13,6 @@ import javax.swing.JPanel;
 public class TeamMapPanel extends JPanel implements ThemeAware {
 	private static final String LIGHT_MAP_IMAGE_PATH = "resources/map.png";
 	private static final String DARK_MAP_IMAGE_PATH = "resources/map(dark).png";
-	private static final Color POINT_COLOR = new Color(210, 48, 48);
 	private static final int TEAM_POINT_RADIUS = 6;
 	private static final double SOURCE_IMAGE_WIDTH = 1000.0;
 	private static final double SOURCE_IMAGE_HEIGHT = 667.0;
@@ -165,9 +163,9 @@ public class TeamMapPanel extends JPanel implements ThemeAware {
 			int diameter = radius * 2;
 
 			if (teamName.equals(selectedTeamName)) {
-				g.setColor(new Color(55, 132, 179));
+				g.setColor(DashboardPanelUtil.getSelectedMapPointColor());
 			} else {
-				g.setColor(POINT_COLOR);
+				g.setColor(DashboardPanelUtil.getMapPointColor());
 			}
 			g.fillOval(centerX - radius, centerY - radius, diameter, diameter);
 		}

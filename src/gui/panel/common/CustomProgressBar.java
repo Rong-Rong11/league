@@ -25,7 +25,7 @@ public class CustomProgressBar extends JPanel implements ThemeAware {
 		this.minimum = minimum;
 		this.maximum = maximum;
 		cornerRadius = DEFAULT_BAR_HEIGHT;
-		fillColor = new Color(0x17, 0x31, 0x74);
+		fillColor = DashboardPanelUtil.getProgressFillColor();
 		setOpaque(false);
 		setPreferredSize(new Dimension(260, DEFAULT_BAR_HEIGHT));
 	}
@@ -87,10 +87,7 @@ public class CustomProgressBar extends JPanel implements ThemeAware {
 	}
 
 	private Color getTrackColor() {
-		if (DashboardPanelUtil.isDarkMode()) {
-			return new Color(53, 58, 68);
-		}
-		return new Color(227, 232, 238);
+		return DashboardPanelUtil.getProgressTrackColor();
 	}
 
 	@Override

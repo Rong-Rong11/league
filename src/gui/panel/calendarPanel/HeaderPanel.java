@@ -1,7 +1,6 @@
 package gui.panel.calendarPanel;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -24,9 +23,6 @@ import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
 
 public class HeaderPanel extends RoundedPanel implements ThemeAware {
-
-	private static final Color NAVIGATION_BUTTON_COLOR = new Color(0x17, 0x31, 0x74);
-	private static final Color CALENDAR_PROGRESS_COLOR = DashboardPanelUtil.ACCENT_RED_COLOR;
 
 	private JLabel progressTitleLabel;
 	private JLabel progressSubtitleLabel;
@@ -86,7 +82,7 @@ public class HeaderPanel extends RoundedPanel implements ThemeAware {
 
 		progressBar.setValue(0);
 		progressBar.setPreferredSize(new Dimension(260, 14));
-		progressBar.setFillColor(CALENDAR_PROGRESS_COLOR);
+		progressBar.setFillColor(DashboardPanelUtil.getProgressFillColor());
 		progressBar.setCornerRadius(14);
 
 		styleNavigationButton(previousMonthButton);
@@ -99,14 +95,14 @@ public class HeaderPanel extends RoundedPanel implements ThemeAware {
 	}
 
 	private void styleNavigationButton(JButton button) {
-		button.setBackground(NAVIGATION_BUTTON_COLOR);
-		button.setForeground(Color.WHITE);
+		button.setBackground(DashboardPanelUtil.getNavigationButtonColor());
+		button.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 		button.setPreferredSize(new Dimension(42, 32));
 	}
 
 	private void stylePrimaryActionButton(JButton button) {
-		button.setBackground(new Color(0x17, 0x31, 0x74));
-		button.setForeground(Color.WHITE);
+		button.setBackground(DashboardPanelUtil.getPrimaryActionColor());
+		button.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 	}
 
 	private void organize() {
@@ -255,7 +251,7 @@ public class HeaderPanel extends RoundedPanel implements ThemeAware {
 		percentageLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		monthLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		weekLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		progressBar.setFillColor(CALENDAR_PROGRESS_COLOR);
+		progressBar.setFillColor(DashboardPanelUtil.getProgressFillColor());
 		progressBar.applyTheme();
 		stylePrimaryActionButton(simulateDayButton);
 		stylePrimaryActionButton(simulateWeekButton);

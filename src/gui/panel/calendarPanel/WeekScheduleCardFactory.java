@@ -16,21 +16,6 @@ import gui.panel.common.RoundedPanel;
 import process.utility.TeamDisplayUtil;
 
 public class WeekScheduleCardFactory {
-	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
-	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
-	private static final Color AFTERNOON_COLOR = new Color(0xF8, 0xE9, 0x9A);
-	private static final Color EVENING_COLOR = new Color(0xC8, 0xEE, 0xF6);
-	private static final Color NIGHT_COLOR = new Color(0x4D, 0x46, 0xF0);
-	private static final Color DISPLAYED_AFTERNOON_COLOR = new Color(0xF2, 0xE4, 0xB8);
-	private static final Color DISPLAYED_EVENING_COLOR = new Color(0xD9, 0xEC, 0xF0);
-	private static final Color DISPLAYED_NIGHT_COLOR = new Color(0x8C, 0x88, 0xE8);
-	private static final Color DARK_AFTERNOON_COLOR = new Color(0x7A, 0x6A, 0x33);
-	private static final Color DARK_EVENING_COLOR = new Color(0x2E, 0x53, 0x61);
-	private static final Color DARK_NIGHT_COLOR = new Color(0x33, 0x2F, 0x7A);
-	private static final Color DARK_DISPLAYED_AFTERNOON_COLOR = new Color(0x64, 0x57, 0x2A);
-	private static final Color DARK_DISPLAYED_EVENING_COLOR = new Color(0x2A, 0x49, 0x55);
-	private static final Color DARK_DISPLAYED_NIGHT_COLOR = new Color(0x2D, 0x2A, 0x67);
-
 	public ArrayList<Game> getGamesForSlot(GameDay gameDay, String slotKey) {
 		ArrayList<Game> slotGames = new ArrayList<Game>();
 		for (Game game : gameDay.getGames()) {
@@ -88,47 +73,14 @@ public class WeekScheduleCardFactory {
 	}
 
 	private Color getSlotColor(String slotKey) {
-		if (DashboardPanelUtil.isDarkMode()) {
-			if ("AFTERNOON".equals(slotKey)) {
-				return DARK_AFTERNOON_COLOR;
-			}
-			if ("EVENING".equals(slotKey)) {
-				return DARK_EVENING_COLOR;
-			}
-			return DARK_NIGHT_COLOR;
-		}
-		if ("AFTERNOON".equals(slotKey)) {
-			return AFTERNOON_COLOR;
-		}
-		if ("EVENING".equals(slotKey)) {
-			return EVENING_COLOR;
-		}
-		return NIGHT_COLOR;
+		return DashboardPanelUtil.getCalendarSlotBaseColor(slotKey);
 	}
 
 	private Color getCardColor(Game game, String slotKey) {
-		if (DashboardPanelUtil.isDarkMode()) {
-			if (!game.isDisplayed()) {
-				return getSlotColor(slotKey);
-			}
-			if ("AFTERNOON".equals(slotKey)) {
-				return DARK_DISPLAYED_AFTERNOON_COLOR;
-			}
-			if ("EVENING".equals(slotKey)) {
-				return DARK_DISPLAYED_EVENING_COLOR;
-			}
-			return DARK_DISPLAYED_NIGHT_COLOR;
-		}
 		if (!game.isDisplayed()) {
 			return getSlotColor(slotKey);
 		}
-		if ("AFTERNOON".equals(slotKey)) {
-			return DISPLAYED_AFTERNOON_COLOR;
-		}
-		if ("EVENING".equals(slotKey)) {
-			return DISPLAYED_EVENING_COLOR;
-		}
-		return DISPLAYED_NIGHT_COLOR;
+		return DashboardPanelUtil.getCalendarSlotDisplayedColor(slotKey);
 	}
 
 	private boolean isDarkSlot(String slotKey) {
@@ -136,22 +88,10 @@ public class WeekScheduleCardFactory {
 	}
 
 	private Color getTitleColor(String slotKey) {
-		if (DashboardPanelUtil.isDarkMode()) {
-			return Color.WHITE;
-		}
-		if (isDarkSlot(slotKey)) {
-			return Color.WHITE;
-		}
-		return TITLE_COLOR;
+		return DashboardPanelUtil.getCalendarSlotTitleColor(slotKey);
 	}
 
 	private Color getSubtitleColor(String slotKey) {
-		if (DashboardPanelUtil.isDarkMode()) {
-			return new Color(230, 234, 240);
-		}
-		if (isDarkSlot(slotKey)) {
-			return Color.WHITE;
-		}
-		return SUBTITLE_COLOR;
+		return DashboardPanelUtil.getCalendarSlotSubtitleColor(slotKey);
 	}
 }

@@ -71,8 +71,8 @@ public class OpeningDashboard extends JPanel implements ThemeAware {
 		continueButton.setFont(new java.awt.Font(java.awt.Font.SANS_SERIF, java.awt.Font.BOLD, 16));
 		continueButton.setPreferredSize(new Dimension(170, 56));
 		continueButton.setBorder(BorderFactory.createEmptyBorder(14, 28, 14, 28));
-		continueButton.setBackground(new Color(0x17, 0x31, 0x74));
-		continueButton.setForeground(Color.WHITE);
+		continueButton.setBackground(DashboardPanelUtil.getPrimaryActionColor());
+		continueButton.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 		themeButton.setFont(new java.awt.Font(java.awt.Font.SANS_SERIF, java.awt.Font.BOLD, 14));
 		themeButton.setPreferredSize(new Dimension(150, 44));
 		applyTheme();

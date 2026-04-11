@@ -88,10 +88,23 @@ public class RegularSeasonCalendarBuilder extends CalendarBuilder {
 
 	private ArrayList<Game> getGamesSortedByImportance(ArrayList<Game> games, LocalDate date) {
 		ArrayList<Game> sortedGames = new ArrayList<Game>(games);
-		Collections.sort(sortedGames, (gameA, gameB) -> Double.compare(
-				CalendarUtilitary.popularityScoreGame(gameB, date),
-				CalendarUtilitary.popularityScoreGame(gameA, date)));
+		Collections.sort(sortedGames, new GameImportanceComparator(date));
 		return sortedGames;
+	}
+
+	private class GameImportanceComparator implements java.util.Comparator<Game> {
+		private final LocalDate date;
+
+		private GameImportanceComparator(LocalDate date) {
+			this.date = date;
+		}
+
+		@Override
+		public int compare(Game gameA, Game gameB) {
+			return Double.compare(
+					CalendarUtilitary.popularityScoreGame(gameB, date),
+					CalendarUtilitary.popularityScoreGame(gameA, date));
+		}
 	}
 
 }
