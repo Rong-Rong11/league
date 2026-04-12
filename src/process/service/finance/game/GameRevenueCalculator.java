@@ -1,9 +1,11 @@
-package process.service.finance.tools.game;
+package process.service.finance.game;
 
 import java.time.LocalDate;
 
 import data.finance.GameStat;
+import data.league.League;
 import data.sport.setup.Game;
+import data.sport.setup.GameMoment;
 import data.team.Stadium;
 import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
@@ -11,13 +13,16 @@ import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import process.utility.CalendarUtilitary;
 import process.utility.FinanceUtilitary;
+import process.visitor.gamemoment.GameMomentAttendanceBonusVisitor;
 import process.visitor.marketsize.CalculateBaseTicketVisitor;
 
 public abstract class GameRevenueCalculator {
 
+    private League league;
     protected GameStat gameStat;
 
-    public GameRevenueCalculator(GameStat gameStat) {
+    public GameRevenueCalculator(League league, GameStat gameStat) {
+        this.league = league;
         this.gameStat = gameStat;
     }
 
@@ -26,7 +31,7 @@ public abstract class GameRevenueCalculator {
         double popularityRate = calculatePopularityRate(game, date);
         Stadium stadium = homeTeam.getStadium();
         int capacity = stadium.getCapacity();
-        double attendanceRate = calculateAttendanceRate(date, homeTeam, popularityRate);
+        double attendanceRate = calculateAttendanceRate(game, date, homeTeam, popularityRate);
         int attendees = calculateAttendees(capacity, attendanceRate);
         int ticketPrice = calculateTicketPrice(homeTeam, stadium, popularityRate, attendees, game);
 
@@ -95,42 +100,61 @@ public abstract class GameRevenueCalculator {
         return attendees;
     }
 
-    protected double calculateAttendanceRate(LocalDate date, Team homeTeam, double popularityRate) {
+    protected double calculateAttendanceRate(Game game, LocalDate date, Team homeTeam, double popularityRate) {
         MediaMarket mediaMarket = homeTeam.getTeamFinance().getMediaMarket();
         EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
         double teamValueFactor = FinanceUtilitary.getNormalizedTeamValue(homeTeam);
 
-        double importantDayBonus = CalendarUtilitary.isImportantDay(date) ? 0.04 : 0.0;
+        double importantDayBonus = CalendarUtilitary.isImportantDay(date)
+                || CalendarUtilitary.isSpecialEvent(league.getReagularSeason(), date) ? 0.20 : 0.0;
+        double gameTimeBonus = getGameTimeAttendanceBonus(game);
 
-        double attendanceRate = (0.45
-                + (popularityRate * 0.4)
+        double attendanceRate = (0.36
+                + (popularityRate * 0.5)
                 + importantDayBonus);
 
-        attendanceRate += mediaMarket.getFanBaseModifier() * 0.08;
-        attendanceRate += economicProfil.getFanLoyalty() * 0.10;
-        attendanceRate += economicProfil.getHistoricalPrestige() * 0.03;
-        attendanceRate += teamValueFactor * 0.04;
+        attendanceRate += mediaMarket.getFanBaseModifier() * 0.12;
+        attendanceRate += economicProfil.getFanLoyalty() * 0.16;
+        attendanceRate += economicProfil.getHistoricalPrestige() * 0.06;
+        attendanceRate += teamValueFactor * 0.05;
         attendanceRate += getAttendanceBonusRate(homeTeam, popularityRate);
+        attendanceRate += gameTimeBonus;
 
-        double volatility = 0.15;
+        double financeBoost = (mediaMarket.getFanBaseModifier() * 0.40)
+                + (economicProfil.getFanLoyalty() * 0.35)
+                + (economicProfil.getHistoricalPrestige() * 0.15)
+                + (teamValueFactor * 0.10);
 
-        if (popularityRate < 0.4) {
-            volatility = 0.25;
-        } else if (popularityRate > 0.8) {
-            volatility = 0.05;
+        if (popularityRate > 0.82) {
+            attendanceRate += 0.10 + (financeBoost * 0.05);
+        } else if (popularityRate > 0.70) {
+            attendanceRate += 0.06 + (financeBoost * 0.03);
+        } else if (popularityRate > 0.62) {
+            attendanceRate += 0.05;
+        } else if (popularityRate < 0.30) {
+            attendanceRate -= 0.14 + ((1 - teamValueFactor) * 0.03);
+        } else if (popularityRate < 0.35) {
+            attendanceRate -= 0.10 + ((1 - mediaMarket.getFanBaseModifier()) * 0.02);
+        } else if (popularityRate < 0.45) {
+            attendanceRate -= 0.06;
         }
 
-        double randomFactor = 1 - volatility + (Math.random() * 2 * volatility);
-
-        if (Math.random() < 0.60) {
-            randomFactor -= Math.random() * 0.06;
-        }
+        double randomFactor = 0.88 + (Math.random() * 0.24);
 
         attendanceRate *= randomFactor;
-
-        attendanceRate = Math.max(0.50, Math.min(0.95, attendanceRate));
+        attendanceRate = Math.max(0.30, Math.min(1.00, attendanceRate));
         gameStat.setAttendanceRate(attendanceRate);
         return attendanceRate;
+    }
+
+    private double getGameTimeAttendanceBonus(Game game) {
+        GameMoment gameMoment = game.getGameContext().getGameMoment();
+
+        if (gameMoment == null) {
+            return 0.0;
+        }
+
+        return gameMoment.accept(new GameMomentAttendanceBonusVisitor());
     }
 
     protected void calculateTicketRevenue(int attendees, double ticketPrice, Game game) {

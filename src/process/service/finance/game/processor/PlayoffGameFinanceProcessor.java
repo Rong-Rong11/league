@@ -1,23 +1,26 @@
-package process.service.finance.tools.game.processor;
+package process.service.finance.game.processor;
 
 import data.finance.GameStat;
 import data.finance.budget.FinanceSeasonMoment;
+import data.league.League;
 import data.league.PlayoffRound;
-import process.service.finance.tools.game.GameExpenseCalculator;
-import process.service.finance.tools.game.GameRevenueCalculator;
-import process.service.finance.tools.game.PlayoffGameExpenseCalculator;
-import process.service.finance.tools.game.PlayoffGameRevenueCalculator;
+import process.service.finance.game.GameExpenseCalculator;
+import process.service.finance.game.GameRevenueCalculator;
+import process.service.finance.game.PlayoffGameExpenseCalculator;
+import process.service.finance.game.PlayoffGameRevenueCalculator;
 
 public class PlayoffGameFinanceProcessor extends GameFinanceProcessor {
+
    private PlayoffRound round;
 
-   public PlayoffGameFinanceProcessor(PlayoffRound round) {
+   public PlayoffGameFinanceProcessor(League league, PlayoffRound round) {
+      super(league);
       this.round = round;
    }
 
    @Override
-   protected GameRevenueCalculator createRevenueCalculator(GameStat gameStat) {
-      return new PlayoffGameRevenueCalculator(gameStat, round);
+   protected GameRevenueCalculator createRevenueCalculator(League league, GameStat gameStat) {
+      return new PlayoffGameRevenueCalculator(league, gameStat, round);
    }
 
    @Override

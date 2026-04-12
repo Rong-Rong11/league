@@ -1,13 +1,15 @@
 package data.sport.setup;
 
+import process.visitor.gamemoment.GameMomentVisitor;
+
 public class Night extends GameMoment {
    public Night() {
       super();
    }
 
    @Override
-   public String getSlotKey() {
-      return "NIGHT";
+   public <T> T accept(GameMomentVisitor<T> visitor) {
+      return visitor.visit(this);
    }
 
 }

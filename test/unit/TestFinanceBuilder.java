@@ -16,7 +16,7 @@ import process.builder.league.LeagueBuilder;
 import process.repositery.DivisionRepositery;
 import process.repositery.PlayerRepositery;
 import process.repositery.TeamRepositery;
-import process.service.finance.tools.FinanceInitializer;
+import process.service.finance.initialization.FinanceInitializer;
 
 public class TestFinanceBuilder {
 

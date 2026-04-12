@@ -13,6 +13,7 @@ import data.calendar.GameDay;
 import data.sport.setup.Game;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedPanel;
+import process.visitor.gamemoment.GameMomentSlotKeyVisitor;
 import process.utility.TeamDisplayUtil;
 
 public class WeekScheduleCardFactory {
@@ -37,7 +38,7 @@ public class WeekScheduleCardFactory {
 	}
 
 	private boolean matchesSlot(Game game, String slotKey) {
-		return slotKey.equals(game.getGameContext().getGameMoment().getSlotKey());
+		return slotKey.equals(game.getGameContext().getGameMoment().accept(new GameMomentSlotKeyVisitor()));
 	}
 
 	private JLabel buildMatchupLabel(Game game, String slotKey) {

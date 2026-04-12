@@ -40,6 +40,19 @@ public class FinanceConfiguration {
     public static final double REVENUE_SHARING_REDISTRIBUTION_RATE = 0.25;
     public static final double LEAGUE_OPERATING_RATE = 0.10;
 
+    public static final double REGULAR_SEASON_LOCAL_SPONSORING_RATE = 1.00;
+    public static final double PLAYOFF_LOCAL_SPONSORING_RATE = 1.05;
+    public static final double REGULAR_SEASON_LOCAL_MERCH_RATE = 1.00;
+    public static final double PLAYOFF_LOCAL_MERCH_RATE = 1.15;
+    public static final double REGULAR_SEASON_OTHER_LOCAL_RATE = 1.00;
+    public static final double PLAYOFF_OTHER_LOCAL_RATE = 1.10;
+    public static final double REGULAR_SEASON_CENTRAL_TV_RATE = 1.00;
+    public static final double PLAYOFF_CENTRAL_TV_RATE = 1.15;
+    public static final double REGULAR_SEASON_CENTRAL_SPONSORING_RATE = 1.00;
+    public static final double PLAYOFF_CENTRAL_SPONSORING_RATE = 1.10;
+    public static final double REGULAR_SEASON_CENTRAL_MERCH_RATE = 1.00;
+    public static final double PLAYOFF_CENTRAL_MERCH_RATE = 1.12;
+
     public static final double INFLATION_RATE = 1.5;
     public static final double CAP_GROWTH_RATE = 0.1;
 }

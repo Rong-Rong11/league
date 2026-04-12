@@ -1,20 +1,16 @@
-package process.service.finance.tools.game;
+package process.service.finance.game;
 
 import java.time.LocalDate;
 
 import data.finance.GameStat;
-import data.league.PlayoffRound;
+import data.league.League;
 import data.sport.setup.Game;
 import data.team.Team;
-import process.service.finance.playoff.PlayoffFinancialRules;
 
-public class PlayoffGameRevenueCalculator extends GameRevenueCalculator {
+public class RegularSeasonGameRevenueCalculator extends GameRevenueCalculator {
 
-   private PlayoffFinancialRules playoffFinancialRules;
-
-   public PlayoffGameRevenueCalculator(GameStat gameStat, PlayoffRound round) {
-      super(gameStat);
-      this.playoffFinancialRules = new PlayoffFinancialRules(round);
+   public RegularSeasonGameRevenueCalculator(League league, GameStat gameStat) {
+      super(league, gameStat);
    }
 
    @Override
@@ -29,7 +25,7 @@ public class PlayoffGameRevenueCalculator extends GameRevenueCalculator {
 
    @Override
    protected double getTicketPriceBonusRate(Game game, Team homeTeam, int attendees, double popularityRate) {
-      return playoffFinancialRules.getRoundTicketBonusRate();
+      return 0.0;
    }
 
    @Override
@@ -39,26 +35,26 @@ public class PlayoffGameRevenueCalculator extends GameRevenueCalculator {
 
    @Override
    protected double getConcessionsBonusRate(Game game, Team homeTeam, int attendees, double popularityRate) {
-      return playoffFinancialRules.getRoundConcessionsBonusRate();
+      return 0.0;
    }
 
    @Override
    protected double getParkingBonusRate(Game game, Team homeTeam, int attendees) {
-      return playoffFinancialRules.getRoundParkingBonusRate();
+      return 0.0;
    }
 
    @Override
    protected double getHomeTvBonusRate(Game game) {
-      return playoffFinancialRules.getRoundTvBonusRate();
+      return 0.0;
    }
 
    @Override
    protected double getAwayTvBonusRate(Game game) {
-      return playoffFinancialRules.getRoundTvBonusRate();
+      return 0.0;
    }
 
    @Override
    protected double getMerchBonusRate(Game game, Team homeTeam, int attendees, double popularityRate) {
-      return playoffFinancialRules.getRoundMerchBonusRate();
+      return 0.0;
    }
 }

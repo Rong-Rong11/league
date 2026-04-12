@@ -1,4 +1,4 @@
-package process.service.finance.tools.game;
+package process.service.finance.game;
 
 import data.finance.GameStat;
 import data.league.PlayoffRound;

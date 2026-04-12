@@ -1,4 +1,4 @@
-package process.service.finance.tools;
+package process.service.finance.initialization;
 
 import data.team.Team;
 import process.builder.FinanceBuilder;

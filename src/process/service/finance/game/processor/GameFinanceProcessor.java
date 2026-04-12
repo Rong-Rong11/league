@@ -1,23 +1,29 @@
-package process.service.finance.tools.game.processor;
+package process.service.finance.game.processor;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 
 import data.finance.GameStat;
 import data.finance.budget.FinanceSeasonMoment;
+import data.league.League;
 import data.sport.setup.Game;
-import process.service.finance.tools.game.GameExpenseCalculator;
-import process.service.finance.tools.game.GameRevenueCalculator;
+import process.service.finance.game.GameExpenseCalculator;
+import process.service.finance.game.GameRevenueCalculator;
 import process.utility.FinanceUtilitary;
 
 public abstract class GameFinanceProcessor {
+    private League league;
     private HashMap<Game, GameStat> gameStats = new HashMap<Game, GameStat>();
+
+    public GameFinanceProcessor(League league) {
+        this.league = league;
+    }
 
     public final void calculateGame(Game game, LocalDate date, int month) {
         GameStat gameStat = new GameStat(game);
         FinanceSeasonMoment seasonMoment = getSeasonMoment();
 
-        GameRevenueCalculator revenueCalculator = createRevenueCalculator(gameStat);
+        GameRevenueCalculator revenueCalculator = createRevenueCalculator(league, gameStat);
         revenueCalculator.calculateGameRevenue(game, date);
         FinanceUtilitary.addGameRevenue(game, gameStat, month, seasonMoment);
 
@@ -28,7 +34,7 @@ public abstract class GameFinanceProcessor {
         gameStats.put(game, gameStat);
     }
 
-    protected abstract GameRevenueCalculator createRevenueCalculator(GameStat gameStat);
+    protected abstract GameRevenueCalculator createRevenueCalculator(League league, GameStat gameStat);
 
     protected abstract GameExpenseCalculator createExpenseCalculator(GameStat gameStat);
 

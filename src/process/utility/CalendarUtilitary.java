@@ -27,6 +27,7 @@ public class CalendarUtilitary {
     public static boolean isImportantDay(LocalDate localDate) {
         return isWeekend(localDate)
                 || localDate.getDayOfWeek() == DayOfWeek.WEDNESDAY;
+
     }
 
     public static boolean isSpecialEvent(RegularSeason regularSeason, LocalDate localDate) {

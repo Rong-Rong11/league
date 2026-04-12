@@ -1,4 +1,4 @@
-package process.service.finance.tools.game;
+package process.service.finance.game;
 
 import config.FinanceConfiguration;
 import config.GameConfiguration;

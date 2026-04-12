@@ -100,20 +100,21 @@ public class LeagueBuilder {
 	}
 
 	private void buildFinanceLeague(League league) {
-		double initialBudget = FinanceConfiguration.INITIAL_LEAGUE_BUDGET;
+		double annualRevenueEstimate = FinanceConfiguration.INITIAL_LEAGUE_BUDGET;
+		double openingTreasury = annualRevenueEstimate * 0.20;
 
-		Budget budget = new Budget(initialBudget);
+		Budget budget = new Budget(openingTreasury);
 		FinanceUtilitary.initiateBudget(budget);
 
-		FinanceUtilitary.addIncome(budget, new Income(IncomeType.NATIONAL_TV, initialBudget * 0.65),
+		FinanceUtilitary.addIncome(budget, new Income(IncomeType.NATIONAL_TV, openingTreasury * 0.55),
 				0);
 		FinanceUtilitary.addIncome(budget,
-				new Income(IncomeType.NATIONAL_SPONSORING, initialBudget * 0.15), 0);
+				new Income(IncomeType.NATIONAL_SPONSORING, openingTreasury * 0.20), 0);
 		FinanceUtilitary.addIncome(budget,
-				new Income(IncomeType.NATIONAL_MERCHANDISING, initialBudget * 0.10), 0);
-		FinanceUtilitary.addIncome(budget, new Income(IncomeType.OTHER, initialBudget * 0.10), 0);
+				new Income(IncomeType.NATIONAL_MERCHANDISING, openingTreasury * 0.10), 0);
+		FinanceUtilitary.addIncome(budget, new Income(IncomeType.OTHER, openingTreasury * 0.15), 0);
 
-		double salaryCap = (initialBudget * FinanceConfiguration.PLAYER_SHARE) / CalendarConfiguration.NUMBER_OF_TEAM;
+		double salaryCap = (annualRevenueEstimate * FinanceConfiguration.PLAYER_SHARE) / CalendarConfiguration.NUMBER_OF_TEAM;
 		double luxuryTaxLine = salaryCap * FinanceConfiguration.LUXURYTAX_THRESHOLD_RATE;
 		double minimumTeamSalary = salaryCap * FinanceConfiguration.MINIMUM_TEAM_SALARY_RATE;
 
