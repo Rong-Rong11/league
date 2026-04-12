@@ -2,9 +2,12 @@ package gui.panel.rankingPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -22,6 +25,7 @@ import process.utility.TeamDisplayUtil;
 
 public class RankingTablePanel extends JPanel implements ThemeAware {
 	private static final Color PRIMARY_ACCENT = new Color(0x17, 0x31, 0x74);
+	private static final int GLOBAL_PAGE_SIZE = 15;
 	private static final String GLOBAL_MODE = "global";
 	private static final String EAST_MODE = "east";
 	private static final String WEST_MODE = "west";
@@ -33,11 +37,16 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 	private JButton westButton;
 	private JButton regularSeasonButton;
 	private JButton playoffsButton;
+	private JButton previousPageButton;
+	private JButton nextPageButton;
+	private JLabel pageLabel;
 	private String selectedMode;
+	private int globalPageIndex;
 
 	public RankingTablePanel(GUIInterface guiInterface) {
 		this.guiInterface = guiInterface;
 		selectedMode = GLOBAL_MODE;
+		globalPageIndex = 0;
 		setLayout(new BorderLayout(0, 12));
 		setOpaque(false);
 
@@ -56,9 +65,9 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		globalButton = createFilterButton("Global", true);
 		eastButton = createFilterButton("Est", false);
 		westButton = createFilterButton("Ouest", false);
-		globalButton.addActionListener(e -> setSelectedMode(GLOBAL_MODE));
-		eastButton.addActionListener(e -> setSelectedMode(EAST_MODE));
-		westButton.addActionListener(e -> setSelectedMode(WEST_MODE));
+		globalButton.addActionListener(new ModeAction(GLOBAL_MODE));
+		eastButton.addActionListener(new ModeAction(EAST_MODE));
+		westButton.addActionListener(new ModeAction(WEST_MODE));
 		leftPanel.add(globalButton);
 		leftPanel.add(eastButton);
 		leftPanel.add(westButton);
@@ -86,6 +95,60 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		tableContentPanel = new JPanel(new BorderLayout(0, 0));
 		tableContentPanel.setOpaque(false);
 		return tableContentPanel;
+	}
+
+	private JPanel buildPageBar(int pageCount) {
+		JPanel pageBar = new JPanel(new BorderLayout());
+		pageBar.setOpaque(false);
+		pageBar.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+
+		previousPageButton = createPageButton("<");
+		nextPageButton = createPageButton(">");
+		pageLabel = new JLabel(buildPageText(pageCount), JLabel.CENTER);
+		pageLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		pageLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+
+		previousPageButton.addActionListener(new PreviousPageAction(pageCount));
+		nextPageButton.addActionListener(new NextPageAction(pageCount));
+
+		pageBar.add(previousPageButton, BorderLayout.WEST);
+		pageBar.add(pageLabel, BorderLayout.CENTER);
+		pageBar.add(nextPageButton, BorderLayout.EAST);
+		updatePageButtons(pageCount);
+		return pageBar;
+	}
+
+	private JButton createPageButton(String text) {
+		JButton button = new RoundedButton(text);
+		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+		button.setPreferredSize(new Dimension(44, 32));
+		button.setBackground(PRIMARY_ACCENT);
+		button.setForeground(Color.WHITE);
+		return button;
+	}
+
+	private String buildPageText(int pageCount) {
+		return "Page " + (globalPageIndex + 1) + " / " + pageCount;
+	}
+
+	private void updatePageButtons(int pageCount) {
+		if (pageLabel != null) {
+			pageLabel.setText(buildPageText(pageCount));
+			pageLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		}
+		if (previousPageButton != null) {
+			previousPageButton.setEnabled(globalPageIndex > 0);
+			stylePageButton(previousPageButton);
+		}
+		if (nextPageButton != null) {
+			nextPageButton.setEnabled(globalPageIndex < pageCount - 1);
+			stylePageButton(nextPageButton);
+		}
+	}
+
+	private void stylePageButton(JButton button) {
+		button.setBackground(PRIMARY_ACCENT);
+		button.setForeground(Color.WHITE);
 	}
 
 	private JPanel buildHeaderRow() {
@@ -125,6 +188,11 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 
 		ArrayList<Team> teams = getSelectedTeams();
 		if (GLOBAL_MODE.equals(selectedMode)) {
+			int pageCount = Math.max(1, (int) Math.ceil((double) teams.size() / GLOBAL_PAGE_SIZE));
+			if (globalPageIndex >= pageCount) {
+				globalPageIndex = pageCount - 1;
+			}
+			tableContentPanel.add(buildPageBar(pageCount), BorderLayout.NORTH);
 			tableContentPanel.add(buildGlobalTable(teams), BorderLayout.CENTER);
 		} else {
 			tableContentPanel.add(buildSingleTable(teams), BorderLayout.CENTER);
@@ -143,19 +211,17 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 	}
 
 	private JPanel buildGlobalTable(ArrayList<Team> teams) {
-		JPanel globalTable = new JPanel(new GridLayout(1, 2, 16, 0));
-		globalTable.setOpaque(false);
-		globalTable.add(buildTableColumn(teams, 0, 15));
-		globalTable.add(buildTableColumn(teams, 15, teams.size()));
-		return globalTable;
+		int startIndex = globalPageIndex * GLOBAL_PAGE_SIZE;
+		int endIndex = Math.min(startIndex + GLOBAL_PAGE_SIZE, teams.size());
+		return buildSinglePageTable(teams, startIndex, endIndex);
 	}
 
-	private JPanel buildTableColumn(ArrayList<Team> teams, int startIndex, int endIndex) {
-		JPanel column = new JPanel(new BorderLayout(0, 0));
-		column.setOpaque(false);
-		column.add(buildHeaderRow(), BorderLayout.NORTH);
-		column.add(buildRankingColumn(teams, startIndex, endIndex), BorderLayout.CENTER);
-		return column;
+	private JPanel buildSinglePageTable(ArrayList<Team> teams, int startIndex, int endIndex) {
+		JPanel table = new JPanel(new BorderLayout(0, 0));
+		table.setOpaque(false);
+		table.add(buildHeaderRow(), BorderLayout.NORTH);
+		table.add(buildRankingColumn(teams, startIndex, endIndex), BorderLayout.CENTER);
+		return table;
 	}
 
 	private JPanel buildRankingColumn(ArrayList<Team> teams, int startIndex, int endIndex) {
@@ -182,6 +248,9 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 
 	private void setSelectedMode(String mode) {
 		selectedMode = mode;
+		if (GLOBAL_MODE.equals(mode)) {
+			globalPageIndex = 0;
+		}
 		updateModeButtons();
 		refreshRanking();
 	}
@@ -247,10 +316,63 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		button.setForeground(selected ? Color.WHITE : DashboardPanelUtil.BUTTON_TEXT_COLOR);
 	}
 
+	private class ModeAction implements ActionListener {
+		private final String mode;
+
+		private ModeAction(String mode) {
+			this.mode = mode;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			setSelectedMode(mode);
+		}
+	}
+
+	private class PreviousPageAction implements ActionListener {
+		private final int pageCount;
+
+		private PreviousPageAction(int pageCount) {
+			this.pageCount = pageCount;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (globalPageIndex > 0) {
+				globalPageIndex--;
+				updatePageButtons(pageCount);
+				refreshRanking();
+			}
+		}
+	}
+
+	private class NextPageAction implements ActionListener {
+		private final int pageCount;
+
+		private NextPageAction(int pageCount) {
+			this.pageCount = pageCount;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (globalPageIndex < pageCount - 1) {
+				globalPageIndex++;
+				updatePageButtons(pageCount);
+				refreshRanking();
+			}
+		}
+	}
+
 	@Override
 	public void applyTheme() {
 		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
 		updateModeButtons();
+		if (previousPageButton != null) {
+			stylePageButton(previousPageButton);
+		}
+		if (nextPageButton != null) {
+			stylePageButton(nextPageButton);
+		}
 		refreshRanking();
 	}
 }
