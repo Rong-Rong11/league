@@ -15,10 +15,9 @@ import data.player.Asset;
 import gui.panel.common.DashboardCard;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.PlayerDisplayUtil;
-import gui.panel.common.ThemeAware;
 import process.utility.PlayerStatUtil;
 
-public class PlayerRosterEntryPanel extends DashboardCard implements ThemeAware {
+public class PlayerRosterEntryPanel extends DashboardCard {
 	private PlayerPortraitPanel portraitPanel;
 	private JLabel nameLabel;
 	private JLabel positionLabel;

@@ -12,9 +12,9 @@ import javax.swing.JPanel;
 import data.player.Player;
 import gui.panel.common.DashboardCard;
 import gui.panel.common.DashboardPanelUtil;
-import gui.panel.common.ThemeAware;
 
-public class PlayerSummaryPanel extends DashboardCard implements ThemeAware {
+
+public class PlayerSummaryPanel extends DashboardCard{
 	private PlayerPortraitPanel portraitPanel;
 	private JLabel nameLabel;
 	private JLabel infoLabel;

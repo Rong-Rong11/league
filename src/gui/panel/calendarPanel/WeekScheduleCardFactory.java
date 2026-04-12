@@ -83,9 +83,6 @@ public class WeekScheduleCardFactory {
 		return DashboardPanelUtil.getCalendarSlotDisplayedColor(slotKey);
 	}
 
-	private boolean isDarkSlot(String slotKey) {
-		return "NIGHT".equals(slotKey);
-	}
 
 	private Color getTitleColor(String slotKey) {
 		return DashboardPanelUtil.getCalendarSlotTitleColor(slotKey);

@@ -35,7 +35,6 @@ import javax.swing.JPanel;
 public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 
 	private static final Color HEADER_BACKGROUND = new Color(0x17, 0x31, 0x74);
-	private static final Color TITLE_COLOR = new Color(110, 117, 131);
 	private static final Dimension SELECTION_BUTTON_SIZE = new Dimension(156, 56);
 
 	private TeamLogoPanel logoPanel;

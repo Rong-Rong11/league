@@ -19,7 +19,6 @@ import gui.panel.common.ThemeAware;
 
 public class MatchFinancePanel extends JPanel implements ThemeAware {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
-	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
 	private static final Color NEGATIVE_COLOR = DashboardPanelUtil.ACCENT_RED_COLOR;
 
 	private JLabel attendanceValueLabel;
