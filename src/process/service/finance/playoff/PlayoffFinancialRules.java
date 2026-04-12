@@ -16,13 +16,51 @@ public class PlayoffFinancialRules {
 
       switch (round) {
          case FIRST_ROUND:
-            return 0.20;
+            return 0.12;
          case CONFERENCE_SEMIFINALS:
-            return 0.32;
+            return 0.22;
          case CONFERENCE_FINALS:
-            return 0.48;
+            return 0.33;
          case NBA_FINALS:
-            return 0.75;
+            return 0.48;
+         default:
+            return 0.0;
+      }
+   }
+
+   public double getRoundPopularityBonusRate() {
+      if (round == null) {
+         return 0.0;
+      }
+
+      switch (round) {
+         case FIRST_ROUND:
+            return 0.05;
+         case CONFERENCE_SEMIFINALS:
+            return 0.09;
+         case CONFERENCE_FINALS:
+            return 0.14;
+         case NBA_FINALS:
+            return 0.22;
+         default:
+            return 0.0;
+      }
+   }
+
+   public double getRoundAttendanceBonusRate() {
+      if (round == null) {
+         return 0.0;
+      }
+
+      switch (round) {
+         case FIRST_ROUND:
+            return 0.06;
+         case CONFERENCE_SEMIFINALS:
+            return 0.10;
+         case CONFERENCE_FINALS:
+            return 0.16;
+         case NBA_FINALS:
+            return 0.25;
          default:
             return 0.0;
       }
@@ -35,13 +73,13 @@ public class PlayoffFinancialRules {
 
       switch (round) {
          case FIRST_ROUND:
-            return 0.25;
+            return 0.35;
          case CONFERENCE_SEMIFINALS:
-            return 0.40;
+            return 0.55;
          case CONFERENCE_FINALS:
-            return 0.65;
+            return 0.85;
          case NBA_FINALS:
-            return 1.10;
+            return 1.35;
          default:
             return 0.0;
       }
@@ -54,13 +92,13 @@ public class PlayoffFinancialRules {
 
       switch (round) {
          case FIRST_ROUND:
-            return 0.18;
+            return 0.32;
          case CONFERENCE_SEMIFINALS:
-            return 0.28;
+            return 0.48;
          case CONFERENCE_FINALS:
-            return 0.42;
-         case NBA_FINALS:
             return 0.70;
+         case NBA_FINALS:
+            return 1.05;
          default:
             return 0.0;
       }
@@ -73,13 +111,13 @@ public class PlayoffFinancialRules {
 
       switch (round) {
          case FIRST_ROUND:
-            return 0.10;
+            return 0.18;
          case CONFERENCE_SEMIFINALS:
-            return 0.16;
+            return 0.28;
          case CONFERENCE_FINALS:
-            return 0.24;
+            return 0.40;
          case NBA_FINALS:
-            return 0.35;
+            return 0.58;
          default:
             return 0.0;
       }
@@ -92,13 +130,13 @@ public class PlayoffFinancialRules {
 
       switch (round) {
          case FIRST_ROUND:
-            return 0.08;
+            return 0.05;
          case CONFERENCE_SEMIFINALS:
-            return 0.12;
+            return 0.08;
          case CONFERENCE_FINALS:
-            return 0.18;
+            return 0.12;
          case NBA_FINALS:
-            return 0.25;
+            return 0.16;
          default:
             return 0.0;
       }

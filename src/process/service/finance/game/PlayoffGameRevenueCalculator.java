@@ -20,12 +20,12 @@ public class PlayoffGameRevenueCalculator extends GameRevenueCalculator {
 
    @Override
    protected double getPopularityBonusRate(Game game, LocalDate date, Team homeTeam) {
-      return 0.0;
+      return playoffFinancialRules.getRoundPopularityBonusRate();
    }
 
    @Override
    protected double getAttendanceBonusRate(Team homeTeam, double popularityRate) {
-      return 0.0;
+      return playoffFinancialRules.getRoundAttendanceBonusRate();
    }
 
    @Override

@@ -40,19 +40,20 @@ public class MonthlyCentralRevenueCalculator {
         double averageTeamValue = calculateAverageTeamValue(teams);
         int starTeams = countTeamsWithStarPlayer(teams);
 
-        double revenue = (0.30 * teamCount)
-                + (averagePopularity * 0.035)
-                + (averagePerformance * 0.55)
-                + (averagePrestige * 1.1)
-                + (averageTeamValue * 1.4)
-                + (starTeams * 0.08);
+        double revenue = (0.48 * teamCount)
+                + (averagePopularity * 0.055)
+                + (averagePerformance * 0.90)
+                + (averagePrestige * 1.75)
+                + (averageTeamValue * 2.20)
+                + (starTeams * 0.14);
 
         revenue *= profile.getTvRate();
-        revenue *= getImportantGamesRevenueRate(month, 0.002);
-        revenue *= getPlayoffGamesRevenueRate(month, 0.0050);
-        revenue *= getActivePlayoffTeamsRate(month, 0.0040);
+        revenue *= getImportantGamesRevenueRate(month, 0.0015);
+        revenue *= getPlayoffGamesRevenueRate(month, 0.0045);
+        revenue *= getActivePlayoffTeamsRate(month, 0.0038);
         revenue *= getSeasonMomentumRate(month, 0.06);
-        revenue *= getControlledEconomicNoise(month, 0.02);
+        revenue *= getControlledEconomicNoise(month, 0.012);
+        revenue *= getRevenueTypeMonthlyRate(month, 0.012, 0.006, 0.0);
 
         return revenue;
     }
@@ -67,19 +68,20 @@ public class MonthlyCentralRevenueCalculator {
         double averageTeamValue = calculateAverageTeamValue(teams);
         int starTeams = countTeamsWithStarPlayer(teams);
 
-        double revenue = (0.10 * teamCount)
-                + (averagePopularity * 0.022)
-                + (averageCommercialAggressiveness * 0.95)
-                + (averageBusinessOpportunity * 0.85)
-                + (averageTeamValue * 0.8)
-                + (starTeams * 0.06);
+        double revenue = (0.22 * teamCount)
+                + (averagePopularity * 0.042)
+                + (averageCommercialAggressiveness * 1.45)
+                + (averageBusinessOpportunity * 1.28)
+                + (averageTeamValue * 1.25)
+                + (starTeams * 0.11);
 
         revenue *= profile.getSponsoringRate();
-        revenue *= getImportantGamesRevenueRate(month, 0.0011);
-        revenue *= getPlayoffGamesRevenueRate(month, 0.0032);
-        revenue *= getActivePlayoffTeamsRate(month, 0.0028);
-        revenue *= getSeasonMomentumRate(month, 0.04);
-        revenue *= getControlledEconomicNoise(month, 0.012);
+        revenue *= getImportantGamesRevenueRate(month, 0.0022);
+        revenue *= getPlayoffGamesRevenueRate(month, 0.0043);
+        revenue *= getActivePlayoffTeamsRate(month, 0.0036);
+        revenue *= getSeasonMomentumRate(month, 0.07);
+        revenue *= getControlledEconomicNoise(month, 0.022);
+        revenue *= getRevenueTypeMonthlyRate(month, 0.030, 0.016, 0.7);
 
         return revenue;
     }
@@ -94,19 +96,20 @@ public class MonthlyCentralRevenueCalculator {
         double averageTeamValue = calculateAverageTeamValue(teams);
         int starTeams = countTeamsWithStarPlayer(teams);
 
-        double revenue = (0.04 * teamCount)
-                + (averagePopularity * 0.014)
-                + (averageFanLoyalty * 0.85)
-                + (averagePrestige * 0.65)
-                + (averageTeamValue * 0.45)
-                + (starTeams * 0.05);
+        double revenue = (0.11 * teamCount)
+                + (averagePopularity * 0.030)
+                + (averageFanLoyalty * 1.28)
+                + (averagePrestige * 1.05)
+                + (averageTeamValue * 0.78)
+                + (starTeams * 0.10);
 
         revenue *= profile.getMerchandisingRate();
-        revenue *= getImportantGamesRevenueRate(month, 0.0013);
-        revenue *= getPlayoffGamesRevenueRate(month, 0.0038);
-        revenue *= getActivePlayoffTeamsRate(month, 0.0030);
-        revenue *= getSeasonMomentumRate(month, 0.05);
-        revenue *= getControlledEconomicNoise(month, 0.015);
+        revenue *= getImportantGamesRevenueRate(month, 0.0032);
+        revenue *= getPlayoffGamesRevenueRate(month, 0.0060);
+        revenue *= getActivePlayoffTeamsRate(month, 0.0048);
+        revenue *= getSeasonMomentumRate(month, 0.10);
+        revenue *= getControlledEconomicNoise(month, 0.030);
+        revenue *= getRevenueTypeMonthlyRate(month, 0.050, 0.024, 1.4);
 
         return revenue;
     }
@@ -214,6 +217,14 @@ public class MonthlyCentralRevenueCalculator {
         int activeTeams = countActivePlayoffTeams();
         double wave = Math.sin((month * 1.73) + (importantGames * 0.11) + (playoffGames * 0.23) + (activeTeams * 0.19));
         return 1 + (wave * maxAmplitude);
+    }
+
+    private double getRevenueTypeMonthlyRate(int month, double primaryAmplitude, double secondaryAmplitude,
+            double phaseShift) {
+        double primaryWave = Math.sin((month * 1.11) + phaseShift);
+        double secondaryWave = Math.cos((month * 0.67) + (phaseShift * 0.6));
+
+        return 1 + (primaryWave * primaryAmplitude) + (secondaryWave * secondaryAmplitude);
     }
 
     private int countImportantGamesInMonth(int month) {

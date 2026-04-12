@@ -8,16 +8,16 @@ public class GameMomentSlotKeyVisitor implements GameMomentVisitor<String> {
 
     @Override
     public String visit(Afternoon afternoon) {
-        return "AFTERNOON";
+        return "afternoon";
     }
 
     @Override
     public String visit(Evening evening) {
-        return "EVENING";
+        return "evening";
     }
 
     @Override
     public String visit(Night night) {
-        return "NIGHT";
+        return "night";
     }
 }

@@ -90,7 +90,6 @@ public class CalendarDashboard extends JPanel implements ThemeAware {
 	}
 
 	public void startSeason() {
-		guiInterface.randomFinance();
 		guiInterface.startSeason();
 		currentCalendarDate = guiInterface.getCalendarDisplayDate(guiInterface.getCurrentDate());
 		weekViewPanel.syncToSimulationDate(guiInterface.getCurrentDate());
