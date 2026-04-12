@@ -1,18 +1,17 @@
 package gui.panel.calendarPanel;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.time.LocalDate;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import java.awt.Font;
-
 import data.calendar.GameDay;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.GUIInterface;
+import process.orchestrator.interf.GUIInterface;
 
 public class WeekViewPanel extends JPanel implements ThemeAware {
 	private static final long serialVersionUID = 1L;

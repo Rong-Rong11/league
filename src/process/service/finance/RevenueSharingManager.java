@@ -1,6 +1,5 @@
 package process.service.finance;
 
-import config.FinanceConfiguration;
 import data.finance.budget.Budget;
 import data.finance.budget.expense.Expense;
 import data.finance.budget.expense.ExpenseType;
@@ -12,12 +11,12 @@ import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
-import process.repositery.TeamRepositery;
+import process.repository.TeamRepository;
 import process.utility.FinanceUtility;
 import process.visitor.marketsize.CalculateMonthlyTeamFinanceVisitor;
 
 public class RevenueSharingManager {
-    private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+    private TeamRepository teamRepositery = TeamRepository.getInstance();
     private League league;
 
     public RevenueSharingManager(League league) {

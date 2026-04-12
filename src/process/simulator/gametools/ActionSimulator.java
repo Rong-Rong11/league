@@ -36,7 +36,7 @@ public class ActionSimulator {
 		} else {
 			shotProbability = GameConfiguration.FOULDRAW_PROBABILITY_SUCESS;
 		}
-		shotProbability += (trueShootingPercentage * 0.30);
+		shotProbability += (trueShootingPercentage * 0.15);
 		double defenseNote = defensingPlayersNote(defensivePlayers);
 		shotProbability -= defenseNote * 0.006;
 		shotProbability -= attackingPlayer.getHealthStatus().getFatigue() * 0.05;

@@ -12,7 +12,7 @@ import gui.panel.common.SectionTitle;
 import gui.panel.common.ThemeAware;
 import gui.panel.rankingPanel.RankingLeagueViewPanel;
 import gui.panel.rankingPanel.RankingPerformancePanel;
-import process.orchestrator.GUIInterface;
+import process.orchestrator.interf.GUIInterface;
 
 /**
  * Dashboard dedie a la page Classement.

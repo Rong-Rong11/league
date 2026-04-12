@@ -1,20 +1,21 @@
 /*
  * Decompiled with CFR 0.152.
  */
-package process.repositery;
+package process.repository;
 
-import data.player.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PlayerRepositery {
-    private HashMap<String, Player> players = new HashMap<>();
-    private static PlayerRepositery instance = new PlayerRepositery();
+import data.player.Player;
 
-    private PlayerRepositery() {
+public class PlayerRepository {
+    private HashMap<String, Player> players = new HashMap<>();
+    private static PlayerRepository instance = new PlayerRepository();
+
+    private PlayerRepository() {
     }
 
-    public static PlayerRepositery getInstance() {
+    public static PlayerRepository getInstance() {
         return instance;
     }
 

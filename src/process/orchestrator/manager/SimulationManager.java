@@ -1,4 +1,4 @@
-package process.orchestrator;
+package process.orchestrator.manager;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -25,10 +25,12 @@ import process.builder.calendar.FirstRoundCalendarBuilder;
 import process.builder.calendar.RegularSeasonCalendarBuilder;
 import process.builder.league.LeagueBuilder;
 import process.builder.league.PlayoffBuilder;
-import process.repositery.TeamRepositery;
+import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interf.SimulationClock;
+import process.repository.TeamRepository;
 import process.service.finance.FinanceManager;
 import process.service.game.GameManager;
-import process.service.leaguetools.TeamPopularityUpdater;
+import process.service.league.TeamPopularityUpdater;
 import process.service.live.LiveMatchService;
 import process.service.live.LiveMatchState;
 import process.service.trade.PreSeasonTradeService;
@@ -36,8 +38,8 @@ import process.service.trade.RegularSeasonTradeService;
 import process.service.trade.TradeService;
 import process.utility.CalendarUtility;
 import process.utility.FinanceUtility;
-import process.utility.TeamDisplayUtility;
-import process.utility.TeamStatUtility;
+import gui.utility.TeamDisplayUtility;
+import gui.utility.TeamStatUtility;
 
 //cerveau de la simulation 
 public class SimulationManager implements GUIInterface {
@@ -289,7 +291,7 @@ public class SimulationManager implements GUIInterface {
 		qualifiedTeams.addAll(league.getPlayoff().getQualifiedEastTeams());
 		qualifiedTeams.addAll(league.getPlayoff().getQualifiedWestTeams());
 
-		for (Team team : TeamRepositery.getInstance().getAllTeams()) {
+		for (Team team : TeamRepository.getInstance().getAllTeams()) {
 			if (!qualifiedTeams.contains(team)) {
 				teamPopularityUpdater.applyMissedPlayoffPenalty(team);
 			}
@@ -542,7 +544,7 @@ public class SimulationManager implements GUIInterface {
 
 	@Override
 	public ArrayList<Team> getTeams() {
-		return new ArrayList<Team>(TeamRepositery.getInstance().getAllTeams());
+		return new ArrayList<Team>(TeamRepository.getInstance().getAllTeams());
 	}
 
 	@Override
@@ -562,7 +564,7 @@ public class SimulationManager implements GUIInterface {
 
 	@Override
 	public Team getTeamByName(String teamName) {
-		return TeamRepositery.getInstance().getTeam(teamName);
+		return TeamRepository.getInstance().getTeam(teamName);
 	}
 
 	@Override

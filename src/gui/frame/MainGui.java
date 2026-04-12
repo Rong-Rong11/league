@@ -19,7 +19,7 @@ import gui.dashboard.RankingDashboard;
 import gui.dashboard.RosterDashboard;
 import gui.layout.SidebarPanel;
 import gui.panel.common.DashboardPanelUtil;
-import process.orchestrator.GUIInterface;
+import process.orchestrator.interf.GUIInterface;
 
 public class MainGui extends JFrame {
 

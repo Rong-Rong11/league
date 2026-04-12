@@ -2,7 +2,7 @@ package gui.panel.matchPanel.liveMatchPanel;
 
 import data.team.Team;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
-import process.utility.TeamDisplayUtility;
+import gui.utility.TeamDisplayUtility;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

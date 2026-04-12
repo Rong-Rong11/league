@@ -20,7 +20,7 @@ import gui.panel.calendarPanel.MonthViewPanel;
 import gui.panel.calendarPanel.WeekViewPanel;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.GUIInterface;
+import process.orchestrator.interf.GUIInterface;
 
 public class CalendarDashboard extends JPanel implements ThemeAware {
 

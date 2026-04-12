@@ -1,8 +1,8 @@
 package gui.app;
 
 import gui.frame.MainGui;
-import process.orchestrator.GUIInterface;
-import process.orchestrator.SimulationManager;
+import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.manager.SimulationManager;
 
 public class App {
 

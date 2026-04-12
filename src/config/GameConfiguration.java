@@ -31,10 +31,10 @@ public class GameConfiguration {
     public static final double TWOPOINT_PROBABILITY = 0.38;
     public static final double ASSIST_PROBABILITY = 0.6;
     public static final double BLOCK_PROBABILTY = 0.08;
-    public static final double OFFENSIVE_REBOUND_PROBABILITY = 0.18;
-    public static final double DEFENSIVE_REBOUND_PROBABILITY = 0.82;
-    public static final double THREEPOINT_PROBABILITY_SUCCESS = 0.41;
-    public static final double TWO_PROBABILITY_SUCCESS = 0.60;
+    public static final double OFFENSIVE_REBOUND_PROBABILITY = 0.15;
+    public static final double DEFENSIVE_REBOUND_PROBABILITY = 0.85;
+    public static final double THREEPOINT_PROBABILITY_SUCCESS = 0.39;
+    public static final double TWO_PROBABILITY_SUCCESS = 0.57;
     public static final double FOULDRAW_PROBABILITY_SUCESS = 0.82;
     public static final String THREEPOINT = "threepoint";
     public static final String TWOPOINT = "twopoint";

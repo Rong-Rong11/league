@@ -19,7 +19,7 @@ import data.sport.setup.Game;
 import data.sport.setup.GameResult;
 import data.team.Team;
 import data.team.TeamPerformance;
-import process.repositery.PlayerRepositery;
+import process.repository.PlayerRepository;
 import process.simulator.gametools.ActionSimulator;
 import process.simulator.gametools.EventSimulator;
 import process.simulator.gametools.HealthManager;
@@ -33,7 +33,7 @@ import process.visitor.actionresult.GameResultVisitor;
 
 public class GameSimulator {
 
-	private PlayerRepositery playerRepositery = PlayerRepositery.getInstance();
+	private PlayerRepository playerRepositery = PlayerRepository.getInstance();
 	private EventSimulator eventSimulator = new EventSimulator();
 	private InjuryManager injuryManager = new InjuryManager();
 	private ActionSimulator actionSimulator = new ActionSimulator();
@@ -249,6 +249,23 @@ public class GameSimulator {
 		}
 	}
 
+	private void updateTrueShootingPercentages(Team homeTeam, Team awayTeam, HashMap<Player, Asset> playersNewAssets) {
+		updateTrueShootingPercentages(homeTeam, playersNewAssets);
+		updateTrueShootingPercentages(awayTeam, playersNewAssets);
+	}
+
+	private void updateTrueShootingPercentages(Team team, HashMap<Player, Asset> playersNewAssets) {
+		for (Player player : team.getCurrentPlayers().values()) {
+			Asset asset = playersNewAssets.get(player);
+			double fieldGoalAttempts = asset.getTwoPointAttemptPerMatch() + asset.getThreePointAttemptPerMatch();
+			double freeThrowAttempts = asset.getFreeThrowAttemptPerMatch();
+			double denominator = 2 * (fieldGoalAttempts + 0.44 * freeThrowAttempts);
+			if (denominator > 0) {
+				asset.setTrueShootingPercentage(asset.getPointPerMatch() / denominator);
+			}
+		}
+	}
+
 	public void simulateGame(Game game) {
 		GameResult[] quarterResults = new GameResult[4];
 		Team homeTeam = game.getGameContext().getHomeTeam();
@@ -304,6 +321,7 @@ public class GameSimulator {
 			TeamUtility.updatePerformanceRating(awayTeam, homeTeam, 0, 0, homeTeam.getCurrentPopularity());
 		}
 
+		updateTrueShootingPercentages(homeTeam, awayTeam, playersNewAssets);
 		updateCurrentSeasonAsset(homeTeam, playersNewAssets);
 		updateCurrentSeasonAsset(awayTeam, playersNewAssets);
 

@@ -26,7 +26,7 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
 import process.utility.CalendarUtility;
-import process.utility.TeamDisplayUtility;
+import gui.utility.TeamDisplayUtility;
 
 public class MonthViewPanel extends JPanel implements ThemeAware {
 	private static final String[] DAY_NAMES = { "LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM" };

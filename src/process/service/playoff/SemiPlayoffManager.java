@@ -10,7 +10,7 @@ import process.builder.calendar.ConferenceFinalCalendarBuilder;
 import process.builder.calendar.SemiCalendarBuilder;
 import process.builder.league.PlayoffBuilder;
 import process.service.finance.FinanceManager;
-import process.service.leaguetools.TeamPopularityUpdater;
+import process.service.league.TeamPopularityUpdater;
 
 public class SemiPlayoffManager extends PlayoffManager {
 

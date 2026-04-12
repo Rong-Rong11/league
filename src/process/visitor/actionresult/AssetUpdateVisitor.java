@@ -25,6 +25,7 @@ implements ActionResultVisitor<Void> {
     @Override
     public Void visit(PointScored pointScored) {
         Player player = pointScored.getScorerPlayer();
+        this.incrementShootingAttempt(player, pointScored.getOffensiveAction().getName());
         this.playersNewAssets.get(player).setPointPerMatch(this.playersNewAssets.get(player).getPointPerMatch() + (double)pointScored.getPointsScored());
         Player player2 = pointScored.getAssistPlayer();
         if (player2 != null) {
@@ -35,6 +36,7 @@ implements ActionResultVisitor<Void> {
 
     @Override
     public Void visit(MissedShot missedShot) {
+        this.incrementShootingAttempt(missedShot.getShooter(), missedShot.getOffensiveAction().getName());
         return null;
     }
 
@@ -64,5 +66,16 @@ implements ActionResultVisitor<Void> {
     @Override
     public Void visit(EndOfTime endOfTime) {
         return null;
+    }
+
+    private void incrementShootingAttempt(Player player, String string) {
+        Asset asset = this.playersNewAssets.get(player);
+        if ("threepoint".equals(string)) {
+            asset.setThreePointAttemptPerMatch(asset.getThreePointAttemptPerMatch() + 1.0);
+        } else if ("twopoint".equals(string)) {
+            asset.setTwoPointAttemptPerMatch(asset.getTwoPointAttemptPerMatch() + 1.0);
+        } else if ("fouldraw".equals(string)) {
+            asset.setFreeThrowAttemptPerMatch(asset.getFreeThrowAttemptPerMatch() + 1.0);
+        }
     }
 }

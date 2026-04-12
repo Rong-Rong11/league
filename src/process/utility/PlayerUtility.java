@@ -65,6 +65,12 @@ public class PlayerUtility {
         asset3.setInterceptionPerMatch(
                 (asset.getInterceptionPerMatch() * d2 + asset2.getInterceptionPerMatch() * d) / d3);
         asset3.setBlockPerMatch((asset.getBlockPerMatch() * d2 + asset2.getBlockPerMatch() * d) / d3);
+        asset3.setTwoPointAttemptPerMatch(
+                (asset.getTwoPointAttemptPerMatch() * d2 + asset2.getTwoPointAttemptPerMatch() * d) / d3);
+        asset3.setThreePointAttemptPerMatch(
+                (asset.getThreePointAttemptPerMatch() * d2 + asset2.getThreePointAttemptPerMatch() * d) / d3);
+        asset3.setFreeThrowAttemptPerMatch(
+                (asset.getFreeThrowAttemptPerMatch() * d2 + asset2.getFreeThrowAttemptPerMatch() * d) / d3);
         asset3.setTrueShootingPercentage(
                 (asset.getTrueShootingPercentage() * d2 + asset2.getTrueShootingPercentage() * d) / d3);
         asset3.setMinutesPlayedPerMatch(
@@ -91,6 +97,12 @@ public class PlayerUtility {
                 + previousAsset.getBlockPerMatch() * previousWeight);
         blendedAsset.setLostBallPerMatch(currentAsset.getLostBallPerMatch() * boundedCurrentWeight
                 + previousAsset.getLostBallPerMatch() * previousWeight);
+        blendedAsset.setTwoPointAttemptPerMatch(currentAsset.getTwoPointAttemptPerMatch() * boundedCurrentWeight
+                + previousAsset.getTwoPointAttemptPerMatch() * previousWeight);
+        blendedAsset.setThreePointAttemptPerMatch(currentAsset.getThreePointAttemptPerMatch() * boundedCurrentWeight
+                + previousAsset.getThreePointAttemptPerMatch() * previousWeight);
+        blendedAsset.setFreeThrowAttemptPerMatch(currentAsset.getFreeThrowAttemptPerMatch() * boundedCurrentWeight
+                + previousAsset.getFreeThrowAttemptPerMatch() * previousWeight);
         blendedAsset.setTrueShootingPercentage(currentAsset.getTrueShootingPercentage() * boundedCurrentWeight
                 + previousAsset.getTrueShootingPercentage() * previousWeight);
         return blendedAsset;
@@ -139,6 +151,14 @@ public class PlayerUtility {
                 (asset2.getInterceptionPerMatch() * d + asset.getInterceptionPerMatch() * d2) / d3);
         asset2.setBlockPerMatch((asset2.getBlockPerMatch() * d + asset.getBlockPerMatch() * d2) / d3);
         asset2.setLostBallPerMatch((asset2.getLostBallPerMatch() * d + asset.getLostBallPerMatch() * d2) / d3);
+        asset2.setTwoPointAttemptPerMatch(
+                (asset2.getTwoPointAttemptPerMatch() * d + asset.getTwoPointAttemptPerMatch() * d2) / d3);
+        asset2.setThreePointAttemptPerMatch(
+                (asset2.getThreePointAttemptPerMatch() * d + asset.getThreePointAttemptPerMatch() * d2) / d3);
+        asset2.setFreeThrowAttemptPerMatch(
+                (asset2.getFreeThrowAttemptPerMatch() * d + asset.getFreeThrowAttemptPerMatch() * d2) / d3);
+        asset2.setTrueShootingPercentage(
+                (asset2.getTrueShootingPercentage() * d + asset.getTrueShootingPercentage() * d2) / d3);
         asset2.setMinutesPlayedPerMatch(
                 (asset2.getMinutesPlayedPerMatch() * d + asset.getMinutesPlayedPerMatch() * d2) / d3);
     }

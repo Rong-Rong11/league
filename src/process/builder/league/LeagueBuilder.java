@@ -19,21 +19,21 @@ import data.player.Player;
 import data.team.Team;
 import process.factory.PlayerFactory;
 import process.factory.TeamFactory;
-import process.repositery.CurrentSeasonAssetRepositery;
-import process.repositery.DivisionRepositery;
-import process.repositery.PlayerRepositery;
-import process.repositery.PreSeasonAssetRepositery;
-import process.repositery.TeamRepositery;
+import process.repository.CurrentSeasonAssetRepository;
+import process.repository.DivisionRepository;
+import process.repository.PlayerRepository;
+import process.repository.PreSeasonAssetRepository;
+import process.repository.TeamRepository;
 import process.utility.FinanceUtility;
 import process.utility.TeamUtility;
 
 public class LeagueBuilder {
 
-	private PlayerRepositery playerRepositery = PlayerRepositery.getInstance();
-	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
-	private DivisionRepositery divisionRepositery = DivisionRepositery.getInstance();
-	private PreSeasonAssetRepositery preSeasonAssetRepositery = PreSeasonAssetRepositery.getInstance();
-	private CurrentSeasonAssetRepositery currentSeasonAssetRepositery = CurrentSeasonAssetRepositery.getInstance();
+	private PlayerRepository playerRepositery = PlayerRepository.getInstance();
+	private TeamRepository teamRepositery = TeamRepository.getInstance();
+	private DivisionRepository divisionRepositery = DivisionRepository.getInstance();
+	private PreSeasonAssetRepository preSeasonAssetRepositery = PreSeasonAssetRepository.getInstance();
+	private CurrentSeasonAssetRepository currentSeasonAssetRepositery = CurrentSeasonAssetRepository.getInstance();
 
 	public LeagueBuilder() {
 

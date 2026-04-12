@@ -1,4 +1,4 @@
-package process.service.rankingtools;
+package process.service.ranking;
 
 import java.util.ArrayList;
 import java.util.Comparator;

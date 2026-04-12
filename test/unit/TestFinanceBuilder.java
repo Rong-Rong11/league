@@ -13,9 +13,9 @@ import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
 import process.builder.league.LeagueBuilder;
-import process.repositery.DivisionRepositery;
-import process.repositery.PlayerRepositery;
-import process.repositery.TeamRepositery;
+import process.repository.DivisionRepository;
+import process.repository.PlayerRepository;
+import process.repository.TeamRepository;
 import process.service.finance.initialization.FinanceInitializer;
 
 public class TestFinanceBuilder {
@@ -24,9 +24,9 @@ public class TestFinanceBuilder {
 
    @Before
    public void setUp() {
-      PlayerRepositery.getInstance().clear();
-      TeamRepositery.getInstance().clear();
-      DivisionRepositery.getInstance().clear();
+      PlayerRepository.getInstance().clear();
+      TeamRepository.getInstance().clear();
+      DivisionRepository.getInstance().clear();
       league = new LeagueBuilder().build();
       new FinanceInitializer().initializeFinance();
    }

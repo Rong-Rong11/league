@@ -22,13 +22,13 @@ import process.service.finance.FinanceManager;
 import process.service.game.tools.GameDaySimulationProcessor;
 import process.service.game.tools.PlayoffGameDaySimulationProcessor;
 import process.service.game.tools.RegularSeasonGameDaySimulationProcessor;
-import process.service.leaguetools.TeamPopularityUpdater;
+import process.service.league.TeamPopularityUpdater;
 import process.service.playoff.ConferenceFinalPlayoffManager;
 import process.service.playoff.FirstRoundPlayoffManager;
 import process.service.playoff.NbaFinalPlayoffManager;
 import process.service.playoff.PlayoffManager;
 import process.service.playoff.SemiPlayoffManager;
-import process.service.submanager.RegularSeasonRankingManager;
+import process.service.ranking.RegularSeasonRankingManager;
 import process.simulator.GameSimulator;
 import process.utility.LeagueUtility;
 

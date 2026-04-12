@@ -1,20 +1,19 @@
-package process.service.submanager;
+package process.service.ranking;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.TreeMap;
 
 import data.calendar.GameDay;
 import data.league.League;
 import data.league.Ranking;
 import data.sport.setup.Game;
 import data.team.Team;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.TreeMap;
-
-import process.repositery.TeamRepositery;
-import process.service.rankingtools.NbaRegularSeasonTeamComparator;
+import process.repository.TeamRepository;
 
 public class RegularSeasonRankingManager {
-    private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+    private TeamRepository teamRepositery = TeamRepository.getInstance();
     private ArrayList<GameDay> simulatedGameDay = new ArrayList<>();
     private ArrayList<Team> westTeams;
     private ArrayList<Team> eastTeams;

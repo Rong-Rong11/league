@@ -6,7 +6,7 @@ import config.GameConfiguration;
 import data.sport.play.action.ActionResult;
 import data.sport.setup.Game;
 import data.sport.setup.GameResult;
-import process.service.LiveMatchStatistics;
+import process.service.live.LiveMatchStatistics;
 import process.visitor.actionresult.LiveActionTextVisitor;
 
 public class LiveMatchService {

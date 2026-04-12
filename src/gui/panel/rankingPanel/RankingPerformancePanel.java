@@ -19,8 +19,8 @@ import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
-import process.orchestrator.GUIInterface;
-import process.utility.TeamDisplayUtility;
+import process.orchestrator.interf.GUIInterface;
+import gui.utility.TeamDisplayUtility;
 
 public class RankingPerformancePanel extends JPanel implements ThemeAware {
 	private static final int CARD_HEIGHT = 108;

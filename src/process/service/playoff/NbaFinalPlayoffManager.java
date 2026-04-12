@@ -8,7 +8,7 @@ import data.sport.setup.PlayoffSeries;
 import process.builder.calendar.NbaFinalCalendarBuilder;
 import process.builder.league.PlayoffBuilder;
 import process.service.finance.FinanceManager;
-import process.service.leaguetools.TeamPopularityUpdater;
+import process.service.league.TeamPopularityUpdater;
 
 public class NbaFinalPlayoffManager extends PlayoffManager {
 

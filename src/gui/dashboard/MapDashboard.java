@@ -11,12 +11,12 @@ import javax.swing.JPanel;
 
 import data.team.Team;
 import gui.panel.common.BuildBox;
-import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.TeamMapPanel;
 import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.MapTeamSummaryPanel;
-import process.orchestrator.GUIInterface;
+import process.orchestrator.interf.GUIInterface;
 
 /**
  * Dashboard dedie a la page Carte.
@@ -83,7 +83,8 @@ public class MapDashboard extends JPanel implements ThemeAware {
 
 	private JPanel buildRightColumn() {
 		JPanel column = DashboardPanelUtil.createGridColumn(1, 1, 0, 12, IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH);
-		column.add(new BuildBox("Details de l'equipe", "Informations detaillees sur l'equipe selectionnee", teamSummaryPanel));
+		column.add(
+				new BuildBox("Details de l'equipe", "Informations detaillees sur l'equipe selectionnee", teamSummaryPanel));
 		return column;
 	}
 

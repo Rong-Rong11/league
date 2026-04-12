@@ -11,7 +11,7 @@ import gui.panel.common.ThemeAware;
 import gui.panel.financePanel.FinanceHeaderPanel;
 import gui.panel.financePanel.LeagueFinanceViewPanel;
 import gui.panel.financePanel.TeamFinanceViewPanel;
-import process.orchestrator.GUIInterface;
+import process.orchestrator.interf.GUIInterface;
 
 public class FinanceDashboard extends JPanel implements ThemeAware {
 

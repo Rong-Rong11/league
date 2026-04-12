@@ -1,6 +1,6 @@
 package gui.panel.rankingPanel;
 
-import process.orchestrator.GUIInterface;
+import process.orchestrator.interf.GUIInterface;
 
 public class RankingLeagueViewPanel extends RankingTablePanel {
 

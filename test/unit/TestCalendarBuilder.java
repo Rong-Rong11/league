@@ -16,17 +16,17 @@ import data.sport.setup.Game;
 import data.team.Team;
 import process.builder.calendar.RegularSeasonCalendarBuilder;
 import process.builder.league.LeagueBuilder;
-import process.repositery.DivisionRepositery;
-import process.repositery.PlayerRepositery;
-import process.repositery.TeamRepositery;
+import process.repository.DivisionRepository;
+import process.repository.PlayerRepository;
+import process.repository.TeamRepository;
 
 public class TestCalendarBuilder {
 
    @Before
    public void setUp() {
-      PlayerRepositery.getInstance().clear();
-      TeamRepositery.getInstance().clear();
-      DivisionRepositery.getInstance().clear();
+      PlayerRepository.getInstance().clear();
+      TeamRepository.getInstance().clear();
+      DivisionRepository.getInstance().clear();
    }
 
    @Test
@@ -70,7 +70,7 @@ public class TestCalendarBuilder {
       RegularSeasonCalendarBuilder regularSeasonCalendarBuilder = new RegularSeasonCalendarBuilder(league);
 
       regularSeasonCalendarBuilder.buildCalendar();
-      for (Team team : TeamRepositery.getInstance().getAllTeams()) {
+      for (Team team : TeamRepository.getInstance().getAllTeams()) {
          assertTrue(team.getSchedule().getScheduledGames().values().size() > 0);
       }
    }

@@ -13,6 +13,9 @@ public class Asset {
     private double blockPerMatch;
     private double lostBallPerMatch;
     private double trueShootingPercentage;
+    private double twoPointAttemptPerMatch;
+    private double threePointAttemptPerMatch;
+    private double freeThrowAttemptPerMatch;
 
     public Asset(double d, double d2, double d3, double d4, double d5, double d6, double d7, double d8, double d9) {
         this.note = d;
@@ -24,6 +27,9 @@ public class Asset {
         this.blockPerMatch = d7;
         this.lostBallPerMatch = d8;
         this.trueShootingPercentage = d9;
+        this.twoPointAttemptPerMatch = 0.0;
+        this.threePointAttemptPerMatch = 0.0;
+        this.freeThrowAttemptPerMatch = 0.0;
     }
 
     public Asset() {
@@ -103,6 +109,30 @@ public class Asset {
     }
 
     public String toString() {
-        return "Asset [note=" + this.note + ", minutesPlayedPerMatch=" + this.minutesPlayedPerMatch + ", pointPerMatch=" + this.pointPerMatch + ", reboundPerMatch=" + this.reboundPerMatch + ", assistPerMatch=" + this.assistPerMatch + ", interceptionPerMatch=" + this.interceptionPerMatch + ", blockPerMatch=" + this.blockPerMatch + ", lostBallPerMatch=" + this.lostBallPerMatch + ", trueShootingPercentage=" + this.trueShootingPercentage + "]";
+        return "Asset [note=" + this.note + ", minutesPlayedPerMatch=" + this.minutesPlayedPerMatch + ", pointPerMatch=" + this.pointPerMatch + ", reboundPerMatch=" + this.reboundPerMatch + ", assistPerMatch=" + this.assistPerMatch + ", interceptionPerMatch=" + this.interceptionPerMatch + ", blockPerMatch=" + this.blockPerMatch + ", lostBallPerMatch=" + this.lostBallPerMatch + ", trueShootingPercentage=" + this.trueShootingPercentage + ", twoPointAttemptPerMatch=" + this.twoPointAttemptPerMatch + ", threePointAttemptPerMatch=" + this.threePointAttemptPerMatch + ", freeThrowAttemptPerMatch=" + this.freeThrowAttemptPerMatch + "]";
+    }
+
+    public double getTwoPointAttemptPerMatch() {
+        return this.twoPointAttemptPerMatch;
+    }
+
+    public void setTwoPointAttemptPerMatch(double d) {
+        this.twoPointAttemptPerMatch = d;
+    }
+
+    public double getThreePointAttemptPerMatch() {
+        return this.threePointAttemptPerMatch;
+    }
+
+    public void setThreePointAttemptPerMatch(double d) {
+        this.threePointAttemptPerMatch = d;
+    }
+
+    public double getFreeThrowAttemptPerMatch() {
+        return this.freeThrowAttemptPerMatch;
+    }
+
+    public void setFreeThrowAttemptPerMatch(double d) {
+        this.freeThrowAttemptPerMatch = d;
     }
 }

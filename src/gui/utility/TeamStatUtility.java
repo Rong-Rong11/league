@@ -1,4 +1,4 @@
-package process.utility;
+package gui.utility;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,7 @@ import data.league.League;
 import data.player.Player;
 import data.sport.setup.Game;
 import data.team.Team;
-import process.repositery.TeamRepositery;
+import process.repository.TeamRepository;
 
 public class TeamStatUtility {
 
@@ -105,7 +105,7 @@ public class TeamStatUtility {
    }
 
    public static Team findTeamByName(String teamName) {
-      return TeamRepositery.getInstance().getTeam(teamName);
+      return TeamRepository.getInstance().getTeam(teamName);
    }
 
    public static String getConferenceName(Team team, League league) {

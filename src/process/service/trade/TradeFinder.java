@@ -3,13 +3,13 @@ package process.service.trade;
 import config.FinanceConfiguration;
 import data.team.Team;
 import data.team.finance.transfer.TeamTransferStrategy;
-import process.repositery.TeamRepositery;
+import process.repository.TeamRepository;
 import process.utility.TeamUtility;
 import process.visitor.teamtransfer.EvaluateSeasonIntentVisitor;
 
 public class TradeFinder {
 
-    private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+    private TeamRepository teamRepositery = TeamRepository.getInstance();
     private double salaryCap;
 
     public TradeFinder(double salaryCap) {

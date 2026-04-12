@@ -7,8 +7,8 @@ import config.FinanceConfiguration;
 import data.finance.GameStat;
 import data.finance.TeamGameFinance;
 import data.finance.budget.Budget;
-import data.finance.budget.FinanceSeasonMoment;
 import data.finance.budget.FinanceScope;
+import data.finance.budget.FinanceSeasonMoment;
 import data.finance.budget.expense.Expense;
 import data.finance.budget.expense.ExpenseType;
 import data.finance.budget.income.Income;
@@ -16,7 +16,7 @@ import data.finance.budget.income.IncomeType;
 import data.player.Player;
 import data.sport.setup.Game;
 import data.team.Team;
-import process.repositery.TeamRepositery;
+import process.repository.TeamRepository;
 import process.utility.tools.FinanceTypeResolver;
 
 //les sommes en millions
@@ -34,7 +34,7 @@ public class FinanceUtility {
 	}
 
 	public static void updateFormerLeaguePayroll() {
-		TeamRepositery teamRepositery = TeamRepositery.getInstance();
+		TeamRepository teamRepositery = TeamRepository.getInstance();
 		for (Team team : teamRepositery.getAllTeams()) {
 			updateTeamFormerPayroll(team);
 		}

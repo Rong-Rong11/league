@@ -11,7 +11,7 @@ import data.sport.setup.Game;
 import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.mediamarket.MediaMarket;
-import process.repositery.TeamRepositery;
+import process.repository.TeamRepository;
 import process.service.finance.FinanceManager;
 import process.utility.CalendarUtility;
 import process.utility.FinanceUtility;
@@ -19,7 +19,7 @@ import process.utility.FinanceUtility;
 public class MonthlyCentralRevenueCalculator {
 
     private final League league;
-    private final TeamRepositery teamRepository = TeamRepositery.getInstance();
+    private final TeamRepository teamRepository = TeamRepository.getInstance();
     private FinanceManager financeManager;
 
     public MonthlyCentralRevenueCalculator(League league) {

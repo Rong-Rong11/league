@@ -1,11 +1,11 @@
 package process.service.finance.initialization;
 
 import data.team.Team;
-import process.builder.FinanceBuilder;
-import process.repositery.TeamRepositery;
+import process.builder.finance.FinanceBuilder;
+import process.repository.TeamRepository;
 
 public class FinanceInitializer {
-   private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+   private TeamRepository teamRepositery = TeamRepository.getInstance();
 
    public FinanceInitializer() {
    }

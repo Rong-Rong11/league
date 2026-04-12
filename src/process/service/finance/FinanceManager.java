@@ -13,7 +13,7 @@ import data.sport.setup.Game;
 import data.team.Team;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
-import process.repositery.TeamRepositery;
+import process.repository.TeamRepository;
 import process.service.finance.distribution.CentralRevenueDistributor;
 import process.service.finance.expense.LeagueExpenseCalculator;
 import process.service.finance.game.processor.PlayoffGameFinanceProcessor;
@@ -28,7 +28,7 @@ import process.visitor.financialprofil.ChooseTransferStrategyVisitor;
 
 public class FinanceManager {
     private League league;
-    private final TeamRepositery teamRepository = TeamRepositery.getInstance();
+    private final TeamRepository teamRepository = TeamRepository.getInstance();
     private final FinanceInitializer financeInitializer = new FinanceInitializer();
 
     private final RevenueSharingManager revenueSharingManager;

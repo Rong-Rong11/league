@@ -1,14 +1,14 @@
-package process.service.leaguetools;
+package process.service.league;
 
 import data.league.PlayoffRound;
 import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.mediamarket.MediaMarket;
 import data.team.finance.transfer.TeamTransferStrategy;
-import process.repositery.TeamRepositery;
+import process.repository.TeamRepository;
 
 public class TeamPopularityUpdater {
-   private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+   private TeamRepository teamRepositery = TeamRepository.getInstance();
 
    public TeamPopularityUpdater() {
 

@@ -8,7 +8,7 @@ import data.league.Ranking;
 import data.league.RegularSeason;
 import data.sport.setup.Game;
 import process.service.finance.FinanceManager;
-import process.service.submanager.RegularSeasonRankingManager;
+import process.service.ranking.RegularSeasonRankingManager;
 import process.simulator.GameSimulator;
 
 public class RegularSeasonGameDaySimulationProcessor extends GameDaySimulationProcessor {

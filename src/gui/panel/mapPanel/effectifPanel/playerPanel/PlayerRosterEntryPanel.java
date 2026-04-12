@@ -15,7 +15,7 @@ import data.player.Player;
 import gui.panel.common.DashboardCard;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.PlayerDisplayUtil;
-import process.utility.PlayerStatUtility;
+import gui.utility.PlayerStatUtility;
 
 public class PlayerRosterEntryPanel extends DashboardCard {
 	private PlayerPortraitPanel portraitPanel;

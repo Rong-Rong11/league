@@ -31,7 +31,7 @@ import gui.panel.common.InfoPopupUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
-import process.utility.TeamDisplayUtility;
+import gui.utility.TeamDisplayUtility;
 
 public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 

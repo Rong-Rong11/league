@@ -1,20 +1,21 @@
 /*
  * Decompiled with CFR 0.152.
  */
-package process.repositery;
+package process.repository;
 
-import data.league.Division;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DivisionRepositery {
-    private HashMap<String, Division> divisions = new HashMap<>();
-    private static DivisionRepositery instance = new DivisionRepositery();
+import data.league.Division;
 
-    private DivisionRepositery() {
+public class DivisionRepository {
+    private HashMap<String, Division> divisions = new HashMap<>();
+    private static DivisionRepository instance = new DivisionRepository();
+
+    private DivisionRepository() {
     }
 
-    public static DivisionRepositery getInstance() {
+    public static DivisionRepository getInstance() {
         return instance;
     }
 

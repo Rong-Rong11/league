@@ -12,13 +12,13 @@ import data.league.RegularSeason;
 import data.sport.setup.Game;
 import data.team.Team;
 import data.team.calendar.Schedule;
-import process.repositery.TeamRepositery;
+import process.repository.TeamRepository;
 import process.utility.CalendarUtility;
 
 public class GameSelector {
 
 	private LocalDate date;
-	private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+	private TeamRepository teamRepositery = TeamRepository.getInstance();
 	private League league;
 	private RegularSeason regularSeason;
 

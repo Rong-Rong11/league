@@ -13,7 +13,7 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.SectionTitle;
 import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.playerPanel.PlayerSummaryPanel;
-import process.service.LiveMatchStatistics.PlayerLiveSummary;
+import process.service.live.LiveMatchStatistics.PlayerLiveSummary;
 
 public class LiveTeamStatsPanel extends JPanel implements ThemeAware {
 	private JLabel pointsLabel;

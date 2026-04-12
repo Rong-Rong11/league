@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import data.league.Conference;
 import data.league.League;
 import data.team.Team;
-import process.repositery.TeamRepositery;
+import process.repository.TeamRepository;
 
 public class LeagueUtility {
 
    public static void getConferenceTeams(League league, ArrayList<Team> eastTeams, ArrayList<Team> westTeams) {
       Conference easternConference = league.getEasternConference();
-      for (Team team : TeamRepositery.getInstance().getAllTeams()) {
+      for (Team team : TeamRepository.getInstance().getAllTeams()) {
          if (TeamUtility.getConferenceOfTeam(league, team).equals(league.getEasternConference())) {
             eastTeams.add(team);
          } else {

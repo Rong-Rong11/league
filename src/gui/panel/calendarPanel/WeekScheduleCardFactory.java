@@ -13,7 +13,7 @@ import data.calendar.GameDay;
 import data.sport.setup.Game;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedPanel;
-import process.utility.TeamDisplayUtility;
+import gui.utility.TeamDisplayUtility;
 import process.visitor.gamemoment.GameMomentSlotKeyVisitor;
 
 public class WeekScheduleCardFactory {

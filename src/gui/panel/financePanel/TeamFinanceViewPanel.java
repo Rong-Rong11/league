@@ -21,7 +21,7 @@ import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.MonthNavigatorPanel;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.GUIInterface;
+import process.orchestrator.interf.GUIInterface;
 
 public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 
@@ -195,7 +195,8 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		profileValueLabel.setText(FinanceDataUtil.formatPolicy(getFinancialPolicy(team)));
 		marketValueLabel.setText(FinanceDataUtil.formatMarket(getMarketSize(team)));
 		strategyValueLabel.setText(FinanceDataUtil.formatStrategy(getTransferStrategy(team)));
-		ticketPriceValueLabel.setText(team.getStadium() == null ? "-" : FinanceDataUtil.formatMoney(team.getStadium().getTicketPrice()));
+		ticketPriceValueLabel
+				.setText(team.getStadium() == null ? "-" : FinanceDataUtil.formatMoney(team.getStadium().getTicketPrice()));
 		capacityValueLabel.setText(team.getStadium() == null ? "-" : String.valueOf(team.getStadium().getCapacity()));
 
 		budgetValueLabel.setForeground(DashboardPanelUtil.NEUTRAL_ACCENT_COLOR);
@@ -247,7 +248,8 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		expenseMetricsPanel.add(Box.createVerticalStrut(8));
 		expenseMetricsPanel.add(FinanceViewFactory.valueRow("Net du mois",
 				FinanceDataUtil.formatMoney(FinanceDataUtil.totalIncome(FinanceDataUtil.teamIncomes(team, month)) - total),
-				DashboardPanelUtil.getValueColorForAmount(FinanceDataUtil.totalIncome(FinanceDataUtil.teamIncomes(team, month)) - total)));
+				DashboardPanelUtil.getValueColorForAmount(
+						FinanceDataUtil.totalIncome(FinanceDataUtil.teamIncomes(team, month)) - total)));
 
 		if (expenses != null && !expenses.isEmpty()) {
 			for (Expense expense : expenses.values()) {

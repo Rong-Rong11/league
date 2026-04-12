@@ -11,7 +11,7 @@ import data.player.Player;
 import data.team.Team;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
-import process.utility.PlayerStatUtility;
+import gui.utility.PlayerStatUtility;
 
 public class MapTeamPlayersPanel extends JPanel implements ThemeAware {
 	private JLabel[] playerLabels;

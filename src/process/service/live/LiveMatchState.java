@@ -1,7 +1,7 @@
 package process.service.live;
 
 import data.team.Team;
-import process.service.LiveMatchStatistics.PlayerLiveSummary;
+import process.service.live.LiveMatchStatistics.PlayerLiveSummary;
 
 public class LiveMatchState {
 

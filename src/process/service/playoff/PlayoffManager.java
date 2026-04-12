@@ -12,7 +12,7 @@ import data.team.Team;
 import process.builder.calendar.PlayoffCalendarBuilder;
 import process.builder.league.PlayoffBuilder;
 import process.service.finance.FinanceManager;
-import process.service.leaguetools.TeamPopularityUpdater;
+import process.service.league.TeamPopularityUpdater;
 
 public abstract class PlayoffManager {
    private League league;

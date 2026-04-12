@@ -20,7 +20,7 @@ import data.sport.setup.Game;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
-import process.utility.TeamDisplayUtility;
+import gui.utility.TeamDisplayUtility;
 
 public class MatchDayEntryPanel extends JPanel implements ThemeAware {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);

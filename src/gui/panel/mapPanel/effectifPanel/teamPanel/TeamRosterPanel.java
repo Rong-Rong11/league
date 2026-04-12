@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import data.player.Player;
 import data.team.Team;
 import gui.panel.mapPanel.effectifPanel.playerPanel.PlayerRosterEntryPanel;
-import process.utility.PlayerStatUtility;
+import gui.utility.PlayerStatUtility;
 
 public class TeamRosterPanel extends JPanel {
 

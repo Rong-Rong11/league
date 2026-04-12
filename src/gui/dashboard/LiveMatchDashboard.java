@@ -17,7 +17,7 @@ import gui.panel.common.ThemeAware;
 import gui.panel.matchPanel.liveMatchPanel.LiveActionsPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveMatchHeaderPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveTeamStatsPanel;
-import process.orchestrator.GUIInterface;
+import process.orchestrator.interf.GUIInterface;
 import process.service.live.LiveMatchState;
 
 public class LiveMatchDashboard extends JPanel implements Runnable, ThemeAware {

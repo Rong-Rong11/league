@@ -1,4 +1,4 @@
-package process.builder;
+package process.builder.finance;
 
 import config.FinanceConfiguration;
 import data.finance.budget.Budget;
@@ -10,7 +10,7 @@ import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import process.factory.EconomicProfileFactory;
-import process.repositery.TeamRepositery;
+import process.repository.TeamRepository;
 import process.utility.FinanceUtility;
 import process.visitor.marketsize.CalculateBaseTicketVisitor;
 import process.visitor.marketsize.CalculateInitialTeamBudgetVisitor;
@@ -19,7 +19,7 @@ import process.visitor.marketsize.CreateMediaMarketVisitor;
 import process.visitor.marketsize.GenerateStadiumCapacityVisitor;
 
 public class FinanceBuilder {
-    private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+    private TeamRepository teamRepositery = TeamRepository.getInstance();
 
     // deja un marketSize et un profil financier au moment de l'appel car choisi en
     // random

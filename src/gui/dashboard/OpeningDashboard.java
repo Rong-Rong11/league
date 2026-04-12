@@ -18,14 +18,14 @@ import javax.swing.JPanel;
 import data.team.Team;
 import gui.panel.common.BuildBox;
 import gui.panel.common.ButtonStyleUtil;
-import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.TeamMapPanel;
 import gui.panel.common.ThemeAware;
 import gui.panel.openningPanel.OpeningPolicyDetailPanel;
 import gui.panel.openningPanel.OpeningTeamSelectionPanel;
-import process.orchestrator.GUIInterface;
+import process.orchestrator.interf.GUIInterface;
 
 public class OpeningDashboard extends JPanel implements ThemeAware {
 

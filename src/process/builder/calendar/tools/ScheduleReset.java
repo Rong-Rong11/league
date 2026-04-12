@@ -1,10 +1,10 @@
 package process.builder.calendar.tools;
 
 import data.team.Team;
-import process.repositery.TeamRepositery;
+import process.repository.TeamRepository;
 
 public class ScheduleReset {
-    private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+    private TeamRepository teamRepositery = TeamRepository.getInstance();
 
     public void initialization() {
         for (Team team : this.teamRepositery.getAllTeams()) {

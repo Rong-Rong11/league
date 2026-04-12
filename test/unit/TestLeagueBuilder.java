@@ -15,17 +15,17 @@ import data.league.finance.LeagueFinancialRules;
 import data.player.Player;
 import data.team.Team;
 import process.builder.league.LeagueBuilder;
-import process.repositery.DivisionRepositery;
-import process.repositery.PlayerRepositery;
-import process.repositery.TeamRepositery;
+import process.repository.DivisionRepository;
+import process.repository.PlayerRepository;
+import process.repository.TeamRepository;
 
 public class TestLeagueBuilder {
 
 	@Before
 	public void setUp() {
-		PlayerRepositery.getInstance().clear();
-		TeamRepositery.getInstance().clear();
-		DivisionRepositery.getInstance().clear();
+		PlayerRepository.getInstance().clear();
+		TeamRepository.getInstance().clear();
+		DivisionRepository.getInstance().clear();
 	}
 
 	@Test
@@ -39,9 +39,9 @@ public class TestLeagueBuilder {
 		assertNotNull(league.getWesternConference());
 		assertNotNull(league.getLeagueFinance());
 		assertEquals(30, league.getAllTeam().size());
-		assertEquals(6, DivisionRepositery.getInstance().getAllDivisions().size());
-		assertTrue(PlayerRepositery.getInstance().getAllPlayers().size() > 500);
-		assertEquals(30, TeamRepositery.getInstance().getAllTeams().size());
+		assertEquals(6, DivisionRepository.getInstance().getAllDivisions().size());
+		assertTrue(PlayerRepository.getInstance().getAllPlayers().size() > 500);
+		assertEquals(30, TeamRepository.getInstance().getAllTeams().size());
 	}
 
 	@Test

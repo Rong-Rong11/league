@@ -24,7 +24,7 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.GUIInterface;
+import process.orchestrator.interf.GUIInterface;
 
 public class WeekScheduleGridPanel extends RoundedPanel implements ThemeAware {
 	private static final long serialVersionUID = 1L;
@@ -202,7 +202,8 @@ public class WeekScheduleGridPanel extends RoundedPanel implements ThemeAware {
 	}
 
 	private boolean isOutsideSeason(LocalDate day) {
-		return day.isBefore(guiInterface.getRegularSeasonStartDate()) || day.isAfter(guiInterface.getRegularSeasonEndDate());
+		return day.isBefore(guiInterface.getRegularSeasonStartDate())
+				|| day.isAfter(guiInterface.getRegularSeasonEndDate());
 	}
 
 	private Color getGridBorderColor() {

@@ -1,20 +1,21 @@
 /*
  * Decompiled with CFR 0.152.
  */
-package process.repositery;
+package process.repository;
+
+import java.util.HashMap;
 
 import data.player.Asset;
 import data.player.Player;
-import java.util.HashMap;
 
-public class PreSeasonAssetRepositery {
+public class PreSeasonAssetRepository {
     private HashMap<Player, Asset> preSeasonAssets = new HashMap<>();
-    private static PreSeasonAssetRepositery instance = new PreSeasonAssetRepositery();
+    private static PreSeasonAssetRepository instance = new PreSeasonAssetRepository();
 
-    private PreSeasonAssetRepositery() {
+    private PreSeasonAssetRepository() {
     }
 
-    public static PreSeasonAssetRepositery getInstance() {
+    public static PreSeasonAssetRepository getInstance() {
         return instance;
     }
 

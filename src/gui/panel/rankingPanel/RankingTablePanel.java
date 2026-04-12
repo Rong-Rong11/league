@@ -21,8 +21,8 @@ import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.GUIInterface;
-import process.utility.TeamDisplayUtility;
+import process.orchestrator.interf.GUIInterface;
+import gui.utility.TeamDisplayUtility;
 
 public class RankingTablePanel extends JPanel implements ThemeAware {
 	private static final int GLOBAL_PAGE_SIZE = 15;

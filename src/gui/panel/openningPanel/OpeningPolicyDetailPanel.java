@@ -11,8 +11,8 @@ import javax.swing.JPanel;
 import data.team.Team;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.GUIInterface;
-import process.utility.TeamDisplayUtility;
+import process.orchestrator.interf.GUIInterface;
+import gui.utility.TeamDisplayUtility;
 
 public class OpeningPolicyDetailPanel extends JPanel implements ThemeAware {
 	private final GUIInterface guiInterface;

@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import config.FinanceConfiguration;
 import data.player.Player;
 import data.team.Team;
-import process.repositery.TeamRepositery;
+import process.repository.TeamRepository;
 import process.simulator.TradeSimulator;
 
 public abstract class TradeService {
 
-    private final TeamRepositery teamRepositery = TeamRepositery.getInstance();
+    private final TeamRepository teamRepositery = TeamRepository.getInstance();
     private final double salaryCap;
     private final double luxuryTaxLine;
     private final TradeSimulator tradeSimulator = new TradeSimulator();

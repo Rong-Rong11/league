@@ -7,7 +7,7 @@ import data.finance.budget.income.IncomeType;
 import data.league.League;
 import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
-import process.repositery.TeamRepositery;
+import process.repository.TeamRepository;
 import process.service.finance.FinanceManager;
 import process.utility.FinanceUtility;
 
@@ -17,7 +17,7 @@ public class CentralRevenueDistributor {
     private static final String MERCHANDISING_SHARE_TYPE = "merchandising";
 
     private League league;
-    private TeamRepositery teamRepositery = TeamRepositery.getInstance();
+    private TeamRepository teamRepositery = TeamRepository.getInstance();
     private MonthlyCentralRevenueCalculator monthlyCentralRevenueCalculator;
 
     public CentralRevenueDistributor(League league) {

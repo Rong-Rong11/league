@@ -24,7 +24,7 @@ import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.MonthNavigatorPanel;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.GUIInterface;
+import process.orchestrator.interf.GUIInterface;
 
 public class LeagueFinanceViewPanel extends JPanel implements ThemeAware {
 
@@ -98,7 +98,8 @@ public class LeagueFinanceViewPanel extends JPanel implements ThemeAware {
 				BorderLayout.NORTH);
 		centerColumn.add(FinanceViewFactory.panelWithHeight(
 				new BuildBox("DEPENSES DE LA LIGUE", "Repartition du mois selectionne",
-						FinanceViewFactory.financeBarChart(expenseDataset, DashboardPanelUtil.EXPENSE_COLOR)), 250),
+						FinanceViewFactory.financeBarChart(expenseDataset, DashboardPanelUtil.EXPENSE_COLOR)),
+				250),
 				BorderLayout.CENTER);
 		return centerColumn;
 	}

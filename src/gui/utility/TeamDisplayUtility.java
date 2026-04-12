@@ -1,4 +1,4 @@
-package process.utility;
+package gui.utility;
 
 import data.team.Team;
 

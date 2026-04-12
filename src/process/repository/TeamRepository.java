@@ -1,20 +1,21 @@
 /*
  * Decompiled with CFR 0.152.
  */
-package process.repositery;
+package process.repository;
 
-import data.team.Team;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TeamRepositery {
-    private HashMap<String, Team> teams = new HashMap<>();
-    private static TeamRepositery instance = new TeamRepositery();
+import data.team.Team;
 
-    private TeamRepositery() {
+public class TeamRepository {
+    private HashMap<String, Team> teams = new HashMap<>();
+    private static TeamRepository instance = new TeamRepository();
+
+    private TeamRepository() {
     }
 
-    public static TeamRepositery getInstance() {
+    public static TeamRepository getInstance() {
         return instance;
     }
 
