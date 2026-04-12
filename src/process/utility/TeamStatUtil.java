@@ -40,6 +40,36 @@ public class TeamStatUtil {
       return total / count;
    }
 
+   public static double getAverageRebounds(Team team, boolean currentSeasonSelected) {
+      double total = 0;
+      int count = 0;
+
+      for (Player player : team.getCurrentPlayers().values()) {
+         total += PlayerStatUtil.getDisplayedAssets(player, currentSeasonSelected).getReboundPerMatch();
+         count++;
+      }
+
+      if (count == 0) {
+         return 0;
+      }
+      return total / count;
+   }
+
+   public static double getAverageAssists(Team team, boolean currentSeasonSelected) {
+      double total = 0;
+      int count = 0;
+
+      for (Player player : team.getCurrentPlayers().values()) {
+         total += PlayerStatUtil.getDisplayedAssets(player, currentSeasonSelected).getAssistPerMatch();
+         count++;
+      }
+
+      if (count == 0) {
+         return 0;
+      }
+      return total / count;
+   }
+
    public static ArrayList<Boolean> getLastResults(Team team, int numberOfGames) {
       ArrayList<Boolean> results = new ArrayList<Boolean>();
 

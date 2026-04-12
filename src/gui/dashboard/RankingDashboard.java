@@ -10,8 +10,8 @@ import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.SectionTitle;
 import gui.panel.common.ThemeAware;
+import gui.panel.rankingPanel.RankingLeagueViewPanel;
 import gui.panel.rankingPanel.RankingPerformancePanel;
-import gui.panel.rankingPanel.RankingTablePanel;
 import process.orchestrator.GUIInterface;
 
 /**
@@ -25,7 +25,7 @@ public class RankingDashboard extends JPanel implements ThemeAware {
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 
 	private GUIInterface guiInterface;
-	private RankingTablePanel rankingTablePanel;
+	private RankingLeagueViewPanel rankingLeagueViewPanel;
 	private RankingPerformancePanel rankingPerformancePanel;
 
 	public RankingDashboard(GUIInterface guiInterface) {
@@ -35,12 +35,12 @@ public class RankingDashboard extends JPanel implements ThemeAware {
 	}
 
 	private void create() {
-		rankingTablePanel = new RankingTablePanel(guiInterface);
+		rankingLeagueViewPanel = new RankingLeagueViewPanel(guiInterface);
 		rankingPerformancePanel = new RankingPerformancePanel(guiInterface);
 	}
 
 	public void refreshRanking() {
-		rankingTablePanel.refreshRanking();
+		rankingLeagueViewPanel.refreshRanking();
 		rankingPerformancePanel.refreshPerformance();
 	}
 
@@ -72,7 +72,7 @@ public class RankingDashboard extends JPanel implements ThemeAware {
 	}
 
 	private JPanel buildCenterColumn() {
-		return new BuildBox("", "", rankingTablePanel);
+		return new BuildBox("", "", rankingLeagueViewPanel);
 	}
 
 	private JPanel buildRightColumn() {

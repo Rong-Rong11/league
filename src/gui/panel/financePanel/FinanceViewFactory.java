@@ -154,16 +154,10 @@ public final class FinanceViewFactory {
 		JFreeChart chart = ChartFactory.createLineChart(null, "", "Montant (M$)", dataset, PlotOrientation.VERTICAL,
 				false, false, false);
 
-		CategoryPlot plot = chart.getCategoryPlot();
-		stylePlot(plot);
-
 		LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, true);
-		renderer.setSeriesPaint(0, mainColor);
-		if (dataset.getRowCount() > 1) {
-			renderer.setSeriesPaint(1, DashboardPanelUtil.EXPENSE_COLOR);
-		}
-		plot.setRenderer(renderer);
-		styleAxes(plot);
+		CategoryPlot chartArea = chart.getCategoryPlot();
+		chartArea.setRenderer(renderer);
+		applyChartTheme(chart, mainColor);
 
 		return wrapChart(chart, 190);
 	}
@@ -172,39 +166,71 @@ public final class FinanceViewFactory {
 		JFreeChart chart = ChartFactory.createBarChart(null, "Categorie", "Montant (M$)", dataset,
 				PlotOrientation.VERTICAL, false, false, false);
 
-		CategoryPlot plot = chart.getCategoryPlot();
-		stylePlot(plot);
-
-		BarRenderer renderer = (BarRenderer) plot.getRenderer();
-		renderer.setSeriesPaint(0, color);
+		CategoryPlot chartArea = chart.getCategoryPlot();
+		BarRenderer renderer = (BarRenderer) chartArea.getRenderer();
 		renderer.setBarPainter(new StandardBarPainter());
 		renderer.setShadowVisible(false);
 		renderer.setMaximumBarWidth(0.12);
-
-		styleAxes(plot);
-		plot.getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.STANDARD);
-		plot.getDomainAxis().setMaximumCategoryLabelLines(2);
+		applyChartTheme(chart, color);
 
 		return wrapChart(chart, 190);
 	}
 
-	private static void stylePlot(CategoryPlot plot) {
-		plot.setBackgroundPaint(DashboardPanelUtil.PANEL_SURFACE_COLOR);
-		plot.setOutlineVisible(false);
-		plot.setRangeGridlinePaint(DashboardPanelUtil.getCalendarGridBorderColor());
-		plot.setNoDataMessage("Aucune donnee");
-		plot.setNoDataMessagePaint(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+	private static void applyChartTheme(JFreeChart chart, Color mainColor) {
+		chart.setBackgroundPaint(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+
+		CategoryPlot chartArea = chart.getCategoryPlot();
+		styleChartArea(chartArea);
+		styleAxes(chartArea);
+
+		CategoryAxis domainAxis = chartArea.getDomainAxis();
+		domainAxis.setCategoryLabelPositions(CategoryLabelPositions.STANDARD);
+		domainAxis.setMaximumCategoryLabelLines(2);
+
+		if (chartArea.getRenderer() instanceof LineAndShapeRenderer) {
+			LineAndShapeRenderer renderer = (LineAndShapeRenderer) chartArea.getRenderer();
+			renderer.setSeriesPaint(0, mainColor);
+			if (chartArea.getDataset() != null && chartArea.getDataset().getRowCount() > 1) {
+				renderer.setSeriesPaint(1, DashboardPanelUtil.EXPENSE_COLOR);
+			}
+		}
+
+		if (chartArea.getRenderer() instanceof BarRenderer) {
+			BarRenderer renderer = (BarRenderer) chartArea.getRenderer();
+			Color barColor = mainColor;
+			if (chartArea.getDataset() != null && chartArea.getDataset().getRowCount() > 0) {
+				Comparable<?> rowKey = chartArea.getDataset().getRowKey(0);
+				if (rowKey != null) {
+					String text = rowKey.toString().toLowerCase();
+					if (text.contains("depense")) {
+						barColor = DashboardPanelUtil.EXPENSE_COLOR;
+					}
+					if (text.contains("revenu")) {
+						barColor = DashboardPanelUtil.REVENUE_COLOR;
+					}
+				}
+			}
+			renderer.setSeriesPaint(0, barColor);
+		}
 	}
 
-	private static void styleAxes(CategoryPlot plot) {
-		CategoryAxis domainAxis = plot.getDomainAxis();
+	private static void styleChartArea(CategoryPlot chartArea) {
+		chartArea.setBackgroundPaint(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		chartArea.setOutlineVisible(false);
+		chartArea.setRangeGridlinePaint(DashboardPanelUtil.getCalendarGridBorderColor());
+		chartArea.setNoDataMessage("Aucune donnee");
+		chartArea.setNoDataMessagePaint(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+	}
+
+	private static void styleAxes(CategoryPlot chartArea) {
+		CategoryAxis domainAxis = chartArea.getDomainAxis();
 		domainAxis.setTickLabelPaint(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 		domainAxis.setLabelPaint(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 		domainAxis.setTickLabelFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
 		domainAxis.setAxisLineVisible(false);
 		domainAxis.setTickMarksVisible(false);
 
-		NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+		NumberAxis rangeAxis = (NumberAxis) chartArea.getRangeAxis();
 		rangeAxis.setTickLabelPaint(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 		rangeAxis.setLabelPaint(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		rangeAxis.setTickLabelFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
@@ -230,6 +256,9 @@ public final class FinanceViewFactory {
 		if (component instanceof ChartPanel) {
 			ChartPanel chartPanel = (ChartPanel) component;
 			chartPanel.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+			if (chartPanel.getChart() != null) {
+				applyChartTheme(chartPanel.getChart(), DashboardPanelUtil.REVENUE_COLOR);
+			}
 			chartPanel.repaint();
 		}
 

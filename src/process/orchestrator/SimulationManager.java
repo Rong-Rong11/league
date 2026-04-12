@@ -586,6 +586,16 @@ public class SimulationManager implements GUIInterface {
 	}
 
 	@Override
+	public double getAverageRebounds(Team team, boolean currentSeasonSelected) {
+		return TeamStatUtil.getAverageRebounds(team, currentSeasonSelected);
+	}
+
+	@Override
+	public double getAverageAssists(Team team, boolean currentSeasonSelected) {
+		return TeamStatUtil.getAverageAssists(team, currentSeasonSelected);
+	}
+
+	@Override
 	public String getTeamAbbreviation(String teamName) {
 		return TeamDisplayUtil.getAbbreviation(getTeamByName(teamName));
 	}

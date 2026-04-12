@@ -23,6 +23,10 @@ public interface TeamGetterInterface {
 
    double getAveragePoints(Team team, boolean currentSeasonSelected);
 
+   double getAverageRebounds(Team team, boolean currentSeasonSelected);
+
+   double getAverageAssists(Team team, boolean currentSeasonSelected);
+
    String getTeamAbbreviation(String teamName);
 
    double getTeamCurrentPayroll(Team team);

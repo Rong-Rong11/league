@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import data.team.Team;
+import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
@@ -24,11 +25,12 @@ import process.orchestrator.GUIInterface;
 import process.utility.TeamDisplayUtil;
 
 public class RankingTablePanel extends JPanel implements ThemeAware {
-	private static final Color PRIMARY_ACCENT = new Color(0x17, 0x31, 0x74);
 	private static final int GLOBAL_PAGE_SIZE = 15;
 	private static final String GLOBAL_MODE = "global";
 	private static final String EAST_MODE = "east";
 	private static final String WEST_MODE = "west";
+	private static final String REGULAR_SEASON = "regular";
+	private static final String PLAYOFFS = "playoffs";
 
 	private GUIInterface guiInterface;
 	private JPanel tableContentPanel;
@@ -40,13 +42,17 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 	private JButton previousPageButton;
 	private JButton nextPageButton;
 	private JLabel pageLabel;
+	private final RankingPlayoffsViewPanel playoffsViewPanel;
 	private String selectedMode;
+	private String selectedSeason;
 	private int globalPageIndex;
 
 	public RankingTablePanel(GUIInterface guiInterface) {
 		this.guiInterface = guiInterface;
 		selectedMode = GLOBAL_MODE;
+		selectedSeason = REGULAR_SEASON;
 		globalPageIndex = 0;
+		playoffsViewPanel = new RankingPlayoffsViewPanel();
 		setLayout(new BorderLayout(0, 12));
 		setOpaque(false);
 
@@ -76,6 +82,8 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		rightPanel.setOpaque(false);
 		regularSeasonButton = createFilterButton("Saison reguliere", true);
 		playoffsButton = createFilterButton("Playoffs", false);
+		regularSeasonButton.addActionListener(new SeasonAction(REGULAR_SEASON));
+		playoffsButton.addActionListener(new SeasonAction(PLAYOFFS));
 		rightPanel.add(regularSeasonButton);
 		rightPanel.add(playoffsButton);
 
@@ -86,8 +94,8 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 
 	private JButton createFilterButton(String text, boolean selected) {
 		JButton button = new RoundedButton(text);
-		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		applyFilterButtonTheme(button, selected);
+		ButtonStyleUtil.styleToggleButton(button);
+		ButtonStyleUtil.setToggleButtonSelected(button, selected);
 		return button;
 	}
 
@@ -122,8 +130,7 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		JButton button = new RoundedButton(text);
 		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
 		button.setPreferredSize(new Dimension(44, 32));
-		button.setBackground(PRIMARY_ACCENT);
-		button.setForeground(Color.WHITE);
+		stylePageButton(button);
 		return button;
 	}
 
@@ -147,8 +154,13 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 	}
 
 	private void stylePageButton(JButton button) {
-		button.setBackground(PRIMARY_ACCENT);
-		button.setForeground(Color.WHITE);
+		if (button.isEnabled()) {
+			button.setBackground(DashboardPanelUtil.getNavigationButtonColor());
+			button.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
+			return;
+		}
+		button.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
+		button.setForeground(DashboardPanelUtil.BUTTON_TEXT_COLOR);
 	}
 
 	private JPanel buildHeaderRow() {
@@ -185,6 +197,13 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 
 	public void refreshRanking() {
 		tableContentPanel.removeAll();
+
+		if (PLAYOFFS.equals(selectedSeason)) {
+			tableContentPanel.add(playoffsViewPanel, BorderLayout.CENTER);
+			revalidate();
+			repaint();
+			return;
+		}
 
 		ArrayList<Team> teams = getSelectedTeams();
 		if (GLOBAL_MODE.equals(selectedMode)) {
@@ -255,15 +274,26 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		refreshRanking();
 	}
 
+	private void setSelectedSeason(String season) {
+		selectedSeason = season;
+		updateSeasonButtons();
+		refreshRanking();
+	}
+
 	private void updateModeButtons() {
 		styleFilterButton(globalButton, GLOBAL_MODE.equals(selectedMode));
 		styleFilterButton(eastButton, EAST_MODE.equals(selectedMode));
 		styleFilterButton(westButton, WEST_MODE.equals(selectedMode));
 	}
 
+	private void updateSeasonButtons() {
+		styleFilterButton(regularSeasonButton, REGULAR_SEASON.equals(selectedSeason));
+		styleFilterButton(playoffsButton, PLAYOFFS.equals(selectedSeason));
+	}
+
 	private void styleFilterButton(JButton button, boolean selected) {
-		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		applyFilterButtonTheme(button, selected);
+		ButtonStyleUtil.styleToggleButton(button);
+		ButtonStyleUtil.setToggleButtonSelected(button, selected);
 	}
 
 	private JPanel createTeamRow(int rank, Team team) {
@@ -279,18 +309,18 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 			String bestWinStreak) {
 		JPanel row = new JPanel(new GridLayout(1, 7, 12, 0));
 		row.setOpaque(true);
-		row.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		row.setBackground(getRowBackground(rank));
 		row.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createMatteBorder(0, 0, 1, 0, DashboardPanelUtil.BORDER_COLOR),
 				BorderFactory.createEmptyBorder(8, 12, 8, 12)));
 
-		row.add(createValueLabel(String.valueOf(rank), true));
-		row.add(createValueLabel(teamName, true));
-		row.add(createValueLabel(String.valueOf(wins), false));
-		row.add(createValueLabel(String.valueOf(losses), false));
-		row.add(createValueLabel(String.valueOf(points), true));
-		row.add(createValueLabel(percentage, true));
-		row.add(createValueLabel(bestWinStreak, true));
+		row.add(createColoredValueLabel(String.valueOf(rank), true, getRankColor(rank)));
+		row.add(createColoredValueLabel(teamName, true, DashboardPanelUtil.TITLE_TEXT_COLOR));
+		row.add(createColoredValueLabel(String.valueOf(wins), true, DashboardPanelUtil.POSITIVE_VALUE_COLOR));
+		row.add(createColoredValueLabel(String.valueOf(losses), false, DashboardPanelUtil.EXPENSE_COLOR));
+		row.add(createColoredValueLabel(String.valueOf(points), true, DashboardPanelUtil.NEUTRAL_ACCENT_COLOR));
+		row.add(createColoredValueLabel(percentage, true, DashboardPanelUtil.REVENUE_COLOR));
+		row.add(createColoredValueLabel(bestWinStreak, true, DashboardPanelUtil.POSITIVE_VALUE_COLOR));
 
 		return row;
 	}
@@ -304,16 +334,40 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		return String.format("%.1f%%", winRate);
 	}
 
-	private JLabel createValueLabel(String text, boolean accented) {
+	private JLabel createColoredValueLabel(String text, boolean accented, Color color) {
 		JLabel label = new JLabel(text);
-		label.setForeground(accented ? DashboardPanelUtil.TITLE_TEXT_COLOR : DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		label.setForeground(color);
 		label.setFont(new Font(Font.SANS_SERIF, accented ? Font.BOLD : Font.PLAIN, 12));
 		return label;
 	}
 
-	private void applyFilterButtonTheme(JButton button, boolean selected) {
-		button.setBackground(selected ? PRIMARY_ACCENT : DashboardPanelUtil.BUTTON_SURFACE_COLOR);
-		button.setForeground(selected ? Color.WHITE : DashboardPanelUtil.BUTTON_TEXT_COLOR);
+	private Color getRankColor(int rank) {
+		if (rank == 1) {
+			return DashboardPanelUtil.NEUTRAL_ACCENT_COLOR;
+		}
+		if (rank <= 3) {
+			return DashboardPanelUtil.POLICY_BALANCED_COLOR;
+		}
+		if (rank <= 8) {
+			return DashboardPanelUtil.REVENUE_COLOR;
+		}
+		if (rank <= 15) {
+			return DashboardPanelUtil.TITLE_TEXT_COLOR;
+		}
+		return DashboardPanelUtil.SUBTITLE_TEXT_COLOR;
+	}
+
+	private Color getRowBackground(int rank) {
+		if (DashboardPanelUtil.isDarkMode()) {
+			if (rank % 2 == 0) {
+				return DashboardPanelUtil.PANEL_SURFACE_COLOR;
+			}
+			return new Color(39, 43, 50);
+		}
+		if (rank % 2 == 0) {
+			return DashboardPanelUtil.PANEL_SURFACE_COLOR;
+		}
+		return new Color(250, 251, 253);
 	}
 
 	private class ModeAction implements ActionListener {
@@ -326,6 +380,19 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			setSelectedMode(mode);
+		}
+	}
+
+	private class SeasonAction implements ActionListener {
+		private final String season;
+
+		private SeasonAction(String season) {
+			this.season = season;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			setSelectedSeason(season);
 		}
 	}
 
@@ -367,6 +434,7 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 	public void applyTheme() {
 		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
 		updateModeButtons();
+		updateSeasonButtons();
 		if (previousPageButton != null) {
 			stylePageButton(previousPageButton);
 		}
