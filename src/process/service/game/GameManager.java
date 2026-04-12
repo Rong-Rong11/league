@@ -10,6 +10,7 @@ import data.league.League;
 import data.league.Playoff;
 import data.league.PlayoffRound;
 import data.league.RegularSeason;
+import data.sport.setup.Game;
 import data.team.Team;
 import process.builder.calendar.CalendarBuilder;
 import process.builder.calendar.ConferenceFinalCalendarBuilder;
@@ -134,5 +135,54 @@ public class GameManager {
 
 	public Team getRegularSeasonEastWinner() {
 		return league.getReagularSeason().getRanking().getEastRanking().get(1);
+	}
+
+	public ArrayList<Team> getGlobalRanking() {
+		return regularSeasonRankingManager.getGlobalRanking(league);
+	}
+
+	public ArrayList<Team> getEastRanking() {
+		return regularSeasonRankingManager.getEastRanking();
+	}
+
+	public ArrayList<Team> getWestRanking() {
+		return regularSeasonRankingManager.getWestRanking();
+	}
+
+	public void simulateFirstRoundDay(LocalDate date, int month) {
+		simulateManagedPlayoffDay(date, month, firstRoundPlayoffManager);
+	}
+
+	public void simulateSemiRoundDay(LocalDate date, int month) {
+		simulateManagedPlayoffDay(date, month, semiPlayoffManager);
+	}
+
+	public void simulateConferenceFinalRoundDay(LocalDate date, int month) {
+		simulateManagedPlayoffDay(date, month, conferenceFinalPlayoffManager);
+	}
+
+	public void simulateNbaFinalRoundDay(LocalDate date, int month) {
+		simulateManagedPlayoffDay(date, month, nbaFinalPlayoffManager);
+	}
+
+	private void simulateManagedPlayoffDay(LocalDate date, int month, PlayoffManager playoffManager) {
+		Playoff playoff = league.getPlayoff();
+		TreeMap<LocalDate, GameDay> playoffCalendar = playoff.getNbaCalendar().getCalendar();
+		GameDay gameDay = playoffCalendar.get(date);
+		if (gameDay != null && !gameDay.isSimulated()) {
+			simulateGameDay(gameDay, date, month);
+			for (Game game : gameDay.getGames()) {
+				playoffManager.handlePlayedGame(game, date);
+			}
+		}
+	}
+
+	private void simulateGameDay(GameDay gameDay, LocalDate date, int month) {
+		for (Game game : gameDay.getGames()) {
+			gameSimulator.simulateGame(game);
+			financeManager.calculatePlayoffGame(game, date, month, league.getPlayoff().getCurrentRound());
+		}
+		gameDay.setSimulated(true);
+
 	}
 }

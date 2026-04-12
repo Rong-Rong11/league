@@ -1,12 +1,17 @@
 package process.orchestrator;
 
-import java.util.ArrayList;
-
 import data.team.Team;
+import java.util.ArrayList;
 
 public interface TeamGetterInterface {
 
    ArrayList<Team> getTeams();
+
+   ArrayList<Team> getGlobalRanking();
+
+   ArrayList<Team> getEastRanking();
+
+   ArrayList<Team> getWestRanking();
 
    Team getTeamByName(String teamName);
 
@@ -22,13 +27,17 @@ public interface TeamGetterInterface {
 
    double getTeamCurrentPayroll(Team team);
 
-   double getTeamCurrentWinStreak(Team team);
+   String getTeamFinancialPolicyLabel(Team team);
 
-   double getTeamCurrentLoseStreak(Team team);
+   String getTeamMarketSizeLabel(Team team);
 
-   double getTeamMaxWinStreak(Team team);
+   int getTeamCurrentWinStreak(Team team);
 
-   double getTeamMaxLoseStreak(Team team);
+   int getTeamCurrentLoseStreak(Team team);
+
+   int getTeamMaxWinStreak(Team team);
+
+   int getTeamMaxLoseStreak(Team team);
 
    int getTeamNumberWin(Team team);
 
@@ -36,5 +45,5 @@ public interface TeamGetterInterface {
 
    int getTeamNumberPlayedGames(Team team);
 
-   ArrayList<Boolean> getTeamLast4GamesResults(Team team, int numberOfGames);
+   ArrayList<Boolean> getTeamLastGamesResults(Team team, int numberOfGames);
 }

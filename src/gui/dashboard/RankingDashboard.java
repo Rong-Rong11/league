@@ -7,22 +7,41 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 
 import gui.panel.common.BuildBox;
-import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.SectionTitle;
 import gui.panel.common.ThemeAware;
+import gui.panel.rankingPanel.RankingPerformancePanel;
+import gui.panel.rankingPanel.RankingTablePanel;
+import process.orchestrator.GUIInterface;
 
 /**
  * Dashboard dedie a la page Classement.
  */
 public class RankingDashboard extends JPanel implements ThemeAware {
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
-	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 64;
-	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 340;
+	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
+	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 250;
 	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 300;
 	private static final Color IDEAL_DASHBOARD_BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
 
-	public RankingDashboard() {
+	private GUIInterface guiInterface;
+	private RankingTablePanel rankingTablePanel;
+	private RankingPerformancePanel rankingPerformancePanel;
+
+	public RankingDashboard(GUIInterface guiInterface) {
+		this.guiInterface = guiInterface;
+		create();
 		organize();
+	}
+
+	private void create() {
+		rankingTablePanel = new RankingTablePanel(guiInterface);
+		rankingPerformancePanel = new RankingPerformancePanel(guiInterface);
+	}
+
+	public void refreshRanking() {
+		rankingTablePanel.refreshRanking();
+		rankingPerformancePanel.refreshPerformance();
 	}
 
 	private void organize() {
@@ -40,7 +59,7 @@ public class RankingDashboard extends JPanel implements ThemeAware {
 	}
 
 	private JPanel buildHeader() {
-		JPanel header = new DashboardTitleBanner("CLASSEMENT GENERAL", "Conference Est - Saison reguliere");
+		JPanel header = new SectionTitle("CLASSEMENT GÉNÉRAL", "");
 		header.setPreferredSize(new Dimension(IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH, IDEAL_DASHBOARD_HEADER_HEIGHT));
 		return header;
 	}
@@ -53,18 +72,12 @@ public class RankingDashboard extends JPanel implements ThemeAware {
 	}
 
 	private JPanel buildCenterColumn() {
-		return new BuildBox("CLASSEMENT COMPLET", "12 equipes", "TABLEAU CLASSEMENT");// ! A changer le string par un
-																												// jpanel quand on aura la
-																												// fonctionnalite
+		return new BuildBox("", "", rankingTablePanel);
 	}
 
 	private JPanel buildRightColumn() {
-		JPanel column = DashboardPanelUtil.createGridColumn(2, 1, 0, 12, IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH);
-
-		column.add(new BuildBox("ZONE PLAYOFFS", "Equipes qualifiees", "PLAYOFFS"));// ! A changer le string par un jpanel
-																												// quand on aura la fonctionnalite
-		column.add(new BuildBox("PERFORMANCES", "Forme recente", "STATISTIQUES"));// ! A changer le string par un jpanel
-																											// quand on aura la fonctionnalite
+		JPanel column = DashboardPanelUtil.createGridColumn(1, 1, 0, 12, IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH);
+		column.add(new BuildBox("PERFORMANCES", "Forme récente", rankingPerformancePanel));
 
 		return column;
 	}

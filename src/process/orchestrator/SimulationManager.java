@@ -546,6 +546,21 @@ public class SimulationManager implements GUIInterface {
 	}
 
 	@Override
+	public ArrayList<Team> getGlobalRanking() {
+		return gameManager.getGlobalRanking();
+	}
+
+	@Override
+	public ArrayList<Team> getEastRanking() {
+		return gameManager.getEastRanking();
+	}
+
+	@Override
+	public ArrayList<Team> getWestRanking() {
+		return gameManager.getWestRanking();
+	}
+
+	@Override
 	public Team getTeamByName(String teamName) {
 		return TeamRepositery.getInstance().getTeam(teamName);
 	}
@@ -578,6 +593,82 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public double getTeamCurrentPayroll(Team team) {
 		return financeManager.getTeamCurrentPayroll(team);
+	}
+
+	@Override
+	public String getTeamFinancialPolicyLabel(Team team) {
+		if (team == null || team.getTeamFinance() == null || team.getTeamFinance().getFinancialProfil() == null) {
+			return "-";
+		}
+		String className = team.getTeamFinance().getFinancialProfil().getClass().getSimpleName();
+		if ("AmbitiousPolicy".equals(className)) {
+			return "Ambitieuse";
+		}
+		if ("BalancedPolicy".equals(className)) {
+			return "Equilibree";
+		}
+		if ("ThriftyPolicy".equals(className)) {
+			return "Economique";
+		}
+		return className;
+	}
+
+	@Override
+	public String getTeamMarketSizeLabel(Team team) {
+		if (team == null || team.getTeamFinance() == null || team.getTeamFinance().getMarketSize() == null) {
+			return "-";
+		}
+		String className = team.getTeamFinance().getMarketSize().getClass().getSimpleName();
+		if ("LargeSize".equals(className)) {
+			return "Grand";
+		}
+		if ("MediumSize".equals(className)) {
+			return "Moyen";
+		}
+		if ("SmallSize".equals(className)) {
+			return "Petit";
+		}
+		return className;
+	}
+
+	@Override
+	public int getTeamCurrentWinStreak(Team team) {
+		return team.getTeamPerformance().getCurrentWinStreak();
+	}
+
+	@Override
+	public int getTeamCurrentLoseStreak(Team team) {
+		return team.getTeamPerformance().getCurrentLoseStreak();
+	}
+
+	@Override
+	public int getTeamMaxWinStreak(Team team) {
+		return TeamStatUtil.getBestWinStreak(team);
+	}
+
+	@Override
+	public int getTeamMaxLoseStreak(Team team) {
+		return TeamStatUtil.getBestLoseStreak(team);
+	}
+
+	@Override
+	public int getTeamNumberWin(Team team) {
+		return team.getTeamPerformance().getNumberWin();
+	}
+
+	@Override
+	public int getTeamNumberLose(Team team) {
+		return team.getTeamPerformance().getNumberLose();
+	}
+
+	@Override
+	public int getTeamNumberPlayedGames(Team team) {
+		return team.getTeamPerformance().getNumberPlayedGames();
+	}
+
+	@Override
+	public ArrayList<Boolean> getTeamLastGamesResults(Team team, int numberOfGames) {
+		return TeamStatUtil.getLastResults(team, numberOfGames);
 	}
 
 	@Override
@@ -660,54 +751,6 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public LiveMatchState getCurrentLiveState() {
 		return liveMatchService.getCurrentState();
-	}
-
-	@Override
-	public double getTeamCurrentLoseStreak(Team team) {
-		// TODO Auto-generated method stub
-		return team.getTeamPerformance().getCurrentLoseStreak();
-	}
-
-	@Override
-	public double getTeamCurrentWinStreak(Team team) {
-		// TODO Auto-generated method stub
-		return team.getTeamPerformance().getCurrentWinStreak();
-	}
-
-	@Override
-	public double getTeamMaxLoseStreak(Team team) {
-		// TODO Auto-generated method stub
-		return team.getTeamPerformance().getMaxLoseStreak();
-	}
-
-	@Override
-	public double getTeamMaxWinStreak(Team team) {
-		// TODO Auto-generated method stub
-		return team.getTeamPerformance().getMaxWinsStreak();
-	}
-
-	@Override
-	public int getTeamNumberLose(Team team) {
-		// TODO Auto-generated method stub
-		return team.getTeamPerformance().getNumberLose();
-	}
-
-	@Override
-	public int getTeamNumberPlayedGames(Team team) {
-		// TODO Auto-generated method stub
-		return team.getTeamPerformance().getNumberPlayedGames();
-	}
-
-	@Override
-	public int getTeamNumberWin(Team team) {
-		// TODO Auto-generated method stub
-		return team.getTeamPerformance().getNumberWin();
-	}
-
-	@Override
-	public ArrayList<Boolean> getTeamLast4GamesResults(Team team, int numberOfGames) {
-		// TODO Auto-generated method stub
-		return TeamStatUtil.getLast4Results(team);
 	}
 
 }
