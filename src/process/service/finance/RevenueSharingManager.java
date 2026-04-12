@@ -1,5 +1,6 @@
 package process.service.finance;
 
+import config.FinanceConfiguration;
 import data.finance.budget.Budget;
 import data.finance.budget.expense.Expense;
 import data.finance.budget.expense.ExpenseType;
@@ -110,7 +111,7 @@ public class RevenueSharingManager {
         for (Team team : teamRepositery.getAllTeams()) {
             double adjustedLocalRevenue = calculateAdjustedLocalRevenue(team, month);
             if (adjustedLocalRevenue < leagueAverage) {
-                totalNeed += (leagueAverage - adjustedLocalRevenue);
+                totalNeed += calculateWeightedNeed(team, leagueAverage, adjustedLocalRevenue);
             }
         }
         if (totalNeed <= 0) {
@@ -121,7 +122,7 @@ public class RevenueSharingManager {
             Budget budget = team.getTeamFinance().getBudget();
 
             if (adjustedLocalRevenue < leagueAverage) {
-                double need = leagueAverage - adjustedLocalRevenue;
+                double need = calculateWeightedNeed(team, leagueAverage, adjustedLocalRevenue);
                 double share = (need / totalNeed) * pool;
 
                 FinanceUtility.addIncome(
@@ -185,6 +186,31 @@ public class RevenueSharingManager {
             return 0.0;
         }
         return (maxRevenue - minRevenue) / maxRevenue;
+    }
+
+    private double calculateWeightedNeed(Team team, double leagueAverage, double adjustedLocalRevenue) {
+        double baseNeed = leagueAverage - adjustedLocalRevenue;
+
+        if (baseNeed <= 0) {
+            return 0.0;
+        }
+
+        MarketSize marketSize = team.getTeamFinance().getMarketSize();
+        double multiplier = 1.0;
+
+        if (marketSize != null) {
+            double marketMultiplier = getMarketMultiplier(marketSize);
+
+            if (marketMultiplier <= FinanceConfiguration.MARKET_SIZE_SMALL_MULTIPLIER) {
+                multiplier = 1.60;
+            } else if (marketMultiplier < 1.0) {
+                multiplier = 1.22;
+            } else if (marketMultiplier > 1.0) {
+                multiplier = 0.88;
+            }
+        }
+
+        return baseNeed * multiplier;
     }
 
     private double calculateAdjustedLocalRevenue(Team team, int month) {

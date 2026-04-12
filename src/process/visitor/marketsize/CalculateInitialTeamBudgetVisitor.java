@@ -22,17 +22,17 @@ public class CalculateInitialTeamBudgetVisitor
 
     @Override
     public Double visit(LargeSize largeSize) {
-        return this.computeBudget(1.2);
+        return this.computeBudget(1.6);
     }
 
     @Override
     public Double visit(MediumSize mediumSize) {
-        return this.computeBudget(1.0);
+        return this.computeBudget(1.4);
     }
 
     @Override
     public Double visit(SmallSize smallSize) {
-        return this.computeBudget(0.8);
+        return this.computeBudget(1.1);
     }
 
     private double computeBudget(double marketMultiplier) {

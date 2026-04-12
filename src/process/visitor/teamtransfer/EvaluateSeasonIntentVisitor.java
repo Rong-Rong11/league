@@ -76,7 +76,9 @@ public class EvaluateSeasonIntentVisitor
     @Override
     public String visit(SalaryDump salaryDump) {
         ValidateTradeVisitor validateTradeVisitor = new ValidateTradeVisitor(
-                this.team.getTeamFinance().getCurrentPayroll(), this.salaryCap);
+                this.team.getTeamFinance().getCurrentPayroll(),
+                this.salaryCap,
+                this.team.getTeamFinance().getMarketSize());
         if (this.team.getTeamFinance().getFinancialProfil().accept(validateTradeVisitor).booleanValue()) {
             return "seller";
         }

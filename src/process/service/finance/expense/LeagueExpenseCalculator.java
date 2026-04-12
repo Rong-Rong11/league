@@ -65,39 +65,39 @@ public class LeagueExpenseCalculator {
    private double calculateMediaCost(int month) {
       double cost = FinanceConfiguration.LEAGUE_MEDIA_COST;
       if (CalendarUtility.isImportantMonth(month)) {
-         cost *= 1.10;
+         cost *= 1.16;
       }
-      cost *= getImportantGamesExpenseRate(month, 0.0010);
-      cost *= getPlayoffGamesExpenseRate(month, 0.0030);
-      cost *= getActivePlayoffTeamsExpenseRate(month, 0.0020);
-      cost *= getSeasonExpenseRate(month, 0.05);
-      cost *= getControlledEconomicNoise(month, 0.010);
+      cost *= getImportantGamesExpenseRate(month, 0.0018);
+      cost *= getPlayoffGamesExpenseRate(month, 0.0048);
+      cost *= getActivePlayoffTeamsExpenseRate(month, 0.0032);
+      cost *= getSeasonExpenseRate(month, 0.08);
+      cost *= getControlledEconomicNoise(month, 0.016);
       return cost;
    }
 
    private double calculateMarketingCost(int month) {
       double cost = FinanceConfiguration.LEAGUE_MARKETING_COST;
       if (CalendarUtility.isImportantMonth(month)) {
-         cost *= 1.20;
+         cost *= 1.28;
       }
-      cost *= getImportantGamesExpenseRate(month, 0.0014);
-      cost *= getPlayoffGamesExpenseRate(month, 0.0035);
-      cost *= getActivePlayoffTeamsExpenseRate(month, 0.0025);
-      cost *= getSeasonExpenseRate(month, 0.06);
-      cost *= getControlledEconomicNoise(month, 0.012);
+      cost *= getImportantGamesExpenseRate(month, 0.0024);
+      cost *= getPlayoffGamesExpenseRate(month, 0.0054);
+      cost *= getActivePlayoffTeamsExpenseRate(month, 0.0038);
+      cost *= getSeasonExpenseRate(month, 0.10);
+      cost *= getControlledEconomicNoise(month, 0.020);
       return cost;
    }
 
    private double calculateOfficiatingCost(int month) {
       double cost = FinanceConfiguration.LEAGUE_OFFICIATING_COST;
       if (CalendarUtility.isImportantMonth(month)) {
-         cost *= 1.05;
+         cost *= 1.10;
       }
-      cost *= getImportantGamesExpenseRate(month, 0.0012);
-      cost *= getPlayoffGamesExpenseRate(month, 0.0045);
-      cost *= getActivePlayoffTeamsExpenseRate(month, 0.0030);
-      cost *= getSeasonExpenseRate(month, 0.05);
-      cost *= getControlledEconomicNoise(month, 0.010);
+      cost *= getImportantGamesExpenseRate(month, 0.0018);
+      cost *= getPlayoffGamesExpenseRate(month, 0.0058);
+      cost *= getActivePlayoffTeamsExpenseRate(month, 0.0038);
+      cost *= getSeasonExpenseRate(month, 0.08);
+      cost *= getControlledEconomicNoise(month, 0.014);
       return cost;
    }
 

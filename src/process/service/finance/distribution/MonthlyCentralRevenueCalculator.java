@@ -40,12 +40,12 @@ public class MonthlyCentralRevenueCalculator {
         double averageTeamValue = calculateAverageTeamValue(teams);
         int starTeams = countTeamsWithStarPlayer(teams);
 
-        double revenue = (0.48 * teamCount)
-                + (averagePopularity * 0.055)
-                + (averagePerformance * 0.90)
-                + (averagePrestige * 1.75)
-                + (averageTeamValue * 2.20)
-                + (starTeams * 0.14);
+        double revenue = (0.82 * teamCount)
+                + (averagePopularity * 0.100)
+                + (averagePerformance * 1.48)
+                + (averagePrestige * 2.78)
+                + (averageTeamValue * 3.45)
+                + (starTeams * 0.27);
 
         revenue *= profile.getTvRate();
         revenue *= getImportantGamesRevenueRate(month, 0.0015);
@@ -68,12 +68,12 @@ public class MonthlyCentralRevenueCalculator {
         double averageTeamValue = calculateAverageTeamValue(teams);
         int starTeams = countTeamsWithStarPlayer(teams);
 
-        double revenue = (0.22 * teamCount)
-                + (averagePopularity * 0.042)
-                + (averageCommercialAggressiveness * 1.45)
-                + (averageBusinessOpportunity * 1.28)
-                + (averageTeamValue * 1.25)
-                + (starTeams * 0.11);
+        double revenue = (0.40 * teamCount)
+                + (averagePopularity * 0.080)
+                + (averageCommercialAggressiveness * 2.28)
+                + (averageBusinessOpportunity * 1.96)
+                + (averageTeamValue * 1.98)
+                + (starTeams * 0.20);
 
         revenue *= profile.getSponsoringRate();
         revenue *= getImportantGamesRevenueRate(month, 0.0022);
@@ -96,12 +96,12 @@ public class MonthlyCentralRevenueCalculator {
         double averageTeamValue = calculateAverageTeamValue(teams);
         int starTeams = countTeamsWithStarPlayer(teams);
 
-        double revenue = (0.11 * teamCount)
-                + (averagePopularity * 0.030)
-                + (averageFanLoyalty * 1.28)
-                + (averagePrestige * 1.05)
-                + (averageTeamValue * 0.78)
-                + (starTeams * 0.10);
+        double revenue = (0.23 * teamCount)
+                + (averagePopularity * 0.062)
+                + (averageFanLoyalty * 2.05)
+                + (averagePrestige * 1.68)
+                + (averageTeamValue * 1.24)
+                + (starTeams * 0.19);
 
         revenue *= profile.getMerchandisingRate();
         revenue *= getImportantGamesRevenueRate(month, 0.0032);

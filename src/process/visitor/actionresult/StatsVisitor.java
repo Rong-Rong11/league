@@ -26,12 +26,7 @@ public class StatsVisitor implements ActionResultVisitor<Void> {
         boolean homeScorer = isHomePlayer(scorer, liveMatchStatistics.getGame());
         String shotType = pointScored.getOffensiveAction() == null ? "" : pointScored.getOffensiveAction().getName();
 
-        int points = 1;
-        if (GameConfiguration.THREEPOINT.equals(shotType)) {
-            points = 3;
-        } else if (GameConfiguration.TWOPOINT.equals(shotType)) {
-            points = 2;
-        }
+        int points = pointScored.getPointsScored();
 
         if (homeScorer) {
             liveMatchStatistics.setHomePoints(liveMatchStatistics.getHomePoints() + points);

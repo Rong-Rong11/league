@@ -18,19 +18,19 @@ public class CreateMediaMarketVisitor implements MarketSizeVisitor<Void> {
 
    @Override
    public Void visit(LargeSize largeSize) {
-      applyMultipliers(4.0 * Math.random());
+      applyMultipliers(7.0 * Math.random());
       return null;
    }
 
    @Override
    public Void visit(MediumSize mediumSize) {
-      applyMultipliers(2.0 * Math.random());
+      applyMultipliers(5.0 * Math.random());
       return null;
    }
 
    @Override
    public Void visit(SmallSize smallSize) {
-      applyMultipliers(1.0 * Math.random());
+      applyMultipliers(3.0 * Math.random());
       return null;
    }
 

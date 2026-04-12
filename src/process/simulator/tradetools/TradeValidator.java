@@ -38,7 +38,10 @@ public class TradeValidator {
         if (incomingPayroll > outgoingPayroll * 1.25) {
             return false;
         }
-        ValidateTradeVisitor validateTradeVisitor = new ValidateTradeVisitor(incomingPayroll, salaryCap);
+        ValidateTradeVisitor validateTradeVisitor = new ValidateTradeVisitor(
+                incomingPayroll,
+                salaryCap,
+                team.getTeamFinance().getMarketSize());
         return financialProfil.accept(validateTradeVisitor);
     }
 

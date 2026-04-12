@@ -51,17 +51,20 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
                 localSponsoring *= (1 + economicProfil.getCommercialAggressiveness() * 0.30);
                 localSponsoring *= (1 + economicProfil.getHistoricalPrestige() * 0.15);
                 localSponsoring *= (1 + teamValueFactor * 0.25);
+                localSponsoring *= getSmallMarketRevenueBoost(marketSize, 1.15);
                 localSponsoring *= getLocalSponsoringMultiplier();
                 localSponsoring *= getMonthlyLocalRevenueRate(team, month, 0.035, 0.020);
 
                 localMerchandising *= (1 + economicProfil.getFanLoyalty() * 0.25);
                 localMerchandising *= (1 + economicProfil.getHistoricalPrestige() * 0.20);
                 localMerchandising *= (1 + teamValueFactor * 0.22);
+                localMerchandising *= getSmallMarketRevenueBoost(marketSize, 1.18);
                 localMerchandising *= getLocalMerchandisingMultiplier();
                 localMerchandising *= getMonthlyLocalRevenueRate(team, month, 0.060, 0.030);
 
                 otherRevenue *= (1 + economicProfil.getOwnerDeficitTolerance() * 0.08);
                 otherRevenue *= (1 + teamValueFactor * 0.15);
+                otherRevenue *= getSmallMarketRevenueBoost(marketSize, 1.12);
                 otherRevenue *= getOtherRevenueMultiplier();
                 otherRevenue *= getMonthlyLocalRevenueRate(team, month, 0.045, 0.022);
 
@@ -71,7 +74,8 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
                 double stadiumMaintenance = calculateStadiumMaintenance(team, marketMultiplier, mediaMarket,
                                 economicProfil, financialPolicy);
                 double staffCost = calculateStaffCost(team, marketMultiplier, economicProfil, financialPolicy);
-                double administrativeCost = calculateAdministrativeCost(marketMultiplier, mediaMarket, economicProfil,
+                double administrativeCost = calculateAdministrativeCost(team, marketMultiplier, mediaMarket,
+                                economicProfil,
                                 financialPolicy);
 
                 FinanceUtility.addIncome(budget,
@@ -102,7 +106,8 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
                 double stadiumMaintenance = calculateStadiumMaintenance(team, marketMultiplier, mediaMarket,
                                 economicProfil, financialPolicy);
                 double staffCost = calculateStaffCost(team, marketMultiplier, economicProfil, financialPolicy);
-                double administrativeCost = calculateAdministrativeCost(marketMultiplier, mediaMarket, economicProfil,
+                double administrativeCost = calculateAdministrativeCost(team, marketMultiplier, mediaMarket,
+                                economicProfil,
                                 financialPolicy);
 
                 applyFixedCosts(team, month, budget, teamFinance, marketMultiplier, mediaMarket, economicProfil,
@@ -150,6 +155,7 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
                 maintenance *= (1 + economicProfil.getHistoricalPrestige() * 0.05);
                 maintenance *= 1.15;
                 maintenance *= financialPolicy.accept(new MaintenanceCostMultiplierVisitor());
+                maintenance *= getSmallMarketCostFactor(team.getTeamFinance().getMarketSize(), 0.88);
 
                 return maintenance;
         }
@@ -163,11 +169,12 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
                 staffCost *= (1 + economicProfil.getFanLoyalty() * 0.08);
                 staffCost *= (1 + economicProfil.getCommercialAggressiveness() * 0.05);
                 staffCost *= 1.12;
+                staffCost *= getSmallMarketCostFactor(team.getTeamFinance().getMarketSize(), 0.92);
 
                 return staffCost * financialPolicy.accept(new StaffCostMultiplierVisitor());
         }
 
-        private double calculateAdministrativeCost(double marketMultiplier, MediaMarket mediaMarket,
+        private double calculateAdministrativeCost(Team team, double marketMultiplier, MediaMarket mediaMarket,
                         EconomicProfil economicProfil, FinancialPolicy financialPolicy) {
                 double administrativeCost = 0.18 * marketMultiplier;
 
@@ -175,6 +182,7 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
                 administrativeCost *= (1 + economicProfil.getCommercialAggressiveness() * 0.10);
                 administrativeCost *= 1.10;
                 administrativeCost *= financialPolicy.accept(new AdministrativeCostMultiplierVisitor());
+                administrativeCost *= getSmallMarketCostFactor(team.getTeamFinance().getMarketSize(), 0.90);
 
                 return administrativeCost;
         }
@@ -190,6 +198,32 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
                 double secondWave = Math.cos((month * 0.72) + (teamPhase * 0.55));
 
                 return 1 + (monthWave * monthAmplitude) + (secondWave * teamAmplitude);
+        }
+
+        private double getSmallMarketRevenueBoost(MarketSize marketSize, double boost) {
+                if (marketSize == null) {
+                        return 1.0;
+                }
+
+                double marketMultiplier = getMarketMultiplier(marketSize);
+                if (marketMultiplier <= FinanceConfiguration.MARKET_SIZE_SMALL_MULTIPLIER) {
+                        return boost;
+                }
+
+                return 1.0;
+        }
+
+        private double getSmallMarketCostFactor(MarketSize marketSize, double factor) {
+                if (marketSize == null) {
+                        return 1.0;
+                }
+
+                double marketMultiplier = getMarketMultiplier(marketSize);
+                if (marketMultiplier <= FinanceConfiguration.MARKET_SIZE_SMALL_MULTIPLIER) {
+                        return factor;
+                }
+
+                return 1.0;
         }
 
         protected abstract double getLocalSponsoringMultiplier();
