@@ -95,7 +95,7 @@ public class LightThemePalette implements ThemePalette {
 
 	@Override
 	public Color getPolicyAmbitiousColor() {
-		return new Color(0xCC, 0x7A, 0x2A);
+		return new Color(0xC5, 0x3D, 0x3D);
 	}
 
 	@Override

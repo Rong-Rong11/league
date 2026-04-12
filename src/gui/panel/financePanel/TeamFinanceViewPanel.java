@@ -1,7 +1,6 @@
 package gui.panel.financePanel;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -55,19 +54,19 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		this.guiInterface = guiInterface;
 		teamSelector = new JComboBox<String>();
 		monthSelector = new MonthNavigatorPanel();
-		FinancePanelUtil.styleComboBox(teamSelector);
-		budgetValueLabel = FinancePanelUtil.createMetricValueLabel();
-		selectedRevenueValueLabel = FinancePanelUtil.createMetricValueLabel();
-		selectedExpenseValueLabel = FinancePanelUtil.createMetricValueLabel();
-		selectedNetValueLabel = FinancePanelUtil.createMetricValueLabel();
-		luxuryTaxValueLabel = FinancePanelUtil.createMetricValueLabel();
-		profileValueLabel = FinancePanelUtil.createBodyValueLabel();
-		marketValueLabel = FinancePanelUtil.createBodyValueLabel();
-		strategyValueLabel = FinancePanelUtil.createBodyValueLabel();
-		ticketPriceValueLabel = FinancePanelUtil.createBodyValueLabel();
-		capacityValueLabel = FinancePanelUtil.createBodyValueLabel();
-		revenueMetricsPanel = FinancePanelUtil.createMetricListPanel();
-		expenseMetricsPanel = FinancePanelUtil.createMetricListPanel();
+		FinanceViewFactory.styleComboBox(teamSelector);
+		budgetValueLabel = FinanceViewFactory.metricLabel();
+		selectedRevenueValueLabel = FinanceViewFactory.metricLabel();
+		selectedExpenseValueLabel = FinanceViewFactory.metricLabel();
+		selectedNetValueLabel = FinanceViewFactory.metricLabel();
+		luxuryTaxValueLabel = FinanceViewFactory.metricLabel();
+		profileValueLabel = FinanceViewFactory.infoLabel();
+		marketValueLabel = FinanceViewFactory.infoLabel();
+		strategyValueLabel = FinanceViewFactory.infoLabel();
+		ticketPriceValueLabel = FinanceViewFactory.infoLabel();
+		capacityValueLabel = FinanceViewFactory.infoLabel();
+		revenueMetricsPanel = FinanceViewFactory.metricListPanel();
+		expenseMetricsPanel = FinanceViewFactory.metricListPanel();
 		revenueDataset = new DefaultCategoryDataset();
 		expenseDataset = new DefaultCategoryDataset();
 		historyDataset = new DefaultCategoryDataset();
@@ -92,16 +91,16 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 	private JPanel buildCenterColumn() {
 		JPanel centerColumn = new JPanel(new BorderLayout(0, DASHBOARD_SPACING));
 		centerColumn.setOpaque(false);
-		centerColumn.add(FinancePanelUtil.withPreferredHeight(
-				new BuildBox("HISTORIQUE MENSUEL", "Revenus vs depenses",
-						FinancePanelUtil.buildLineChartPanel(historyDataset, "Montant (M$)", DashboardPanelUtil.REVENUE_COLOR)),
+		centerColumn.add(FinanceViewFactory.panelWithHeight(
+				new BuildBox("HISTORIQUE MENSUEL", "Revenus et depenses",
+						FinanceViewFactory.financeLineChart(historyDataset, DashboardPanelUtil.REVENUE_COLOR)),
 				250), BorderLayout.NORTH);
 
 		JPanel bottomRow = new JPanel(new GridLayout(1, 2, DASHBOARD_SPACING, 0));
 		bottomRow.setOpaque(false);
 		bottomRow.add(new BuildBox("REVENUS", "Mois selectionne", buildRevenuePanel()));
 		bottomRow.add(new BuildBox("DEPENSES", "Mois selectionne", buildExpensePanel()));
-		centerColumn.add(FinancePanelUtil.withPreferredHeight(bottomRow, 280), BorderLayout.CENTER);
+		centerColumn.add(FinanceViewFactory.panelWithHeight(bottomRow, 280), BorderLayout.CENTER);
 		return centerColumn;
 	}
 
@@ -114,23 +113,23 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 	private JPanel buildSummaryPanel() {
 		JPanel summaryPanel = new JPanel(new GridLayout(1, 5, DASHBOARD_SPACING, 0));
 		summaryPanel.setOpaque(false);
-		summaryPanel.add(FinancePanelUtil.buildMetricCard("Equipe", teamSelector));
-		summaryPanel.add(FinancePanelUtil.buildMetricCard("Budget restant", budgetValueLabel));
-		summaryPanel.add(FinancePanelUtil.buildMetricCard("Revenus mois", selectedRevenueValueLabel));
-		summaryPanel.add(FinancePanelUtil.buildMetricCard("Net mois", selectedNetValueLabel));
-		summaryPanel.add(FinancePanelUtil.buildMetricCard("Mois", monthSelector));
+		summaryPanel.add(FinanceViewFactory.metricCard("Equipe", teamSelector));
+		summaryPanel.add(FinanceViewFactory.metricCard("Budget restant", budgetValueLabel));
+		summaryPanel.add(FinanceViewFactory.metricCard("Revenus mois", selectedRevenueValueLabel));
+		summaryPanel.add(FinanceViewFactory.metricCard("Net mois", selectedNetValueLabel));
+		summaryPanel.add(FinanceViewFactory.metricCard("Mois", monthSelector));
 		return summaryPanel;
 	}
 
 	private JPanel buildProfilePanel() {
-		JPanel panel = FinancePanelUtil.createSectionContentPanel();
-		panel.add(FinancePanelUtil.buildTextMetricRow("Financial policy", profileValueLabel));
+		JPanel panel = FinanceViewFactory.infoPanel();
+		panel.add(FinanceViewFactory.infoRow("Politique financiere", profileValueLabel));
 		panel.add(Box.createVerticalStrut(10));
-		panel.add(FinancePanelUtil.buildTextMetricRow("Market size", marketValueLabel));
+		panel.add(FinanceViewFactory.infoRow("Taille du marche", marketValueLabel));
 		panel.add(Box.createVerticalStrut(10));
-		panel.add(FinancePanelUtil.buildTextMetricRow("Strategy", strategyValueLabel));
+		panel.add(FinanceViewFactory.infoRow("Strategie", strategyValueLabel));
 		panel.add(Box.createVerticalStrut(10));
-		panel.add(FinancePanelUtil.buildTextMetricRow("Luxury tax paid", luxuryTaxValueLabel));
+		panel.add(FinanceViewFactory.infoRow("Taxe de luxe payee", luxuryTaxValueLabel));
 		return panel;
 	}
 
@@ -138,7 +137,7 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		JPanel panel = new JPanel(new BorderLayout(0, DASHBOARD_SPACING));
 		panel.setOpaque(false);
 		panel.add(revenueMetricsPanel, BorderLayout.NORTH);
-		panel.add(FinancePanelUtil.buildBarChartPanel(revenueDataset, "Type", "Montant (M$)", DashboardPanelUtil.REVENUE_COLOR),
+		panel.add(FinanceViewFactory.financeBarChart(revenueDataset, DashboardPanelUtil.REVENUE_COLOR),
 				BorderLayout.CENTER);
 		return panel;
 	}
@@ -147,16 +146,16 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		JPanel panel = new JPanel(new BorderLayout(0, DASHBOARD_SPACING));
 		panel.setOpaque(false);
 		panel.add(expenseMetricsPanel, BorderLayout.NORTH);
-		panel.add(FinancePanelUtil.buildBarChartPanel(expenseDataset, "Type", "Montant (M$)", DashboardPanelUtil.EXPENSE_COLOR),
+		panel.add(FinanceViewFactory.financeBarChart(expenseDataset, DashboardPanelUtil.EXPENSE_COLOR),
 				BorderLayout.CENTER);
 		return panel;
 	}
 
 	private JPanel buildInfrastructurePanel() {
-		JPanel panel = FinancePanelUtil.createSectionContentPanel();
-		panel.add(FinancePanelUtil.buildTextMetricRow("Capacite", capacityValueLabel));
+		JPanel panel = FinanceViewFactory.infoPanel();
+		panel.add(FinanceViewFactory.infoRow("Capacite", capacityValueLabel));
 		panel.add(Box.createVerticalStrut(10));
-		panel.add(FinancePanelUtil.buildTextMetricRow("Prix billet", ticketPriceValueLabel));
+		panel.add(FinanceViewFactory.infoRow("Prix billet", ticketPriceValueLabel));
 		return panel;
 	}
 
@@ -175,40 +174,40 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 
 	public void refreshData() {
 		populateTeamsIfNeeded();
-		Team team = FinancePanelUtil.getSelectedTeam(guiInterface, teamSelector, 0);
+		Team team = FinanceDataUtil.selectedTeam(guiInterface, teamSelector, 0);
 		if (team == null) {
 			resetView();
 			return;
 		}
 
-		int month = FinancePanelUtil.getSelectedMonth(monthSelector);
-		Budget budget = FinancePanelUtil.getBudget(team);
+		int month = FinanceDataUtil.selectedMonth(monthSelector);
+		Budget budget = FinanceDataUtil.teamBudget(team);
 		updatingSelectors = true;
-		FinancePanelUtil.setAvailableMonths(monthSelector, FinancePanelUtil.getAvailableMonths(guiInterface, budget));
+		FinanceDataUtil.setAvailableMonths(monthSelector, FinanceDataUtil.availableMonths(guiInterface, budget));
 		updatingSelectors = false;
-		month = FinancePanelUtil.getSelectedMonth(monthSelector);
+		month = FinanceDataUtil.selectedMonth(monthSelector);
 
-		budgetValueLabel.setText(budget == null ? "-" : FinancePanelUtil.formatMoney(budget.getRemainingAmount()));
-		double selectedRevenue = FinancePanelUtil.sumIncomeMap(FinancePanelUtil.getIncomeMap(team, month));
-		double selectedExpense = FinancePanelUtil.sumExpenseMap(FinancePanelUtil.getExpenseMap(team, month));
-		selectedRevenueValueLabel.setText(FinancePanelUtil.formatMoney(selectedRevenue));
-		selectedExpenseValueLabel.setText(FinancePanelUtil.formatMoney(selectedExpense));
-		selectedNetValueLabel.setText(FinancePanelUtil.formatMoney(selectedRevenue - selectedExpense));
-		luxuryTaxValueLabel.setText(FinancePanelUtil.formatMoney(getLuxuryTaxPaid(team)));
-		profileValueLabel.setText(FinancePanelUtil.prettifyObjectName(getFinancialPolicy(team)));
-		marketValueLabel.setText(FinancePanelUtil.prettifyObjectName(getMarketSize(team)));
-		strategyValueLabel.setText(FinancePanelUtil.prettifyObjectName(getTransferStrategy(team)));
-		ticketPriceValueLabel.setText(team.getStadium() == null ? "-" : FinancePanelUtil.formatMoney(team.getStadium().getTicketPrice()));
+		budgetValueLabel.setText(budget == null ? "-" : FinanceDataUtil.formatMoney(budget.getRemainingAmount()));
+		double selectedRevenue = FinanceDataUtil.totalIncome(FinanceDataUtil.teamIncomes(team, month));
+		double selectedExpense = FinanceDataUtil.totalExpense(FinanceDataUtil.teamExpenses(team, month));
+		selectedRevenueValueLabel.setText(FinanceDataUtil.formatMoney(selectedRevenue));
+		selectedExpenseValueLabel.setText(FinanceDataUtil.formatMoney(selectedExpense));
+		selectedNetValueLabel.setText(FinanceDataUtil.formatMoney(selectedRevenue - selectedExpense));
+		luxuryTaxValueLabel.setText(FinanceDataUtil.formatMoney(getLuxuryTaxPaid(team)));
+		profileValueLabel.setText(FinanceDataUtil.formatPolicy(getFinancialPolicy(team)));
+		marketValueLabel.setText(FinanceDataUtil.formatMarket(getMarketSize(team)));
+		strategyValueLabel.setText(FinanceDataUtil.formatStrategy(getTransferStrategy(team)));
+		ticketPriceValueLabel.setText(team.getStadium() == null ? "-" : FinanceDataUtil.formatMoney(team.getStadium().getTicketPrice()));
 		capacityValueLabel.setText(team.getStadium() == null ? "-" : String.valueOf(team.getStadium().getCapacity()));
 
 		budgetValueLabel.setForeground(DashboardPanelUtil.NEUTRAL_ACCENT_COLOR);
-		FinancePanelUtil.applyRevenueColor(selectedRevenueValueLabel);
-		FinancePanelUtil.applyExpenseColor(selectedExpenseValueLabel);
-		FinancePanelUtil.applyAmountColor(selectedNetValueLabel, selectedRevenue - selectedExpense);
+		FinanceDataUtil.setRevenueColor(selectedRevenueValueLabel);
+		FinanceDataUtil.setExpenseColor(selectedExpenseValueLabel);
+		FinanceDataUtil.setAmountColor(selectedNetValueLabel, selectedRevenue - selectedExpense);
 		luxuryTaxValueLabel.setForeground(DashboardPanelUtil.EXPENSE_COLOR);
-		FinancePanelUtil.applyPolicyColor(profileValueLabel, profileValueLabel.getText());
-		FinancePanelUtil.applyMarketColor(marketValueLabel, marketValueLabel.getText());
-		FinancePanelUtil.applyStrategyColor(strategyValueLabel, strategyValueLabel.getText());
+		FinanceDataUtil.setPolicyColor(profileValueLabel, profileValueLabel.getText());
+		FinanceDataUtil.setMarketColor(marketValueLabel, marketValueLabel.getText());
+		FinanceDataUtil.setStrategyColor(strategyValueLabel, strategyValueLabel.getText());
 		ticketPriceValueLabel.setForeground(DashboardPanelUtil.REVENUE_COLOR);
 		capacityValueLabel.setForeground(DashboardPanelUtil.POLICY_BALANCED_COLOR);
 
@@ -220,17 +219,17 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 	private void rebuildIncomeBreakdown(Team team, int month) {
 		revenueDataset.clear();
 		revenueMetricsPanel.removeAll();
-		Map<String, Income> incomes = FinancePanelUtil.getIncomeMap(team, month);
-		double total = FinancePanelUtil.sumIncomeMap(incomes);
-		revenueMetricsPanel.add(FinancePanelUtil.buildListMetricRow("Total revenus", FinancePanelUtil.formatMoney(total),
+		Map<String, Income> incomes = FinanceDataUtil.teamIncomes(team, month);
+		double total = FinanceDataUtil.totalIncome(incomes);
+		revenueMetricsPanel.add(FinanceViewFactory.valueRow("Total revenus", FinanceDataUtil.formatMoney(total),
 				DashboardPanelUtil.REVENUE_COLOR));
 		revenueMetricsPanel.add(Box.createVerticalStrut(8));
-		revenueMetricsPanel.add(FinancePanelUtil.buildListMetricRow("Local",
-				FinancePanelUtil.formatMoney(FinancePanelUtil.sumLocalIncomeMap(incomes)), DashboardPanelUtil.REVENUE_COLOR));
+		revenueMetricsPanel.add(FinanceViewFactory.valueRow("Revenus locaux",
+				FinanceDataUtil.formatMoney(FinanceDataUtil.totalLocalIncome(incomes)), DashboardPanelUtil.REVENUE_COLOR));
 
 		if (incomes != null && !incomes.isEmpty()) {
 			for (Income income : incomes.values()) {
-				revenueDataset.addValue(income.getAmount(), "Revenus", FinancePanelUtil.prettifyEnum(income.getName()));
+				revenueDataset.addValue(income.getAmount(), "Revenus", FinanceDataUtil.formatTypeName(income.getName()));
 			}
 		} else {
 			revenueDataset.addValue(0.0, "Revenus", "Aucun");
@@ -243,18 +242,18 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 	private void rebuildExpenseBreakdown(Team team, int month) {
 		expenseDataset.clear();
 		expenseMetricsPanel.removeAll();
-		Map<String, Expense> expenses = FinancePanelUtil.getExpenseMap(team, month);
-		double total = FinancePanelUtil.sumExpenseMap(expenses);
-		expenseMetricsPanel.add(FinancePanelUtil.buildListMetricRow("Total depenses", FinancePanelUtil.formatMoney(total),
+		Map<String, Expense> expenses = FinanceDataUtil.teamExpenses(team, month);
+		double total = FinanceDataUtil.totalExpense(expenses);
+		expenseMetricsPanel.add(FinanceViewFactory.valueRow("Total depenses", FinanceDataUtil.formatMoney(total),
 				DashboardPanelUtil.EXPENSE_COLOR));
 		expenseMetricsPanel.add(Box.createVerticalStrut(8));
-		expenseMetricsPanel.add(FinancePanelUtil.buildListMetricRow("Net du mois",
-				FinancePanelUtil.formatMoney(FinancePanelUtil.sumIncomeMap(FinancePanelUtil.getIncomeMap(team, month)) - total),
-				DashboardPanelUtil.getValueColorForAmount(FinancePanelUtil.sumIncomeMap(FinancePanelUtil.getIncomeMap(team, month)) - total)));
+		expenseMetricsPanel.add(FinanceViewFactory.valueRow("Net du mois",
+				FinanceDataUtil.formatMoney(FinanceDataUtil.totalIncome(FinanceDataUtil.teamIncomes(team, month)) - total),
+				DashboardPanelUtil.getValueColorForAmount(FinanceDataUtil.totalIncome(FinanceDataUtil.teamIncomes(team, month)) - total)));
 
 		if (expenses != null && !expenses.isEmpty()) {
 			for (Expense expense : expenses.values()) {
-				expenseDataset.addValue(expense.getAmount(), "Depenses", FinancePanelUtil.prettifyEnum(expense.getName()));
+				expenseDataset.addValue(expense.getAmount(), "Depenses", FinanceDataUtil.formatTypeName(expense.getName()));
 			}
 		} else {
 			expenseDataset.addValue(0.0, "Depenses", "Aucune");
@@ -266,11 +265,11 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 
 	private void rebuildHistoryDataset(Team team) {
 		historyDataset.clear();
-		for (int month = 1; month <= FinancePanelUtil.getLastVisibleFinanceMonth(guiInterface); month++) {
-			double totalIncome = FinancePanelUtil.sumIncomeMap(FinancePanelUtil.getIncomeMap(team, month));
-			double totalExpense = FinancePanelUtil.sumExpenseMap(FinancePanelUtil.getExpenseMap(team, month));
-			historyDataset.addValue(totalIncome, "Revenus", FinancePanelUtil.monthLabel(month));
-			historyDataset.addValue(totalExpense, "Depenses", FinancePanelUtil.monthLabel(month));
+		for (int month = 1; month <= FinanceDataUtil.lastVisibleMonth(guiInterface); month++) {
+			double totalIncome = FinanceDataUtil.totalIncome(FinanceDataUtil.teamIncomes(team, month));
+			double totalExpense = FinanceDataUtil.totalExpense(FinanceDataUtil.teamExpenses(team, month));
+			historyDataset.addValue(totalIncome, "Revenus", FinanceDataUtil.monthLabel(month));
+			historyDataset.addValue(totalExpense, "Depenses", FinanceDataUtil.monthLabel(month));
 		}
 	}
 
@@ -368,8 +367,8 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 	@Override
 	public void applyTheme() {
 		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
-		FinancePanelUtil.styleComboBox(teamSelector);
+		FinanceViewFactory.styleComboBox(teamSelector);
 		monthSelector.applyTheme();
-		FinancePanelUtil.applyThemeToCharts(this);
+		FinanceViewFactory.refreshCharts(this);
 	}
 }

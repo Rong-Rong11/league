@@ -32,7 +32,7 @@ public class DashboardPanelUtil {
 	public static Color NEUTRAL_ACCENT_COLOR = new Color(0xC4, 0x8A, 0x32);
 	public static Color POLICY_THRIFTY_COLOR = new Color(0x2F, 0x8F, 0x66);
 	public static Color POLICY_BALANCED_COLOR = new Color(0x2F, 0x6F, 0xC1);
-	public static Color POLICY_AMBITIOUS_COLOR = new Color(0xCC, 0x7A, 0x2A);
+	public static Color POLICY_AMBITIOUS_COLOR = new Color(0xC5, 0x3D, 0x3D);
 	public static Color STRATEGY_REBUILD_COLOR = new Color(0x8A, 0x58, 0xC7);
 	public static Color STRATEGY_ALL_IN_COLOR = new Color(0xC5, 0x3D, 0x3D);
 	public static Color STRATEGY_BALANCED_COLOR = new Color(0x2B, 0x8D, 0x95);

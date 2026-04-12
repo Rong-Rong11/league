@@ -95,7 +95,7 @@ public class DarkThemePalette implements ThemePalette {
 
 	@Override
 	public Color getPolicyAmbitiousColor() {
-		return new Color(0xFF, 0xA5, 0x4B);
+		return new Color(0xFF, 0x7A, 0x7A);
 	}
 
 	@Override
