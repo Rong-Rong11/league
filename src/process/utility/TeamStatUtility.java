@@ -8,14 +8,14 @@ import data.sport.setup.Game;
 import data.team.Team;
 import process.repositery.TeamRepositery;
 
-public class TeamStatUtil {
+public class TeamStatUtility {
 
    public static double getAverageNote(Team team) {
       double total = 0;
       int count = 0;
 
       for (Player player : team.getCurrentPlayers().values()) {
-         total += PlayerStatUtil.getDisplayedNote(player);
+         total += PlayerStatUtility.getDisplayedNote(player);
          count++;
       }
 
@@ -30,7 +30,7 @@ public class TeamStatUtil {
       int count = 0;
 
       for (Player player : team.getCurrentPlayers().values()) {
-         total += PlayerStatUtil.getDisplayedAssets(player, currentSeasonSelected).getPointPerMatch();
+         total += PlayerStatUtility.getDisplayedAssets(player, currentSeasonSelected).getPointPerMatch();
          count++;
       }
 
@@ -45,7 +45,7 @@ public class TeamStatUtil {
       int count = 0;
 
       for (Player player : team.getCurrentPlayers().values()) {
-         total += PlayerStatUtil.getDisplayedAssets(player, currentSeasonSelected).getReboundPerMatch();
+         total += PlayerStatUtility.getDisplayedAssets(player, currentSeasonSelected).getReboundPerMatch();
          count++;
       }
 
@@ -60,7 +60,7 @@ public class TeamStatUtil {
       int count = 0;
 
       for (Player player : team.getCurrentPlayers().values()) {
-         total += PlayerStatUtil.getDisplayedAssets(player, currentSeasonSelected).getAssistPerMatch();
+         total += PlayerStatUtility.getDisplayedAssets(player, currentSeasonSelected).getAssistPerMatch();
          count++;
       }
 

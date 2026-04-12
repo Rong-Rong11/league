@@ -1,5 +1,21 @@
 package gui.panel.openningPanel;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import data.team.Team;
 import data.team.finance.financialpolicy.AmbitiousPolicy;
 import data.team.finance.financialpolicy.BalancedPolicy;
@@ -15,22 +31,7 @@ import gui.panel.common.InfoPopupUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
-import process.utility.TeamDisplayUtil;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import process.utility.TeamDisplayUtility;
 
 public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 
@@ -162,7 +163,8 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 		JLabel titleLabel = new JLabel(title);
 		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
 		storeSectionTitleLabel(titleLabel);
-		JPanel titlePanel = buildTitlePanel(titleLabel, title.equals("POLITIQUE FINANCIERE") ? policyInfoButton : marketInfoButton);
+		JPanel titlePanel = buildTitlePanel(titleLabel,
+				title.equals("POLITIQUE FINANCIERE") ? policyInfoButton : marketInfoButton);
 
 		JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 12, 0));
 		buttonPanel.setOpaque(false);
@@ -218,8 +220,8 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 
 	private void showTeamState(Team team) {
 		logoPanel.setTeamName(team.getName());
-		cityLabel.setText(TeamDisplayUtil.getCityName(team));
-		teamLabel.setText(TeamDisplayUtil.getShortName(team));
+		cityLabel.setText(TeamDisplayUtility.getCityName(team));
+		teamLabel.setText(TeamDisplayUtility.getShortName(team));
 		setButtonsEnabled(true);
 		selectedPolicy = team.getTeamFinance().getFinancialProfil();
 		selectedMarketSize = team.getTeamFinance().getMarketSize();

@@ -63,7 +63,7 @@ implements ActionResultVisitor<Void> {
 
     @Override
     public Void visit(Turnover turnover) {
-        Player player = turnover.getDefensePlayer();
+        Player player = turnover.getInterceptedPlayer();
         if (this.homeTeamPlayers.contains(player)) {
             this.gameResult.setTurnoverHomeTeam(this.gameResult.getTurnoverHomeTeam() + 1);
         } else {

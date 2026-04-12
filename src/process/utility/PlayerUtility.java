@@ -7,9 +7,12 @@ import data.player.Asset;
 import data.player.HealthStatus;
 import data.player.Player;
 
-public class PlayerUtilitary {
+public class PlayerUtility {
+    private static final double CURRENT_SEASON_MINUTES_RELIABLE = 18.0;
+    private static final double CURRENT_SEASON_MINUTES_PARTIAL = 8.0;
+
     public static double getPlayerAttackNote(Player player) {
-        Asset asset = PlayerUtilitary.getWeightedAssets(player);
+        Asset asset = PlayerUtility.getWeightedAssets(player);
         double d = Math.sqrt(Math.max(0.0, asset.getPointPerMatch() / 10.0));
         double d2 = Math.sqrt(Math.max(0.0, asset.getAssistPerMatch() / 3.0));
         double d3 = asset.getTrueShootingPercentage();
@@ -19,12 +22,32 @@ public class PlayerUtilitary {
     }
 
     public static double getPlayerDefenseNote(Player player) {
-        Asset asset = PlayerUtilitary.getWeightedAssets(player);
+        Asset asset = PlayerUtility.getWeightedAssets(player);
         double d = Math.sqrt(Math.max(0.0, asset.getInterceptionPerMatch() / 1.0));
         double d2 = Math.sqrt(Math.max(0.0, asset.getBlockPerMatch() / 1.0));
         double d3 = d * 0.55 + d2 * 0.45;
         d3 = 0.5 + d3 * 0.3;
         return Math.min(d3, 1.0);
+    }
+
+    public static Asset getReferenceOffensiveAsset(Player player) {
+        Asset currentAsset = player.getCurrentSeasonAssets();
+        Asset previousAsset = player.getPreSeasonAssets();
+        double currentMinutes = currentAsset.getMinutesPlayedPerMatch();
+        if (currentMinutes <= 0.0) {
+            return previousAsset;
+        }
+        if (currentMinutes >= CURRENT_SEASON_MINUTES_RELIABLE) {
+            return currentAsset;
+        }
+        double currentWeight;
+        if (currentMinutes <= CURRENT_SEASON_MINUTES_PARTIAL) {
+            currentWeight = 0.25;
+        } else {
+            currentWeight = 0.25 + ((currentMinutes - CURRENT_SEASON_MINUTES_PARTIAL)
+                    / (CURRENT_SEASON_MINUTES_RELIABLE - CURRENT_SEASON_MINUTES_PARTIAL)) * 0.75;
+        }
+        return blendAssets(currentAsset, previousAsset, currentWeight);
     }
 
     private static Asset getWeightedAssets(Player player) {
@@ -49,9 +72,33 @@ public class PlayerUtilitary {
         return asset3;
     }
 
+    private static Asset blendAssets(Asset currentAsset, Asset previousAsset, double currentWeight) {
+        double boundedCurrentWeight = Math.max(0.0, Math.min(1.0, currentWeight));
+        double previousWeight = 1.0 - boundedCurrentWeight;
+        Asset blendedAsset = new Asset();
+        blendedAsset.setNote(currentAsset.getNote() * boundedCurrentWeight + previousAsset.getNote() * previousWeight);
+        blendedAsset.setMinutesPlayedPerMatch(currentAsset.getMinutesPlayedPerMatch() * boundedCurrentWeight
+                + previousAsset.getMinutesPlayedPerMatch() * previousWeight);
+        blendedAsset.setPointPerMatch(currentAsset.getPointPerMatch() * boundedCurrentWeight
+                + previousAsset.getPointPerMatch() * previousWeight);
+        blendedAsset.setReboundPerMatch(currentAsset.getReboundPerMatch() * boundedCurrentWeight
+                + previousAsset.getReboundPerMatch() * previousWeight);
+        blendedAsset.setAssistPerMatch(currentAsset.getAssistPerMatch() * boundedCurrentWeight
+                + previousAsset.getAssistPerMatch() * previousWeight);
+        blendedAsset.setInterceptionPerMatch(currentAsset.getInterceptionPerMatch() * boundedCurrentWeight
+                + previousAsset.getInterceptionPerMatch() * previousWeight);
+        blendedAsset.setBlockPerMatch(currentAsset.getBlockPerMatch() * boundedCurrentWeight
+                + previousAsset.getBlockPerMatch() * previousWeight);
+        blendedAsset.setLostBallPerMatch(currentAsset.getLostBallPerMatch() * boundedCurrentWeight
+                + previousAsset.getLostBallPerMatch() * previousWeight);
+        blendedAsset.setTrueShootingPercentage(currentAsset.getTrueShootingPercentage() * boundedCurrentWeight
+                + previousAsset.getTrueShootingPercentage() * previousWeight);
+        return blendedAsset;
+    }
+
     public static double getPlayerOverAllNote(Player player) {
-        double d = PlayerUtilitary.getPlayerAttackNote(player);
-        double d2 = PlayerUtilitary.getPlayerDefenseNote(player);
+        double d = PlayerUtility.getPlayerAttackNote(player);
+        double d2 = PlayerUtility.getPlayerDefenseNote(player);
         double d3 = d * 0.6 + d2 * 0.4;
         double d4 = player.getPreSeasonAssets().getNote();
         return d3 * 0.7 + d4 * 0.3;

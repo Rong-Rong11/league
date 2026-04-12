@@ -9,7 +9,7 @@ import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
 import process.repositery.TeamRepositery;
 import process.service.finance.FinanceManager;
-import process.utility.FinanceUtilitary;
+import process.utility.FinanceUtility;
 
 public class CentralRevenueDistributor {
     private static final String TV_SHARE_TYPE = "tv";
@@ -77,12 +77,12 @@ public class CentralRevenueDistributor {
         distributeNationalSponsoringShare(distributableSponsors, month);
         distributeMerchandisingShare(distributableMerchandising, month);
 
-        FinanceUtilitary.updateBudget(leagueBudget);
+        FinanceUtility.updateBudget(leagueBudget);
     }
 
     private double retainLeagueCut(Budget leagueBudget, double revenue, IncomeType incomeType, int month) {
         double leagueCut = revenue * FinanceConfiguration.LEAGUE_OPERATING_RATE;
-        FinanceUtilitary.addIncome(leagueBudget, new Income(incomeType, leagueCut), month);
+        FinanceUtility.addIncome(leagueBudget, new Income(incomeType, leagueCut), month);
         return revenue - leagueCut;
     }
 
@@ -91,8 +91,8 @@ public class CentralRevenueDistributor {
 
         for (Team team : teamRepositery.getAllTeams()) {
             Budget budget = team.getTeamFinance().getBudget();
-            FinanceUtilitary.addIncome(budget, new Income(incomeType, share), month);
-            FinanceUtilitary.updateBudget(budget);
+            FinanceUtility.addIncome(budget, new Income(incomeType, share), month);
+            FinanceUtility.updateBudget(budget);
         }
     }
 
@@ -133,9 +133,9 @@ public class CentralRevenueDistributor {
             double share = weightedPart * (score / totalScore);
 
             Budget budget = team.getTeamFinance().getBudget();
-            FinanceUtilitary.addIncome(budget, new Income(IncomeType.CENTRAL_SHARE, share),
+            FinanceUtility.addIncome(budget, new Income(IncomeType.CENTRAL_SHARE, share),
                     month);
-            FinanceUtilitary.updateBudget(budget);
+            FinanceUtility.updateBudget(budget);
         }
     }
 
@@ -148,7 +148,7 @@ public class CentralRevenueDistributor {
             return calculateSponsoringShareScore(team);
         }
 
-        return FinanceUtilitary.calculateMerchandisingScore(team);
+        return FinanceUtility.calculateMerchandisingScore(team);
     }
 
     private double calculateTvShareScore(Team team) {
@@ -156,7 +156,7 @@ public class CentralRevenueDistributor {
         double score = 1.0;
         score += team.getCurrentPopularity() / 250.0;
         score += profil.getHistoricalPrestige() * 0.8;
-        score += FinanceUtilitary.getNormalizedTeamValue(team) * 0.7;
+        score += FinanceUtility.getNormalizedTeamValue(team) * 0.7;
 
         if (team.hasStarPlayer()) {
             score += 0.5;
@@ -171,7 +171,7 @@ public class CentralRevenueDistributor {
         score += team.getCurrentPopularity() / 200.0;
         score += profil.getCommercialAggressiveness() * 0.8;
         score += profil.getHistoricalPrestige() * 0.5;
-        score += FinanceUtilitary.getNormalizedTeamValue(team) * 0.5;
+        score += FinanceUtility.getNormalizedTeamValue(team) * 0.5;
 
         if (team.hasStarPlayer()) {
             score += 0.4;

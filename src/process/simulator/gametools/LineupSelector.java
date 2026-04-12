@@ -10,9 +10,9 @@ import data.team.Team;
 import data.team.finance.financialpolicy.AmbitiousPolicy;
 import data.team.finance.financialpolicy.BalancedPolicy;
 import data.team.finance.financialpolicy.FinancialPolicy;
-import process.utility.FinanceUtilitary;
-import process.utility.PlayerUtilitary;
-import process.utility.TeamUtilitary;
+import process.utility.FinanceUtility;
+import process.utility.PlayerUtility;
+import process.utility.TeamUtility;
 
 public class LineupSelector {
 
@@ -21,8 +21,8 @@ public class LineupSelector {
 	}
 
 	public ArrayList<Player> choosePlayerToPlay(Team team, Team opponent) {
-		String opponentProfile = TeamUtilitary.getTeamSportProfile(opponent);
-		double averageSalary = FinanceUtilitary.getAverageSalary(team);
+		String opponentProfile = TeamUtility.getTeamSportProfile(opponent);
+		double averageSalary = FinanceUtility.getAverageSalary(team);
 		TreeMap<Double, Player> scoredPlayers = new TreeMap<Double, Player>(Collections.reverseOrder());
 
 		FinancialPolicy teamFinancialProfil = team.getTeamFinance().getFinancialProfil();
@@ -40,8 +40,8 @@ public class LineupSelector {
 
 		for (Player player : team.getCurrentPlayers().values()) {
 			double economicFactor = player.getSalary() / averageSalary;
-			double playerAttackNote = PlayerUtilitary.getPlayerAttackNote(player);
-			double playerDefenseNote = PlayerUtilitary.getPlayerDefenseNote(player);
+			double playerAttackNote = PlayerUtility.getPlayerAttackNote(player);
+			double playerDefenseNote = PlayerUtility.getPlayerDefenseNote(player);
 			double matchProfileScore;
 			switch (opponentProfile) {
 				case GameConfiguration.TEAM_DEFENSIVE_MATCH_PROFIL:
@@ -82,6 +82,9 @@ public class LineupSelector {
 		}
 		players.removeAll(playersToRemove);
 		for (Player player : team.getCurrentPlayers().values()) {
+			if (players.size() >= 5) {
+				break;
+			}
 			if (!player.getHealthStatus().isInjured() && !players.contains(player)) {
 				players.add(player);
 			}
@@ -93,13 +96,13 @@ public class LineupSelector {
 		double total = 0;
 
 		for (Player player : players) {
-			total += PlayerUtilitary.getPlayerAttackNote(player);
+			total += PlayerUtility.getPlayerAttackNote(player);
 		}
 
 		double cumulative = 0;
 
 		for (Player player : players) {
-			double attackNote = PlayerUtilitary.getPlayerAttackNote(player) / total;
+			double attackNote = PlayerUtility.getPlayerAttackNote(player) / total;
 			cumulative += attackNote;
 			attackingPlayers.put(cumulative, player);
 		}
@@ -111,13 +114,13 @@ public class LineupSelector {
 		double total = 0;
 
 		for (Player player : players) {
-			total += PlayerUtilitary.getPlayerDefenseNote(player);
+			total += PlayerUtility.getPlayerDefenseNote(player);
 		}
 
 		double cumulative = 0;
 
 		for (Player player : players) {
-			double defenseNote = PlayerUtilitary.getPlayerDefenseNote(player) / total;
+			double defenseNote = PlayerUtility.getPlayerDefenseNote(player) / total;
 			cumulative += defenseNote;
 			defensivePlayers.put(cumulative, player);
 		}

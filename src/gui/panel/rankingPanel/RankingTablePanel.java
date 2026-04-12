@@ -22,7 +22,7 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
 import process.orchestrator.GUIInterface;
-import process.utility.TeamDisplayUtil;
+import process.utility.TeamDisplayUtility;
 
 public class RankingTablePanel extends JPanel implements ThemeAware {
 	private static final int GLOBAL_PAGE_SIZE = 15;
@@ -302,7 +302,7 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		int points = wins * 2;
 		String percentage = buildPercentage(team);
 		String bestWinStreak = guiInterface.getTeamMaxWinStreak(team) + " W";
-		return createRow(rank, TeamDisplayUtil.getShortName(team), wins, losses, points, percentage, bestWinStreak);
+		return createRow(rank, TeamDisplayUtility.getShortName(team), wins, losses, points, percentage, bestWinStreak);
 	}
 
 	private JPanel createRow(int rank, String teamName, int wins, int losses, int points, String percentage,

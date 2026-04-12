@@ -1,13 +1,13 @@
 package process.service.rankingtools;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+
 import data.league.Division;
 import data.league.League;
 import data.sport.setup.Game;
 import data.team.Team;
-import process.utility.TeamUtilitary;
-
-import java.util.ArrayList;
-import java.util.Comparator;
+import process.utility.TeamUtility;
 
 public class NbaRegularSeasonTeamComparator implements Comparator<Team> {
 
@@ -112,7 +112,7 @@ public class NbaRegularSeasonTeamComparator implements Comparator<Team> {
    }
 
    private boolean isDivisionChampion(Team team) {
-      Division division = TeamUtilitary.getDivisionOfTeam(league, team);
+      Division division = TeamUtility.getDivisionOfTeam(league, team);
 
       if (division == null) {
          return false;
@@ -143,8 +143,8 @@ public class NbaRegularSeasonTeamComparator implements Comparator<Team> {
    }
 
    private boolean isSameDivision(Team teamA, Team teamB) {
-      Division divisionA = TeamUtilitary.getDivisionOfTeam(league, teamA);
-      Division divisionB = TeamUtilitary.getDivisionOfTeam(league, teamB);
+      Division divisionA = TeamUtility.getDivisionOfTeam(league, teamA);
+      Division divisionB = TeamUtility.getDivisionOfTeam(league, teamB);
 
       if (divisionA == null || divisionB == null) {
          return false;

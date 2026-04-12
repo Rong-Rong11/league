@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
+import config.FinanceConfiguration;
 import data.finance.budget.income.Income;
 import data.finance.budget.income.IncomeType;
 import data.league.League;
@@ -109,10 +110,11 @@ public class TestLeagueBuilder {
 	@Test
 	public void shouldBuildLeagueWithFinance() {
 		League league = new LeagueBuilder().build();
+		double expectedOpeningTreasury = FinanceConfiguration.INITIAL_LEAGUE_BUDGET * 0.20;
 
 		assertNotNull(league.getLeagueFinance());
-		assertTrue(league.getLeagueFinance().getBudget().getInitialAmount() == 9278.82);
-		assertTrue(league.getLeagueFinance().getBudget().getRemainingAmount() == 9278.82);
+		assertEquals(expectedOpeningTreasury, league.getLeagueFinance().getBudget().getInitialAmount(), 0.001);
+		assertEquals(expectedOpeningTreasury, league.getLeagueFinance().getBudget().getRemainingAmount(), 0.001);
 		HashMap<String, Income> initialIncomes = league.getLeagueFinance().getBudget().getIncomesForMonth(0);
 		assertNotNull(initialIncomes);
 		assertTrue(initialIncomes.size() > 0);

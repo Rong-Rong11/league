@@ -2,7 +2,7 @@ package process.utility;
 
 import data.team.Team;
 
-public class TeamDisplayUtil {
+public class TeamDisplayUtility {
 
 	public static String getAbbreviation(Team team) {
 		if (team == null || team.getAbbreviation() == null || team.getAbbreviation().equals("")) {

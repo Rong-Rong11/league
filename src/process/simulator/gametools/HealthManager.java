@@ -7,7 +7,7 @@ import data.player.Asset;
 import data.player.HealthStatus;
 import data.player.Player;
 import data.team.Team;
-import process.utility.PlayerUtilitary;
+import process.utility.PlayerUtility;
 
 public class HealthManager {
 
@@ -34,19 +34,19 @@ public class HealthManager {
 	public void updateFatigue(ArrayList<Player> homePlayers, ArrayList<Player> awayPlayers, int actionTimeSeconds) {
 		double minutesPlayed = actionTimeSeconds / 60.0;
 		for (Player homePlayer : homePlayers) {
-			PlayerUtilitary.updateFatigue(minutesPlayed, homePlayer);
+			PlayerUtility.updateFatigue(minutesPlayed, homePlayer);
 		}
 		for (Player awayPlayer : awayPlayers) {
-			PlayerUtilitary.updateFatigue(minutesPlayed, awayPlayer);
+			PlayerUtility.updateFatigue(minutesPlayed, awayPlayer);
 		}
 	}
 
 	public void updateRest(double restMinutes, Team homeTeam, Team awayTeam) {
 		for (Player player : homeTeam.getCurrentPlayers().values()) {
-			PlayerUtilitary.updateRest(restMinutes, player);
+			PlayerUtility.updateRest(restMinutes, player);
 		}
 		for (Player player : awayTeam.getCurrentPlayers().values()) {
-			PlayerUtilitary.updateRest(restMinutes, player);
+			PlayerUtility.updateRest(restMinutes, player);
 		}
 	}
 

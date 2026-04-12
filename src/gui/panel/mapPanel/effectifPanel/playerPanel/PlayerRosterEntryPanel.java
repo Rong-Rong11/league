@@ -10,12 +10,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import data.player.Player;
 import data.player.Asset;
+import data.player.Player;
 import gui.panel.common.DashboardCard;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.PlayerDisplayUtil;
-import process.utility.PlayerStatUtil;
+import process.utility.PlayerStatUtility;
 
 public class PlayerRosterEntryPanel extends DashboardCard {
 	private PlayerPortraitPanel portraitPanel;
@@ -89,7 +89,7 @@ public class PlayerRosterEntryPanel extends DashboardCard {
 	}
 
 	private String buildStatsText(Player player, boolean currentSeasonSelected) {
-		Asset assets = PlayerStatUtil.getDisplayedAssets(player, currentSeasonSelected);
+		Asset assets = PlayerStatUtility.getDisplayedAssets(player, currentSeasonSelected);
 		double points = assets.getPointPerMatch();
 		double assists = assets.getAssistPerMatch();
 		double rebounds = assets.getReboundPerMatch();

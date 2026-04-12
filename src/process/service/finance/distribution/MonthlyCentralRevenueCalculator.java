@@ -13,8 +13,8 @@ import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.mediamarket.MediaMarket;
 import process.repositery.TeamRepositery;
 import process.service.finance.FinanceManager;
-import process.utility.CalendarUtilitary;
-import process.utility.FinanceUtilitary;
+import process.utility.CalendarUtility;
+import process.utility.FinanceUtility;
 
 public class MonthlyCentralRevenueCalculator {
 
@@ -169,7 +169,7 @@ public class MonthlyCentralRevenueCalculator {
     private double calculateAverageTeamValue(List<Team> teams) {
         double total = 0.0;
         for (Team team : teams) {
-            total += FinanceUtilitary.getNormalizedTeamValue(team);
+            total += FinanceUtility.getNormalizedTeamValue(team);
         }
         return total / teams.size();
     }
@@ -205,7 +205,7 @@ public class MonthlyCentralRevenueCalculator {
         if (isPlayoffMonth(month)) {
             return 1 + playoffBonusRate;
         }
-        if (CalendarUtilitary.isImportantMonth(month)) {
+        if (CalendarUtility.isImportantMonth(month)) {
             return 1.03;
         }
         return 1.0;
@@ -266,7 +266,7 @@ public class MonthlyCentralRevenueCalculator {
             }
             return count;
         }
-        for (GameDay gameDay : league.getReagularSeason().getNbaCalendar().getCalendar().values()) {
+        for (GameDay gameDay : league.getRegularSeason().getNbaCalendar().getCalendar().values()) {
             LocalDate date = gameDay.getDate();
             if (date == null || !matchesFinanceMonth(date, month)) {
                 continue;
@@ -289,7 +289,7 @@ public class MonthlyCentralRevenueCalculator {
         }
 
         ArrayList<Team> activeTeams = new ArrayList<Team>();
-        for (data.sport.setup.PlayoffSeries series : CalendarUtilitary.getCurrentRoundSeries(league.getPlayoff())) {
+        for (data.sport.setup.PlayoffSeries series : CalendarUtility.getCurrentRoundSeries(league.getPlayoff())) {
             if (series == null || series.isFinished()) {
                 continue;
             }
@@ -304,7 +304,7 @@ public class MonthlyCentralRevenueCalculator {
     }
 
     private boolean matchesFinanceMonth(LocalDate date, int month) {
-        int startMonth = league.getReagularSeason().getDebutDate().getMonthValue();
+        int startMonth = league.getRegularSeason().getDebutDate().getMonthValue();
         int monthDelta = date.getMonthValue() - startMonth;
         if (monthDelta < 0) {
             monthDelta += 12;
@@ -313,7 +313,7 @@ public class MonthlyCentralRevenueCalculator {
     }
 
     private boolean isImportantGame(Game game, LocalDate date) {
-        return CalendarUtilitary.popularityScoreGame(game, date) >= 80 || game.getGameContext().isRivalry();
+        return CalendarUtility.popularityScoreGame(game, date) >= 80 || game.getGameContext().isRivalry();
     }
 
     private boolean hasHighAttendance(Game game) {

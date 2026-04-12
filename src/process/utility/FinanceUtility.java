@@ -20,7 +20,7 @@ import process.repositery.TeamRepositery;
 import process.utility.tools.FinanceTypeResolver;
 
 //les sommes en millions
-public class FinanceUtilitary {
+public class FinanceUtility {
 
 	public static void initiateBudget(Budget budget) {
 		HashMap<Integer, HashMap<String, Income>> monthlyIncomes = budget.getMonthlyIncomes();

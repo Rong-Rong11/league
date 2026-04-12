@@ -13,7 +13,7 @@ import data.sport.setup.Game;
 import data.team.Team;
 import data.team.calendar.Schedule;
 import process.repositery.TeamRepositery;
-import process.utility.CalendarUtilitary;
+import process.utility.CalendarUtility;
 
 public class GameSelector {
 
@@ -26,7 +26,7 @@ public class GameSelector {
 		super();
 		this.date = date;
 		this.league = league;
-		regularSeason = league.getReagularSeason();
+		regularSeason = league.getRegularSeason();
 	}
 
 	public ArrayList<Game> selectGamesForDay() {
@@ -42,8 +42,8 @@ public class GameSelector {
 			double scheduleScore = scheduleScore(game, date);
 
 			double popularityScore = 0;
-			if (CalendarUtilitary.isSpecialEvent(regularSeason, date) || CalendarUtilitary.isImportantDay(date)) {
-				popularityScore = CalendarUtilitary.popularityScoreGame(game, date);
+			if (CalendarUtility.isSpecialEvent(regularSeason, date) || CalendarUtility.isImportantDay(date)) {
+				popularityScore = CalendarUtility.popularityScoreGame(game, date);
 			}
 			double randomScore = (Math.random() - 0.5) * 10.0;
 			double totalScore = loadScore + popularityScore + scheduleScore + randomScore;

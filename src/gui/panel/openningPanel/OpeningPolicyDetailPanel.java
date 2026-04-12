@@ -1,16 +1,18 @@
 package gui.panel.openningPanel;
 
-import data.team.Team;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import data.team.Team;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
 import process.orchestrator.GUIInterface;
-import process.utility.TeamDisplayUtil;
+import process.utility.TeamDisplayUtility;
 
 public class OpeningPolicyDetailPanel extends JPanel implements ThemeAware {
 	private final GUIInterface guiInterface;
@@ -97,9 +99,9 @@ public class OpeningPolicyDetailPanel extends JPanel implements ThemeAware {
 	}
 
 	private void showTeamState(Team team) {
-		teamValueLabel.setText(TeamDisplayUtil.getShortName(team));
-		cityValueLabel.setText(TeamDisplayUtil.getCityName(team));
-		conferenceValueLabel.setText(TeamDisplayUtil.getConferenceLabel(guiInterface.getConferenceName(team)));
+		teamValueLabel.setText(TeamDisplayUtility.getShortName(team));
+		cityValueLabel.setText(TeamDisplayUtility.getCityName(team));
+		conferenceValueLabel.setText(TeamDisplayUtility.getConferenceLabel(guiInterface.getConferenceName(team)));
 		divisionValueLabel.setText(guiInterface.getDivisionName(team));
 	}
 

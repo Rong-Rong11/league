@@ -38,7 +38,7 @@ public class RegularSeasonGameDaySimulationProcessor extends GameDaySimulationPr
 
    @Override
    protected void afterGameDay(GameDay gameDay, LocalDate date, int month) {
-      RegularSeason regularSeason = league.getReagularSeason();
+      RegularSeason regularSeason = league.getRegularSeason();
       Ranking ranking = regularSeason.getRanking();
 
       regularSeasonRankingManager.addSimulatedGameDay(gameDay);

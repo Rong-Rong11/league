@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import data.player.Player;
 import data.team.Team;
-import process.utility.FinanceUtilitary;
+import process.utility.FinanceUtility;
 
 public class TradeApplier {
     public void applyTrade(Team team, ArrayList<Player> arrayList) {
@@ -22,7 +22,7 @@ public class TradeApplier {
         }
         team.setCurrentPlayers(hashMap2);
         TradeApplier.updateStarPlayer(team, arrayList);
-        FinanceUtilitary.updateTeamPayroll(team);
+        FinanceUtility.updateTeamPayroll(team);
         team.getTeamFinance().incrementTransferMade();
     }
 

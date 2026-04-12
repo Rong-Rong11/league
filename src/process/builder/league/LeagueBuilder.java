@@ -24,8 +24,8 @@ import process.repositery.DivisionRepositery;
 import process.repositery.PlayerRepositery;
 import process.repositery.PreSeasonAssetRepositery;
 import process.repositery.TeamRepositery;
-import process.utility.FinanceUtilitary;
-import process.utility.TeamUtilitary;
+import process.utility.FinanceUtility;
+import process.utility.TeamUtility;
 
 public class LeagueBuilder {
 
@@ -95,7 +95,7 @@ public class LeagueBuilder {
 
 	private void setStarPlayerTeams() {
 		for (Team team : teamRepositery.getAllTeams()) {
-			TeamUtilitary.setStarPlayer(team);
+			TeamUtility.setStarPlayer(team);
 		}
 	}
 
@@ -104,17 +104,18 @@ public class LeagueBuilder {
 		double openingTreasury = annualRevenueEstimate * 0.20;
 
 		Budget budget = new Budget(openingTreasury);
-		FinanceUtilitary.initiateBudget(budget);
+		FinanceUtility.initiateBudget(budget);
 
-		FinanceUtilitary.addIncome(budget, new Income(IncomeType.NATIONAL_TV, openingTreasury * 0.55),
+		FinanceUtility.addIncome(budget, new Income(IncomeType.NATIONAL_TV, openingTreasury * 0.55),
 				0);
-		FinanceUtilitary.addIncome(budget,
+		FinanceUtility.addIncome(budget,
 				new Income(IncomeType.NATIONAL_SPONSORING, openingTreasury * 0.20), 0);
-		FinanceUtilitary.addIncome(budget,
+		FinanceUtility.addIncome(budget,
 				new Income(IncomeType.NATIONAL_MERCHANDISING, openingTreasury * 0.10), 0);
-		FinanceUtilitary.addIncome(budget, new Income(IncomeType.OTHER, openingTreasury * 0.15), 0);
+		FinanceUtility.addIncome(budget, new Income(IncomeType.OTHER, openingTreasury * 0.15), 0);
 
-		double salaryCap = (annualRevenueEstimate * FinanceConfiguration.PLAYER_SHARE) / CalendarConfiguration.NUMBER_OF_TEAM;
+		double salaryCap = (annualRevenueEstimate * FinanceConfiguration.PLAYER_SHARE)
+				/ CalendarConfiguration.NUMBER_OF_TEAM;
 		double luxuryTaxLine = salaryCap * FinanceConfiguration.LUXURYTAX_THRESHOLD_RATE;
 		double minimumTeamSalary = salaryCap * FinanceConfiguration.MINIMUM_TEAM_SALARY_RATE;
 

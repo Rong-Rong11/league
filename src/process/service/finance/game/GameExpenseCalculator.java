@@ -8,7 +8,7 @@ import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
-import process.utility.CalendarUtilitary;
+import process.utility.CalendarUtility;
 import process.visitor.marketsize.CalculateStadiumCostVisitor;
 
 public abstract class GameExpenseCalculator {
@@ -123,7 +123,7 @@ public abstract class GameExpenseCalculator {
 
         double modifier = 0.0;
 
-        if (CalendarUtilitary.isRivalry(game.getGameContext())) {
+        if (CalendarUtility.isRivalry(game.getGameContext())) {
             modifier += 0.15;
         }
 

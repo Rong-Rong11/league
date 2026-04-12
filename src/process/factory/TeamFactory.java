@@ -7,9 +7,8 @@ import data.team.finance.TeamFinance;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.transfer.TeamTransferStrategy;
-import process.utility.TeamUtilitary;
+import process.utility.TeamUtility;
 import process.visitor.financialprofil.ChooseTransferStrategyVisitor;
-import process.visitor.marketsize.CalculateInitialTeamValue;
 
 public class TeamFactory {
     private static String checkRivalTeam(String rivalTeam) {
@@ -24,8 +23,8 @@ public class TeamFactory {
         String teamName = data[2];
         String rivalTeamName = TeamFactory.checkRivalTeam(data[11]);
         double teamPopularity = Float.valueOf(data[12]).floatValue();
-        FinancialPolicy financialProfil = TeamUtilitary.randomFinancialProfil();
-        MarketSize marketSize = TeamUtilitary.randomMarketSize();
+        FinancialPolicy financialProfil = TeamUtility.randomFinancialProfil();
+        MarketSize marketSize = TeamUtility.randomMarketSize();
         Budget budget = new Budget(0.0);
         TeamTransferStrategy teamTransferStrategy = financialProfil
                 .accept(new ChooseTransferStrategyVisitor(rivalTeamName));

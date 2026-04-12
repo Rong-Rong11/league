@@ -1,7 +1,7 @@
 package data.sport.setup;
 
 import data.team.Team;
-import process.utility.CalendarUtilitary;
+import process.utility.CalendarUtility;
 
 public class GameContext {
     private Team homeTeam;
@@ -20,7 +20,7 @@ public class GameContext {
         this.setHomeTeam(homeTeam);
         this.setTypeGame(typeGame);
         this.setGameMoment(gameMoment);
-        this.isRivalry = CalendarUtilitary.isRivalry(this);
+        this.isRivalry = CalendarUtility.isRivalry(this);
     }
 
     public boolean isScheduled() {

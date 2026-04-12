@@ -1,23 +1,24 @@
 package gui.panel.matchPanel;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import data.sport.setup.Game;
 import data.sport.setup.GameResult;
 import data.team.Team;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
-import process.utility.TeamDisplayUtil;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import process.utility.TeamDisplayUtility;
 
 public class MatchResultPanel extends JPanel implements ThemeAware {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
@@ -58,8 +59,8 @@ public class MatchResultPanel extends JPanel implements ThemeAware {
 		matchStatusLabel.setText("A venir");
 		mainScoreLabel.setText("--");
 		quarterTitleLabel.setText("Resultats masques");
-		homeQuarterTeamLabel.setText(TeamDisplayUtil.getShortName(homeTeam));
-		awayQuarterTeamLabel.setText(TeamDisplayUtil.getShortName(awayTeam));
+		homeQuarterTeamLabel.setText(TeamDisplayUtility.getShortName(homeTeam));
+		awayQuarterTeamLabel.setText(TeamDisplayUtility.getShortName(awayTeam));
 		resetQuarterTable();
 	}
 
@@ -236,15 +237,15 @@ public class MatchResultPanel extends JPanel implements ThemeAware {
 		titleLabel.setText("SAISON REGULIERE - " + dayLabel.toUpperCase());
 		homeLogoPanel.setTeamName(homeTeam.getName());
 		awayLogoPanel.setTeamName(awayTeam.getName());
-		homeNameLabel.setText(TeamDisplayUtil.getShortName(homeTeam));
-		awayNameLabel.setText(TeamDisplayUtil.getShortName(awayTeam));
-		homeCityLabel.setText(TeamDisplayUtil.getCityName(homeTeam));
-		awayCityLabel.setText(TeamDisplayUtil.getCityName(awayTeam));
+		homeNameLabel.setText(TeamDisplayUtility.getShortName(homeTeam));
+		awayNameLabel.setText(TeamDisplayUtility.getShortName(awayTeam));
+		homeCityLabel.setText(TeamDisplayUtility.getCityName(homeTeam));
+		awayCityLabel.setText(TeamDisplayUtility.getCityName(awayTeam));
 	}
 
 	private void updateQuarterTable(GameResult[] quarterResults, Team homeTeam, Team awayTeam) {
-		homeQuarterTeamLabel.setText(TeamDisplayUtil.getShortName(homeTeam));
-		awayQuarterTeamLabel.setText(TeamDisplayUtil.getShortName(awayTeam));
+		homeQuarterTeamLabel.setText(TeamDisplayUtility.getShortName(homeTeam));
+		awayQuarterTeamLabel.setText(TeamDisplayUtility.getShortName(awayTeam));
 		int homeTotal = 0;
 		int awayTotal = 0;
 		for (int i = 0; i < 4; i++) {

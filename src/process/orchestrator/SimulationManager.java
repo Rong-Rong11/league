@@ -34,10 +34,10 @@ import process.service.live.LiveMatchState;
 import process.service.trade.PreSeasonTradeService;
 import process.service.trade.RegularSeasonTradeService;
 import process.service.trade.TradeService;
-import process.utility.CalendarUtilitary;
-import process.utility.FinanceUtilitary;
-import process.utility.TeamDisplayUtil;
-import process.utility.TeamStatUtil;
+import process.utility.CalendarUtility;
+import process.utility.FinanceUtility;
+import process.utility.TeamDisplayUtility;
+import process.utility.TeamStatUtility;
 
 //cerveau de la simulation 
 public class SimulationManager implements GUIInterface {
@@ -60,7 +60,7 @@ public class SimulationManager implements GUIInterface {
 
 	public SimulationManager() {
 		league = leagueBuilder.build();
-		FinanceUtilitary.updateFormerLeaguePayroll();
+		FinanceUtility.updateFormerLeaguePayroll();
 		playoffBuilder = new PlayoffBuilder(league);
 		firstRoundCalendarBuilder = new FirstRoundCalendarBuilder(league);
 
@@ -132,7 +132,7 @@ public class SimulationManager implements GUIInterface {
 		financeManager.initializeFinance();
 		simulatePreSeasonTrade();
 		teamPopularityUpdater.updateBeforeSeason();
-		league.getReagularSeason().setNbaCalendar(regularSeasonCalendarBuilder.buildCalendar());
+		league.getRegularSeason().setNbaCalendar(regularSeasonCalendarBuilder.buildCalendar());
 		league.getLeagueFinance().getBudget().getInitialAmount();
 		clock.reset();
 	}
@@ -242,7 +242,7 @@ public class SimulationManager implements GUIInterface {
 		if (playoff == null || playoff.getCurrentRound() == null) {
 			return new ArrayList<>(activeTeams);
 		}
-		for (PlayoffSeries series : CalendarUtilitary.getCurrentRoundSeries(playoff)) {
+		for (PlayoffSeries series : CalendarUtility.getCurrentRoundSeries(playoff)) {
 			if (series == null || series.isFinished()) {
 				continue;
 			}
@@ -317,12 +317,12 @@ public class SimulationManager implements GUIInterface {
 
 	@Override
 	public LocalDate getRegularSeasonStartDate() {
-		return league.getReagularSeason().getDebutDate();
+		return league.getRegularSeason().getDebutDate();
 	}
 
 	@Override
 	public LocalDate getRegularSeasonEndDate() {
-		return league.getReagularSeason().getEndDate();
+		return league.getRegularSeason().getEndDate();
 	}
 
 	@Override
@@ -521,7 +521,7 @@ public class SimulationManager implements GUIInterface {
 		if (!isSeasonInitialized() || date == null) {
 			return null;
 		}
-		return league.getReagularSeason().getNbaCalendar().getCalendar().get(date);
+		return league.getRegularSeason().getNbaCalendar().getCalendar().get(date);
 	}
 
 	@Override
@@ -529,15 +529,15 @@ public class SimulationManager implements GUIInterface {
 		if (!isSeasonInitialized()) {
 			return new TreeMap<LocalDate, GameDay>();
 		}
-		return new TreeMap<LocalDate, GameDay>(league.getReagularSeason().getNbaCalendar().getCalendar());
+		return new TreeMap<LocalDate, GameDay>(league.getRegularSeason().getNbaCalendar().getCalendar());
 	}
 
 	@Override
 	public boolean isSeasonInitialized() {
 		return league != null
-				&& league.getReagularSeason() != null
-				&& league.getReagularSeason().getNbaCalendar() != null
-				&& !league.getReagularSeason().getNbaCalendar().getCalendar().isEmpty();
+				&& league.getRegularSeason() != null
+				&& league.getRegularSeason().getNbaCalendar() != null
+				&& !league.getRegularSeason().getNbaCalendar().getCalendar().isEmpty();
 	}
 
 	@Override
@@ -567,37 +567,37 @@ public class SimulationManager implements GUIInterface {
 
 	@Override
 	public String getConferenceName(Team team) {
-		return TeamStatUtil.getConferenceName(team, league);
+		return TeamStatUtility.getConferenceName(team, league);
 	}
 
 	@Override
 	public String getDivisionName(Team team) {
-		return TeamStatUtil.getDivisionName(team, league);
+		return TeamStatUtility.getDivisionName(team, league);
 	}
 
 	@Override
 	public double getAverageNote(Team team) {
-		return TeamStatUtil.getAverageNote(team);
+		return TeamStatUtility.getAverageNote(team);
 	}
 
 	@Override
 	public double getAveragePoints(Team team, boolean currentSeasonSelected) {
-		return TeamStatUtil.getAveragePoints(team, currentSeasonSelected);
+		return TeamStatUtility.getAveragePoints(team, currentSeasonSelected);
 	}
 
 	@Override
 	public double getAverageRebounds(Team team, boolean currentSeasonSelected) {
-		return TeamStatUtil.getAverageRebounds(team, currentSeasonSelected);
+		return TeamStatUtility.getAverageRebounds(team, currentSeasonSelected);
 	}
 
 	@Override
 	public double getAverageAssists(Team team, boolean currentSeasonSelected) {
-		return TeamStatUtil.getAverageAssists(team, currentSeasonSelected);
+		return TeamStatUtility.getAverageAssists(team, currentSeasonSelected);
 	}
 
 	@Override
 	public String getTeamAbbreviation(String teamName) {
-		return TeamDisplayUtil.getAbbreviation(getTeamByName(teamName));
+		return TeamDisplayUtility.getAbbreviation(getTeamByName(teamName));
 	}
 
 	@Override
@@ -653,12 +653,12 @@ public class SimulationManager implements GUIInterface {
 
 	@Override
 	public int getTeamMaxWinStreak(Team team) {
-		return TeamStatUtil.getBestWinStreak(team);
+		return TeamStatUtility.getBestWinStreak(team);
 	}
 
 	@Override
 	public int getTeamMaxLoseStreak(Team team) {
-		return TeamStatUtil.getBestLoseStreak(team);
+		return TeamStatUtility.getBestLoseStreak(team);
 	}
 
 	@Override
@@ -678,7 +678,7 @@ public class SimulationManager implements GUIInterface {
 
 	@Override
 	public ArrayList<Boolean> getTeamLastGamesResults(Team team, int numberOfGames) {
-		return TeamStatUtil.getLastResults(team, numberOfGames);
+		return TeamStatUtility.getLastResults(team, numberOfGames);
 	}
 
 	@Override

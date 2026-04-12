@@ -13,7 +13,7 @@ import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import process.repositery.TeamRepositery;
-import process.utility.FinanceUtilitary;
+import process.utility.FinanceUtility;
 import process.visitor.marketsize.CalculateMonthlyTeamFinanceVisitor;
 
 public class RevenueSharingManager {
@@ -33,7 +33,7 @@ public class RevenueSharingManager {
         double pool = collectFromRichTeams(leagueAverage, redistributionRate, month);
 
         double leagueKeeps = pool * leagueRedistributionPolicy.getBaseLeagueRetentionRate();
-        FinanceUtilitary.addIncome(
+        FinanceUtility.addIncome(
                 league.getLeagueFinance().getBudget(),
                 new Income(IncomeType.LEAGUE_KEEPS, leagueKeeps),
                 month);
@@ -72,13 +72,13 @@ public class RevenueSharingManager {
                 if (excess > 0) {
                     double contribution = excess * redistributionRate;
 
-                    FinanceUtilitary.addExpense(
+                    FinanceUtility.addExpense(
                             budget,
                             new Expense(ExpenseType.REVENUE_SHARING_CONTRIBUTION,
                                     contribution),
                             month);
 
-                    FinanceUtilitary.updateBudget(budget);
+                    FinanceUtility.updateBudget(budget);
                     pool += contribution;
                 }
             }
@@ -95,11 +95,11 @@ public class RevenueSharingManager {
         double share = pool / teamCount;
         for (Team team : teamRepositery.getAllTeams()) {
             Budget budget = team.getTeamFinance().getBudget();
-            FinanceUtilitary.addIncome(
+            FinanceUtility.addIncome(
                     budget,
                     new Income(IncomeType.EQUAL_SHARE, share),
                     month);
-            FinanceUtilitary.updateBudget(budget);
+            FinanceUtility.updateBudget(budget);
         }
     }
 
@@ -125,12 +125,12 @@ public class RevenueSharingManager {
                 double need = leagueAverage - adjustedLocalRevenue;
                 double share = (need / totalNeed) * pool;
 
-                FinanceUtilitary.addIncome(
+                FinanceUtility.addIncome(
                         budget,
                         new Income(IncomeType.EQUAL_SHARE, share),
                         month);
 
-                FinanceUtilitary.updateBudget(budget);
+                FinanceUtility.updateBudget(budget);
             }
         }
     }
@@ -200,13 +200,13 @@ public class RevenueSharingManager {
     }
 
     private double getRegularSeasonRevenueBase(Team team, int month) {
-        return FinanceUtilitary.getTeamIncomeOfMonthForRegularSeason(team, month)
-                + FinanceUtilitary.getTeamIncomeOfMonthForBoth(team, month);
+        return FinanceUtility.getTeamIncomeOfMonthForRegularSeason(team, month)
+                + FinanceUtility.getTeamIncomeOfMonthForBoth(team, month);
     }
 
     private double calculateRevenueContextFactor(Team team) {
         double factor = 0.75;
-        double valueFactor = FinanceUtilitary.getNormalizedTeamValue(team);
+        double valueFactor = FinanceUtility.getNormalizedTeamValue(team);
 
         MarketSize marketSize = team.getTeamFinance().getMarketSize();
         MediaMarket mediaMarket = team.getTeamFinance().getMediaMarket();

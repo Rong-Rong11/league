@@ -18,7 +18,7 @@ import process.builder.calendar.tools.GameGenerator;
 import process.builder.calendar.tools.GameSelector;
 import process.builder.calendar.tools.ScheduleNotifier;
 import process.builder.calendar.tools.SpecialEventPlanner;
-import process.utility.CalendarUtilitary;
+import process.utility.CalendarUtility;
 
 public class RegularSeasonCalendarBuilder extends CalendarBuilder {
 	private GameSelector gameSelector;
@@ -29,7 +29,7 @@ public class RegularSeasonCalendarBuilder extends CalendarBuilder {
 	}
 
 	private void specialEventsPlacement() {
-		SpecialEventPlanner.specialEventsPlacement(getLeague().getReagularSeason());
+		SpecialEventPlanner.specialEventsPlacement(getLeague().getRegularSeason());
 	}
 
 	protected void generateGames() {
@@ -38,7 +38,7 @@ public class RegularSeasonCalendarBuilder extends CalendarBuilder {
 
 	public NBACalendar build() {
 		specialEventsPlacement();
-		RegularSeason regularSeason = getLeague().getReagularSeason();
+		RegularSeason regularSeason = getLeague().getRegularSeason();
 		TreeMap<LocalDate, GameDay> calendar = new TreeMap<LocalDate, GameDay>();
 		LocalDate debutDate = regularSeason.getDebutDate();
 		LocalDate endDate = regularSeason.getEndDate();
@@ -102,8 +102,8 @@ public class RegularSeasonCalendarBuilder extends CalendarBuilder {
 		@Override
 		public int compare(Game gameA, Game gameB) {
 			return Double.compare(
-					CalendarUtilitary.popularityScoreGame(gameB, date),
-					CalendarUtilitary.popularityScoreGame(gameA, date));
+					CalendarUtility.popularityScoreGame(gameB, date),
+					CalendarUtility.popularityScoreGame(gameA, date));
 		}
 	}
 

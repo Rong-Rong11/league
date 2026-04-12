@@ -75,7 +75,7 @@ public class GameManager {
 	}
 
 	public boolean simulateRegularSeasonDay(LocalDate date, int month) {
-		RegularSeason regularSeason = league.getReagularSeason();
+		RegularSeason regularSeason = league.getRegularSeason();
 		TreeMap<LocalDate, GameDay> regularSeasonCalendar = regularSeason.getNbaCalendar().getCalendar();
 		GameDay gameDay = regularSeasonCalendar.get(date);
 
@@ -130,11 +130,11 @@ public class GameManager {
 	}
 
 	public Team getRegularSeasonWestWinner() {
-		return league.getReagularSeason().getRanking().getWestRanking().get(1);
+		return league.getRegularSeason().getRanking().getWestRanking().get(1);
 	}
 
 	public Team getRegularSeasonEastWinner() {
-		return league.getReagularSeason().getRanking().getEastRanking().get(1);
+		return league.getRegularSeason().getRanking().getEastRanking().get(1);
 	}
 
 	public ArrayList<Team> getGlobalRanking() {

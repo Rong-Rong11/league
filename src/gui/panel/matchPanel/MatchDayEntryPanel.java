@@ -1,8 +1,5 @@
 package gui.panel.matchPanel;
 
-import data.sport.setup.Game;
-import process.utility.TeamDisplayUtil;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,9 +16,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import data.sport.setup.Game;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
+import process.utility.TeamDisplayUtility;
 
 public class MatchDayEntryPanel extends JPanel implements ThemeAware {
 	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
@@ -53,8 +53,8 @@ public class MatchDayEntryPanel extends JPanel implements ThemeAware {
 		textPanel.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
 		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 
-		teamLabel = createTeamLabel(TeamDisplayUtil.getShortName(game.getGameContext().getHomeTeam()));
-		opponentLabel = createOpponentLabel(TeamDisplayUtil.getShortName(game.getGameContext().getAwayTeam()));
+		teamLabel = createTeamLabel(TeamDisplayUtility.getShortName(game.getGameContext().getHomeTeam()));
+		opponentLabel = createOpponentLabel(TeamDisplayUtility.getShortName(game.getGameContext().getAwayTeam()));
 		statusLabel = createStatusLabel(displayed ? "Termine" : "A venir", displayed);
 		textPanel.add(teamLabel);
 		textPanel.add(opponentLabel);
@@ -66,7 +66,8 @@ public class MatchDayEntryPanel extends JPanel implements ThemeAware {
 			scorePanel.setOpaque(false);
 			scorePanel.setLayout(new BoxLayout(scorePanel, BoxLayout.Y_AXIS));
 			scorePanel.setPreferredSize(new Dimension(40, 30));
-			scoreLabels = new JLabel[] { createScoreLabel(game.getHomeFinalScore()), createScoreLabel(game.getAwayFinalScore()) };
+			scoreLabels = new JLabel[] { createScoreLabel(game.getHomeFinalScore()),
+					createScoreLabel(game.getAwayFinalScore()) };
 			scorePanel.add(scoreLabels[0]);
 			scorePanel.add(scoreLabels[1]);
 			centerPanel.add(scorePanel, BorderLayout.EAST);

@@ -4,7 +4,7 @@ import config.FinanceConfiguration;
 import data.team.Team;
 import data.team.finance.transfer.TeamTransferStrategy;
 import process.repositery.TeamRepositery;
-import process.utility.TeamUtilitary;
+import process.utility.TeamUtility;
 import process.visitor.teamtransfer.EvaluateSeasonIntentVisitor;
 
 public class TradeFinder {
@@ -59,7 +59,7 @@ public class TradeFinder {
 
             return false;
         }
-        if (!TeamUtilitary.getTeamSportProfile(teamA).equals(TeamUtilitary.getTeamSportProfile(teamB))) {
+        if (!TeamUtility.getTeamSportProfile(teamA).equals(TeamUtility.getTeamSportProfile(teamB))) {
             return true;
         }
 

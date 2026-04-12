@@ -25,8 +25,8 @@ import process.simulator.gametools.EventSimulator;
 import process.simulator.gametools.HealthManager;
 import process.simulator.gametools.InjuryManager;
 import process.simulator.gametools.LineupSelector;
-import process.utility.PlayerUtilitary;
-import process.utility.TeamUtilitary;
+import process.utility.PlayerUtility;
+import process.utility.TeamUtility;
 import process.visitor.actionresult.ActionResultVisitor;
 import process.visitor.actionresult.AssetUpdateVisitor;
 import process.visitor.actionresult.GameResultVisitor;
@@ -86,6 +86,9 @@ public class GameSimulator {
 
 					if (offensiveTry.getName().equals(GameConfiguration.THREEPOINT)) {
 						actionResults.add(new PointScored(GameConfiguration.SCORED_ACTION, 3, attackingPlayer,
+								assistPlayer));
+					} else if (offensiveTry.getName().equals(GameConfiguration.FOULDRAW)) {
+						actionResults.add(new PointScored(GameConfiguration.SCORED_ACTION, 1, attackingPlayer,
 								assistPlayer));
 					} else {
 						actionResults.add(new PointScored(GameConfiguration.SCORED_ACTION, 2, attackingPlayer,
@@ -241,7 +244,7 @@ public class GameSimulator {
 
 	private void updateCurrentSeasonAsset(Team team, HashMap<Player, Asset> playersNewAssets) {
 		for (Player player : team.getCurrentPlayers().values()) {
-			PlayerUtilitary.updateAsset(player, playersNewAssets.get(player));
+			PlayerUtility.updateAsset(player, playersNewAssets.get(player));
 			// faire maj note du joueur
 		}
 	}
@@ -280,25 +283,25 @@ public class GameSimulator {
 
 			homePerformance.incrementNumberWin();
 			awayPerformance.incrementNumberLose();
-			TeamUtilitary.updatePerformanceRating(homeTeam, awayTeam, 1, scoreDifference, awayTeam.getCurrentPopularity());
-			TeamUtilitary.updatePerformanceRating(awayTeam, homeTeam, -1, scoreDifference,
+			TeamUtility.updatePerformanceRating(homeTeam, awayTeam, 1, scoreDifference, awayTeam.getCurrentPopularity());
+			TeamUtility.updatePerformanceRating(awayTeam, homeTeam, -1, scoreDifference,
 					homeTeam.getCurrentPopularity());
-			TeamUtilitary.updateStreak(homeTeam, true);
-			TeamUtilitary.updateStreak(awayTeam, false);
+			TeamUtility.updateStreak(homeTeam, true);
+			TeamUtility.updateStreak(awayTeam, false);
 		} else if (totalAway > totalHome) {
 			game.setWinner(awayTeam);
 			game.setLoser(homeTeam);
 			int scoreDifference = totalAway - totalHome;
 			homeTeam.getTeamPerformance().incrementNumberLose();
 			awayTeam.getTeamPerformance().incrementNumberWin();
-			TeamUtilitary.updatePerformanceRating(homeTeam, awayTeam, -1, scoreDifference,
+			TeamUtility.updatePerformanceRating(homeTeam, awayTeam, -1, scoreDifference,
 					awayTeam.getCurrentPopularity());
-			TeamUtilitary.updatePerformanceRating(awayTeam, homeTeam, 1, scoreDifference, homeTeam.getCurrentPopularity());
-			TeamUtilitary.updateStreak(homeTeam, false);
-			TeamUtilitary.updateStreak(awayTeam, true);
+			TeamUtility.updatePerformanceRating(awayTeam, homeTeam, 1, scoreDifference, homeTeam.getCurrentPopularity());
+			TeamUtility.updateStreak(homeTeam, false);
+			TeamUtility.updateStreak(awayTeam, true);
 		} else {
-			TeamUtilitary.updatePerformanceRating(homeTeam, awayTeam, 0, 0, awayTeam.getCurrentPopularity());
-			TeamUtilitary.updatePerformanceRating(awayTeam, homeTeam, 0, 0, homeTeam.getCurrentPopularity());
+			TeamUtility.updatePerformanceRating(homeTeam, awayTeam, 0, 0, awayTeam.getCurrentPopularity());
+			TeamUtility.updatePerformanceRating(awayTeam, homeTeam, 0, 0, homeTeam.getCurrentPopularity());
 		}
 
 		updateCurrentSeasonAsset(homeTeam, playersNewAssets);

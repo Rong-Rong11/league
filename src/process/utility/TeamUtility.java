@@ -1,13 +1,10 @@
 package process.utility;
 
-import java.util.ArrayList;
-
 import config.GameConfiguration;
 import data.league.Conference;
 import data.league.Division;
 import data.league.League;
 import data.player.Player;
-import data.sport.setup.Game;
 import data.team.Team;
 import data.team.TeamPerformance;
 import data.team.finance.financialpolicy.AmbitiousPolicy;
@@ -19,14 +16,14 @@ import data.team.finance.marketsize.MarketSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
 
-public class TeamUtilitary {
+public class TeamUtility {
 
     private static double getTeamAttackNote(Team team) {
         double sumOfNote = 0;
         double numberOfPlayer = 0;
         double note;
         for (Player player : team.getCurrentPlayers().values()) {
-            sumOfNote += PlayerUtilitary.getPlayerAttackNote(player);
+            sumOfNote += PlayerUtility.getPlayerAttackNote(player);
             numberOfPlayer++;
         }
         note = sumOfNote / numberOfPlayer;
@@ -39,7 +36,7 @@ public class TeamUtilitary {
         double numberOfPlayer = 0;
         double note;
         for (Player player : team.getCurrentPlayers().values()) {
-            sumOfNote += PlayerUtilitary.getPlayerDefenseNote(player);
+            sumOfNote += PlayerUtility.getPlayerDefenseNote(player);
             numberOfPlayer++;
         }
         note = sumOfNote / numberOfPlayer;

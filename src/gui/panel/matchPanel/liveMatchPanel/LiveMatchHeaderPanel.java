@@ -2,7 +2,7 @@ package gui.panel.matchPanel.liveMatchPanel;
 
 import data.team.Team;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
-import process.utility.TeamDisplayUtil;
+import process.utility.TeamDisplayUtility;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -96,7 +96,7 @@ public class LiveMatchHeaderPanel extends RoundedPanel implements ThemeAware {
 			homeNameLabel.setText("Equipe");
 		} else {
 			homeLogoPanel.setTeamName(homeTeam.getName());
-			homeNameLabel.setText(TeamDisplayUtil.getShortName(homeTeam));
+			homeNameLabel.setText(TeamDisplayUtility.getShortName(homeTeam));
 		}
 
 		if (awayTeam == null) {
@@ -104,7 +104,7 @@ public class LiveMatchHeaderPanel extends RoundedPanel implements ThemeAware {
 			awayNameLabel.setText("Equipe");
 		} else {
 			awayLogoPanel.setTeamName(awayTeam.getName());
-			awayNameLabel.setText(TeamDisplayUtil.getShortName(awayTeam));
+			awayNameLabel.setText(TeamDisplayUtility.getShortName(awayTeam));
 		}
 
 		homeScoreLabel.setText(String.valueOf(homeScore));

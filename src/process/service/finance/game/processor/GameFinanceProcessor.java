@@ -9,7 +9,7 @@ import data.league.League;
 import data.sport.setup.Game;
 import process.service.finance.game.GameExpenseCalculator;
 import process.service.finance.game.GameRevenueCalculator;
-import process.utility.FinanceUtilitary;
+import process.utility.FinanceUtility;
 
 public abstract class GameFinanceProcessor {
     private League league;
@@ -25,11 +25,11 @@ public abstract class GameFinanceProcessor {
 
         GameRevenueCalculator revenueCalculator = createRevenueCalculator(league, gameStat);
         revenueCalculator.calculateGameRevenue(game, date);
-        FinanceUtilitary.addGameRevenue(game, gameStat, month, seasonMoment);
+        FinanceUtility.addGameRevenue(game, gameStat, month, seasonMoment);
 
         GameExpenseCalculator expenseCalculator = createExpenseCalculator(gameStat);
         expenseCalculator.calculateGameExpenses(game);
-        FinanceUtilitary.addGameExpense(game, gameStat, month, seasonMoment);
+        FinanceUtility.addGameExpense(game, gameStat, month, seasonMoment);
 
         gameStats.put(game, gameStat);
     }

@@ -35,11 +35,11 @@ public class League {
         this.easternConference = conference;
     }
 
-    public RegularSeason getReagularSeason() {
+    public RegularSeason getRegularSeason() {
         return this.regularSeason;
     }
 
-    public void setReagularSeason(RegularSeason regularSeason) {
+    public void setRegularSeason(RegularSeason regularSeason) {
         this.regularSeason = regularSeason;
     }
 

@@ -13,8 +13,8 @@ import data.calendar.GameDay;
 import data.sport.setup.Game;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedPanel;
+import process.utility.TeamDisplayUtility;
 import process.visitor.gamemoment.GameMomentSlotKeyVisitor;
-import process.utility.TeamDisplayUtil;
 
 public class WeekScheduleCardFactory {
 	public ArrayList<Game> getGamesForSlot(GameDay gameDay, String slotKey) {
@@ -42,8 +42,8 @@ public class WeekScheduleCardFactory {
 	}
 
 	private JLabel buildMatchupLabel(Game game, String slotKey) {
-		String awayTeam = TeamDisplayUtil.getAbbreviation(game.getGameContext().getAwayTeam());
-		String homeTeam = TeamDisplayUtil.getAbbreviation(game.getGameContext().getHomeTeam());
+		String awayTeam = TeamDisplayUtility.getAbbreviation(game.getGameContext().getAwayTeam());
+		String homeTeam = TeamDisplayUtility.getAbbreviation(game.getGameContext().getHomeTeam());
 		JLabel matchupLabel = new JLabel(awayTeam + " vs " + homeTeam);
 		matchupLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
 		matchupLabel.setForeground(getTitleColor(slotKey));
@@ -65,8 +65,8 @@ public class WeekScheduleCardFactory {
 	}
 
 	private JLabel buildTeamsLabel(Game game, String slotKey) {
-		String detailText = TeamDisplayUtil.getShortName(game.getGameContext().getAwayTeam()) + " vs "
-				+ TeamDisplayUtil.getShortName(game.getGameContext().getHomeTeam());
+		String detailText = TeamDisplayUtility.getShortName(game.getGameContext().getAwayTeam()) + " vs "
+				+ TeamDisplayUtility.getShortName(game.getGameContext().getHomeTeam());
 		JLabel teamsLabel = new JLabel(detailText);
 		teamsLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
 		teamsLabel.setForeground(getSubtitleColor(slotKey));
@@ -83,7 +83,6 @@ public class WeekScheduleCardFactory {
 		}
 		return DashboardPanelUtil.getCalendarSlotDisplayedColor(slotKey);
 	}
-
 
 	private Color getTitleColor(String slotKey) {
 		return DashboardPanelUtil.getCalendarSlotTitleColor(slotKey);

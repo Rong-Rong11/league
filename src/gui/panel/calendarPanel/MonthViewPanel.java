@@ -1,16 +1,7 @@
 package gui.panel.calendarPanel;
 
-import data.calendar.GameDay;
-import data.sport.setup.Game;
-import gui.dashboard.MatchDashboard;
-import gui.panel.common.DashboardPanelUtil;
-import gui.panel.common.RoundedPanel;
-import gui.panel.common.ThemeAware;
-import process.utility.CalendarUtilitary;
-import process.utility.TeamDisplayUtil;
-
-import java.awt.Color;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -22,10 +13,20 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import data.calendar.GameDay;
+import data.sport.setup.Game;
+import gui.dashboard.MatchDashboard;
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.RoundedPanel;
+import gui.panel.common.ThemeAware;
+import process.utility.CalendarUtility;
+import process.utility.TeamDisplayUtility;
 
 public class MonthViewPanel extends JPanel implements ThemeAware {
 	private static final String[] DAY_NAMES = { "LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM" };
@@ -125,8 +126,8 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 			ArrayList<Game> displayedGames = getBestGames(gameDay.getGames(), date);
 			int matchCount = Math.min(2, displayedGames.size());
 			for (int i = 0; i < matchCount; i++) {
-				String homeTeam = TeamDisplayUtil.getAbbreviation(displayedGames.get(i).getGameContext().getHomeTeam());
-				String awayTeam = TeamDisplayUtil.getAbbreviation(displayedGames.get(i).getGameContext().getAwayTeam());
+				String homeTeam = TeamDisplayUtility.getAbbreviation(displayedGames.get(i).getGameContext().getHomeTeam());
+				String awayTeam = TeamDisplayUtility.getAbbreviation(displayedGames.get(i).getGameContext().getAwayTeam());
 				boolean hasBottomSpacing = i < matchCount - 1;
 				matchesPanel.add(buildMatchLabel(homeTeam + " vs " + awayTeam, hasBottomSpacing ? 4 : 0));
 			}
@@ -199,8 +200,8 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 			Game bestGame = remainingGames.get(0);
 
 			for (int i = 1; i < remainingGames.size(); i++) {
-				double currentScore = CalendarUtilitary.popularityScoreGame(remainingGames.get(i), date);
-				double bestScore = CalendarUtilitary.popularityScoreGame(bestGame, date);
+				double currentScore = CalendarUtility.popularityScoreGame(remainingGames.get(i), date);
+				double bestScore = CalendarUtility.popularityScoreGame(bestGame, date);
 
 				if (currentScore > bestScore) {
 					bestGame = remainingGames.get(i);

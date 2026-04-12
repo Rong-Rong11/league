@@ -17,7 +17,7 @@ import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import process.orchestrator.GUIInterface;
-import process.utility.TeamDisplayUtil;
+import process.utility.TeamDisplayUtility;
 
 public class MapTeamSummaryPanel extends JPanel implements ThemeAware {
 
@@ -162,7 +162,7 @@ public class MapTeamSummaryPanel extends JPanel implements ThemeAware {
 	private void showTeamState(Team team, boolean currentSeasonSelected) {
 		teamLogoPanel.setTeamName(team.getName());
 		teamNameLabel.setText(team.getName());
-		cityLabel.setText(TeamDisplayUtil.getCityName(team));
+		cityLabel.setText(TeamDisplayUtility.getCityName(team));
 		conferenceLabel.setText(guiInterface.getConferenceName(team));
 		divisionLabel.setText(guiInterface.getDivisionName(team));
 		arenaLabel.setText(team.getStadium().getName());

@@ -1,13 +1,14 @@
 package gui.panel.mapPanel.effectifPanel.teamPanel;
 
+import java.awt.GridLayout;
+import java.util.ArrayList;
+
+import javax.swing.JPanel;
+
 import data.player.Player;
 import data.team.Team;
 import gui.panel.mapPanel.effectifPanel.playerPanel.PlayerRosterEntryPanel;
-import process.utility.PlayerStatUtil;
-
-import java.awt.GridLayout;
-import java.util.ArrayList;
-import javax.swing.JPanel;
+import process.utility.PlayerStatUtility;
 
 public class TeamRosterPanel extends JPanel {
 
@@ -30,7 +31,7 @@ public class TeamRosterPanel extends JPanel {
 			players = new ArrayList<Player>(team.getFormerPlayers().values());
 		}
 
-		PlayerStatUtil.sortPlayersByDisplayedNote(players);
+		PlayerStatUtility.sortPlayersByDisplayedNote(players);
 
 		int rows = 8;
 		int columns = (int) Math.ceil(players.size() / 8.0);

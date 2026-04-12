@@ -17,7 +17,7 @@ import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import process.visitor.marketsize.CalculateGamePopularityVisitor;
 
-public class CalendarUtilitary {
+public class CalendarUtility {
 
     public static boolean isWeekend(LocalDate localDate) {
         return localDate.getDayOfWeek() == DayOfWeek.SATURDAY

@@ -11,8 +11,8 @@ import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
-import process.utility.CalendarUtilitary;
-import process.utility.FinanceUtilitary;
+import process.utility.CalendarUtility;
+import process.utility.FinanceUtility;
 import process.visitor.gamemoment.GameMomentAttendanceBonusVisitor;
 import process.visitor.marketsize.CalculateBaseTicketVisitor;
 
@@ -45,7 +45,7 @@ public abstract class GameRevenueCalculator {
     protected double calculatePopularityRate(Game game, LocalDate date) {
         Team homeTeam = game.getGameContext().getHomeTeam();
 
-        double gamePopularity = CalendarUtilitary.popularityScoreGame(game, date);
+        double gamePopularity = CalendarUtility.popularityScoreGame(game, date);
         double gameScore = gamePopularity / 800;
 
         double performatingRate = (game.getGameContext().getHomeTeam().getTeamPerformance().getPerformanceRating()
@@ -68,7 +68,7 @@ public abstract class GameRevenueCalculator {
         MarketSize marketSize = homeTeam.getTeamFinance().getMarketSize();
         MediaMarket mediaMarket = homeTeam.getTeamFinance().getMediaMarket();
         EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
-        double teamValueFactor = FinanceUtilitary.getNormalizedTeamValue(homeTeam);
+        double teamValueFactor = FinanceUtility.getNormalizedTeamValue(homeTeam);
 
         double base = stadium.getTicketPrice();
         base = marketSize.accept(new CalculateBaseTicketVisitor());
@@ -103,10 +103,10 @@ public abstract class GameRevenueCalculator {
     protected double calculateAttendanceRate(Game game, LocalDate date, Team homeTeam, double popularityRate) {
         MediaMarket mediaMarket = homeTeam.getTeamFinance().getMediaMarket();
         EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
-        double teamValueFactor = FinanceUtilitary.getNormalizedTeamValue(homeTeam);
+        double teamValueFactor = FinanceUtility.getNormalizedTeamValue(homeTeam);
 
-        double importantDayBonus = CalendarUtilitary.isImportantDay(date)
-                || CalendarUtilitary.isSpecialEvent(league.getReagularSeason(), date) ? 0.20 : 0.0;
+        double importantDayBonus = CalendarUtility.isImportantDay(date)
+                || CalendarUtility.isSpecialEvent(league.getRegularSeason(), date) ? 0.20 : 0.0;
         double gameTimeBonus = getGameTimeAttendanceBonus(game);
 
         double attendanceRate = (0.36
@@ -242,7 +242,7 @@ public abstract class GameRevenueCalculator {
     protected void calculateMerchRevenue(Team homeTeam, double popularityRate, int attendees, Game game) {
         MediaMarket mediaMarket = homeTeam.getTeamFinance().getMediaMarket();
         EconomicProfil economicProfil = homeTeam.getTeamFinance().getEconomicProfil();
-        double teamValueFactor = FinanceUtilitary.getNormalizedTeamValue(homeTeam);
+        double teamValueFactor = FinanceUtility.getNormalizedTeamValue(homeTeam);
         boolean rivalryGame = game.getGameContext().isRivalry();
 
         double purchaseRate = 0.030 + (popularityRate * 0.040);

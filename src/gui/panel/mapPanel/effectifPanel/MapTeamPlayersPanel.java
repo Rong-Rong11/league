@@ -11,7 +11,7 @@ import data.player.Player;
 import data.team.Team;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
-import process.utility.PlayerStatUtil;
+import process.utility.PlayerStatUtility;
 
 public class MapTeamPlayersPanel extends JPanel implements ThemeAware {
 	private JLabel[] playerLabels;
@@ -52,13 +52,13 @@ public class MapTeamPlayersPanel extends JPanel implements ThemeAware {
 		} else {
 			players = new ArrayList<Player>(team.getFormerPlayers().values());
 		}
-		PlayerStatUtil.sortPlayersByDisplayedNote(players);
+		PlayerStatUtility.sortPlayersByDisplayedNote(players);
 
 		for (int i = 0; i < playerLabels.length; i++) {
 			if (i < players.size()) {
 				Player player = players.get(i);
 				playerLabels[i]
-						.setText((int) Math.round(PlayerStatUtil.getDisplayedNote(player)) + "  " + player.getName());
+						.setText((int) Math.round(PlayerStatUtility.getDisplayedNote(player)) + "  " + player.getName());
 			} else {
 				playerLabels[i].setText("-");
 			}

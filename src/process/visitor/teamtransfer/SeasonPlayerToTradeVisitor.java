@@ -11,7 +11,7 @@ import data.team.finance.transfer.Rebuild;
 import data.team.finance.transfer.SalaryDump;
 import data.team.finance.transfer.SmallAdjust;
 import data.team.finance.transfer.SuperstarBuild;
-import process.utility.PlayerUtilitary;
+import process.utility.PlayerUtility;
 
 public class SeasonPlayerToTradeVisitor implements TeamTransferVisitor<Player> {
     private Team team;
@@ -28,7 +28,7 @@ public class SeasonPlayerToTradeVisitor implements TeamTransferVisitor<Player> {
     private TreeMap<Double, Player> getPlayersSortedByOverall() {
         TreeMap<Double, Player> sorted = new TreeMap<>();
         for (Player p : team.getCurrentPlayers().values()) {
-            sorted.put(PlayerUtilitary.getPlayerOverAllNote(p), p);
+            sorted.put(PlayerUtility.getPlayerOverAllNote(p), p);
         }
         return sorted;
     }

@@ -1,7 +1,6 @@
 package gui.panel.rankingPanel;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -18,10 +17,10 @@ import gui.panel.common.DashboardCard;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.common.RoundedPanel;
-import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import gui.panel.common.ThemeAware;
+import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import process.orchestrator.GUIInterface;
-import process.utility.TeamDisplayUtil;
+import process.utility.TeamDisplayUtility;
 
 public class RankingPerformancePanel extends JPanel implements ThemeAware {
 	private static final int CARD_HEIGHT = 108;
@@ -65,7 +64,8 @@ public class RankingPerformancePanel extends JPanel implements ThemeAware {
 		lastDetailBadge = createDetailBadge(lastDetailLabel);
 
 		add(createPerformanceCard("Leader", leaderLogoPanel, leaderTeamValue, leaderStatsLabel, leaderDetailBadge));
-		add(createPerformanceCard("Meilleure serie", streakLogoPanel, streakTeamValue, streakStatsLabel, streakDetailBadge));
+		add(createPerformanceCard("Meilleure serie", streakLogoPanel, streakTeamValue, streakStatsLabel,
+				streakDetailBadge));
 		add(createPerformanceCard("Derniere place", lastLogoPanel, lastTeamValue, lastStatsLabel, lastDetailBadge));
 		refreshPerformance();
 		applyTheme();
@@ -92,7 +92,7 @@ public class RankingPerformancePanel extends JPanel implements ThemeAware {
 			streakStatsLabel.setText("-");
 		} else {
 			streakLogoPanel.setTeamName(bestStreakTeam.getName());
-			streakTeamValue.setText(TeamDisplayUtil.getShortName(bestStreakTeam));
+			streakTeamValue.setText(TeamDisplayUtility.getShortName(bestStreakTeam));
 			streakDetailLabel.setText(guiInterface.getTeamMaxWinStreak(bestStreakTeam) + " victoires");
 			streakStatsLabel.setText(buildStatsText(bestStreakTeam));
 		}
@@ -126,11 +126,13 @@ public class RankingPerformancePanel extends JPanel implements ThemeAware {
 		return bestTeam;
 	}
 
-	private void updateTeamBlock(TeamLogoPanel logoPanel, JLabel teamValue, JLabel statsLabel, JLabel detailLabel, Team team) {
+	private void updateTeamBlock(TeamLogoPanel logoPanel, JLabel teamValue, JLabel statsLabel, JLabel detailLabel,
+			Team team) {
 		logoPanel.setTeamName(team.getName());
-		teamValue.setText(TeamDisplayUtil.getShortName(team));
+		teamValue.setText(TeamDisplayUtility.getShortName(team));
 		statsLabel.setText(buildStatsText(team));
-		detailLabel.setText("V " + guiInterface.getTeamNumberWin(team) + "  |  D " + guiInterface.getTeamNumberLose(team));
+		detailLabel
+				.setText("V " + guiInterface.getTeamNumberWin(team) + "  |  D " + guiInterface.getTeamNumberLose(team));
 	}
 
 	private String buildStatsText(Team team) {

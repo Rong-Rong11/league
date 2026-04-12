@@ -1,13 +1,12 @@
 package process.simulator.gametools;
 
-import config.GameConfiguration;
-
 import java.util.TreeMap;
 
+import config.GameConfiguration;
 import data.player.Asset;
 import data.player.Player;
 import data.sport.play.OffensiveTry;
-import process.utility.PlayerUtilitary;
+import process.utility.PlayerUtility;
 
 public class ActionSimulator {
 
@@ -16,8 +15,8 @@ public class ActionSimulator {
 	}
 
 	public boolean effectiveTurnover(Player attackingPlayer, Player defendingPlayer) {
-		double playerDefenseNote = Math.min(PlayerUtilitary.getPlayerDefenseNote(defendingPlayer), 2);
-		double playerAttackNote = Math.min(PlayerUtilitary.getPlayerAttackNote(attackingPlayer), 2);
+		double playerDefenseNote = Math.min(PlayerUtility.getPlayerDefenseNote(defendingPlayer), 2);
+		double playerAttackNote = Math.min(PlayerUtility.getPlayerAttackNote(attackingPlayer), 2);
 		double noteGap = Math.max(0, playerDefenseNote - playerAttackNote);
 		double turnoverProbability = 0.05 + (noteGap * 0.06);
 		turnoverProbability = Math.min(turnoverProbability, 0.12);
@@ -51,7 +50,7 @@ public class ActionSimulator {
 		double numberOfPlayer = 0;
 		double note;
 		for (Player player : defensivePlayers.values()) {
-			sumOfNote += PlayerUtilitary.getPlayerDefenseNote(player);
+			sumOfNote += PlayerUtility.getPlayerDefenseNote(player);
 			numberOfPlayer++;
 		}
 		note = sumOfNote / numberOfPlayer;

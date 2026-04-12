@@ -14,16 +14,16 @@ import data.team.Team;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import process.repositery.TeamRepositery;
-import process.service.finance.expense.LeagueExpenseCalculator;
 import process.service.finance.distribution.CentralRevenueDistributor;
-import process.service.finance.initialization.FinanceInitializer;
+import process.service.finance.expense.LeagueExpenseCalculator;
 import process.service.finance.game.processor.PlayoffGameFinanceProcessor;
 import process.service.finance.game.processor.RegularSeasonGameFinanceProcessor;
+import process.service.finance.initialization.FinanceInitializer;
 import process.service.finance.playoff.PlayoffFinancialRules;
 import process.service.finance.team.PlayoffMonthlyTeamFinanceCalculator;
 import process.service.finance.team.RegularSeasonMonthlyTeamFinanceCalculator;
-import process.utility.FinanceUtilitary;
-import process.utility.TeamUtilitary;
+import process.utility.FinanceUtility;
+import process.utility.TeamUtility;
 import process.visitor.financialprofil.ChooseTransferStrategyVisitor;
 
 public class FinanceManager {
@@ -150,7 +150,7 @@ public class FinanceManager {
     // Team finance setup
     public void randomFinancialPolicy() {
         for (Team team : teamRepository.getAllTeams()) {
-            FinancialPolicy financialPolicy = TeamUtilitary.randomFinancialProfil();
+            FinancialPolicy financialPolicy = TeamUtility.randomFinancialProfil();
             chooseFinancialPolicy(team, financialPolicy);
         }
     }
@@ -167,7 +167,7 @@ public class FinanceManager {
 
     public void randomMarketSize() {
         for (Team team : teamRepository.getAllTeams()) {
-            MarketSize marketSize = TeamUtilitary.randomMarketSize();
+            MarketSize marketSize = TeamUtility.randomMarketSize();
             chooseMarketSize(team, marketSize);
         }
     }
@@ -180,12 +180,12 @@ public class FinanceManager {
     public void applyPlayoffQualificationBonus(Team team, int month) {
         double bonus = 0.8;
 
-        FinanceUtilitary.addIncome(
+        FinanceUtility.addIncome(
                 team.getTeamFinance().getBudget(),
                 new Income(IncomeType.PLAYOFF_QUALIFICATION_BONUS, bonus),
                 month);
 
-        FinanceUtilitary.updateBudget(team.getTeamFinance().getBudget());
+        FinanceUtility.updateBudget(team.getTeamFinance().getBudget());
     }
 
     public void applyPlayoffQualificationBonus(ArrayList<Team> teams, int month) {
@@ -202,11 +202,11 @@ public class FinanceManager {
             return;
         }
 
-        FinanceUtilitary.addIncome(
+        FinanceUtility.addIncome(
                 team.getTeamFinance().getBudget(),
                 new Income(IncomeType.PLAYOFF_ROUND_BONUS, bonus),
                 month);
 
-        FinanceUtilitary.updateBudget(team.getTeamFinance().getBudget());
+        FinanceUtility.updateBudget(team.getTeamFinance().getBudget());
     }
 }

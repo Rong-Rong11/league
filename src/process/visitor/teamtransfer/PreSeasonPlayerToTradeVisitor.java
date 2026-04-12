@@ -13,7 +13,7 @@ import data.team.finance.transfer.Rebuild;
 import data.team.finance.transfer.SalaryDump;
 import data.team.finance.transfer.SmallAdjust;
 import data.team.finance.transfer.SuperstarBuild;
-import process.utility.PlayerUtilitary;
+import process.utility.PlayerUtility;
 
 public class PreSeasonPlayerToTradeVisitor
         implements TeamTransferVisitor<Player> {
@@ -27,7 +27,7 @@ public class PreSeasonPlayerToTradeVisitor
     public Player visit(AllIn allIn) {
         TreeMap<Double, Player> treeMap = new TreeMap<Double, Player>();
         for (Player object : this.team.getCurrentPlayers().values()) {
-            treeMap.put(PlayerUtilitary.getPlayerOverAllNote(object), object);
+            treeMap.put(PlayerUtility.getPlayerOverAllNote(object), object);
         }
         int n = 0;
         for (Double d : treeMap.descendingKeySet()) {
@@ -47,7 +47,7 @@ public class PreSeasonPlayerToTradeVisitor
     public Player visit(SuperstarBuild superstarBuild) {
         TreeMap<Double, Player> treeMap = new TreeMap<Double, Player>();
         for (Player object : this.team.getCurrentPlayers().values()) {
-            treeMap.put(PlayerUtilitary.getPlayerOverAllNote(object), object);
+            treeMap.put(PlayerUtility.getPlayerOverAllNote(object), object);
         }
         int n = 0;
         for (Double d : treeMap.descendingKeySet()) {
@@ -67,7 +67,7 @@ public class PreSeasonPlayerToTradeVisitor
     public Player visit(SmallAdjust smallAdjust) {
         TreeMap<Double, Player> treeMap = new TreeMap<Double, Player>();
         for (Player object : this.team.getCurrentPlayers().values()) {
-            treeMap.put(PlayerUtilitary.getPlayerOverAllNote(object), object);
+            treeMap.put(PlayerUtility.getPlayerOverAllNote(object), object);
         }
         int n = 0;
         for (Double d : treeMap.keySet()) {
@@ -87,7 +87,7 @@ public class PreSeasonPlayerToTradeVisitor
     public Player visit(Balanced balanced) {
         TreeMap<Double, Player> treeMap = new TreeMap<Double, Player>();
         for (Player player : this.team.getCurrentPlayers().values()) {
-            treeMap.put(PlayerUtilitary.getPlayerOverAllNote(player), player);
+            treeMap.put(PlayerUtility.getPlayerOverAllNote(player), player);
         }
         int n = treeMap.size() / 2;
         int n2 = n + 3;
@@ -108,7 +108,7 @@ public class PreSeasonPlayerToTradeVisitor
     public Player visit(Rebuild rebuild) {
         TreeMap<Double, Player> treeMap = new TreeMap<Double, Player>();
         for (Player object : this.team.getCurrentPlayers().values()) {
-            treeMap.put(PlayerUtilitary.getPlayerOverAllNote(object), object);
+            treeMap.put(PlayerUtility.getPlayerOverAllNote(object), object);
         }
         for (Double d : treeMap.descendingKeySet()) {
             Player player = (Player) treeMap.get(d);

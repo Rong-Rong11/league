@@ -1,10 +1,11 @@
 package process.utility;
 
-import data.player.Asset;
-import data.player.Player;
 import java.util.ArrayList;
 
-public class PlayerStatUtil {
+import data.player.Asset;
+import data.player.Player;
+
+public class PlayerStatUtility {
 
    public static Asset getDisplayedAssets(Player player, boolean currentSeasonSelected) {
       if (!currentSeasonSelected) {
