@@ -17,7 +17,7 @@ public class FinanceConfiguration {
     public static final double LEAGUE_MARKETING_COST = 0.42;
     public static final double LEAGUE_OFFICIATING_COST = 0.28;
 
-    public static final double MARKET_SIZE_SMALL_MULTIPLIER = 0.95;
+    public static final double MARKET_SIZE_SMALL_MULTIPLIER = 1.00;
     public static final double MARKET_SIZE_MEDIUM_MULTIPLIER = 1;
     public static final double MARKET_SIZE_LARGE_MULTIPLIER = 1.3;
 

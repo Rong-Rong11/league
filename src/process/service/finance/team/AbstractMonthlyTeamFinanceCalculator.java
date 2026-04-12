@@ -51,20 +51,20 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
                 localSponsoring *= (1 + economicProfil.getCommercialAggressiveness() * 0.30);
                 localSponsoring *= (1 + economicProfil.getHistoricalPrestige() * 0.15);
                 localSponsoring *= (1 + teamValueFactor * 0.25);
-                localSponsoring *= getSmallMarketRevenueBoost(marketSize, 1.15);
+                localSponsoring *= getSmallMarketRevenueBoost(marketSize, 1.25);
                 localSponsoring *= getLocalSponsoringMultiplier();
                 localSponsoring *= getMonthlyLocalRevenueRate(team, month, 0.035, 0.020);
 
                 localMerchandising *= (1 + economicProfil.getFanLoyalty() * 0.25);
                 localMerchandising *= (1 + economicProfil.getHistoricalPrestige() * 0.20);
                 localMerchandising *= (1 + teamValueFactor * 0.22);
-                localMerchandising *= getSmallMarketRevenueBoost(marketSize, 1.18);
+                localMerchandising *= getSmallMarketRevenueBoost(marketSize, 1.30);
                 localMerchandising *= getLocalMerchandisingMultiplier();
                 localMerchandising *= getMonthlyLocalRevenueRate(team, month, 0.060, 0.030);
 
                 otherRevenue *= (1 + economicProfil.getOwnerDeficitTolerance() * 0.08);
                 otherRevenue *= (1 + teamValueFactor * 0.15);
-                otherRevenue *= getSmallMarketRevenueBoost(marketSize, 1.12);
+                otherRevenue *= getSmallMarketRevenueBoost(marketSize, 1.20);
                 otherRevenue *= getOtherRevenueMultiplier();
                 otherRevenue *= getMonthlyLocalRevenueRate(team, month, 0.045, 0.022);
 
