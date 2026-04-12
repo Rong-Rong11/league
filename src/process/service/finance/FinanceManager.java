@@ -38,7 +38,7 @@ public class FinanceManager {
 
     public FinanceManager(League league) {
         revenueSharingManager = new RevenueSharingManager(league);
-        monthlyTeamFinanceCalculator = new MonthlyTeamFinanceCalculator();
+        monthlyTeamFinanceCalculator = new MonthlyTeamFinanceCalculator(league);
         centralRevenueDistributor = new CentralRevenueDistributor(league);
         leagueExpenseCalculator = new LeagueExpenseCalculator(league);
 

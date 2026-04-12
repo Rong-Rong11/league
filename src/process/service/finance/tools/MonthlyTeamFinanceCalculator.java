@@ -6,6 +6,7 @@ import data.finance.budget.expense.Expense;
 import data.finance.budget.expense.ExpenseType;
 import data.finance.budget.income.Income;
 import data.finance.budget.income.IncomeType;
+import data.league.League;
 import data.team.Team;
 import data.team.finance.TeamFinance;
 import data.team.finance.economicprofil.EconomicProfil;
@@ -17,6 +18,12 @@ import process.visitor.financialprofil.StaffCostMultiplierVisitor;
 import process.visitor.marketsize.CalculateMonthlyTeamFinanceVisitor;
 
 public class MonthlyTeamFinanceCalculator {
+        private final League league;
+
+        public MonthlyTeamFinanceCalculator(League league) {
+                this.league = league;
+        }
+
         public void applyMonthlyFinance(Team team, int month) {
                 Budget budget = team.getTeamFinance().getBudget();
                 TeamFinance teamFinance = team.getTeamFinance();
@@ -55,6 +62,7 @@ public class MonthlyTeamFinanceCalculator {
 
                 double monthlyPayroll = team.getTeamFinance().getCurrentPayroll()
                                 / FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS;
+                double monthlyLuxuryTax = calculateMonthlyLuxuryTax(teamFinance);
                 double stadiumMaintenance = calculateStadiumMaintenance(team, marketMultiplier, mediaMarket,
                                 economicProfil);
                 double staffCost = calculateStaffCost(team, marketMultiplier, economicProfil, financialPolicy);
@@ -71,6 +79,8 @@ public class MonthlyTeamFinanceCalculator {
                 FinanceUtilitary.addExpense(budget,
                                 new Expense(ExpenseType.PLAYER_SALARY, monthlyPayroll), month);
                 FinanceUtilitary.addExpense(budget,
+                                new Expense(ExpenseType.LUXURY_TAX_PAID, monthlyLuxuryTax), month);
+                FinanceUtilitary.addExpense(budget,
                                 new Expense(ExpenseType.MAINTENANCE_STADIUM_COST,
                                                 stadiumMaintenance),
                                 month);
@@ -81,6 +91,7 @@ public class MonthlyTeamFinanceCalculator {
                                 new Expense(ExpenseType.ADMINISTRATIVE_COST, administrativeCost),
                                 month);
 
+                teamFinance.setLuxuryTaxPaid(teamFinance.getLuxuryTaxPaid() + monthlyLuxuryTax);
                 FinanceUtilitary.updateBudget(budget);
                 FinanceUtilitary.updateTeamValue(team);
         }
@@ -96,6 +107,7 @@ public class MonthlyTeamFinanceCalculator {
                 double marketMultiplier = getMarketMultiplier(marketSize);
                 double monthlyPayroll = team.getTeamFinance().getCurrentPayroll()
                                 / FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS;
+                double monthlyLuxuryTax = calculateMonthlyLuxuryTax(teamFinance);
                 double stadiumMaintenance = calculateStadiumMaintenance(team, marketMultiplier, mediaMarket,
                                 economicProfil);
                 double staffCost = calculateStaffCost(team, marketMultiplier, economicProfil, financialPolicy);
@@ -103,6 +115,8 @@ public class MonthlyTeamFinanceCalculator {
 
                 FinanceUtilitary.addExpense(budget,
                                 new Expense(ExpenseType.PLAYER_SALARY, monthlyPayroll), month);
+                FinanceUtilitary.addExpense(budget,
+                                new Expense(ExpenseType.LUXURY_TAX_PAID, monthlyLuxuryTax), month);
                 FinanceUtilitary.addExpense(budget,
                                 new Expense(ExpenseType.MAINTENANCE_STADIUM_COST,
                                                 stadiumMaintenance),
@@ -114,8 +128,15 @@ public class MonthlyTeamFinanceCalculator {
                                 new Expense(ExpenseType.ADMINISTRATIVE_COST, administrativeCost),
                                 month);
 
+                teamFinance.setLuxuryTaxPaid(teamFinance.getLuxuryTaxPaid() + monthlyLuxuryTax);
                 FinanceUtilitary.updateBudget(budget);
                 FinanceUtilitary.updateTeamValue(team);
+        }
+
+        private double calculateMonthlyLuxuryTax(TeamFinance teamFinance) {
+                double luxuryTaxLine = league.getLeagueFinance().getLeagueFinancialRules().getLuxuryTaxLine();
+                double seasonLuxuryTax = FinanceUtilitary.luxuryTaxPenalty(teamFinance.getCurrentPayroll(), luxuryTaxLine);
+                return seasonLuxuryTax / FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS;
         }
 
         private double calculateStadiumMaintenance(Team team, double marketMultiplier, MediaMarket mediaMarket,
