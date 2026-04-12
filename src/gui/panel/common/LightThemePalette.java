@@ -57,4 +57,74 @@ public class LightThemePalette implements ThemePalette {
 	public Color getSidebarTextColor() {
 		return new Color(40, 40, 40);
 	}
+
+	@Override
+	public Color getRevenueColor() {
+		return new Color(0x2C, 0x6B, 0xD9);
+	}
+
+	@Override
+	public Color getExpenseColor() {
+		return new Color(0xD0, 0x55, 0x55);
+	}
+
+	@Override
+	public Color getPositiveValueColor() {
+		return new Color(0x2E, 0x8B, 0x57);
+	}
+
+	@Override
+	public Color getNegativeValueColor() {
+		return new Color(0xC0, 0x3F, 0x3F);
+	}
+
+	@Override
+	public Color getNeutralAccentColor() {
+		return new Color(0xC4, 0x8A, 0x32);
+	}
+
+	@Override
+	public Color getPolicyThriftyColor() {
+		return new Color(0x2F, 0x8F, 0x66);
+	}
+
+	@Override
+	public Color getPolicyBalancedColor() {
+		return new Color(0x2F, 0x6F, 0xC1);
+	}
+
+	@Override
+	public Color getPolicyAmbitiousColor() {
+		return new Color(0xC5, 0x3D, 0x3D);
+	}
+
+	@Override
+	public Color getStrategyRebuildColor() {
+		return new Color(0x8A, 0x58, 0xC7);
+	}
+
+	@Override
+	public Color getStrategyAllInColor() {
+		return new Color(0xC5, 0x3D, 0x3D);
+	}
+
+	@Override
+	public Color getStrategyBalancedColor() {
+		return new Color(0x2B, 0x8D, 0x95);
+	}
+
+	@Override
+	public Color getMarketSmallColor() {
+		return new Color(0xC2, 0x7A, 0x2E);
+	}
+
+	@Override
+	public Color getMarketMediumColor() {
+		return new Color(0x4F, 0x7E, 0xC8);
+	}
+
+	@Override
+	public Color getMarketLargeColor() {
+		return new Color(0x6C, 0x57, 0xC8);
+	}
 }

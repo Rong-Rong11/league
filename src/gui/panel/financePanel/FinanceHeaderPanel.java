@@ -48,8 +48,9 @@ public class FinanceHeaderPanel extends RoundedPanel implements ThemeAware {
 
 	public void setSelectedView(String selectedView) {
 		boolean leagueSelected = "league".equals(selectedView);
+		boolean teamSelected = "team".equals(selectedView);
 		ButtonStyleUtil.setToggleButtonSelected(leagueButton, leagueSelected);
-		ButtonStyleUtil.setToggleButtonSelected(teamsButton, !leagueSelected);
+		ButtonStyleUtil.setToggleButtonSelected(teamsButton, teamSelected);
 	}
 
 	private JPanel buildTitlePanel() {

@@ -25,6 +25,21 @@ public class DashboardPanelUtil {
 	public static Color PLACEHOLDER_BACKGROUND_COLOR = new Color(226, 226, 226);
 	public static Color SIDEBAR_BACKGROUND_COLOR = Color.WHITE;
 	public static Color SIDEBAR_TEXT_COLOR = new Color(40, 40, 40);
+	public static Color REVENUE_COLOR = new Color(0x2C, 0x6B, 0xD9);
+	public static Color EXPENSE_COLOR = new Color(0xD0, 0x55, 0x55);
+	public static Color POSITIVE_VALUE_COLOR = new Color(0x2E, 0x8B, 0x57);
+	public static Color NEGATIVE_VALUE_COLOR = new Color(0xC0, 0x3F, 0x3F);
+	public static Color NEUTRAL_ACCENT_COLOR = new Color(0xC4, 0x8A, 0x32);
+	public static Color POLICY_THRIFTY_COLOR = new Color(0x2F, 0x8F, 0x66);
+	public static Color POLICY_BALANCED_COLOR = new Color(0x2F, 0x6F, 0xC1);
+	public static Color POLICY_AMBITIOUS_COLOR = new Color(0xC5, 0x3D, 0x3D);
+	public static Color STRATEGY_REBUILD_COLOR = new Color(0x8A, 0x58, 0xC7);
+	public static Color STRATEGY_ALL_IN_COLOR = new Color(0xC5, 0x3D, 0x3D);
+	public static Color STRATEGY_BALANCED_COLOR = new Color(0x2B, 0x8D, 0x95);
+	public static Color MARKET_SMALL_COLOR = new Color(0xC2, 0x7A, 0x2E);
+	public static Color MARKET_MEDIUM_COLOR = new Color(0x4F, 0x7E, 0xC8);
+	public static Color MARKET_LARGE_COLOR = new Color(0x6C, 0x57, 0xC8);
+	public static Color ON_ACCENT_TEXT_COLOR = Color.WHITE;
 	private static boolean darkMode;
 	private static ThemePalette currentPalette;
 
@@ -66,6 +81,234 @@ public class DashboardPanelUtil {
 		PLACEHOLDER_BACKGROUND_COLOR = palette.getPlaceholderBackgroundColor();
 		SIDEBAR_BACKGROUND_COLOR = palette.getSidebarBackgroundColor();
 		SIDEBAR_TEXT_COLOR = palette.getSidebarTextColor();
+		REVENUE_COLOR = palette.getRevenueColor();
+		EXPENSE_COLOR = palette.getExpenseColor();
+		POSITIVE_VALUE_COLOR = palette.getPositiveValueColor();
+		NEGATIVE_VALUE_COLOR = palette.getNegativeValueColor();
+		NEUTRAL_ACCENT_COLOR = palette.getNeutralAccentColor();
+		POLICY_THRIFTY_COLOR = palette.getPolicyThriftyColor();
+		POLICY_BALANCED_COLOR = palette.getPolicyBalancedColor();
+		POLICY_AMBITIOUS_COLOR = palette.getPolicyAmbitiousColor();
+		STRATEGY_REBUILD_COLOR = palette.getStrategyRebuildColor();
+		STRATEGY_ALL_IN_COLOR = palette.getStrategyAllInColor();
+		STRATEGY_BALANCED_COLOR = palette.getStrategyBalancedColor();
+		MARKET_SMALL_COLOR = palette.getMarketSmallColor();
+		MARKET_MEDIUM_COLOR = palette.getMarketMediumColor();
+		MARKET_LARGE_COLOR = palette.getMarketLargeColor();
+	}
+
+	public static Color getValueColorForAmount(double value) {
+		if (value > 0.0) {
+			return POSITIVE_VALUE_COLOR;
+		}
+		if (value < 0.0) {
+			return NEGATIVE_VALUE_COLOR;
+		}
+		return TITLE_TEXT_COLOR;
+	}
+
+	public static Color getPrimaryActionColor() {
+		return POLICY_BALANCED_COLOR;
+	}
+
+	public static Color getPrimaryActionTextColor() {
+		if (isDarkMode()) {
+			return DASHBOARD_BACKGROUND_COLOR;
+		}
+		return ON_ACCENT_TEXT_COLOR;
+	}
+
+	public static Color getNavigationButtonColor() {
+		return POLICY_BALANCED_COLOR;
+	}
+
+	public static Color getHeaderAccentColor() {
+		return POLICY_BALANCED_COLOR;
+	}
+
+	public static Color getProgressFillColor() {
+		return NEUTRAL_ACCENT_COLOR;
+	}
+
+	public static Color getProgressTrackColor() {
+		if (isDarkMode()) {
+			return new Color(53, 58, 68);
+		}
+		return new Color(227, 232, 238);
+	}
+
+	public static Color getCalendarGridBorderColor() {
+		if (isDarkMode()) {
+			return new Color(58, 63, 72);
+		}
+		return BORDER_COLOR;
+	}
+
+	public static Color getCalendarHeaderBackgroundColor() {
+		return getHeaderAccentColor();
+	}
+
+	public static Color getCalendarCellBackgroundColor() {
+		if (isDarkMode()) {
+			return PANEL_SURFACE_COLOR;
+		}
+		return Color.WHITE;
+	}
+
+	public static Color getCalendarDisplayedDayBackgroundColor() {
+		if (isDarkMode()) {
+			return new Color(42, 46, 54);
+		}
+		return new Color(245, 247, 250);
+	}
+
+	public static Color getCalendarOtherMonthBackgroundColor() {
+		if (isDarkMode()) {
+			return new Color(30, 33, 39);
+		}
+		return new Color(245, 246, 248);
+	}
+
+	public static Color getCalendarOutsideMonthTextColor() {
+		if (isDarkMode()) {
+			return new Color(111, 118, 128);
+		}
+		return new Color(180, 185, 193);
+	}
+
+	public static Color getCalendarMatchChipColor() {
+		if (isDarkMode()) {
+			return new Color(47, 53, 62);
+		}
+		return new Color(236, 242, 250);
+	}
+
+	public static Color getCurrentDayBackgroundColor() {
+		if (isDarkMode()) {
+			return new Color(48, 54, 66);
+		}
+		return new Color(0xE8, 0xF2, 0xFF);
+	}
+
+	public static Color getCurrentDayBorderColor() {
+		if (isDarkMode()) {
+			return ON_ACCENT_TEXT_COLOR;
+		}
+		return POLICY_BALANCED_COLOR;
+	}
+
+	public static Color getCalendarSlotBaseColor(String slotKey) {
+		if (isDarkMode()) {
+			if ("AFTERNOON".equals(slotKey)) {
+				return new Color(0x7A, 0x6A, 0x33);
+			}
+			if ("EVENING".equals(slotKey)) {
+				return new Color(0x2E, 0x53, 0x61);
+			}
+			return new Color(0x33, 0x2F, 0x7A);
+		}
+		if ("AFTERNOON".equals(slotKey)) {
+			return new Color(0xF8, 0xE9, 0x9A);
+		}
+		if ("EVENING".equals(slotKey)) {
+			return new Color(0xC8, 0xEE, 0xF6);
+		}
+		return new Color(0x4D, 0x46, 0xF0);
+	}
+
+	public static Color getCalendarSlotDisplayedColor(String slotKey) {
+		if (isDarkMode()) {
+			if ("AFTERNOON".equals(slotKey)) {
+				return new Color(0x64, 0x57, 0x2A);
+			}
+			if ("EVENING".equals(slotKey)) {
+				return new Color(0x2A, 0x49, 0x55);
+			}
+			return new Color(0x2D, 0x2A, 0x67);
+		}
+		if ("AFTERNOON".equals(slotKey)) {
+			return new Color(0xF2, 0xE4, 0xB8);
+		}
+		if ("EVENING".equals(slotKey)) {
+			return new Color(0xD9, 0xEC, 0xF0);
+		}
+		return new Color(0x8C, 0x88, 0xE8);
+	}
+
+	public static Color getCalendarSlotTitleColor(String slotKey) {
+		if (isDarkMode() || "NIGHT".equals(slotKey)) {
+			return ON_ACCENT_TEXT_COLOR;
+		}
+		return TITLE_TEXT_COLOR;
+	}
+
+	public static Color getCalendarSlotSubtitleColor(String slotKey) {
+		if (isDarkMode()) {
+			return new Color(230, 234, 240);
+		}
+		if ("NIGHT".equals(slotKey)) {
+			return ON_ACCENT_TEXT_COLOR;
+		}
+		return SUBTITLE_TEXT_COLOR;
+	}
+
+	public static Color getMapPointColor() {
+		return EXPENSE_COLOR;
+	}
+
+	public static Color getSelectedMapPointColor() {
+		return REVENUE_COLOR;
+	}
+
+	public static Color getFinancialPolicyColor(String policyName) {
+		if (policyName == null) {
+			return TITLE_TEXT_COLOR;
+		}
+		String lowerName = policyName.toLowerCase();
+		if (lowerName.contains("thrifty")) {
+			return POLICY_THRIFTY_COLOR;
+		}
+		if (lowerName.contains("ambitious")) {
+			return POLICY_AMBITIOUS_COLOR;
+		}
+		if (lowerName.contains("balanced")) {
+			return POLICY_BALANCED_COLOR;
+		}
+		return TITLE_TEXT_COLOR;
+	}
+
+	public static Color getTransferStrategyColor(String strategyName) {
+		if (strategyName == null) {
+			return TITLE_TEXT_COLOR;
+		}
+		String lowerName = strategyName.toLowerCase();
+		if (lowerName.contains("rebuild")) {
+			return STRATEGY_REBUILD_COLOR;
+		}
+		if (lowerName.contains("all in") || lowerName.contains("allin") || lowerName.contains("superstar")) {
+			return STRATEGY_ALL_IN_COLOR;
+		}
+		if (lowerName.contains("balanced") || lowerName.contains("small adjust") || lowerName.contains("salary dump")) {
+			return STRATEGY_BALANCED_COLOR;
+		}
+		return TITLE_TEXT_COLOR;
+	}
+
+	public static Color getMarketColor(String marketName) {
+		if (marketName == null) {
+			return TITLE_TEXT_COLOR;
+		}
+		String lowerName = marketName.toLowerCase();
+		if (lowerName.contains("small")) {
+			return MARKET_SMALL_COLOR;
+		}
+		if (lowerName.contains("medium")) {
+			return MARKET_MEDIUM_COLOR;
+		}
+		if (lowerName.contains("large")) {
+			return MARKET_LARGE_COLOR;
+		}
+		return TITLE_TEXT_COLOR;
 	}
 
 	public static void refreshTheme(Component component) {

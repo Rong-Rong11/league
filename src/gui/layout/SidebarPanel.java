@@ -1,7 +1,6 @@
 package gui.layout;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
@@ -27,8 +26,6 @@ import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
 
 public class SidebarPanel extends JPanel implements ThemeAware {
-	private static final Color ACTIVE_BUTTON_BACKGROUND_COLOR = new Color(0x17, 0x31, 0x74);
-
 	private JButton matchButton = new RoundedButton("Match");
 	private JButton calendarButton = new RoundedButton("Calendrier");
 	private JButton rankingButton = new RoundedButton("Classement");
@@ -196,20 +193,20 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 
 	private void initializeHighlightStrategies() {
 		highlightStrategies.put("match", new ButtonHighlightStrategy(
-				matchButton, menuButtons, DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR, ACTIVE_BUTTON_BACKGROUND_COLOR,
-				DashboardPanelUtil.SIDEBAR_TEXT_COLOR, Color.WHITE));
+				matchButton, menuButtons, DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR, DashboardPanelUtil.getNavigationButtonColor(),
+				DashboardPanelUtil.SIDEBAR_TEXT_COLOR, DashboardPanelUtil.getPrimaryActionTextColor()));
 		highlightStrategies.put("calendar", new ButtonHighlightStrategy(
-				calendarButton, menuButtons, DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR, ACTIVE_BUTTON_BACKGROUND_COLOR,
-				DashboardPanelUtil.SIDEBAR_TEXT_COLOR, Color.WHITE));
+				calendarButton, menuButtons, DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR, DashboardPanelUtil.getNavigationButtonColor(),
+				DashboardPanelUtil.SIDEBAR_TEXT_COLOR, DashboardPanelUtil.getPrimaryActionTextColor()));
 		highlightStrategies.put("ranking", new ButtonHighlightStrategy(
-				rankingButton, menuButtons, DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR, ACTIVE_BUTTON_BACKGROUND_COLOR,
-				DashboardPanelUtil.SIDEBAR_TEXT_COLOR, Color.WHITE));
+				rankingButton, menuButtons, DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR, DashboardPanelUtil.getNavigationButtonColor(),
+				DashboardPanelUtil.SIDEBAR_TEXT_COLOR, DashboardPanelUtil.getPrimaryActionTextColor()));
 		highlightStrategies.put("finance", new ButtonHighlightStrategy(
-				financeButton, menuButtons, DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR, ACTIVE_BUTTON_BACKGROUND_COLOR,
-				DashboardPanelUtil.SIDEBAR_TEXT_COLOR, Color.WHITE));
+				financeButton, menuButtons, DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR, DashboardPanelUtil.getNavigationButtonColor(),
+				DashboardPanelUtil.SIDEBAR_TEXT_COLOR, DashboardPanelUtil.getPrimaryActionTextColor()));
 		highlightStrategies.put("map", new ButtonHighlightStrategy(
-				mapButton, menuButtons, DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR, ACTIVE_BUTTON_BACKGROUND_COLOR,
-				DashboardPanelUtil.SIDEBAR_TEXT_COLOR, Color.WHITE));
+				mapButton, menuButtons, DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR, DashboardPanelUtil.getNavigationButtonColor(),
+				DashboardPanelUtil.SIDEBAR_TEXT_COLOR, DashboardPanelUtil.getPrimaryActionTextColor()));
 	}
 
 	private void highlightActiveButton(JButton activeButton) {
@@ -226,8 +223,8 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 			buttons[i].setForeground(DashboardPanelUtil.SIDEBAR_TEXT_COLOR);
 		}
 
-		activeButton.setBackground(ACTIVE_BUTTON_BACKGROUND_COLOR);
-		activeButton.setForeground(Color.WHITE);
+		activeButton.setBackground(DashboardPanelUtil.getNavigationButtonColor());
+		activeButton.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 	}
 
 	public void setActiveSection(String sectionName) {

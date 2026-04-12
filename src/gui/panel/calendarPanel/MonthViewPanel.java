@@ -29,14 +29,6 @@ import javax.swing.JPanel;
 
 public class MonthViewPanel extends JPanel implements ThemeAware {
 	private static final String[] DAY_NAMES = { "LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM" };
-	private static final Color GRID_COLOR = new Color(220, 224, 230);
-	private static final Color HEADER_BACKGROUND = new Color(0x17, 0x31, 0x74);
-	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
-	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
-	private static final Color CURRENT_DAY_COLOR = DashboardPanelUtil.ACCENT_RED_COLOR;
-	private static final Color DISPLAYED_DAY_COLOR = new Color(245, 247, 250);
-	private static final Color OTHER_MONTH_COLOR = new Color(245, 246, 248);
-	private static final Color MATCH_CHIP_COLOR = new Color(236, 242, 250);
 	private MatchDashboard matchDashboard;
 	private Runnable showMatchDashboardAction;
 
@@ -73,8 +65,8 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 	private JLabel buildDayNameLabel(String text) {
 		JLabel label = new JLabel(text, JLabel.CENTER);
 		label.setOpaque(true);
-		label.setBackground(HEADER_BACKGROUND);
-		label.setForeground(Color.WHITE);
+		label.setBackground(DashboardPanelUtil.getCalendarHeaderBackgroundColor());
+		label.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
 		label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, getGridColor()));
 		return label;
@@ -112,11 +104,11 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 		if (date.equals(currentDate)) {
 			RoundedPanel currentDayBadge = new RoundedPanel(18);
 			currentDayBadge.setLayout(new BorderLayout());
-			currentDayBadge.setBackground(CURRENT_DAY_COLOR);
+			currentDayBadge.setBackground(DashboardPanelUtil.ACCENT_RED_COLOR);
 			currentDayBadge.setPreferredSize(new Dimension(34, 28));
 			currentDayBadge.setMinimumSize(new Dimension(34, 28));
 			currentDayBadge.setMaximumSize(new Dimension(34, 28));
-			dayNumberLabel.setForeground(Color.WHITE);
+			dayNumberLabel.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 			currentDayBadge.add(dayNumberLabel, BorderLayout.CENTER);
 			topPanel.add(currentDayBadge, BorderLayout.WEST);
 		} else {
@@ -171,27 +163,27 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 	}
 
 	private Color getGridColor() {
-		return DashboardPanelUtil.isDarkMode() ? new Color(58, 63, 72) : GRID_COLOR;
+		return DashboardPanelUtil.getCalendarGridBorderColor();
 	}
 
 	private Color getDefaultDayBackground() {
-		return DashboardPanelUtil.isDarkMode() ? new Color(34, 37, 43) : Color.WHITE;
+		return DashboardPanelUtil.getCalendarCellBackgroundColor();
 	}
 
 	private Color getDisplayedDayBackground() {
-		return DashboardPanelUtil.isDarkMode() ? new Color(42, 46, 54) : DISPLAYED_DAY_COLOR;
+		return DashboardPanelUtil.getCalendarDisplayedDayBackgroundColor();
 	}
 
 	private Color getOtherMonthBackground() {
-		return DashboardPanelUtil.isDarkMode() ? new Color(30, 33, 39) : OTHER_MONTH_COLOR;
+		return DashboardPanelUtil.getCalendarOtherMonthBackgroundColor();
 	}
 
 	private Color getOutsideMonthTextColor() {
-		return DashboardPanelUtil.isDarkMode() ? new Color(111, 118, 128) : new Color(180, 185, 193);
+		return DashboardPanelUtil.getCalendarOutsideMonthTextColor();
 	}
 
 	private Color getMatchChipColor() {
-		return DashboardPanelUtil.isDarkMode() ? new Color(47, 53, 62) : MATCH_CHIP_COLOR;
+		return DashboardPanelUtil.getCalendarMatchChipColor();
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package gui.panel.openningPanel;
 
 import data.team.Team;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
@@ -50,7 +49,7 @@ public class OpeningPolicyDetailPanel extends JPanel implements ThemeAware {
 	private JLabel createValueLabel() {
 		JLabel valueLabel = new JLabel("-");
 		valueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
-		valueLabel.setForeground(new Color(0x17, 0x31, 0x74));
+		valueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		return valueLabel;
 	}
 
@@ -58,7 +57,7 @@ public class OpeningPolicyDetailPanel extends JPanel implements ThemeAware {
 		JPanel row = new JPanel(new GridLayout(2, 1, 0, 2));
 		row.setOpaque(false);
 		row.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(235, 238, 242)),
+				BorderFactory.createMatteBorder(0, 0, 1, 0, DashboardPanelUtil.BORDER_COLOR),
 				BorderFactory.createEmptyBorder(0, 12, 0, 12)));
 
 		JLabel titleLabel = new JLabel(title);

@@ -28,10 +28,6 @@ import process.orchestrator.GUIInterface;
 
 public class WeekScheduleGridPanel extends RoundedPanel implements ThemeAware {
 	private static final long serialVersionUID = 1L;
-	private static final Color GRID_BORDER_COLOR = new Color(220, 224, 230);
-	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
-	private static final Color CURRENT_DAY_BACKGROUND = new Color(0xE8, 0xF2, 0xFF);
-	private static final Color CURRENT_DAY_BORDER = new Color(0x17, 0x31, 0x74);
 	private static final Font TEXT_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 11);
 	private static final Font SLOT_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 12);
 	private static final Font DAY_FONT = new Font(Font.SANS_SERIF, Font.BOLD, 16);
@@ -210,19 +206,19 @@ public class WeekScheduleGridPanel extends RoundedPanel implements ThemeAware {
 	}
 
 	private Color getGridBorderColor() {
-		return DashboardPanelUtil.isDarkMode() ? new Color(58, 63, 72) : GRID_BORDER_COLOR;
+		return DashboardPanelUtil.getCalendarGridBorderColor();
 	}
 
 	private Color getCellBackground() {
-		return DashboardPanelUtil.isDarkMode() ? new Color(34, 37, 43) : Color.WHITE;
+		return DashboardPanelUtil.getCalendarCellBackgroundColor();
 	}
 
 	private Color getCurrentDayBackground() {
-		return DashboardPanelUtil.isDarkMode() ? new Color(48, 54, 66) : CURRENT_DAY_BACKGROUND;
+		return DashboardPanelUtil.getCurrentDayBackgroundColor();
 	}
 
 	private Color getCurrentDayBorderColor() {
-		return DashboardPanelUtil.isDarkMode() ? Color.WHITE : CURRENT_DAY_BORDER;
+		return DashboardPanelUtil.getCurrentDayBorderColor();
 	}
 
 	public interface OpenDayAction {

@@ -7,8 +7,6 @@ import java.awt.Font;
 import javax.swing.JButton;
 
 public class ToggleButtonStyleStrategy implements ButtonStyleStrategy {
-	private static final Color ACTIVE_BUTTON_COLOR = new Color(0x17, 0x31, 0x74);
-
 	@Override
 	public void applyBaseStyle(JButton button) {
 		button.setFocusPainted(false);
@@ -22,8 +20,8 @@ public class ToggleButtonStyleStrategy implements ButtonStyleStrategy {
 	@Override
 	public void applySelectionStyle(JButton button, boolean selected) {
 		if (selected) {
-			button.setBackground(ACTIVE_BUTTON_COLOR);
-			button.setForeground(Color.WHITE);
+			button.setBackground(DashboardPanelUtil.POLICY_BALANCED_COLOR);
+			button.setForeground(DashboardPanelUtil.isDarkMode() ? DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR : Color.WHITE);
 			return;
 		}
 		button.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
