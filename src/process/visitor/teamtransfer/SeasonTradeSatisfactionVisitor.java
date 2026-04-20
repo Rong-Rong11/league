@@ -9,7 +9,6 @@ import data.team.finance.transfer.Rebuild;
 import data.team.finance.transfer.SalaryDump;
 import data.team.finance.transfer.SmallAdjust;
 import data.team.finance.transfer.SuperstarBuild;
-import process.visitor.teamtransfer.TeamTransferVisitor;
 
 public class SeasonTradeSatisfactionVisitor
 implements TeamTransferVisitor<Boolean> {

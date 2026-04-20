@@ -3,7 +3,6 @@
 	*/
 package data.player;
 
-import data.player.Injury;
 
 public class HealthStatus {
 	private double fatigue = 0.0;

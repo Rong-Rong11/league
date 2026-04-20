@@ -3,7 +3,6 @@
 	*/
 package data.sport.play.action;
 
-import data.sport.play.action.ActionResult;
 import process.visitor.actionresult.ActionResultVisitor;
 
 public class EndOfTime

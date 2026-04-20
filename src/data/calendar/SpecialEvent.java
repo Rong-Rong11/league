@@ -3,7 +3,6 @@
 	*/
 package data.calendar;
 
-import data.calendar.GameDay;
 import java.time.LocalDate;
 
 public class SpecialEvent

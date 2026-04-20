@@ -187,7 +187,6 @@ public void shouldCalculateExpectedEconomicProfileValues() {
 			+ getExpectedBusinessOpportunityModifierMax(team));
 
 		double expectedOwnerDeficitToleranceMin = 0.6;
-		double expectedOwnerDeficitToleranceMax = 0.6;
 
 		assertTrue(team.getTeamFinance().getEconomicProfil().getHistoricalPrestige() >= expectedHistoricalPrestigeMin);
 		assertTrue(team.getTeamFinance().getEconomicProfil().getHistoricalPrestige() <= expectedHistoricalPrestigeMax);

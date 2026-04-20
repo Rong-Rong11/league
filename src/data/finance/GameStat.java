@@ -3,7 +3,7 @@
 	*/
 package data.finance;
 
-import data.finance.TeamGameFinance;
+
 import data.sport.setup.Game;
 
 public class GameStat {

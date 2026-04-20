@@ -3,8 +3,6 @@
 	*/
 package data.player;
 
-import data.player.Asset;
-import data.player.HealthStatus;
 
 public class Player {
 	private String id;

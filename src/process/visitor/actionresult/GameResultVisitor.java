@@ -12,18 +12,18 @@ import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
 import data.sport.setup.GameResult;
 import java.util.ArrayList;
-import process.visitor.actionresult.ActionResultVisitor;
+
 
 public class GameResultVisitor
 implements ActionResultVisitor<Void> {
 	private GameResult gameResult;
 	private ArrayList<Player> homeTeamPlayers;
-	private ArrayList<Player> awayTeamPlayers;
+
 
 	public GameResultVisitor(GameResult gameResult, ArrayList<Player> arrayList, ArrayList<Player> arrayList2) {
 		this.gameResult = gameResult;
 		this.homeTeamPlayers = arrayList;
-		this.awayTeamPlayers = arrayList2;
+
 	}
 
 	@Override

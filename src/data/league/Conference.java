@@ -1,6 +1,6 @@
 package data.league;
 
-import data.league.Division;
+
 import data.team.Team;
 import java.util.HashMap;
 

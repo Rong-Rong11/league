@@ -4,7 +4,6 @@
 package data.sport.play.action;
 
 import data.player.Player;
-import data.sport.play.action.ActionResult;
 import process.visitor.actionresult.ActionResultVisitor;
 
 public class MissedShot

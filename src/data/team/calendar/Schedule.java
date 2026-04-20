@@ -16,7 +16,7 @@ public class Schedule {
 	private int numberOfHomeGames;
 	private ArrayList<Game> games;
 	private TreeMap<LocalDate, Game> scheduledGames;
-	private TreeMap<LocalDate, Game> playedGames;
+
 
 	public Schedule() {
 		this.setNumberOfAwayGames(0);
@@ -24,7 +24,6 @@ public class Schedule {
 		this.setNumberOfPlayedGames(0);
 		this.games = new ArrayList<>();
 		this.scheduledGames = new TreeMap<>();
-		this.playedGames = new TreeMap<>();
 	}
 
 	public int getNumberOfPlayedGames() {
