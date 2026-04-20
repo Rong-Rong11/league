@@ -7,37 +7,37 @@ import data.team.Team;
 import process.service.finance.playoff.PlayoffFinancialRules;
 
 public class PlayoffGameExpenseCalculator extends GameExpenseCalculator {
-   private PlayoffRound round;
-   private PlayoffFinancialRules playoffFinancialRules;
 
-   public PlayoffGameExpenseCalculator(GameStat gameStat, PlayoffRound round) {
-      super(gameStat);
-      this.round = round;
-      this.playoffFinancialRules = new PlayoffFinancialRules(round);
-   }
+	private PlayoffFinancialRules playoffFinancialRules;
 
-   @Override
-   protected double getStadiumBonusRate(Game game, Team homeTeam, int attendees, double gamePopularity) {
-      return playoffFinancialRules.getRoundStadiumCostBonusRate();
-   }
+	public PlayoffGameExpenseCalculator(GameStat gameStat, PlayoffRound round) {
+		super(gameStat);
 
-   @Override
-   protected double getSecurityBonusRate(Game game, Team homeTeam, int attendees) {
-      return playoffFinancialRules.getRoundSecurityBonusRate();
-   }
+		this.playoffFinancialRules = new PlayoffFinancialRules(round);
+	}
 
-   @Override
-   protected double getStaffBonusRate(Game game, Team homeTeam) {
-      return playoffFinancialRules.getRoundStaffCostBonusRate();
-   }
+	@Override
+	protected double getStadiumBonusRate(Game game, Team homeTeam, int attendees, double gamePopularity) {
+		return playoffFinancialRules.getRoundStadiumCostBonusRate();
+	}
 
-   @Override
-   protected double getTravelBonusRate(Game game) {
-      return playoffFinancialRules.getRoundTravelBonusRate();
-   }
+	@Override
+	protected double getSecurityBonusRate(Game game, Team homeTeam, int attendees) {
+		return playoffFinancialRules.getRoundSecurityBonusRate();
+	}
 
-   @Override
-   protected double getLogisticBonusRate(Game game, Team homeTeam) {
-      return playoffFinancialRules.getRoundLogisticsBonusRate();
-   }
+	@Override
+	protected double getStaffBonusRate(Game game, Team homeTeam) {
+		return playoffFinancialRules.getRoundStaffCostBonusRate();
+	}
+
+	@Override
+	protected double getTravelBonusRate(Game game) {
+		return playoffFinancialRules.getRoundTravelBonusRate();
+	}
+
+	@Override
+	protected double getLogisticBonusRate(Game game, Team homeTeam) {
+		return playoffFinancialRules.getRoundLogisticsBonusRate();
+	}
 }

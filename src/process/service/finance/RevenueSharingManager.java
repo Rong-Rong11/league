@@ -17,251 +17,251 @@ import process.utility.FinanceUtility;
 import process.visitor.marketsize.CalculateMonthlyTeamFinanceVisitor;
 
 public class RevenueSharingManager {
-    private TeamRepository teamRepositery = TeamRepository.getInstance();
-    private League league;
+	private TeamRepository teamRepositery = TeamRepository.getInstance();
+	private League league;
 
-    public RevenueSharingManager(League league) {
-        this.league = league;
-    }
+	public RevenueSharingManager(League league) {
+		this.league = league;
+	}
 
-    public void applyRevenueSharing(int month) {
-        LeagueRedistributionPolicy leagueRedistributionPolicy = league.getLeagueFinance()
-                .getLeagueRedistributionPolicy();
-        double leagueAverage = calculateLeagueLocalAverage(month);
-        double redistributionRate = calculateEffectiveRedistributionRate(leagueRedistributionPolicy, month);
+	public void applyRevenueSharing(int month) {
+		LeagueRedistributionPolicy leagueRedistributionPolicy = league.getLeagueFinance()
+				.getLeagueRedistributionPolicy();
+		double leagueAverage = calculateLeagueLocalAverage(month);
+		double redistributionRate = calculateEffectiveRedistributionRate(leagueRedistributionPolicy, month);
 
-        double pool = collectFromRichTeams(leagueAverage, redistributionRate, month);
+		double pool = collectFromRichTeams(leagueAverage, redistributionRate, month);
 
-        double leagueKeeps = pool * leagueRedistributionPolicy.getBaseLeagueRetentionRate();
-        FinanceUtility.addIncome(
-                league.getLeagueFinance().getBudget(),
-                new Income(IncomeType.LEAGUE_KEEPS, leagueKeeps),
-                month);
+		double leagueKeeps = pool * leagueRedistributionPolicy.getBaseLeagueRetentionRate();
+		FinanceUtility.addIncome(
+				league.getLeagueFinance().getBudget(),
+				new Income(IncomeType.LEAGUE_KEEPS, leagueKeeps),
+				month);
 
-        double remainingPool = pool - leagueKeeps;
-        double equalSharePool = remainingPool * leagueRedistributionPolicy.getBaseEqualShareRate();
-        double weightedSharePool = remainingPool * leagueRedistributionPolicy.getBaseWeightedShareRate();
+		double remainingPool = pool - leagueKeeps;
+		double equalSharePool = remainingPool * leagueRedistributionPolicy.getBaseEqualShareRate();
+		double weightedSharePool = remainingPool * leagueRedistributionPolicy.getBaseWeightedShareRate();
 
-        distributeEqualShare(equalSharePool, month);
-        distributeToSmallTeams(leagueAverage, weightedSharePool, month);
-    }
+		distributeEqualShare(equalSharePool, month);
+		distributeToSmallTeams(leagueAverage, weightedSharePool, month);
+	}
 
-    private double calculateLeagueLocalAverage(int month) {
-        double total = 0.0;
+	private double calculateLeagueLocalAverage(int month) {
+		double total = 0.0;
 
-        for (Team team : teamRepositery.getAllTeams()) {
-            total += calculateAdjustedLocalRevenue(team, month);
-        }
+		for (Team team : teamRepositery.getAllTeams()) {
+			total += calculateAdjustedLocalRevenue(team, month);
+		}
 
-        return total / teamRepositery.getAllTeams().size();
-    }
+		return total / teamRepositery.getAllTeams().size();
+	}
 
-    private double collectFromRichTeams(double leagueAverage, double redistributionRate, int month) {
-        double pool = 0.0;
+	private double collectFromRichTeams(double leagueAverage, double redistributionRate, int month) {
+		double pool = 0.0;
 
-        for (Team team : teamRepositery.getAllTeams()) {
-            double localRevenue = getRegularSeasonRevenueBase(team, month);
-            double contextFactor = calculateRevenueContextFactor(team);
-            double adjustedLocalRevenue = calculateAdjustedLocalRevenue(team, month);
-            Budget budget = team.getTeamFinance().getBudget();
+		for (Team team : teamRepositery.getAllTeams()) {
+			double localRevenue = getRegularSeasonRevenueBase(team, month);
+			double contextFactor = calculateRevenueContextFactor(team);
+			double adjustedLocalRevenue = calculateAdjustedLocalRevenue(team, month);
+			Budget budget = team.getTeamFinance().getBudget();
 
-            if (adjustedLocalRevenue > leagueAverage) {
-                double expectedRevenueAtLeagueAverage = leagueAverage * contextFactor;
-                double excess = localRevenue - expectedRevenueAtLeagueAverage;
+			if (adjustedLocalRevenue > leagueAverage) {
+				double expectedRevenueAtLeagueAverage = leagueAverage * contextFactor;
+				double excess = localRevenue - expectedRevenueAtLeagueAverage;
 
-                if (excess > 0) {
-                    double contribution = excess * redistributionRate;
+				if (excess > 0) {
+					double contribution = excess * redistributionRate;
 
-                    FinanceUtility.addExpense(
-                            budget,
-                            new Expense(ExpenseType.REVENUE_SHARING_CONTRIBUTION,
-                                    contribution),
-                            month);
+					FinanceUtility.addExpense(
+							budget,
+							new Expense(ExpenseType.REVENUE_SHARING_CONTRIBUTION,
+									contribution),
+							month);
 
-                    FinanceUtility.updateBudget(budget);
-                    pool += contribution;
-                }
-            }
-        }
+					FinanceUtility.updateBudget(budget);
+					pool += contribution;
+				}
+			}
+		}
 
-        return pool;
-    }
+		return pool;
+	}
 
-    private void distributeEqualShare(double pool, int month) {
-        if (pool <= 0) {
-            return;
-        }
-        int teamCount = teamRepositery.getAllTeams().size();
-        double share = pool / teamCount;
-        for (Team team : teamRepositery.getAllTeams()) {
-            Budget budget = team.getTeamFinance().getBudget();
-            FinanceUtility.addIncome(
-                    budget,
-                    new Income(IncomeType.EQUAL_SHARE, share),
-                    month);
-            FinanceUtility.updateBudget(budget);
-        }
-    }
+	private void distributeEqualShare(double pool, int month) {
+		if (pool <= 0) {
+			return;
+		}
+		int teamCount = teamRepositery.getAllTeams().size();
+		double share = pool / teamCount;
+		for (Team team : teamRepositery.getAllTeams()) {
+			Budget budget = team.getTeamFinance().getBudget();
+			FinanceUtility.addIncome(
+					budget,
+					new Income(IncomeType.EQUAL_SHARE, share),
+					month);
+			FinanceUtility.updateBudget(budget);
+		}
+	}
 
-    private void distributeToSmallTeams(double leagueAverage, double pool, int month) {
-        if (pool <= 0) {
-            return;
-        }
-        double totalNeed = 0;
-        for (Team team : teamRepositery.getAllTeams()) {
-            double adjustedLocalRevenue = calculateAdjustedLocalRevenue(team, month);
-            if (adjustedLocalRevenue < leagueAverage) {
-                totalNeed += calculateWeightedNeed(team, leagueAverage, adjustedLocalRevenue);
-            }
-        }
-        if (totalNeed <= 0) {
-            return;
-        }
-        for (Team team : teamRepositery.getAllTeams()) {
-            double adjustedLocalRevenue = calculateAdjustedLocalRevenue(team, month);
-            Budget budget = team.getTeamFinance().getBudget();
+	private void distributeToSmallTeams(double leagueAverage, double pool, int month) {
+		if (pool <= 0) {
+			return;
+		}
+		double totalNeed = 0;
+		for (Team team : teamRepositery.getAllTeams()) {
+			double adjustedLocalRevenue = calculateAdjustedLocalRevenue(team, month);
+			if (adjustedLocalRevenue < leagueAverage) {
+				totalNeed += calculateWeightedNeed(team, leagueAverage, adjustedLocalRevenue);
+			}
+		}
+		if (totalNeed <= 0) {
+			return;
+		}
+		for (Team team : teamRepositery.getAllTeams()) {
+			double adjustedLocalRevenue = calculateAdjustedLocalRevenue(team, month);
+			Budget budget = team.getTeamFinance().getBudget();
 
-            if (adjustedLocalRevenue < leagueAverage) {
-                double need = calculateWeightedNeed(team, leagueAverage, adjustedLocalRevenue);
-                double share = (need / totalNeed) * pool;
+			if (adjustedLocalRevenue < leagueAverage) {
+				double need = calculateWeightedNeed(team, leagueAverage, adjustedLocalRevenue);
+				double share = (need / totalNeed) * pool;
 
-                FinanceUtility.addIncome(
-                        budget,
-                        new Income(IncomeType.EQUAL_SHARE, share),
-                        month);
+				FinanceUtility.addIncome(
+						budget,
+						new Income(IncomeType.EQUAL_SHARE, share),
+						month);
 
-                FinanceUtility.updateBudget(budget);
-            }
-        }
-    }
+				FinanceUtility.updateBudget(budget);
+			}
+		}
+	}
 
-    private double calculateEffectiveRedistributionRate(LeagueRedistributionPolicy leagueRedistributionPolicy,
-            int month) {
-        double rate = leagueRedistributionPolicy.getBaseRedistributionRate();
+	private double calculateEffectiveRedistributionRate(LeagueRedistributionPolicy leagueRedistributionPolicy,
+			int month) {
+		double rate = leagueRedistributionPolicy.getBaseRedistributionRate();
 
-        double leagueAveragePopularity = calculateLeagueAveragePopularity();
-        double inequality = calculateRevenueInequality(month);
+		double leagueAveragePopularity = calculateLeagueAveragePopularity();
+		double inequality = calculateRevenueInequality(month);
 
-        if (leagueAveragePopularity < 65) {
-            rate += 0.03;
-        }
+		if (leagueAveragePopularity < 65) {
+			rate += 0.03;
+		}
 
-        if (inequality > 0.30) {
-            rate += 0.05;
-        }
+		if (inequality > 0.30) {
+			rate += 0.05;
+		}
 
-        if (inequality < 0.15) {
-            rate -= 0.03;
-        }
+		if (inequality < 0.15) {
+			rate -= 0.03;
+		}
 
-        return Math.max(
-                leagueRedistributionPolicy.getMinimumRedistributionRate(),
-                Math.min(leagueRedistributionPolicy.getMaximumRedistributionRate(), rate));
-    }
+		return Math.max(
+				leagueRedistributionPolicy.getMinimumRedistributionRate(),
+				Math.min(leagueRedistributionPolicy.getMaximumRedistributionRate(), rate));
+	}
 
-    private double calculateLeagueAveragePopularity() {
-        double total = 0.0;
+	private double calculateLeagueAveragePopularity() {
+		double total = 0.0;
 
-        for (Team team : teamRepositery.getAllTeams()) {
-            total += team.getCurrentPopularity();
-        }
+		for (Team team : teamRepositery.getAllTeams()) {
+			total += team.getCurrentPopularity();
+		}
 
-        return total / teamRepositery.getAllTeams().size();
-    }
+		return total / teamRepositery.getAllTeams().size();
+	}
 
-    private double calculateRevenueInequality(int month) {
-        double minRevenue = Double.MAX_VALUE;
-        double maxRevenue = Double.MIN_VALUE;
+	private double calculateRevenueInequality(int month) {
+		double minRevenue = Double.MAX_VALUE;
+		double maxRevenue = Double.MIN_VALUE;
 
-        for (Team team : teamRepositery.getAllTeams()) {
-            double adjustedLocalRevenue = calculateAdjustedLocalRevenue(team, month);
-            if (adjustedLocalRevenue < minRevenue) {
-                minRevenue = adjustedLocalRevenue;
-            }
-            if (adjustedLocalRevenue > maxRevenue) {
-                maxRevenue = adjustedLocalRevenue;
-            }
-        }
-        if (maxRevenue <= 0) {
-            return 0.0;
-        }
-        return (maxRevenue - minRevenue) / maxRevenue;
-    }
+		for (Team team : teamRepositery.getAllTeams()) {
+			double adjustedLocalRevenue = calculateAdjustedLocalRevenue(team, month);
+			if (adjustedLocalRevenue < minRevenue) {
+				minRevenue = adjustedLocalRevenue;
+			}
+			if (adjustedLocalRevenue > maxRevenue) {
+				maxRevenue = adjustedLocalRevenue;
+			}
+		}
+		if (maxRevenue <= 0) {
+			return 0.0;
+		}
+		return (maxRevenue - minRevenue) / maxRevenue;
+	}
 
-    private double calculateWeightedNeed(Team team, double leagueAverage, double adjustedLocalRevenue) {
-        double baseNeed = leagueAverage - adjustedLocalRevenue;
+	private double calculateWeightedNeed(Team team, double leagueAverage, double adjustedLocalRevenue) {
+		double baseNeed = leagueAverage - adjustedLocalRevenue;
 
-        if (baseNeed <= 0) {
-            return 0.0;
-        }
+		if (baseNeed <= 0) {
+			return 0.0;
+		}
 
-        MarketSize marketSize = team.getTeamFinance().getMarketSize();
-        double multiplier = 1.0;
+		MarketSize marketSize = team.getTeamFinance().getMarketSize();
+		double multiplier = 1.0;
 
-        if (marketSize != null) {
-            double marketMultiplier = getMarketMultiplier(marketSize);
+		if (marketSize != null) {
+			double marketMultiplier = getMarketMultiplier(marketSize);
 
-            if (marketMultiplier <= FinanceConfiguration.MARKET_SIZE_SMALL_MULTIPLIER) {
-                multiplier = 1.60;
-            } else if (marketMultiplier < 1.0) {
-                multiplier = 1.22;
-            } else if (marketMultiplier > 1.0) {
-                multiplier = 0.88;
-            }
-        }
+			if (marketMultiplier <= FinanceConfiguration.MARKET_SIZE_SMALL_MULTIPLIER) {
+				multiplier = 1.60;
+			} else if (marketMultiplier < 1.0) {
+				multiplier = 1.22;
+			} else if (marketMultiplier > 1.0) {
+				multiplier = 0.88;
+			}
+		}
 
-        return baseNeed * multiplier;
-    }
+		return baseNeed * multiplier;
+	}
 
-    private double calculateAdjustedLocalRevenue(Team team, int month) {
-        double localRevenue = getRegularSeasonRevenueBase(team, month);
-        double contextFactor = calculateRevenueContextFactor(team);
+	private double calculateAdjustedLocalRevenue(Team team, int month) {
+		double localRevenue = getRegularSeasonRevenueBase(team, month);
+		double contextFactor = calculateRevenueContextFactor(team);
 
-        if (contextFactor <= 0) {
-            return localRevenue;
-        }
+		if (contextFactor <= 0) {
+			return localRevenue;
+		}
 
-        return localRevenue / contextFactor;
-    }
+		return localRevenue / contextFactor;
+	}
 
-    private double getRegularSeasonRevenueBase(Team team, int month) {
-        return FinanceUtility.getTeamIncomeOfMonthForRegularSeason(team, month)
-                + FinanceUtility.getTeamIncomeOfMonthForBoth(team, month);
-    }
+	private double getRegularSeasonRevenueBase(Team team, int month) {
+		return FinanceUtility.getTeamIncomeOfMonthForRegularSeason(team, month)
+				+ FinanceUtility.getTeamIncomeOfMonthForBoth(team, month);
+	}
 
-    private double calculateRevenueContextFactor(Team team) {
-        double factor = 0.75;
-        double valueFactor = FinanceUtility.getNormalizedTeamValue(team);
+	private double calculateRevenueContextFactor(Team team) {
+		double factor = 0.75;
+		double valueFactor = FinanceUtility.getNormalizedTeamValue(team);
 
-        MarketSize marketSize = team.getTeamFinance().getMarketSize();
-        MediaMarket mediaMarket = team.getTeamFinance().getMediaMarket();
-        EconomicProfil economicProfil = team.getTeamFinance().getEconomicProfil();
+		MarketSize marketSize = team.getTeamFinance().getMarketSize();
+		MediaMarket mediaMarket = team.getTeamFinance().getMediaMarket();
+		EconomicProfil economicProfil = team.getTeamFinance().getEconomicProfil();
 
-        factor *= getMarketMultiplier(marketSize);
+		factor *= getMarketMultiplier(marketSize);
 
-        double mediaFactor = 0.0;
-        double ecomonicFactor = 0.0;
+		double mediaFactor = 0.0;
+		double ecomonicFactor = 0.0;
 
-        mediaFactor += mediaMarket.getBusinessOpportunityModifier() * 0.20;
-        mediaFactor += mediaMarket.getPrestigeModifier() * 0.10;
-        mediaFactor += mediaMarket.getFanBaseModifier() * 0.10;
-        mediaFactor += mediaMarket.getPricingPowerModifier() * 0.10;
+		mediaFactor += mediaMarket.getBusinessOpportunityModifier() * 0.20;
+		mediaFactor += mediaMarket.getPrestigeModifier() * 0.10;
+		mediaFactor += mediaMarket.getFanBaseModifier() * 0.10;
+		mediaFactor += mediaMarket.getPricingPowerModifier() * 0.10;
 
-        ecomonicFactor += economicProfil.getFanLoyalty() * 0.15;
-        ecomonicFactor += economicProfil.getCommercialAggressiveness() * 0.15;
-        ecomonicFactor += economicProfil.getHistoricalPrestige() * 0.10;
+		ecomonicFactor += economicProfil.getFanLoyalty() * 0.15;
+		ecomonicFactor += economicProfil.getCommercialAggressiveness() * 0.15;
+		ecomonicFactor += economicProfil.getHistoricalPrestige() * 0.10;
 
-        double combinedFactor = 1 + (mediaFactor * 0.6 + ecomonicFactor * 0.4);
-        factor *= combinedFactor;
-        factor *= (1 + valueFactor * 0.12);
+		double combinedFactor = 1 + (mediaFactor * 0.6 + ecomonicFactor * 0.4);
+		factor *= combinedFactor;
+		factor *= (1 + valueFactor * 0.12);
 
-        return Math.max(0.75, factor);
-    }
+		return Math.max(0.75, factor);
+	}
 
-    private double getMarketMultiplier(MarketSize marketSize) {
-        if (marketSize == null) {
-            return 1.0;
-        }
-        return marketSize.accept(new CalculateMonthlyTeamFinanceVisitor());
-    }
+	private double getMarketMultiplier(MarketSize marketSize) {
+		if (marketSize == null) {
+			return 1.0;
+		}
+		return marketSize.accept(new CalculateMonthlyTeamFinanceVisitor());
+	}
 }

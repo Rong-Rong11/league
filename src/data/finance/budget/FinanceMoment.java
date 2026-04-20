@@ -1,7 +1,7 @@
 package data.finance.budget;
 
 public enum FinanceMoment {
-    GAME,
-    MONTHLY,
-    SEASON,
+	GAME,
+	MONTHLY,
+	SEASON,
 }

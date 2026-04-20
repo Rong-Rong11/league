@@ -3,9 +3,9 @@ package process.orchestrator.interf;
 import java.time.LocalDate;
 
 public interface DisplayInterface {
-   void displayGameDay(LocalDate date);
+	void displayGameDay(LocalDate date);
 
-   void displayWeek(LocalDate startDate);
+	void displayWeek(LocalDate startDate);
 
-   void displayCurrentSeason();
+	void displayCurrentSeason();
 }

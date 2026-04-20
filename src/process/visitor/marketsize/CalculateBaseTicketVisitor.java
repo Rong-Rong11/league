@@ -7,21 +7,21 @@ import data.team.finance.marketsize.SmallSize;
 
 public class CalculateBaseTicketVisitor implements MarketSizeVisitor<Double> {
 
-    private double baseTicketPrice = FinanceConfiguration.BASE_TICKET_PRICE;
+	private double baseTicketPrice = FinanceConfiguration.BASE_TICKET_PRICE;
 
-    public CalculateBaseTicketVisitor() {
+	public CalculateBaseTicketVisitor() {
 
-    }
+	}
 
-    public Double visit(LargeSize largeSize) {
-        return baseTicketPrice * FinanceConfiguration.MARKET_SIZE_LARGE_MULTIPLIER;
-    }
+	public Double visit(LargeSize largeSize) {
+		return baseTicketPrice * FinanceConfiguration.MARKET_SIZE_LARGE_MULTIPLIER;
+	}
 
-    public Double visit(MediumSize mediumSize) {
-        return baseTicketPrice * FinanceConfiguration.MARKET_SIZE_MEDIUM_MULTIPLIER;
-    }
+	public Double visit(MediumSize mediumSize) {
+		return baseTicketPrice * FinanceConfiguration.MARKET_SIZE_MEDIUM_MULTIPLIER;
+	}
 
-    public Double visit(SmallSize smallSize) {
-        return baseTicketPrice * FinanceConfiguration.MARKET_SIZE_SMALL_MULTIPLIER;
-    }
+	public Double visit(SmallSize smallSize) {
+		return baseTicketPrice * FinanceConfiguration.MARKET_SIZE_SMALL_MULTIPLIER;
+	}
 }

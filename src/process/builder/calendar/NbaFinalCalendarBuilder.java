@@ -10,31 +10,31 @@ import process.builder.calendar.tools.GameGenerator;
 
 public class NbaFinalCalendarBuilder extends PlayoffCalendarBuilder {
 
-   private LocalDate roundEndDate;
+	private LocalDate roundEndDate;
 
-   public NbaFinalCalendarBuilder(League league, LocalDate roundEndDate) {
-      super(league);
-      this.roundEndDate = roundEndDate;
-   }
+	public NbaFinalCalendarBuilder(League league, LocalDate roundEndDate) {
+	  super(league);
+	  this.roundEndDate = roundEndDate;
+	}
 
-   @Override
-   protected NBACalendar build() {
-      // TODO Auto-generated method stub
-      TreeMap<LocalDate, GameDay> playoffCalendar = new TreeMap<>();
+	@Override
+	protected NBACalendar build() {
+	  // TODO Auto-generated method stub
+	  TreeMap<LocalDate, GameDay> playoffCalendar = new TreeMap<>();
 
-      LocalDate startDate = roundEndDate.plusDays(2);
+	  LocalDate startDate = roundEndDate.plusDays(2);
 
-      scheduleRoundFirstFourGames(playoffCalendar, getLeague().getPlayoff().getNbaFinals(), startDate);
+	  scheduleRoundFirstFourGames(playoffCalendar, getLeague().getPlayoff().getNbaFinals(), startDate);
 
-      NBACalendar newCalendar = new NBACalendar(playoffCalendar);
-      return newCalendar;
-   }
+	  NBACalendar newCalendar = new NBACalendar(playoffCalendar);
+	  return newCalendar;
+	}
 
-   @Override
-   protected void generateGames() {
-      // TODO Auto-generated method stub
-      GameGenerator.generateNbaFinalsPlayoffGames(getLeague().getPlayoff());
+	@Override
+	protected void generateGames() {
+	  // TODO Auto-generated method stub
+	  GameGenerator.generateNbaFinalsPlayoffGames(getLeague().getPlayoff());
 
-   }
+	}
 
 }

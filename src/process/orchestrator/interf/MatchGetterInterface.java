@@ -5,5 +5,5 @@ import data.sport.setup.Game;
 
 public interface MatchGetterInterface {
 
-   GameStat getGameStat(Game game);
+	GameStat getGameStat(Game game);
 }

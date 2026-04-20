@@ -1,7 +1,6 @@
 package gui.panel.calendarPanel;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.time.LocalDate;
 
 import javax.swing.BorderFactory;
@@ -16,7 +15,7 @@ import process.orchestrator.interf.GUIInterface;
 
 public class WeekViewPanel extends JPanel implements ThemeAware {
 	private static final long serialVersionUID = 1L;
-	private static final Font TEXT_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 11);
+
 
 	private final GUIInterface guiInterface;
 	private final JPanel matchDisplayPanel = new JPanel();

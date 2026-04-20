@@ -4,66 +4,66 @@ import data.team.Team;
 import process.utility.CalendarUtility;
 
 public class GameContext {
-    private Team homeTeam;
-    private Team awayTeam;
-    private int typeGame;
-    private GameMoment gameMoment;
-    private boolean isScheduled;
-    private boolean isRivalry;
+	private Team homeTeam;
+	private Team awayTeam;
+	private int typeGame;
+	private GameMoment gameMoment;
+	private boolean isScheduled;
+	private boolean isRivalry;
 
-    public GameContext(Team homeTeam, Team awayTeam, int typeGame) {
-        this(homeTeam, awayTeam, typeGame, new Evening());
-    }
+	public GameContext(Team homeTeam, Team awayTeam, int typeGame) {
+		this(homeTeam, awayTeam, typeGame, new Evening());
+	}
 
-    public GameContext(Team homeTeam, Team awayTeam, int typeGame, GameMoment gameMoment) {
-        this.setAwayTeam(awayTeam);
-        this.setHomeTeam(homeTeam);
-        this.setTypeGame(typeGame);
-        this.setGameMoment(gameMoment);
-        this.isRivalry = CalendarUtility.isRivalry(this);
-    }
+	public GameContext(Team homeTeam, Team awayTeam, int typeGame, GameMoment gameMoment) {
+		this.setAwayTeam(awayTeam);
+		this.setHomeTeam(homeTeam);
+		this.setTypeGame(typeGame);
+		this.setGameMoment(gameMoment);
+		this.isRivalry = CalendarUtility.isRivalry(this);
+	}
 
-    public boolean isScheduled() {
-        return this.isScheduled;
-    }
+	public boolean isScheduled() {
+		return this.isScheduled;
+	}
 
-    public void setScheduled(boolean scheduled) {
-        this.isScheduled = scheduled;
-    }
+	public void setScheduled(boolean scheduled) {
+		this.isScheduled = scheduled;
+	}
 
-    public Team getHomeTeam() {
-        return this.homeTeam;
-    }
+	public Team getHomeTeam() {
+		return this.homeTeam;
+	}
 
-    public void setHomeTeam(Team homeTeam) {
-        this.homeTeam = homeTeam;
-    }
+	public void setHomeTeam(Team homeTeam) {
+		this.homeTeam = homeTeam;
+	}
 
-    public Team getAwayTeam() {
-        return this.awayTeam;
-    }
+	public Team getAwayTeam() {
+		return this.awayTeam;
+	}
 
-    public void setAwayTeam(Team awayTeam) {
-        this.awayTeam = awayTeam;
-    }
+	public void setAwayTeam(Team awayTeam) {
+		this.awayTeam = awayTeam;
+	}
 
-    public int getTypeGame() {
-        return this.typeGame;
-    }
+	public int getTypeGame() {
+		return this.typeGame;
+	}
 
-    public void setTypeGame(int typeGame) {
-        this.typeGame = typeGame;
-    }
+	public void setTypeGame(int typeGame) {
+		this.typeGame = typeGame;
+	}
 
-    public GameMoment getGameMoment() {
-        return this.gameMoment;
-    }
+	public GameMoment getGameMoment() {
+		return this.gameMoment;
+	}
 
-    public void setGameMoment(GameMoment gameMoment) {
-        this.gameMoment = gameMoment;
-    }
+	public void setGameMoment(GameMoment gameMoment) {
+		this.gameMoment = gameMoment;
+	}
 
-    public boolean isRivalry() {
-        return this.isRivalry;
-    }
+	public boolean isRivalry() {
+		return this.isRivalry;
+	}
 }

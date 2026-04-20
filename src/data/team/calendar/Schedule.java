@@ -1,6 +1,6 @@
 /*
- * Decompiled with CFR 0.152.
- */
+	* Decompiled with CFR 0.152.
+	*/
 package data.team.calendar;
 
 import java.time.LocalDate;
@@ -11,95 +11,95 @@ import java.util.TreeMap;
 import data.sport.setup.Game;
 
 public class Schedule {
-    private int numberOfPlayedGames;
-    private int numberOfAwayGames;
-    private int numberOfHomeGames;
-    private ArrayList<Game> games;
-    private TreeMap<LocalDate, Game> scheduledGames;
-    private TreeMap<LocalDate, Game> playedGames;
+	private int numberOfPlayedGames;
+	private int numberOfAwayGames;
+	private int numberOfHomeGames;
+	private ArrayList<Game> games;
+	private TreeMap<LocalDate, Game> scheduledGames;
+	private TreeMap<LocalDate, Game> playedGames;
 
-    public Schedule() {
-        this.setNumberOfAwayGames(0);
-        this.setNumberOfHomeGames(0);
-        this.setNumberOfPlayedGames(0);
-        this.games = new ArrayList<>();
-        this.scheduledGames = new TreeMap<>();
-        this.playedGames = new TreeMap<>();
-    }
+	public Schedule() {
+		this.setNumberOfAwayGames(0);
+		this.setNumberOfHomeGames(0);
+		this.setNumberOfPlayedGames(0);
+		this.games = new ArrayList<>();
+		this.scheduledGames = new TreeMap<>();
+		this.playedGames = new TreeMap<>();
+	}
 
-    public int getNumberOfPlayedGames() {
-        return this.numberOfPlayedGames;
-    }
+	public int getNumberOfPlayedGames() {
+		return this.numberOfPlayedGames;
+	}
 
-    public void setNumberOfPlayedGames(int n) {
-        this.numberOfPlayedGames = n;
-    }
+	public void setNumberOfPlayedGames(int n) {
+		this.numberOfPlayedGames = n;
+	}
 
-    public int getNumberOfAwayGames() {
-        return this.numberOfAwayGames;
-    }
+	public int getNumberOfAwayGames() {
+		return this.numberOfAwayGames;
+	}
 
-    public void setNumberOfAwayGames(int n) {
-        this.numberOfAwayGames = n;
-    }
+	public void setNumberOfAwayGames(int n) {
+		this.numberOfAwayGames = n;
+	}
 
-    public int getNumberOfHomeGames() {
-        return this.numberOfHomeGames;
-    }
+	public int getNumberOfHomeGames() {
+		return this.numberOfHomeGames;
+	}
 
-    public void setNumberOfHomeGames(int n) {
-        this.numberOfHomeGames = n;
-    }
+	public void setNumberOfHomeGames(int n) {
+		this.numberOfHomeGames = n;
+	}
 
-    public ArrayList<Game> getGames() {
-        return this.games;
-    }
+	public ArrayList<Game> getGames() {
+		return this.games;
+	}
 
-    public void setGames(ArrayList<Game> arrayList) {
-        this.games = arrayList;
-    }
+	public void setGames(ArrayList<Game> arrayList) {
+		this.games = arrayList;
+	}
 
-    public void addGame(Game game) {
-        this.games.add(game);
-    }
+	public void addGame(Game game) {
+		this.games.add(game);
+	}
 
-    public void incrementNumberOfAwayGames() {
-        ++this.numberOfAwayGames;
-    }
+	public void incrementNumberOfAwayGames() {
+		++this.numberOfAwayGames;
+	}
 
-    public void incrementNumberOfHomeGames() {
-        ++this.numberOfHomeGames;
-    }
+	public void incrementNumberOfHomeGames() {
+		++this.numberOfHomeGames;
+	}
 
-    public boolean isPlayingOn(LocalDate localDate) {
-        return this.scheduledGames.containsKey(localDate);
-    }
+	public boolean isPlayingOn(LocalDate localDate) {
+		return this.scheduledGames.containsKey(localDate);
+	}
 
-    public int daysSinceLastGame(LocalDate localDate) {
-        if (this.scheduledGames.isEmpty()) {
-            return Integer.MAX_VALUE;
-        }
-        LocalDate lastGameDate = this.scheduledGames.lowerKey(localDate);
+	public int daysSinceLastGame(LocalDate localDate) {
+		if (this.scheduledGames.isEmpty()) {
+			return Integer.MAX_VALUE;
+		}
+		LocalDate lastGameDate = this.scheduledGames.lowerKey(localDate);
 
-        if (lastGameDate == null) {
-            return Integer.MAX_VALUE;
-        }
-        return (int) ChronoUnit.DAYS.between(lastGameDate, localDate);
-    }
+		if (lastGameDate == null) {
+			return Integer.MAX_VALUE;
+		}
+		return (int) ChronoUnit.DAYS.between(lastGameDate, localDate);
+	}
 
-    public void scheduleGame(LocalDate localDate, Game game) {
-        this.scheduledGames.put(localDate, game);
-    }
+	public void scheduleGame(LocalDate localDate, Game game) {
+		this.scheduledGames.put(localDate, game);
+	}
 
-    public void clearGames() {
-        this.games.clear();
-    }
+	public void clearGames() {
+		this.games.clear();
+	}
 
-    public void clearScheduledGames() {
-        this.scheduledGames.clear();
-    }
+	public void clearScheduledGames() {
+		this.scheduledGames.clear();
+	}
 
-    public TreeMap<LocalDate, Game> getScheduledGames() {
-        return this.scheduledGames;
-    }
+	public TreeMap<LocalDate, Game> getScheduledGames() {
+		return this.scheduledGames;
+	}
 }

@@ -11,32 +11,32 @@ import process.simulator.GameSimulator;
 
 public class PlayoffGameDaySimulationProcessor extends GameDaySimulationProcessor {
 
-   private PlayoffManager playoffManager;
-   private PlayoffRound round;
+	private PlayoffManager playoffManager;
+	private PlayoffRound round;
 
-   public PlayoffGameDaySimulationProcessor(
-         GameSimulator gameSimulator,
-         FinanceManager financeManager,
-         PlayoffManager playoffManager,
-         PlayoffRound round) {
-      super(gameSimulator, financeManager);
-      this.playoffManager = playoffManager;
-      this.round = round;
-   }
+	public PlayoffGameDaySimulationProcessor(
+		 GameSimulator gameSimulator,
+		 FinanceManager financeManager,
+		 PlayoffManager playoffManager,
+		 PlayoffRound round) {
+	  super(gameSimulator, financeManager);
+	  this.playoffManager = playoffManager;
+	  this.round = round;
+	}
 
-   @Override
-   protected void applyFinance(Game game, LocalDate date, int month) {
-      financeManager.calculatePlayoffGame(game, date, month, round);
-   }
+	@Override
+	protected void applyFinance(Game game, LocalDate date, int month) {
+	  financeManager.calculatePlayoffGame(game, date, month, round);
+	}
 
-   @Override
-   protected void afterGame(Game game, LocalDate date) {
-      playoffManager.handlePlayedGame(game, date);
-   }
+	@Override
+	protected void afterGame(Game game, LocalDate date) {
+	  playoffManager.handlePlayedGame(game, date);
+	}
 
-   @Override
-   protected void afterGameDay(GameDay gameDay, LocalDate date, int month) {
+	@Override
+	protected void afterGameDay(GameDay gameDay, LocalDate date, int month) {
 
-   }
+	}
 
 }

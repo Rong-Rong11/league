@@ -5,21 +5,21 @@ import process.service.live.LiveMatchState;
 
 public interface LiveMatchInterface {
 
-   boolean isLiveMatchAvailable(Game game);
+	boolean isLiveMatchAvailable(Game game);
 
-   void setLiveGame(Game game);
+	void setLiveGame(Game game);
 
-   void startLiveMatch();
+	void startLiveMatch();
 
-   void pauseLiveMatch();
+	void pauseLiveMatch();
 
-   void playCurrentLiveQuarter();
+	void playCurrentLiveQuarter();
 
-   void resetLiveMatch();
+	void resetLiveMatch();
 
-   void tickLiveMatch();
+	void tickLiveMatch();
 
-   boolean isLiveMatchRunning();
+	boolean isLiveMatchRunning();
 
-   LiveMatchState getCurrentLiveState();
+	LiveMatchState getCurrentLiveState();
 }

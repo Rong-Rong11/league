@@ -19,8 +19,8 @@ import gui.panel.mapPanel.effectifPanel.MapTeamSummaryPanel;
 import process.orchestrator.interf.GUIInterface;
 
 /**
- * Dashboard dedie a la page Carte.
- */
+	* Dashboard dedie a la page Carte.
+	*/
 public class MapDashboard extends JPanel implements ThemeAware, RefreshableDashboard {
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 64;

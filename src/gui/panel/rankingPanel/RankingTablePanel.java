@@ -185,12 +185,6 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		return label;
 	}
 
-	private JPanel buildRowsPanel() {
-		JPanel rowsPanel = new JPanel();
-		rowsPanel.setOpaque(false);
-		rowsPanel.setLayout(new BoxLayout(rowsPanel, BoxLayout.Y_AXIS));
-		return rowsPanel;
-	}
 
 	public void refreshRanking() {
 		tableContentPanel.removeAll();

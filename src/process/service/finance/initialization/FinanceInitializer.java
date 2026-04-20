@@ -5,14 +5,14 @@ import process.builder.finance.FinanceBuilder;
 import process.repository.TeamRepository;
 
 public class FinanceInitializer {
-   private TeamRepository teamRepositery = TeamRepository.getInstance();
+	private TeamRepository teamRepositery = TeamRepository.getInstance();
 
-   public FinanceInitializer() {
-   }
+	public FinanceInitializer() {
+	}
 
-   public void initializeFinance() {
-      for (Team team : teamRepositery.getAllTeams()) {
-         team.setTeamFinance(FinanceBuilder.buildTeamFinance(team));
-      }
-   }
+	public void initializeFinance() {
+	  for (Team team : teamRepositery.getAllTeams()) {
+		 team.setTeamFinance(FinanceBuilder.buildTeamFinance(team));
+	  }
+	}
 }

@@ -27,186 +27,186 @@ import process.utility.TeamUtility;
 import process.visitor.financialprofil.ChooseTransferStrategyVisitor;
 
 public class FinanceManager {
-    private League league;
-    private final TeamRepository teamRepository = TeamRepository.getInstance();
-    private final FinanceInitializer financeInitializer = new FinanceInitializer();
+	private League league;
+	private final TeamRepository teamRepository = TeamRepository.getInstance();
+	private final FinanceInitializer financeInitializer = new FinanceInitializer();
 
-    private final RevenueSharingManager revenueSharingManager;
-    private final RegularSeasonMonthlyTeamFinanceCalculator regularSeasonMonthlyFinanceCalculator;
-    private final PlayoffMonthlyTeamFinanceCalculator playoffMonthlyFinanceCalculator;
-    private final CentralRevenueDistributor centralRevenueDistributor;
-    private final LeagueExpenseCalculator leagueExpenseCalculator;
+	private final RevenueSharingManager revenueSharingManager;
+	private final RegularSeasonMonthlyTeamFinanceCalculator regularSeasonMonthlyFinanceCalculator;
+	private final PlayoffMonthlyTeamFinanceCalculator playoffMonthlyFinanceCalculator;
+	private final CentralRevenueDistributor centralRevenueDistributor;
+	private final LeagueExpenseCalculator leagueExpenseCalculator;
 
-    private final RegularSeasonGameFinanceProcessor regularSeasonGameProcessor;
-    private final HashMap<PlayoffRound, PlayoffGameFinanceProcessor> playoffGameProcessorsByRound = new HashMap<PlayoffRound, PlayoffGameFinanceProcessor>();
+	private final RegularSeasonGameFinanceProcessor regularSeasonGameProcessor;
+	private final HashMap<PlayoffRound, PlayoffGameFinanceProcessor> playoffGameProcessorsByRound = new HashMap<PlayoffRound, PlayoffGameFinanceProcessor>();
 
-    public FinanceManager(League league) {
-        this.league = league;
-        revenueSharingManager = new RevenueSharingManager(league);
-        regularSeasonMonthlyFinanceCalculator = new RegularSeasonMonthlyTeamFinanceCalculator(league);
-        playoffMonthlyFinanceCalculator = new PlayoffMonthlyTeamFinanceCalculator(league);
-        centralRevenueDistributor = new CentralRevenueDistributor(league);
-        leagueExpenseCalculator = new LeagueExpenseCalculator(league);
+	public FinanceManager(League league) {
+		this.league = league;
+		revenueSharingManager = new RevenueSharingManager(league);
+		regularSeasonMonthlyFinanceCalculator = new RegularSeasonMonthlyTeamFinanceCalculator(league);
+		playoffMonthlyFinanceCalculator = new PlayoffMonthlyTeamFinanceCalculator(league);
+		centralRevenueDistributor = new CentralRevenueDistributor(league);
+		leagueExpenseCalculator = new LeagueExpenseCalculator(league);
 
-        regularSeasonGameProcessor = new RegularSeasonGameFinanceProcessor(league);
-        centralRevenueDistributor.setFinanceManager(this);
-        leagueExpenseCalculator.setFinanceManager(this);
-    }
+		regularSeasonGameProcessor = new RegularSeasonGameFinanceProcessor(league);
+		centralRevenueDistributor.setFinanceManager(this);
+		leagueExpenseCalculator.setFinanceManager(this);
+	}
 
-    // Initialization
-    public void initializeFinance() {
-        financeInitializer.initializeFinance();
-    }
+	// Initialization
+	public void initializeFinance() {
+		financeInitializer.initializeFinance();
+	}
 
-    // Monthly simulation
-    public void applyMonthlyFinance(int month) {
-        applyRegularSeasonMonthlyFinanceToAllTeams(month);
-        distributeCentralRevenue(month);
-        applyLeagueExpenses(month);
-        applyRevenueSharing(month);
-    }
+	// Monthly simulation
+	public void applyMonthlyFinance(int month) {
+		applyRegularSeasonMonthlyFinanceToAllTeams(month);
+		distributeCentralRevenue(month);
+		applyLeagueExpenses(month);
+		applyRevenueSharing(month);
+	}
 
-    public void applyPlayoffMonthlyFinance(int month, ArrayList<Team> activePlayoffTeams) {
-        for (Team team : teamRepository.getAllTeams()) {
-            if (activePlayoffTeams.contains(team)) {
-                applyPlayoffMonthlyFinanceToTeam(team, month);
-                continue;
-            }
+	public void applyPlayoffMonthlyFinance(int month, ArrayList<Team> activePlayoffTeams) {
+		for (Team team : teamRepository.getAllTeams()) {
+			if (activePlayoffTeams.contains(team)) {
+				applyPlayoffMonthlyFinanceToTeam(team, month);
+				continue;
+			}
 
-            applyPlayoffFixedCostsToTeam(team, month);
-        }
-        distributeCentralRevenue(month);
-        applyLeagueExpenses(month);
-    }
+			applyPlayoffFixedCostsToTeam(team, month);
+		}
+		distributeCentralRevenue(month);
+		applyLeagueExpenses(month);
+	}
 
-    private void distributeCentralRevenue(int month) {
-        centralRevenueDistributor.distributeMonthlyCentralRevenue(month);
-    }
+	private void distributeCentralRevenue(int month) {
+		centralRevenueDistributor.distributeMonthlyCentralRevenue(month);
+	}
 
-    private void applyRevenueSharing(int month) {
-        revenueSharingManager.applyRevenueSharing(month);
-    }
+	private void applyRevenueSharing(int month) {
+		revenueSharingManager.applyRevenueSharing(month);
+	}
 
-    private void applyLeagueExpenses(int month) {
-        leagueExpenseCalculator.applyMonthlyExpenses(month);
-    }
+	private void applyLeagueExpenses(int month) {
+		leagueExpenseCalculator.applyMonthlyExpenses(month);
+	}
 
-    // Game finance
-    public void calculateRegularSeasonGame(Game game, LocalDate date, int month) {
-        regularSeasonGameProcessor.calculateGame(game, date, month);
-    }
+	// Game finance
+	public void calculateRegularSeasonGame(Game game, LocalDate date, int month) {
+		regularSeasonGameProcessor.calculateGame(game, date, month);
+	}
 
-    public void calculatePlayoffGame(Game game, LocalDate date, int month, PlayoffRound round) {
-        PlayoffGameFinanceProcessor playoffGameFinanceProcessor = getOrCreatePlayoffGameProcessor(round);
-        playoffGameFinanceProcessor.calculateGame(game, date, month);
-    }
+	public void calculatePlayoffGame(Game game, LocalDate date, int month, PlayoffRound round) {
+		PlayoffGameFinanceProcessor playoffGameFinanceProcessor = getOrCreatePlayoffGameProcessor(round);
+		playoffGameFinanceProcessor.calculateGame(game, date, month);
+	}
 
-    private PlayoffGameFinanceProcessor getOrCreatePlayoffGameProcessor(PlayoffRound round) {
-        PlayoffGameFinanceProcessor playoffGameProcessor = playoffGameProcessorsByRound.get(round);
-        if (playoffGameProcessor == null) {
-            playoffGameProcessor = new PlayoffGameFinanceProcessor(league, round);
-            playoffGameProcessorsByRound.put(round, playoffGameProcessor);
-        }
-        return playoffGameProcessor;
-    }
+	private PlayoffGameFinanceProcessor getOrCreatePlayoffGameProcessor(PlayoffRound round) {
+		PlayoffGameFinanceProcessor playoffGameProcessor = playoffGameProcessorsByRound.get(round);
+		if (playoffGameProcessor == null) {
+			playoffGameProcessor = new PlayoffGameFinanceProcessor(league, round);
+			playoffGameProcessorsByRound.put(round, playoffGameProcessor);
+		}
+		return playoffGameProcessor;
+	}
 
-    private void applyRegularSeasonMonthlyFinanceToTeam(Team team, int month) {
-        regularSeasonMonthlyFinanceCalculator.applyMonthlyFinance(team, month);
-    }
+	private void applyRegularSeasonMonthlyFinanceToTeam(Team team, int month) {
+		regularSeasonMonthlyFinanceCalculator.applyMonthlyFinance(team, month);
+	}
 
-    private void applyPlayoffFixedCostsToTeam(Team team, int month) {
-        playoffMonthlyFinanceCalculator.applyMonthlyFixedCosts(team, month);
-    }
+	private void applyPlayoffFixedCostsToTeam(Team team, int month) {
+		playoffMonthlyFinanceCalculator.applyMonthlyFixedCosts(team, month);
+	}
 
-    private void applyPlayoffMonthlyFinanceToTeam(Team team, int month) {
-        playoffMonthlyFinanceCalculator.applyMonthlyFinance(team, month);
-    }
+	private void applyPlayoffMonthlyFinanceToTeam(Team team, int month) {
+		playoffMonthlyFinanceCalculator.applyMonthlyFinance(team, month);
+	}
 
-    private void applyRegularSeasonMonthlyFinanceToAllTeams(int month) {
-        for (Team team : teamRepository.getAllTeams()) {
-            applyRegularSeasonMonthlyFinanceToTeam(team, month);
-        }
-    }
+	private void applyRegularSeasonMonthlyFinanceToAllTeams(int month) {
+		for (Team team : teamRepository.getAllTeams()) {
+			applyRegularSeasonMonthlyFinanceToTeam(team, month);
+		}
+	}
 
-    // getters
-    public GameStat getGameStat(Game game) {
-        GameStat gameStat = regularSeasonGameProcessor.getGameStat(game);
+	// getters
+	public GameStat getGameStat(Game game) {
+		GameStat gameStat = regularSeasonGameProcessor.getGameStat(game);
 
-        if (gameStat != null) {
-            return gameStat;
-        }
+		if (gameStat != null) {
+			return gameStat;
+		}
 
-        for (PlayoffGameFinanceProcessor playoffGameFinanceProcessor : playoffGameProcessorsByRound.values()) {
-            gameStat = playoffGameFinanceProcessor.getGameStat(game);
+		for (PlayoffGameFinanceProcessor playoffGameFinanceProcessor : playoffGameProcessorsByRound.values()) {
+			gameStat = playoffGameFinanceProcessor.getGameStat(game);
 
-            if (gameStat != null) {
-                return gameStat;
-            }
-        }
+			if (gameStat != null) {
+				return gameStat;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    // Team finance setup
-    public void randomFinancialPolicy() {
-        for (Team team : teamRepository.getAllTeams()) {
-            FinancialPolicy financialPolicy = TeamUtility.randomFinancialProfil();
-            chooseFinancialPolicy(team, financialPolicy);
-        }
-    }
+	// Team finance setup
+	public void randomFinancialPolicy() {
+		for (Team team : teamRepository.getAllTeams()) {
+			FinancialPolicy financialPolicy = TeamUtility.randomFinancialProfil();
+			chooseFinancialPolicy(team, financialPolicy);
+		}
+	}
 
-    public void chooseFinancialPolicy(Team team, FinancialPolicy financialPolicy) {
-        team.getTeamFinance().setFinancialProfil(financialPolicy);
-        team.getTeamFinance()
-                .setTeamTransferStrategy(financialPolicy.accept(new ChooseTransferStrategyVisitor(team.getRival())));
-    }
+	public void chooseFinancialPolicy(Team team, FinancialPolicy financialPolicy) {
+		team.getTeamFinance().setFinancialProfil(financialPolicy);
+		team.getTeamFinance()
+				.setTeamTransferStrategy(financialPolicy.accept(new ChooseTransferStrategyVisitor(team.getRival())));
+	}
 
-    public void chooseMarketSize(Team team, MarketSize marketSize) {
-        team.getTeamFinance().setMarketSize(marketSize);
-    }
+	public void chooseMarketSize(Team team, MarketSize marketSize) {
+		team.getTeamFinance().setMarketSize(marketSize);
+	}
 
-    public void randomMarketSize() {
-        for (Team team : teamRepository.getAllTeams()) {
-            MarketSize marketSize = TeamUtility.randomMarketSize();
-            chooseMarketSize(team, marketSize);
-        }
-    }
+	public void randomMarketSize() {
+		for (Team team : teamRepository.getAllTeams()) {
+			MarketSize marketSize = TeamUtility.randomMarketSize();
+			chooseMarketSize(team, marketSize);
+		}
+	}
 
-    public double getTeamCurrentPayroll(Team team) {
-        return team.getTeamFinance().getCurrentPayroll();
-    }
+	public double getTeamCurrentPayroll(Team team) {
+		return team.getTeamFinance().getCurrentPayroll();
+	}
 
-    // Playoff bonuses
-    public void applyPlayoffQualificationBonus(Team team, int month) {
-        double bonus = 0.8;
+	// Playoff bonuses
+	public void applyPlayoffQualificationBonus(Team team, int month) {
+		double bonus = 0.8;
 
-        FinanceUtility.addIncome(
-                team.getTeamFinance().getBudget(),
-                new Income(IncomeType.PLAYOFF_QUALIFICATION_BONUS, bonus),
-                month);
+		FinanceUtility.addIncome(
+				team.getTeamFinance().getBudget(),
+				new Income(IncomeType.PLAYOFF_QUALIFICATION_BONUS, bonus),
+				month);
 
-        FinanceUtility.updateBudget(team.getTeamFinance().getBudget());
-    }
+		FinanceUtility.updateBudget(team.getTeamFinance().getBudget());
+	}
 
-    public void applyPlayoffQualificationBonus(ArrayList<Team> teams, int month) {
-        for (Team team : teams) {
-            applyPlayoffQualificationBonus(team, month);
-        }
-    }
+	public void applyPlayoffQualificationBonus(ArrayList<Team> teams, int month) {
+		for (Team team : teams) {
+			applyPlayoffQualificationBonus(team, month);
+		}
+	}
 
-    public void applyPlayoffRoundBonus(Team team, int month, PlayoffRound round) {
-        PlayoffFinancialRules playoffFinancialRules = new PlayoffFinancialRules(round);
-        double bonus = playoffFinancialRules.getRoundQualificationBonus();
+	public void applyPlayoffRoundBonus(Team team, int month, PlayoffRound round) {
+		PlayoffFinancialRules playoffFinancialRules = new PlayoffFinancialRules(round);
+		double bonus = playoffFinancialRules.getRoundQualificationBonus();
 
-        if (bonus <= 0) {
-            return;
-        }
+		if (bonus <= 0) {
+			return;
+		}
 
-        FinanceUtility.addIncome(
-                team.getTeamFinance().getBudget(),
-                new Income(IncomeType.PLAYOFF_ROUND_BONUS, bonus),
-                month);
+		FinanceUtility.addIncome(
+				team.getTeamFinance().getBudget(),
+				new Income(IncomeType.PLAYOFF_ROUND_BONUS, bonus),
+				month);
 
-        FinanceUtility.updateBudget(team.getTeamFinance().getBudget());
-    }
+		FinanceUtility.updateBudget(team.getTeamFinance().getBudget());
+	}
 }

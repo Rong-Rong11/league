@@ -4,9 +4,9 @@ import process.visitor.financialprofil.FinancialProfilVisitor;
 
 public abstract class FinancialPolicy {
 
-    public FinancialPolicy() {
+	public FinancialPolicy() {
 
-    }
+	}
 
-    public abstract <F> F accept(FinancialProfilVisitor<F> var1);
+	public abstract <F> F accept(FinancialProfilVisitor<F> var1);
 }

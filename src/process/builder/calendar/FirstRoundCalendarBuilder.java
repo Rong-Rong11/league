@@ -9,28 +9,28 @@ import data.league.League;
 import process.builder.calendar.tools.GameGenerator;
 
 public class FirstRoundCalendarBuilder extends PlayoffCalendarBuilder {
-   public FirstRoundCalendarBuilder(League league) {
-      super(league);
-   }
+	public FirstRoundCalendarBuilder(League league) {
+	  super(league);
+	}
 
-   @Override
-   protected NBACalendar build() {
-      // TODO Auto-generated method stub
-      TreeMap<LocalDate, GameDay> playoffCalendar = new TreeMap<>();
+	@Override
+	protected NBACalendar build() {
+	  // TODO Auto-generated method stub
+	  TreeMap<LocalDate, GameDay> playoffCalendar = new TreeMap<>();
 
-      LocalDate startDate = config.CalendarConfiguration.PLAYOFF_DEBUT_DATE;
+	  LocalDate startDate = config.CalendarConfiguration.PLAYOFF_DEBUT_DATE;
 
-      scheduleRoundFirstFourGames(playoffCalendar, getLeague().getPlayoff().getEastFirstRound(), startDate);
-      scheduleRoundFirstFourGames(playoffCalendar, getLeague().getPlayoff().getWestFirstRound(), startDate);
+	  scheduleRoundFirstFourGames(playoffCalendar, getLeague().getPlayoff().getEastFirstRound(), startDate);
+	  scheduleRoundFirstFourGames(playoffCalendar, getLeague().getPlayoff().getWestFirstRound(), startDate);
 
-      NBACalendar newCalendar = new NBACalendar(playoffCalendar);
-      return newCalendar;
-   }
+	  NBACalendar newCalendar = new NBACalendar(playoffCalendar);
+	  return newCalendar;
+	}
 
-   @Override
-   protected void generateGames() {
-      GameGenerator.generateFirstRoundPlayoffGames(getLeague().getPlayoff());
+	@Override
+	protected void generateGames() {
+	  GameGenerator.generateFirstRoundPlayoffGames(getLeague().getPlayoff());
 
-   }
+	}
 
 }
