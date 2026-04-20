@@ -1,6 +1,8 @@
 package gui.panel.matchPanel;
 import config.CalendarConfiguration;
+import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
@@ -8,7 +10,6 @@ import gui.panel.common.ThemeAware;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -38,21 +39,21 @@ public class MatchHeaderPanel extends RoundedPanel implements ThemeAware {
 		setBorder(BorderFactory.createEmptyBorder(10, 16, 10, 16));
 
 		titleLabel = new JLabel("SAISON REGULIERE");
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+		LabelStyleUtil.styleTitleLabel(titleLabel, 14);
 		titleLabel.setAlignmentX(LEFT_ALIGNMENT);
 
 		dayNumberLabel = new JLabel("Jour -");
-		dayNumberLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 22));
+		LabelStyleUtil.styleValueLabel(dayNumberLabel, 22);
 		dayNumberLabel.setAlignmentX(LEFT_ALIGNMENT);
 
-		subtitleLabel = new JLabel("-");
-		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+		subtitleLabel = new JLabel("La date sera disponible apres le lancement de la saison.");
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 11);
 		subtitleLabel.setAlignmentX(LEFT_ALIGNMENT);
 
 		previousDayButton = new RoundedButton("<");
 		nextDayButton = new RoundedButton(">");
-		previousDayButton.setPreferredSize(new Dimension(42, 30));
-		nextDayButton.setPreferredSize(new Dimension(42, 30));
+		ButtonStyleUtil.styleActionButton(previousDayButton, 42, 30, 14);
+		ButtonStyleUtil.styleActionButton(nextDayButton, 42, 30, 14);
 		previousDayButton.setBackground(DashboardPanelUtil.getNavigationButtonColor());
 		nextDayButton.setBackground(DashboardPanelUtil.getNavigationButtonColor());
 		previousDayButton.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
@@ -84,7 +85,7 @@ public class MatchHeaderPanel extends RoundedPanel implements ThemeAware {
 	public void updateDate(LocalDate date) {
 		if (date == null) {
 			dayNumberLabel.setText("Jour -");
-			subtitleLabel.setText("-");
+			subtitleLabel.setText("La date sera disponible apres le lancement de la saison.");
 			return;
 		}
 		long dayNumber = ChronoUnit.DAYS.between(CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE, date) + 1;
@@ -103,9 +104,9 @@ public class MatchHeaderPanel extends RoundedPanel implements ThemeAware {
 	@Override
 	public void applyTheme() {
 		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
-		titleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		dayNumberLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleTitleLabel(titleLabel, 14);
+		LabelStyleUtil.styleValueLabel(dayNumberLabel, 22);
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 11);
 		previousDayButton.setBackground(DashboardPanelUtil.getNavigationButtonColor());
 		nextDayButton.setBackground(DashboardPanelUtil.getNavigationButtonColor());
 		previousDayButton.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());

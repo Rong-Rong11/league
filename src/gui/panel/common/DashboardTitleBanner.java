@@ -1,8 +1,6 @@
 package gui.panel.common;
 
 import java.awt.Dimension;
-import java.awt.Font;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -19,14 +17,14 @@ public class DashboardTitleBanner extends RoundedPanel implements ThemeAware {
 		setPreferredSize(new Dimension(360, 64));
 
 		titleLabel = new JLabel(title);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+		LabelStyleUtil.styleTitleLabel(titleLabel, 16);
 		titleLabel.setAlignmentX(LEFT_ALIGNMENT);
 		add(titleLabel);
 
 		if (subtitle != null && !subtitle.isEmpty()) {
 			add(Box.createVerticalStrut(3));
 			subtitleLabel = new JLabel(subtitle);
-			subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+			LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 12);
 			subtitleLabel.setAlignmentX(LEFT_ALIGNMENT);
 			add(subtitleLabel);
 		}
@@ -36,9 +34,9 @@ public class DashboardTitleBanner extends RoundedPanel implements ThemeAware {
 	@Override
 	public void applyTheme() {
 		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
-		titleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleTitleLabel(titleLabel, 16);
 		if (subtitleLabel != null) {
-			subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+			LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 12);
 		}
 	}
 }

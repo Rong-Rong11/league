@@ -22,6 +22,7 @@ import data.league.finance.LeagueRedistributionPolicy;
 import data.team.Team;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.MonthNavigatorPanel;
 import gui.panel.common.ThemeAware;
 import process.orchestrator.interf.GUIInterface;
@@ -156,8 +157,13 @@ public class LeagueFinanceViewPanel extends JPanel implements ThemeAware {
 	}
 
 	public void refreshData() {
+		if (!guiInterface.isSeasonInitialized()) {
+			showSeasonNotStartedState();
+			return;
+		}
 		League league = guiInterface.getLeague();
 		if (league == null || league.getLeagueFinance() == null) {
+			showNoDataState();
 			return;
 		}
 
@@ -206,6 +212,71 @@ public class LeagueFinanceViewPanel extends JPanel implements ThemeAware {
 		rebuildLeagueHistoryDataset(leagueBudget);
 		rebuildLeagueExpenseDataset(leagueBudget, selectedMonth);
 		rebuildTopTeamsPanel(teams, selectedMonth);
+	}
+
+	public void showSeasonNotStartedState() {
+		remainingBudgetValueLabel.setText("La saison n'a pas encore commence.");
+		leagueValueValueLabel.setText("La valeur de la ligue sera disponible apres le lancement.");
+		summaryRevenueValueLabel.setText("Les revenus mensuels apparaitront apres le lancement.");
+		summaryNetValueLabel.setText("Le resultat net sera calcule apres le debut de saison.");
+		snapshotRevenueValueLabel.setText("Aucun revenu mensuel n'est disponible pour le moment.");
+		snapshotExpenseValueLabel.setText("Aucune depense mensuelle n'est disponible pour le moment.");
+		snapshotNetValueLabel.setText("Aucun resultat mensuel n'est disponible pour le moment.");
+		salaryCapValueLabel.setText("Les regles financieres seront affichees au lancement.");
+		luxuryTaxValueLabel.setText("Les regles financieres seront affichees au lancement.");
+		minimumSalaryValueLabel.setText("Les regles financieres seront affichees au lancement.");
+		retentionValueLabel.setText("Aucune redistribution n'est calculee pour le moment.");
+		redistributionValueLabel.setText("Aucune redistribution n'est calculee pour le moment.");
+		equalShareValueLabel.setText("Aucune redistribution n'est calculee pour le moment.");
+		weightedShareValueLabel.setText("Aucune redistribution n'est calculee pour le moment.");
+		resetVisualDatasets("Lancez la saison pour afficher les finances de la ligue.");
+	}
+
+	private void showNoDataState() {
+		remainingBudgetValueLabel.setText("Aucune donnee de ligue n'est disponible.");
+		leagueValueValueLabel.setText("Aucune donnee de ligue n'est disponible.");
+		summaryRevenueValueLabel.setText("Aucune donnee de ligue n'est disponible.");
+		summaryNetValueLabel.setText("Aucune donnee de ligue n'est disponible.");
+		snapshotRevenueValueLabel.setText("Aucune donnee de ligue n'est disponible.");
+		snapshotExpenseValueLabel.setText("Aucune donnee de ligue n'est disponible.");
+		snapshotNetValueLabel.setText("Aucune donnee de ligue n'est disponible.");
+		salaryCapValueLabel.setText("Aucune regle financiere n'est disponible.");
+		luxuryTaxValueLabel.setText("Aucune regle financiere n'est disponible.");
+		minimumSalaryValueLabel.setText("Aucune regle financiere n'est disponible.");
+		retentionValueLabel.setText("Aucune redistribution n'est disponible.");
+		redistributionValueLabel.setText("Aucune redistribution n'est disponible.");
+		equalShareValueLabel.setText("Aucune redistribution n'est disponible.");
+		weightedShareValueLabel.setText("Aucune redistribution n'est disponible.");
+		resetVisualDatasets("Aucune donnee de ligue n'est disponible.");
+	}
+
+	private void resetVisualDatasets(String message) {
+		applyEmptyStateLabel(remainingBudgetValueLabel, 12);
+		applyEmptyStateLabel(leagueValueValueLabel, 12);
+		applyEmptyStateLabel(summaryRevenueValueLabel, 12);
+		applyEmptyStateLabel(summaryNetValueLabel, 12);
+		applyEmptyStateLabel(snapshotRevenueValueLabel, 12);
+		applyEmptyStateLabel(snapshotExpenseValueLabel, 12);
+		applyEmptyStateLabel(snapshotNetValueLabel, 12);
+		applyEmptyStateLabel(salaryCapValueLabel, 12);
+		applyEmptyStateLabel(luxuryTaxValueLabel, 12);
+		applyEmptyStateLabel(minimumSalaryValueLabel, 12);
+		applyEmptyStateLabel(retentionValueLabel, 12);
+		applyEmptyStateLabel(redistributionValueLabel, 12);
+		applyEmptyStateLabel(equalShareValueLabel, 12);
+		applyEmptyStateLabel(weightedShareValueLabel, 12);
+		historyDataset.clear();
+		expenseDataset.clear();
+		topTeamsPanel.removeAll();
+		JLabel messageLabel = new JLabel(message);
+		LabelStyleUtil.styleSubtitleLabel(messageLabel, 12);
+		topTeamsPanel.add(messageLabel);
+		topTeamsPanel.revalidate();
+		topTeamsPanel.repaint();
+	}
+
+	private void applyEmptyStateLabel(JLabel label, int fontSize) {
+		LabelStyleUtil.styleSubtitleLabel(label, fontSize);
 	}
 
 	private void rebuildLeagueHistoryDataset(Budget leagueBudget) {

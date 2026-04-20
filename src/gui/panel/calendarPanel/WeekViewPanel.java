@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import data.calendar.GameDay;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.ThemeAware;
 import process.orchestrator.interf.GUIInterface;
 
@@ -165,9 +166,8 @@ public class WeekViewPanel extends JPanel implements ThemeAware {
 	}
 
 	private void showWaitingState() {
-		JLabel waitingLabel = new JLabel("Saison non initialisee.");
-		waitingLabel.setFont(TEXT_FONT);
-		waitingLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		JLabel waitingLabel = new JLabel("La saison n'a pas encore commence.");
+		LabelStyleUtil.styleSubtitleLabel(waitingLabel, 12);
 		waitingLabel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 		matchDisplayPanel.add(waitingLabel, BorderLayout.CENTER);
 		matchDisplayPanel.revalidate();

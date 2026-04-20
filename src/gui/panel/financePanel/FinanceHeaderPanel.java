@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
@@ -59,11 +60,11 @@ public class FinanceHeaderPanel extends RoundedPanel implements ThemeAware {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 		titleLabel = new JLabel("FINANCE");
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
+		LabelStyleUtil.styleTitleLabel(titleLabel, 24);
 		titleLabel.setAlignmentX(LEFT_ALIGNMENT);
 
 		subtitleLabel = new JLabel("Vue ligue et equipes");
-		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 12);
 		subtitleLabel.setAlignmentX(LEFT_ALIGNMENT);
 
 		panel.add(titleLabel);
@@ -83,7 +84,7 @@ public class FinanceHeaderPanel extends RoundedPanel implements ThemeAware {
 	@Override
 	public void applyTheme() {
 		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
-		titleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleTitleLabel(titleLabel, 24);
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 12);
 	}
 }

@@ -1,15 +1,18 @@
 package gui.panel.matchPanel;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import data.calendar.GameDay;
 import data.sport.setup.Game;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.ThemeAware;
 
 public class MatchDayListPanel extends JPanel implements ThemeAware {
@@ -21,6 +24,7 @@ public class MatchDayListPanel extends JPanel implements ThemeAware {
 
 	private JPanel gamesColumn;
 	private MatchSelectionListener matchSelectionListener;
+	private JLabel emptyStateLabel;
 
 	public MatchDayListPanel() {
 		super(new BorderLayout());
@@ -38,9 +42,7 @@ public class MatchDayListPanel extends JPanel implements ThemeAware {
 		gamesColumn.removeAll();
 
 		if (gameDay == null || gameDay.getGames().isEmpty()) {
-			gamesColumn.add(new JLabel("Aucun match aujourd'hui"));
-			gamesColumn.revalidate();
-			repaint();
+			showMessage("Aucun match programme pour cette date.");
 			return;
 		}
 
@@ -52,6 +54,20 @@ public class MatchDayListPanel extends JPanel implements ThemeAware {
 			gamesColumn.add(buildEmptyRow(i));
 		}
 
+		gamesColumn.revalidate();
+		repaint();
+	}
+
+	public void showSeasonNotStartedState() {
+		showMessage("Lancez la saison pour afficher les matchs du calendrier.");
+	}
+
+	private void showMessage(String text) {
+		gamesColumn.removeAll();
+		emptyStateLabel = new JLabel(text, SwingConstants.CENTER);
+		LabelStyleUtil.styleSubtitleLabel(emptyStateLabel, 13);
+		emptyStateLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		gamesColumn.add(emptyStateLabel);
 		gamesColumn.revalidate();
 		repaint();
 	}
@@ -68,6 +84,9 @@ public class MatchDayListPanel extends JPanel implements ThemeAware {
 
 	@Override
 	public void applyTheme() {
+		if (emptyStateLabel != null) {
+			LabelStyleUtil.styleSubtitleLabel(emptyStateLabel, 13);
+		}
 		repaint();
 	}
 }

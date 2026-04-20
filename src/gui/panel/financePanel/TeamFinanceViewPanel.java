@@ -19,6 +19,7 @@ import data.finance.budget.income.Income;
 import data.team.Team;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.MonthNavigatorPanel;
 import gui.panel.common.ThemeAware;
 import process.orchestrator.interf.GUIInterface;
@@ -171,6 +172,10 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 	}
 
 	public void refreshData() {
+		if (!guiInterface.isSeasonInitialized()) {
+			showSeasonNotStartedState();
+			return;
+		}
 		populateTeamsIfNeeded();
 		Team team = FinanceDataUtil.selectedTeam(guiInterface, teamSelector, 0);
 		if (team == null) {
@@ -269,7 +274,7 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 			double totalIncome = FinanceDataUtil.totalIncome(FinanceDataUtil.teamIncomes(team, month));
 			double totalExpense = FinanceDataUtil.totalExpense(FinanceDataUtil.teamExpenses(team, month));
 			historyDataset.addValue(totalIncome, "Revenus", FinanceDataUtil.monthLabel(month));
-			historyDataset.addValue(totalExpense, "Depenses", FinanceDataUtil.monthLabel(month));
+		historyDataset.addValue(totalExpense, "Depenses", FinanceDataUtil.monthLabel(month));
 		}
 	}
 
@@ -293,29 +298,72 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 	}
 
 	private void resetView() {
-		budgetValueLabel.setText("-");
-		selectedRevenueValueLabel.setText("-");
-		selectedExpenseValueLabel.setText("-");
-		selectedNetValueLabel.setText("-");
-		luxuryTaxValueLabel.setText("-");
-		profileValueLabel.setText("-");
-		marketValueLabel.setText("-");
-		strategyValueLabel.setText("-");
-		ticketPriceValueLabel.setText("-");
-		capacityValueLabel.setText("-");
-		budgetValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		selectedRevenueValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		selectedExpenseValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		selectedNetValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		luxuryTaxValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		profileValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		marketValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		strategyValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		ticketPriceValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		capacityValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		budgetValueLabel.setText("Aucune equipe n'est disponible.");
+		selectedRevenueValueLabel.setText("Aucun revenu mensuel n'est disponible.");
+		selectedExpenseValueLabel.setText("Aucune depense mensuelle n'est disponible.");
+		selectedNetValueLabel.setText("Aucun resultat mensuel n'est disponible.");
+		luxuryTaxValueLabel.setText("Aucune taxe de luxe n'est disponible.");
+		profileValueLabel.setText("Aucun profil financier n'est disponible.");
+		marketValueLabel.setText("Aucune taille de marche n'est disponible.");
+		strategyValueLabel.setText("Aucune strategie n'est disponible.");
+		ticketPriceValueLabel.setText("Aucun prix de billet n'est disponible.");
+		capacityValueLabel.setText("Aucune capacite n'est disponible.");
+		applyEmptyStateLabels();
 		revenueDataset.clear();
 		expenseDataset.clear();
 		historyDataset.clear();
+		revenueMetricsPanel.removeAll();
+		expenseMetricsPanel.removeAll();
+		revenueMetricsPanel.add(buildEmptyStateMessage("Aucune repartition de revenus n'est disponible."));
+		expenseMetricsPanel.add(buildEmptyStateMessage("Aucune repartition de depenses n'est disponible."));
+		revenueMetricsPanel.revalidate();
+		expenseMetricsPanel.revalidate();
+	}
+
+	public void showSeasonNotStartedState() {
+		budgetValueLabel.setText("La saison n'a pas encore commence.");
+		selectedRevenueValueLabel.setText("Les revenus mensuels apparaitront apres le lancement.");
+		selectedExpenseValueLabel.setText("Les depenses mensuelles apparaitront apres le lancement.");
+		selectedNetValueLabel.setText("Le resultat mensuel sera calcule apres le lancement.");
+		luxuryTaxValueLabel.setText("La taxe de luxe sera calculee apres le lancement.");
+		profileValueLabel.setText("Le profil financier sera affiche apres le lancement.");
+		marketValueLabel.setText("La taille du marche sera affichee apres le lancement.");
+		strategyValueLabel.setText("La strategie sera affichee apres le lancement.");
+		ticketPriceValueLabel.setText("Le prix du billet sera affiche apres le lancement.");
+		capacityValueLabel.setText("La capacite sera affichee apres le lancement.");
+		applyEmptyStateLabels();
+		revenueDataset.clear();
+		expenseDataset.clear();
+		historyDataset.clear();
+		revenueMetricsPanel.removeAll();
+		expenseMetricsPanel.removeAll();
+		revenueMetricsPanel.add(buildEmptyStateMessage("Lancez la saison pour afficher les revenus de l'equipe."));
+		expenseMetricsPanel.add(buildEmptyStateMessage("Lancez la saison pour afficher les depenses de l'equipe."));
+		revenueMetricsPanel.revalidate();
+		expenseMetricsPanel.revalidate();
+	}
+
+	private void applyEmptyStateLabels() {
+		applyEmptyStateLabel(budgetValueLabel, 12);
+		applyEmptyStateLabel(selectedRevenueValueLabel, 12);
+		applyEmptyStateLabel(selectedExpenseValueLabel, 12);
+		applyEmptyStateLabel(selectedNetValueLabel, 12);
+		applyEmptyStateLabel(luxuryTaxValueLabel, 12);
+		applyEmptyStateLabel(profileValueLabel, 12);
+		applyEmptyStateLabel(marketValueLabel, 12);
+		applyEmptyStateLabel(strategyValueLabel, 12);
+		applyEmptyStateLabel(ticketPriceValueLabel, 12);
+		applyEmptyStateLabel(capacityValueLabel, 12);
+	}
+
+	private void applyEmptyStateLabel(JLabel label, int fontSize) {
+		LabelStyleUtil.styleSubtitleLabel(label, fontSize);
+	}
+
+	private JLabel buildEmptyStateMessage(String text) {
+		JLabel label = new JLabel(text);
+		LabelStyleUtil.styleSubtitleLabel(label, 12);
+		return label;
 	}
 
 	private double getLuxuryTaxPaid(Team team) {

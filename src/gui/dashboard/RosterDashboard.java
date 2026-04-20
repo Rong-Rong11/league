@@ -2,8 +2,6 @@ package gui.dashboard;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,8 +15,10 @@ import javax.swing.JPanel;
 
 import data.team.Team;
 import gui.panel.common.BuildBox;
+import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardCard;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.RoundedPanel;
@@ -27,10 +27,8 @@ import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamRosterPanel;
 import process.orchestrator.interf.GUIInterface;
 
-public class RosterDashboard extends JPanel implements ThemeAware {
+public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDashboard {
 	private static final int DASHBOARD_SPACING = 16;
-	private static final Color BACKGROUND_COLOR = DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR;
-
 	private Team selectedTeam;
 	private GUIInterface guiInterface;
 	private Runnable backToMapAction;
@@ -63,33 +61,27 @@ public class RosterDashboard extends JPanel implements ThemeAware {
 		currentSeasonButton = new RoundedButton("Saison actuelle");
 		previousSeasonButton = new RoundedButton("Saison precedente");
 		teamNameLabel = new JLabel("Effectif");
-		subtitleLabel = new JLabel("-");
+		subtitleLabel = new JLabel("Selectionnez une franchise pour afficher l'effectif.");
 		teamLogoPanel = new TeamLogoPanel("", 56);
 		teamLogoPanel.setTeamQueryInterface(guiInterface);
-		playersCountValueLabel = new JLabel("-");
-		payrollValueLabel = new JLabel("-");
-		averageNoteValueLabel = new JLabel("-");
-		averagePointsValueLabel = new JLabel("-");
+		playersCountValueLabel = new JLabel("Le nombre de joueurs sera affiche apres la selection.");
+		payrollValueLabel = new JLabel("La masse salariale sera affichee apres la selection.");
+		averageNoteValueLabel = new JLabel("La note moyenne sera affichee apres la selection.");
+		averagePointsValueLabel = new JLabel("Le score moyen sera affiche apres la selection.");
 		rosterPanel = new TeamRosterPanel();
 
-		backButton.setFocusPainted(false);
-		currentSeasonButton.setFocusPainted(false);
-		previousSeasonButton.setFocusPainted(false);
+		ButtonStyleUtil.styleActionButton(backButton, 170, 44, 14);
+		ButtonStyleUtil.styleActionButton(currentSeasonButton, 170, 44, 14);
+		ButtonStyleUtil.styleActionButton(previousSeasonButton, 170, 44, 14);
 		backButton.setAlignmentX(LEFT_ALIGNMENT);
-		currentSeasonButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
-		previousSeasonButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
-		currentSeasonButton.setPreferredSize(new Dimension(170, 44));
-		previousSeasonButton.setPreferredSize(new Dimension(170, 44));
-		teamNameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
-		teamNameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
-		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleTitleLabel(teamNameLabel, 24);
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 13);
 		subtitleLabel.setAlignmentX(LEFT_ALIGNMENT);
 	}
 
 	private void organize() {
 		setLayout(new BorderLayout());
-		setBackground(BACKGROUND_COLOR);
+		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
 
 		JPanel content = new JPanel(new BorderLayout(DASHBOARD_SPACING, DASHBOARD_SPACING));
 		content.setOpaque(false);
@@ -172,10 +164,8 @@ public class RosterDashboard extends JPanel implements ThemeAware {
 		card.setBorder(BorderFactory.createEmptyBorder(14, 16, 14, 16));
 
 		JLabel titleLabel = new JLabel(title);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		titleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
-		valueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 22));
-		valueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(titleLabel, 12);
+		LabelStyleUtil.styleValueLabel(valueLabel, 22);
 
 		card.add(titleLabel);
 		card.add(Box.createVerticalStrut(4));
@@ -216,12 +206,12 @@ public class RosterDashboard extends JPanel implements ThemeAware {
 
 	private void showEmptyState() {
 		teamLogoPanel.setTeamName("");
-		teamNameLabel.setText("Effectif");
-		subtitleLabel.setText("-");
-		playersCountValueLabel.setText("-");
-		payrollValueLabel.setText("-");
-		averageNoteValueLabel.setText("-");
-		averagePointsValueLabel.setText("-");
+		teamNameLabel.setText("Aucune equipe n'est selectionnee.");
+		subtitleLabel.setText("Ouvrez la carte pour choisir une franchise.");
+		playersCountValueLabel.setText("Le nombre de joueurs n'est pas disponible.");
+		payrollValueLabel.setText("La masse salariale n'est pas disponible.");
+		averageNoteValueLabel.setText("La note moyenne n'est pas disponible.");
+		averagePointsValueLabel.setText("Le score moyen n'est pas disponible.");
 		rosterPanel.updateTeam(null, currentSeasonSelected);
 	}
 
@@ -307,6 +297,11 @@ public class RosterDashboard extends JPanel implements ThemeAware {
 	}
 
 	@Override
+	public void refresh() {
+		refreshSelectedTeam();
+	}
+
+	@Override
 	public void applyTheme() {
 		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
 		if (headerPanel != null) {
@@ -314,14 +309,23 @@ public class RosterDashboard extends JPanel implements ThemeAware {
 		}
 		backButton.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
 		backButton.setForeground(DashboardPanelUtil.BUTTON_TEXT_COLOR);
-		teamNameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
-		playersCountValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		payrollValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		averageNoteValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		averagePointsValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleTitleLabel(teamNameLabel, 24);
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 13);
+		applyMetricLabelStyle(playersCountValueLabel);
+		applyMetricLabelStyle(payrollValueLabel);
+		applyMetricLabelStyle(averageNoteValueLabel);
+		applyMetricLabelStyle(averagePointsValueLabel);
 		updateSeasonButtonsStyle();
 		DashboardPanelUtil.refreshChildrenTheme(this);
+	}
+
+	private void applyMetricLabelStyle(JLabel label) {
+		if (label.getText() != null && label.getText().startsWith("Le ")
+				|| label.getText() != null && label.getText().startsWith("La ")) {
+			LabelStyleUtil.styleSubtitleLabel(label, 12);
+			return;
+		}
+		LabelStyleUtil.styleValueLabel(label, 22);
 	}
 
 }

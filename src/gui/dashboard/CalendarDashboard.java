@@ -22,7 +22,7 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
 import process.orchestrator.interf.GUIInterface;
 
-public class CalendarDashboard extends JPanel implements ThemeAware {
+public class CalendarDashboard extends JPanel implements ThemeAware, RefreshableDashboard {
 
 	private static final int DASHBOARD_SPACING = 16;
 	private static final String MONTH_VIEW = "MONTH_VIEW";
@@ -109,6 +109,11 @@ public class CalendarDashboard extends JPanel implements ThemeAware {
 		weekViewPanel.syncToSimulationDate(simulationDate);
 		updateDisplayedMonth(currentCalendarDate);
 		updateDashboardState();
+	}
+
+	@Override
+	public void refresh() {
+		refreshSeasonState();
 	}
 
 	public void showUninitializedSeasonState() {

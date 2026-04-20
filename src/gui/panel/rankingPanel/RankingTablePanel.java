@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import data.team.Team;
 import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
 import process.orchestrator.interf.GUIInterface;
@@ -113,8 +114,7 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		previousPageButton = createPageButton("<");
 		nextPageButton = createPageButton(">");
 		pageLabel = new JLabel(buildPageText(pageCount), JLabel.CENTER);
-		pageLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		pageLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleValueLabel(pageLabel, 12);
 
 		previousPageButton.addActionListener(new PreviousPageAction(pageCount));
 		nextPageButton.addActionListener(new NextPageAction(pageCount));
@@ -128,8 +128,7 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 
 	private JButton createPageButton(String text) {
 		JButton button = new RoundedButton(text);
-		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
-		button.setPreferredSize(new Dimension(44, 32));
+		ButtonStyleUtil.styleActionButton(button, 44, 32, 14);
 		stylePageButton(button);
 		return button;
 	}
@@ -183,8 +182,7 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 
 	private JLabel createHeaderLabel(String text) {
 		JLabel label = new JLabel(text);
-		label.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
-		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+		LabelStyleUtil.styleSubtitleLabel(label, 11);
 		return label;
 	}
 
@@ -206,6 +204,12 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		}
 
 		ArrayList<Team> teams = getSelectedTeams();
+		if (teams.isEmpty()) {
+			tableContentPanel.add(buildEmptyStatePanel(), BorderLayout.CENTER);
+			revalidate();
+			repaint();
+			return;
+		}
 		if (GLOBAL_MODE.equals(selectedMode)) {
 			int pageCount = Math.max(1, (int) Math.ceil((double) teams.size() / GLOBAL_PAGE_SIZE));
 			if (globalPageIndex >= pageCount) {
@@ -253,6 +257,15 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		}
 
 		return column;
+	}
+
+	private JPanel buildEmptyStatePanel() {
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setOpaque(false);
+		JLabel messageLabel = new JLabel("Aucun classement n'est disponible pour le moment.", JLabel.CENTER);
+		LabelStyleUtil.styleSubtitleLabel(messageLabel, 13);
+		panel.add(messageLabel, BorderLayout.CENTER);
+		return panel;
 	}
 
 	private ArrayList<Team> getSelectedTeams() {

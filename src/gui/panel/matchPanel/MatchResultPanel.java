@@ -1,7 +1,6 @@
 package gui.panel.matchPanel;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -16,15 +15,12 @@ import data.sport.setup.Game;
 import data.sport.setup.GameResult;
 import data.team.Team;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import gui.utility.TeamDisplayUtility;
 
 public class MatchResultPanel extends JPanel implements ThemeAware {
-	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
-	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
-	private static final Color PRIMARY_BAR_COLOR = new Color(0x17, 0x31, 0x74);
-
 	private JLabel titleLabel;
 	private JLabel matchStatusLabel;
 	private TeamLogoPanel homeLogoPanel;
@@ -98,11 +94,9 @@ public class MatchResultPanel extends JPanel implements ThemeAware {
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
 		topPanel.setOpaque(false);
 		titleLabel = new JLabel("SAISON REGULIERE");
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
-		titleLabel.setForeground(SUBTITLE_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(titleLabel, 15);
 		matchStatusLabel = new JLabel("A venir");
-		matchStatusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		matchStatusLabel.setForeground(PRIMARY_BAR_COLOR);
+		LabelStyleUtil.styleValueLabel(matchStatusLabel, 12);
 		topPanel.add(titleLabel);
 		topPanel.add(matchStatusLabel);
 
@@ -126,13 +120,11 @@ public class MatchResultPanel extends JPanel implements ThemeAware {
 		logoPanel.setAlignmentX(CENTER_ALIGNMENT);
 
 		JLabel nameLabel = new JLabel(home ? "Home" : "Away");
-		nameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
-		nameLabel.setForeground(TITLE_COLOR);
+		LabelStyleUtil.styleValueLabel(nameLabel, 13);
 		nameLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		JLabel cityLabel = new JLabel("-");
-		cityLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
-		cityLabel.setForeground(SUBTITLE_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(cityLabel, 11);
 		cityLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		panel.add(logoPanel);
@@ -160,13 +152,12 @@ public class MatchResultPanel extends JPanel implements ThemeAware {
 
 		mainScoreLabel = new JLabel("0 - 0", JLabel.CENTER);
 		mainScoreLabel.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
-		mainScoreLabel.setForeground(TITLE_COLOR);
+		mainScoreLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		mainScoreLabel.setAlignmentX(CENTER_ALIGNMENT);
 		mainScoreLabel.setHorizontalAlignment(JLabel.CENTER);
 
 		quarterTitleLabel = new JLabel("Resultat masque");
-		quarterTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		quarterTitleLabel.setForeground(SUBTITLE_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(quarterTitleLabel, 12);
 		quarterTitleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		panel.add(Box.createVerticalGlue());
@@ -183,8 +174,7 @@ public class MatchResultPanel extends JPanel implements ThemeAware {
 		panel.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
 
 		scoreSectionTitleLabel = new JLabel("SCORE PAR QUART-TEMPS");
-		scoreSectionTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
-		scoreSectionTitleLabel.setForeground(TITLE_COLOR);
+		LabelStyleUtil.styleTitleLabel(scoreSectionTitleLabel, 13);
 		panel.add(scoreSectionTitleLabel, BorderLayout.NORTH);
 
 		JPanel table = new JPanel(new GridLayout(3, 6, 10, 6));
@@ -198,6 +188,7 @@ public class MatchResultPanel extends JPanel implements ThemeAware {
 				new JLabel("TOTAL", JLabel.CENTER)
 		};
 		for (int i = 0; i < quarterHeaderLabels.length; i++) {
+			LabelStyleUtil.styleValueLabel(quarterHeaderLabels[i], 11);
 			table.add(quarterHeaderLabels[i]);
 		}
 
@@ -207,6 +198,10 @@ public class MatchResultPanel extends JPanel implements ThemeAware {
 		awayQuarterLabels = createQuarterLabels();
 		homeQuarterTotalLabel = new JLabel("-", JLabel.CENTER);
 		awayQuarterTotalLabel = new JLabel("-", JLabel.CENTER);
+		LabelStyleUtil.styleValueLabel(homeQuarterTeamLabel, 11);
+		LabelStyleUtil.styleValueLabel(awayQuarterTeamLabel, 11);
+		LabelStyleUtil.styleValueLabel(homeQuarterTotalLabel, 11);
+		LabelStyleUtil.styleValueLabel(awayQuarterTotalLabel, 11);
 
 		table.add(homeQuarterTeamLabel);
 		addQuarterRow(table, homeQuarterLabels, homeQuarterTotalLabel);
@@ -218,12 +213,16 @@ public class MatchResultPanel extends JPanel implements ThemeAware {
 	}
 
 	private JLabel[] createQuarterLabels() {
-		return new JLabel[] {
+		JLabel[] labels = new JLabel[] {
 				new JLabel("-", JLabel.CENTER),
 				new JLabel("-", JLabel.CENTER),
 				new JLabel("-", JLabel.CENTER),
 				new JLabel("-", JLabel.CENTER)
 		};
+		for (int i = 0; i < labels.length; i++) {
+			LabelStyleUtil.styleValueLabel(labels[i], 11);
+		}
+		return labels;
 	}
 
 	private void addQuarterRow(JPanel table, JLabel[] quarterLabels, JLabel totalLabel) {

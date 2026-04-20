@@ -15,11 +15,15 @@ import gui.dashboard.LiveMatchDashboard;
 import gui.dashboard.MapDashboard;
 import gui.dashboard.MatchDashboard;
 import gui.dashboard.OpeningDashboard;
+import gui.dashboard.RefreshableDashboard;
 import gui.dashboard.RankingDashboard;
 import gui.dashboard.RosterDashboard;
 import gui.layout.SidebarPanel;
 import gui.panel.common.DashboardPanelUtil;
 import process.orchestrator.interf.GUIInterface;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainGui extends JFrame {
 
@@ -38,11 +42,18 @@ public class MainGui extends JFrame {
 	private FinanceDashboard financeDashboard;
 	private GUIInterface guiInterface;
 	private SidebarPanel sidebar;
+	private Map<String, RefreshableDashboard> refreshableDashboards;
+	private String currentRootCard;
+	private String currentDashboardCard;
 
 	public MainGui(GUIInterface guiInterface) {
+		this(guiInterface, true);
+	}
+
+	public MainGui(GUIInterface guiInterface, boolean visible) {
 		this.guiInterface = guiInterface;
 		create();
-		organize();
+		organize(visible);
 		actions();
 	}
 
@@ -55,56 +66,81 @@ public class MainGui extends JFrame {
 
 		dashboardLayout = new CardLayout();
 		dashboardPanel = new JPanel(dashboardLayout);
+		refreshableDashboards = new HashMap<String, RefreshableDashboard>();
 		openingPanel = new OpeningDashboard(guiInterface);
 		mainPanel = buildApplicationPanel();
 	}
 
-	private void organize() {
+	private void organize(boolean visible) {
 		rootPanel.add(openingPanel, "opening");
 		rootPanel.add(mainPanel, "main");
 
 		setLayout(new BorderLayout());
 		add(rootPanel, BorderLayout.CENTER);
 
-		dashboardLayout.show(dashboardPanel, "match");
-		rootLayout.show(rootPanel, "opening");
+		showDashboardCard("match");
+		showRootCard("opening");
 
 		pack();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setLocationRelativeTo(null);
-		setVisible(true);
+		setVisible(visible);
 	}
 
 	private void actions() {
-		openingPanel.getContinueButton().addActionListener(new OpenApplicationAction(openingPanel));
-		openingPanel.getThemeButton().addActionListener(new ToggleThemeAction());
+		registerOpeningActions();
 	}
 
 	private JPanel buildApplicationPanel() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		sidebar = new SidebarPanel();
 
+		buildDashboards();
+		registerDashboardCards();
+		registerRefreshableDashboards();
+		registerDashboardLinks();
+		registerSidebarActions();
+
+		mainPanel.add(sidebar, BorderLayout.WEST);
+		mainPanel.add(dashboardPanel, BorderLayout.CENTER);
+
+		return mainPanel;
+	}
+
+	private void buildDashboards() {
 		matchDashboard = new MatchDashboard(guiInterface);
 		liveMatchDashboard = new LiveMatchDashboard(guiInterface);
 		mapDashboard = new MapDashboard(guiInterface);
 		rosterDashboard = new RosterDashboard(guiInterface);
-		dashboardPanel.add(matchDashboard, "match");
-		dashboardPanel.add(liveMatchDashboard, "liveMatch");
 		calendarDashboard = new CalendarDashboard(guiInterface, matchDashboard, new ShowMatchDashboardAction(),
 				rosterDashboard, mapDashboard);
-		dashboardPanel.add(calendarDashboard, "calendar");
 		rankingDashboard = new RankingDashboard(guiInterface);
 		financeDashboard = new FinanceDashboard(guiInterface);
+	}
+
+	private void registerDashboardCards() {
+		dashboardPanel.add(matchDashboard, "match");
+		dashboardPanel.add(liveMatchDashboard, "liveMatch");
+		dashboardPanel.add(calendarDashboard, "calendar");
 		dashboardPanel.add(rankingDashboard, "ranking");
 		dashboardPanel.add(financeDashboard, "finance");
 		dashboardPanel.add(mapDashboard, "map");
 		dashboardPanel.add(rosterDashboard, "roster");
+	}
 
+	private void registerDashboardLinks() {
 		matchDashboard.setOpenLiveMatchAction(new ShowLiveMatchDashboardAction());
 		liveMatchDashboard.setBackToMatchAction(new ShowMatchDashboardAction());
 		mapDashboard.setOpenRosterAction(new ShowRosterDashboardAction());
 		rosterDashboard.setBackToMapAction(new ShowMapDashboardAction());
+	}
 
+	private void registerOpeningActions() {
+		openingPanel.getContinueButton().addActionListener(new OpenApplicationAction(openingPanel));
+		openingPanel.getThemeButton().addActionListener(new ToggleThemeAction());
+	}
+
+	private void registerSidebarActions() {
 		sidebar.getMatchButton().addActionListener(new SwitchDashboardAction("match"));
 		sidebar.getCalendarButton().addActionListener(new SwitchDashboardAction("calendar"));
 		sidebar.getRankingButton().addActionListener(new SwitchDashboardAction("ranking"));
@@ -112,11 +148,32 @@ public class MainGui extends JFrame {
 		sidebar.getMapButton().addActionListener(new SwitchDashboardAction("map"));
 		sidebar.getThemeButton().addActionListener(new ToggleThemeAction());
 		sidebar.getExitButton().addActionListener(new QuitAction());
+	}
 
-		mainPanel.add(sidebar, BorderLayout.WEST);
-		mainPanel.add(dashboardPanel, BorderLayout.CENTER);
+	private void registerRefreshableDashboards() {
+		refreshableDashboards.put("match", matchDashboard);
+		refreshableDashboards.put("calendar", calendarDashboard);
+		refreshableDashboards.put("ranking", rankingDashboard);
+		refreshableDashboards.put("finance", financeDashboard);
+		refreshableDashboards.put("map", mapDashboard);
+		refreshableDashboards.put("roster", rosterDashboard);
+	}
 
-		return mainPanel;
+	private void refreshDashboard(String cardName) {
+		RefreshableDashboard dashboard = refreshableDashboards.get(cardName);
+		if (dashboard != null) {
+			dashboard.refresh();
+		}
+	}
+
+	private void showRootCard(String cardName) {
+		currentRootCard = cardName;
+		rootLayout.show(rootPanel, cardName);
+	}
+
+	private void showDashboardCard(String cardName) {
+		currentDashboardCard = cardName;
+		dashboardLayout.show(dashboardPanel, cardName);
 	}
 
 	private class SwitchDashboardAction implements ActionListener {
@@ -128,20 +185,9 @@ public class MainGui extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if ("calendar".equals(cardName)) {
-				calendarDashboard.refreshSeasonState();
-			}
-			if ("match".equals(cardName)) {
-				matchDashboard.refreshSelectedGame();
-			}
-			if ("ranking".equals(cardName)) {
-				rankingDashboard.refreshRanking();
-			}
-			if ("finance".equals(cardName)) {
-				financeDashboard.refreshData();
-			}
+			refreshDashboard(cardName);
 			sidebar.setActiveSection(cardName);
-			dashboardLayout.show(dashboardPanel, cardName);
+			showDashboardCard(cardName);
 		}
 	}
 
@@ -162,8 +208,8 @@ public class MainGui extends JFrame {
 			calendarDashboard.startSeason();
 			matchDashboard.loadGamesOfDay(guiInterface.getMatchDisplayDate());
 			sidebar.setActiveSection("match");
-			dashboardLayout.show(dashboardPanel, "match");
-			rootLayout.show(rootPanel, "main");
+			showDashboardCard("match");
+			showRootCard("main");
 		}
 	}
 
@@ -186,7 +232,7 @@ public class MainGui extends JFrame {
 		public void run() {
 			calendarDashboard.refreshSeasonState();
 			sidebar.setActiveSection("match");
-			dashboardLayout.show(dashboardPanel, "match");
+			showDashboardCard("match");
 		}
 	}
 
@@ -194,7 +240,7 @@ public class MainGui extends JFrame {
 		@Override
 		public void run() {
 			liveMatchDashboard.setGame(matchDashboard.getSelectedGame());
-			dashboardLayout.show(dashboardPanel, "liveMatch");
+			showDashboardCard("liveMatch");
 		}
 	}
 
@@ -203,7 +249,7 @@ public class MainGui extends JFrame {
 		public void run() {
 			rosterDashboard.setSelectedTeam(mapDashboard.getSelectedTeam());
 			sidebar.setActiveSection("map");
-			dashboardLayout.show(dashboardPanel, "roster");
+			showDashboardCard("roster");
 		}
 	}
 
@@ -211,7 +257,7 @@ public class MainGui extends JFrame {
 		@Override
 		public void run() {
 			sidebar.setActiveSection("map");
-			dashboardLayout.show(dashboardPanel, "map");
+			showDashboardCard("map");
 		}
 	}
 
@@ -254,5 +300,21 @@ public class MainGui extends JFrame {
 		if (financeDashboard != null) {
 			financeDashboard.applyTheme();
 		}
+	}
+
+	public OpeningDashboard getOpeningPanel() {
+		return openingPanel;
+	}
+
+	public SidebarPanel getSidebar() {
+		return sidebar;
+	}
+
+	public String getCurrentRootCard() {
+		return currentRootCard;
+	}
+
+	public String getCurrentDashboardCard() {
+		return currentDashboardCard;
 	}
 }
