@@ -21,7 +21,7 @@ import process.orchestrator.interf.GUIInterface;
 /**
  * Dashboard dedie a la page Carte.
  */
-public class MapDashboard extends JPanel implements ThemeAware {
+public class MapDashboard extends JPanel implements ThemeAware, RefreshableDashboard {
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 64;
 	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 270;
@@ -121,6 +121,11 @@ public class MapDashboard extends JPanel implements ThemeAware {
 
 	public void refreshSelectedTeam() {
 		setSelectedTeam(selectedTeam);
+	}
+
+	@Override
+	public void refresh() {
+		refreshSelectedTeam();
 	}
 
 	private class OpenRosterListener implements ActionListener {

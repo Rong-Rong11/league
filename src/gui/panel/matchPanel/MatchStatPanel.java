@@ -2,11 +2,11 @@ package gui.panel.matchPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -19,11 +19,10 @@ import data.sport.setup.Game;
 import data.sport.setup.GameResult;
 import gui.panel.common.CustomProgressBar;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.ThemeAware;
 
 public class MatchStatPanel extends JPanel implements ThemeAware {
-	private static final Color TITLE_COLOR = new Color(0x17, 0x31, 0x74);
-	private static final Color SUBTITLE_COLOR = new Color(0x6D, 0x75, 0x83);
 	private static final Color PRIMARY_BAR_COLOR = new Color(0x17, 0x31, 0x74);
 	private static final Color SECONDARY_BAR_COLOR = DashboardPanelUtil.ACCENT_RED_COLOR;
 
@@ -94,8 +93,8 @@ public class MatchStatPanel extends JPanel implements ThemeAware {
 		threePointsBar.updateValues(0, 0);
 		freeThrowsBar.updateValues(0, 0);
 		reboundsBar.updateValues(0, 0);
-		attendanceSummaryLabel.setText("-");
-		attendanceRateLabel.setText("-");
+		attendanceSummaryLabel.setText("Aucune affluence n'est disponible pour le moment.");
+		attendanceRateLabel.setText("Aucune valeur");
 		attendanceBar.setValue(0);
 	}
 
@@ -106,8 +105,7 @@ public class MatchStatPanel extends JPanel implements ThemeAware {
 		panel.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
 
 		statsTitleLabel = new JLabel("STATISTIQUES DU MATCH");
-		statsTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
-		statsTitleLabel.setForeground(TITLE_COLOR);
+		LabelStyleUtil.styleTitleLabel(statsTitleLabel, 14);
 		statsTitleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		madeShotsBar = new ComparisonBarPanel("Tirs reussis");
@@ -134,16 +132,15 @@ public class MatchStatPanel extends JPanel implements ThemeAware {
 		panel.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
 
 		attendanceTitleLabel = new JLabel("AFFLUENCE");
-		attendanceTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
-		attendanceTitleLabel.setForeground(TITLE_COLOR);
+		LabelStyleUtil.styleTitleLabel(attendanceTitleLabel, 14);
 		attendanceTitleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		JPanel summary = new JPanel(new BorderLayout());
 		summary.setOpaque(false);
-		attendanceSummaryLabel = new JLabel("-");
-		attendanceRateLabel = new JLabel("-");
-		attendanceRateLabel.setForeground(TITLE_COLOR);
-		attendanceRateLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
+		attendanceSummaryLabel = new JLabel("Aucune affluence n'est disponible pour le moment.");
+		LabelStyleUtil.styleSubtitleLabel(attendanceSummaryLabel, 12);
+		attendanceRateLabel = new JLabel("Aucune valeur");
+		LabelStyleUtil.styleValueLabel(attendanceRateLabel, 13);
 		summary.add(attendanceSummaryLabel, BorderLayout.WEST);
 		summary.add(attendanceRateLabel, BorderLayout.EAST);
 
@@ -174,16 +171,13 @@ public class MatchStatPanel extends JPanel implements ThemeAware {
 			header.setOpaque(false);
 
 			leftValueLabel = new JLabel("0");
-			leftValueLabel.setForeground(TITLE_COLOR);
-			leftValueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+			LabelStyleUtil.styleValueLabel(leftValueLabel, 12);
 
 			titleLabel = new JLabel(title, JLabel.CENTER);
-			titleLabel.setForeground(SUBTITLE_COLOR);
-			titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+			LabelStyleUtil.styleSubtitleLabel(titleLabel, 12);
 
 			rightValueLabel = new JLabel("0", JLabel.RIGHT);
-			rightValueLabel.setForeground(TITLE_COLOR);
-			rightValueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+			LabelStyleUtil.styleValueLabel(rightValueLabel, 12);
 
 			header.add(leftValueLabel, BorderLayout.WEST);
 			header.add(titleLabel, BorderLayout.CENTER);
@@ -202,9 +196,9 @@ public class MatchStatPanel extends JPanel implements ThemeAware {
 		}
 
 		private void applyTheme() {
-			leftValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-			rightValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-			titleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+			LabelStyleUtil.styleValueLabel(leftValueLabel, 12);
+			LabelStyleUtil.styleValueLabel(rightValueLabel, 12);
+			LabelStyleUtil.styleSubtitleLabel(titleLabel, 12);
 			progressBar.applyTheme();
 		}
 	}
@@ -273,10 +267,10 @@ public class MatchStatPanel extends JPanel implements ThemeAware {
 
 	@Override
 	public void applyTheme() {
-		statsTitleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		attendanceTitleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		attendanceSummaryLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
-		attendanceRateLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleTitleLabel(statsTitleLabel, 14);
+		LabelStyleUtil.styleTitleLabel(attendanceTitleLabel, 14);
+		LabelStyleUtil.styleSubtitleLabel(attendanceSummaryLabel, 12);
+		LabelStyleUtil.styleValueLabel(attendanceRateLabel, 13);
 		attendanceBar.applyTheme();
 		madeShotsBar.applyTheme();
 		threePointsBar.applyTheme();

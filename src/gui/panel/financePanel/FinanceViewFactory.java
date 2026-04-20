@@ -32,6 +32,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import gui.panel.common.DashboardCard;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 
 public final class FinanceViewFactory {
 
@@ -39,6 +40,7 @@ public final class FinanceViewFactory {
 	}
 
 	public static void styleComboBox(JComboBox<String> comboBox) {
+		LabelStyleUtil.styleSubtitleLabel((JLabel) comboBox.getRenderer(), 13);
 		comboBox.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
 		comboBox.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
 		comboBox.setForeground(DashboardPanelUtil.BUTTON_TEXT_COLOR);
@@ -63,16 +65,14 @@ public final class FinanceViewFactory {
 
 	public static JLabel metricLabel() {
 		JLabel label = new JLabel("-");
-		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-		label.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleValueLabel(label, 18);
 		label.setAlignmentX(Component.LEFT_ALIGNMENT);
 		return label;
 	}
 
 	public static JLabel infoLabel() {
 		JLabel label = new JLabel("-");
-		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		label.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleValueLabel(label, 12);
 		return label;
 	}
 
@@ -82,8 +82,7 @@ public final class FinanceViewFactory {
 		card.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
 
 		JLabel titleLabel = new JLabel(title);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
-		titleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(titleLabel, 11);
 		titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		if (component instanceof JComponent) {
@@ -101,8 +100,7 @@ public final class FinanceViewFactory {
 		panel.setOpaque(false);
 
 		JLabel titleLabel = new JLabel(title);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		titleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(titleLabel, 12);
 
 		panel.add(titleLabel, BorderLayout.WEST);
 		panel.add(valueLabel, BorderLayout.EAST);
@@ -114,11 +112,10 @@ public final class FinanceViewFactory {
 		row.setOpaque(false);
 
 		JLabel leftLabel = new JLabel(title);
-		leftLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		leftLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(leftLabel, 12);
 
 		JLabel rightLabel = new JLabel(value);
-		rightLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		LabelStyleUtil.styleValueLabel(rightLabel, 12);
 		rightLabel.setForeground(valueColor);
 
 		row.add(leftLabel, BorderLayout.WEST);
@@ -218,7 +215,7 @@ public final class FinanceViewFactory {
 		chartArea.setBackgroundPaint(DashboardPanelUtil.PANEL_SURFACE_COLOR);
 		chartArea.setOutlineVisible(false);
 		chartArea.setRangeGridlinePaint(DashboardPanelUtil.getCalendarGridBorderColor());
-		chartArea.setNoDataMessage("Aucune donnee");
+		chartArea.setNoDataMessage("Aucune donnee financiere n'est disponible pour le moment.");
 		chartArea.setNoDataMessagePaint(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 	}
 

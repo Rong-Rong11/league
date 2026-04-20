@@ -21,7 +21,9 @@ import javax.swing.SwingConstants;
 
 import gui.layout.strategy.ButtonHighlightStrategy;
 import gui.layout.strategy.SidebarHighlightStrategy;
+import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
 
@@ -38,6 +40,9 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 	private Map<String, SidebarHighlightStrategy> highlightStrategies = new HashMap<String, SidebarHighlightStrategy>();
 	private JButton[] menuButtons;
 	private String activeSection;
+	private JPanel topSectionPanel;
+	private JPanel menuSectionPanel;
+	private JPanel bottomSectionPanel;
 
 	public SidebarPanel() {
 		create();
@@ -62,21 +67,21 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 	}
 
 	private JPanel buildTopSection() {
-		JPanel panel = new JPanel();
+		topSectionPanel = new JPanel();
+		JPanel panel = topSectionPanel;
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBackground(DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR);
 		panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-		ImageIcon logoIcon = new ImageIcon("img/logo.png");
-		JLabel logoLabel = new JLabel(logoIcon);
+		JLabel logoLabel = new JLabel();
 		logoLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		titleLabel = new JLabel("NBA League");
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
+		LabelStyleUtil.styleTitleLabel(titleLabel, 30);
 		titleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		subtitleLabel = new JLabel("Management");
-		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 18);
 		subtitleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		panel.add(logoLabel);
@@ -88,7 +93,8 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 	}
 
 	private JPanel buildMenuSection() {
-		JPanel panel = new JPanel();
+		menuSectionPanel = new JPanel();
+		JPanel panel = menuSectionPanel;
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBackground(DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR);
 
@@ -118,7 +124,8 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 	}
 
 	private JPanel buildBottomSection() {
-		JPanel panel = new JPanel(new BorderLayout());
+		bottomSectionPanel = new JPanel(new BorderLayout());
+		JPanel panel = bottomSectionPanel;
 		panel.setBackground(DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR);
 
 		configureMenuButton(themeButton);
@@ -135,19 +142,13 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 	}
 
 	private void configureMenuButton(JButton button) {
+		ButtonStyleUtil.styleMenuButton(button, 260, 74, 22);
 		button.setHorizontalAlignment(SwingConstants.LEFT);
 		button.setHorizontalTextPosition(SwingConstants.RIGHT);
 		button.setIconTextGap(12);
-		button.setFocusPainted(false);
 		button.setBorderPainted(false);
 		button.setContentAreaFilled(false);
 		button.setOpaque(false);
-
-		button.setBackground(DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR);
-		button.setForeground(DashboardPanelUtil.SIDEBAR_TEXT_COLOR);
-		button.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 22));
-
-		button.setPreferredSize(new Dimension(260, 74));
 		button.setMaximumSize(new Dimension(Integer.MAX_VALUE, 74));
 		button.setMargin(new Insets(0, 28, 0, 14));
 	}
@@ -167,6 +168,10 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 	}
 
 	private ImageIcon loadSidebarIcon(String path) {
+		return loadSidebarIcon(path, 28);
+	}
+
+	private ImageIcon loadSidebarIcon(String path, int size) {
 		if (path == null) {
 			return null;
 		}
@@ -174,7 +179,7 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 		if (icon.getIconWidth() <= 0) {
 			return null;
 		}
-		Image scaledImage = icon.getImage().getScaledInstance(28, 28, Image.SCALE_SMOOTH);
+		Image scaledImage = icon.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
 		return new ImageIcon(scaledImage);
 	}
 
@@ -263,18 +268,31 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 		return exitButton;
 	}
 
+	public String getActiveSection() {
+		return activeSection;
+	}
+
 	@Override
 	public void applyTheme() {
-		removeAll();
-		organize();
 		setBackground(DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR);
-		if (titleLabel != null) {
-			titleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		if (topSectionPanel != null) {
+			topSectionPanel.setBackground(DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR);
 		}
-		if (subtitleLabel != null) {
-			subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		if (menuSectionPanel != null) {
+			menuSectionPanel.setBackground(DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR);
+		}
+		if (bottomSectionPanel != null) {
+			bottomSectionPanel.setBackground(DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR);
 		}
 		applySidebarIcons();
+		if (titleLabel != null) {
+			LabelStyleUtil.styleTitleLabel(titleLabel, 30);
+			titleLabel.setAlignmentX(CENTER_ALIGNMENT);
+		}
+		if (subtitleLabel != null) {
+			LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 18);
+			subtitleLabel.setAlignmentX(CENTER_ALIGNMENT);
+		}
 		themeButton.setText(DashboardPanelUtil.isDarkMode() ? "Mode clair" : "Mode sombre");
 		themeButton.setBackground(DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR);
 		themeButton.setForeground(DashboardPanelUtil.SIDEBAR_TEXT_COLOR);

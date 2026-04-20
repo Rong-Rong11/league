@@ -11,10 +11,12 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import data.team.Team;
 import gui.panel.common.DashboardCard;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
@@ -29,17 +31,17 @@ public class RankingPerformancePanel extends JPanel implements ThemeAware {
 	private TeamLogoPanel leaderLogoPanel;
 	private JLabel leaderTeamValue;
 	private JLabel leaderDetailLabel;
-	private JLabel leaderStatsLabel;
+	private JTextArea leaderStatsLabel;
 	private RoundedPanel leaderDetailBadge;
 	private TeamLogoPanel streakLogoPanel;
 	private JLabel streakTeamValue;
 	private JLabel streakDetailLabel;
-	private JLabel streakStatsLabel;
+	private JTextArea streakStatsLabel;
 	private RoundedPanel streakDetailBadge;
 	private TeamLogoPanel lastLogoPanel;
 	private JLabel lastTeamValue;
 	private JLabel lastDetailLabel;
-	private JLabel lastStatsLabel;
+	private JTextArea lastStatsLabel;
 	private RoundedPanel lastDetailBadge;
 
 	public RankingPerformancePanel(GUIInterface guiInterface) {
@@ -48,17 +50,17 @@ public class RankingPerformancePanel extends JPanel implements ThemeAware {
 		setOpaque(false);
 
 		leaderLogoPanel = createLogoPanel();
-		leaderTeamValue = new JLabel("-");
+		leaderTeamValue = new JLabel();
 		leaderDetailLabel = createDetailLabel();
 		leaderStatsLabel = createStatsLabel();
 		leaderDetailBadge = createDetailBadge(leaderDetailLabel);
 		streakLogoPanel = createLogoPanel();
-		streakTeamValue = new JLabel("-");
+		streakTeamValue = new JLabel();
 		streakDetailLabel = createDetailLabel();
 		streakStatsLabel = createStatsLabel();
 		streakDetailBadge = createDetailBadge(streakDetailLabel);
 		lastLogoPanel = createLogoPanel();
-		lastTeamValue = new JLabel("-");
+		lastTeamValue = new JLabel();
 		lastDetailLabel = createDetailLabel();
 		lastStatsLabel = createStatsLabel();
 		lastDetailBadge = createDetailBadge(lastDetailLabel);
@@ -72,6 +74,11 @@ public class RankingPerformancePanel extends JPanel implements ThemeAware {
 	}
 
 	public void refreshPerformance() {
+		if (!guiInterface.isSeasonInitialized()) {
+			showEmptyState();
+			return;
+		}
+
 		ArrayList<Team> teams = guiInterface.getGlobalRanking();
 		if (teams.isEmpty()) {
 			showEmptyState();
@@ -87,9 +94,9 @@ public class RankingPerformancePanel extends JPanel implements ThemeAware {
 
 		if (bestStreakTeam == null) {
 			streakLogoPanel.setTeamName("");
-			streakTeamValue.setText("-");
-			streakDetailLabel.setText("-");
-			streakStatsLabel.setText("-");
+			streakTeamValue.setText("Aucune serie n'est disponible.");
+			streakDetailLabel.setText("Lancez la saison pour afficher les performances.");
+			streakStatsLabel.setText("Aucune statistique n'est disponible pour le moment.");
 		} else {
 			streakLogoPanel.setTeamName(bestStreakTeam.getName());
 			streakTeamValue.setText(TeamDisplayUtility.getShortName(bestStreakTeam));
@@ -100,17 +107,17 @@ public class RankingPerformancePanel extends JPanel implements ThemeAware {
 
 	private void showEmptyState() {
 		leaderLogoPanel.setTeamName("");
-		leaderTeamValue.setText("-");
-		leaderDetailLabel.setText("-");
-		leaderStatsLabel.setText("-");
+		leaderTeamValue.setText("Aucun leader n'est disponible.");
+		leaderDetailLabel.setText("Lancez la saison pour afficher les performances.");
+		leaderStatsLabel.setText("Aucune statistique n'est disponible pour le moment.");
 		streakLogoPanel.setTeamName("");
-		streakTeamValue.setText("-");
-		streakDetailLabel.setText("-");
-		streakStatsLabel.setText("-");
+		streakTeamValue.setText("Aucune serie n'est disponible.");
+		streakDetailLabel.setText("Lancez la saison pour afficher les performances.");
+		streakStatsLabel.setText("Aucune statistique n'est disponible pour le moment.");
 		lastLogoPanel.setTeamName("");
-		lastTeamValue.setText("-");
-		lastDetailLabel.setText("-");
-		lastStatsLabel.setText("-");
+		lastTeamValue.setText("Aucune equipe n'est classee.");
+		lastDetailLabel.setText("Lancez la saison pour afficher les performances.");
+		lastStatsLabel.setText("Aucune statistique n'est disponible pour le moment.");
 	}
 
 	private Team findBestStreakTeam(ArrayList<Team> teams) {
@@ -126,7 +133,7 @@ public class RankingPerformancePanel extends JPanel implements ThemeAware {
 		return bestTeam;
 	}
 
-	private void updateTeamBlock(TeamLogoPanel logoPanel, JLabel teamValue, JLabel statsLabel, JLabel detailLabel,
+	private void updateTeamBlock(TeamLogoPanel logoPanel, JLabel teamValue, JTextArea statsLabel, JLabel detailLabel,
 			Team team) {
 		logoPanel.setTeamName(team.getName());
 		teamValue.setText(TeamDisplayUtility.getShortName(team));
@@ -139,71 +146,79 @@ public class RankingPerformancePanel extends JPanel implements ThemeAware {
 		double points = guiInterface.getAveragePoints(team, true);
 		double rebounds = guiInterface.getAverageRebounds(team, true);
 		double assists = guiInterface.getAverageAssists(team, true);
-		return PlayerDisplayUtil.formatOneDecimal(points) + " PTS  |  "
-				+ PlayerDisplayUtil.formatOneDecimal(rebounds) + " REB  |  "
-				+ PlayerDisplayUtil.formatOneDecimal(assists) + " AST";
+		return "PTS " + PlayerDisplayUtil.formatOneDecimal(points)
+				+ "\nREB " + PlayerDisplayUtil.formatOneDecimal(rebounds)
+				+ "\nAST " + PlayerDisplayUtil.formatOneDecimal(assists);
 	}
 
 	private TeamLogoPanel createLogoPanel() {
-		TeamLogoPanel logoPanel = new TeamLogoPanel("", 44);
+		TeamLogoPanel logoPanel = new TeamLogoPanel("", 40);
 		logoPanel.setTeamQueryInterface(guiInterface);
 		return logoPanel;
 	}
 
 	private JLabel createDetailLabel() {
-		JLabel label = new JLabel("-", JLabel.CENTER);
-		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+		JLabel label = new JLabel("Lancez la saison pour afficher les performances.", JLabel.CENTER);
+		LabelStyleUtil.styleValueLabel(label, 11);
+		return label;
+	}
+
+	private JTextArea createStatsLabel() {
+		JTextArea label = new JTextArea("Aucune statistique n'est disponible pour le moment.");
+		label.setOpaque(false);
+		label.setEditable(false);
+		label.setLineWrap(false);
+		label.setWrapStyleWord(false);
+		label.setRows(3);
+		label.setBorder(null);
+		label.setFocusable(false);
+		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
 		label.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 		return label;
 	}
 
-	private JLabel createStatsLabel() {
-		JLabel label = new JLabel("-", JLabel.LEFT);
-		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
-		label.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
-		return label;
-	}
-
-	private JPanel createPerformanceCard(String label, TeamLogoPanel logoPanel, JLabel teamValue, JLabel statsLabel,
+	private JPanel createPerformanceCard(String label, TeamLogoPanel logoPanel, JLabel teamValue, JTextArea statsLabel,
 			RoundedPanel detailBadge) {
 		DashboardCard card = new DashboardCard();
-		card.setLayout(new BorderLayout(0, 8));
+		card.setLayout(new BorderLayout(0, 10));
 		card.setPreferredSize(new java.awt.Dimension(10, CARD_HEIGHT));
 		card.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createMatteBorder(0, 0, 1, 0, DashboardPanelUtil.BORDER_COLOR),
 				BorderFactory.createEmptyBorder(10, 12, 10, 12)));
 
-		JPanel topPanel = new JPanel(new BorderLayout(8, 0));
-		topPanel.setOpaque(false);
+		JPanel headerPanel = new JPanel(new BorderLayout(10, 0));
+		headerPanel.setOpaque(false);
 
-		JPanel textPanel = new JPanel();
-		textPanel.setOpaque(false);
-		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
+		JPanel headerTextPanel = new JPanel();
+		headerTextPanel.setOpaque(false);
+		headerTextPanel.setLayout(new BoxLayout(headerTextPanel, BoxLayout.Y_AXIS));
 
 		JLabel labelValue = new JLabel(label);
-		labelValue.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
-		labelValue.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(labelValue, 12);
 
-		teamValue.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-		teamValue.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleValueLabel(teamValue, 20);
 
-		textPanel.add(labelValue);
-		textPanel.add(teamValue);
-		textPanel.add(statsLabel);
+		headerTextPanel.add(labelValue);
+		headerTextPanel.add(teamValue);
 
 		JPanel logoWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		logoWrapper.setOpaque(false);
-		logoWrapper.setPreferredSize(new Dimension(88, 52));
+		logoWrapper.setPreferredSize(new Dimension(60, 48));
 		logoWrapper.add(logoPanel);
+
+		JPanel statsWrapper = new JPanel(new BorderLayout());
+		statsWrapper.setOpaque(false);
+		statsWrapper.add(statsLabel, BorderLayout.WEST);
 
 		JPanel fieldWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		fieldWrapper.setOpaque(false);
 		fieldWrapper.add(detailBadge);
 
-		topPanel.add(textPanel, BorderLayout.CENTER);
-		topPanel.add(logoWrapper, BorderLayout.EAST);
+		headerPanel.add(headerTextPanel, BorderLayout.CENTER);
+		headerPanel.add(logoWrapper, BorderLayout.EAST);
 
-		card.add(topPanel, BorderLayout.CENTER);
+		card.add(headerPanel, BorderLayout.NORTH);
+		card.add(statsWrapper, BorderLayout.CENTER);
 		card.add(fieldWrapper, BorderLayout.SOUTH);
 		return card;
 	}
@@ -220,12 +235,12 @@ public class RankingPerformancePanel extends JPanel implements ThemeAware {
 	@Override
 	public void applyTheme() {
 		setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
-		leaderTeamValue.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		streakTeamValue.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		lastTeamValue.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		leaderStatsLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
-		streakStatsLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
-		lastStatsLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		applyTeamValueStyle(leaderTeamValue);
+		applyTeamValueStyle(streakTeamValue);
+		applyTeamValueStyle(lastTeamValue);
+		applyStatsStyle(leaderStatsLabel);
+		applyStatsStyle(streakStatsLabel);
+		applyStatsStyle(lastStatsLabel);
 		applyDetailTheme(leaderDetailBadge, leaderDetailLabel);
 		applyDetailTheme(streakDetailBadge, streakDetailLabel);
 		applyDetailTheme(lastDetailBadge, lastDetailLabel);
@@ -234,7 +249,22 @@ public class RankingPerformancePanel extends JPanel implements ThemeAware {
 	}
 
 	private void applyDetailTheme(RoundedPanel badge, JLabel label) {
-		badge.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
-		label.setForeground(DashboardPanelUtil.BUTTON_TEXT_COLOR);
+		badge.setBackground(DashboardPanelUtil.getPrimaryActionColor());
+		LabelStyleUtil.styleValueLabel(label, 12);
+		label.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
+	}
+
+	private void applyTeamValueStyle(JLabel label) {
+		if (label.getText() != null && label.getText().startsWith("Aucune")) {
+			LabelStyleUtil.styleSubtitleLabel(label, 12);
+			return;
+		}
+		LabelStyleUtil.styleValueLabel(label, 20);
+		label.setForeground(DashboardPanelUtil.getPrimaryActionColor());
+	}
+
+	private void applyStatsStyle(JTextArea label) {
+		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+		label.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
 	}
 }

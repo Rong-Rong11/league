@@ -28,6 +28,7 @@ import data.team.finance.marketsize.SmallSize;
 import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.InfoPopupUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
@@ -72,9 +73,9 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 		policyInfoButton = createInfoButton();
 		marketInfoButton = createInfoButton();
 
-		cityLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+		LabelStyleUtil.styleTitleLabel(cityLabel, 20);
+		LabelStyleUtil.styleSubtitleLabel(teamLabel, 18);
 		cityLabel.setForeground(Color.WHITE);
-		teamLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
 		teamLabel.setForeground(Color.WHITE);
 
 		ButtonStyleUtil.styleToggleButton(ambitiousButton);
@@ -91,8 +92,7 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 
 	private JButton createInfoButton() {
 		JButton button = new RoundedButton("i");
-		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 13));
-		button.setPreferredSize(new Dimension(24, 24));
+		ButtonStyleUtil.styleActionButton(button, 24, 24, 13);
 		button.setMinimumSize(new Dimension(24, 24));
 		button.setMaximumSize(new Dimension(24, 24));
 		button.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -109,8 +109,7 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 	}
 
 	private void applySelectionButtonSize(JButton button) {
-		button.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
-		button.setPreferredSize(SELECTION_BUTTON_SIZE);
+		ButtonStyleUtil.styleActionButton(button, SELECTION_BUTTON_SIZE.width, SELECTION_BUTTON_SIZE.height, 15);
 		button.setMinimumSize(SELECTION_BUTTON_SIZE);
 		button.setBorder(BorderFactory.createEmptyBorder(12, 22, 12, 22));
 	}
@@ -161,7 +160,7 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 		sectionPanel.setOpaque(false);
 
 		JLabel titleLabel = new JLabel(title);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+		LabelStyleUtil.styleSubtitleLabel(titleLabel, 11);
 		storeSectionTitleLabel(titleLabel);
 		JPanel titlePanel = buildTitlePanel(titleLabel,
 				title.equals("POLITIQUE FINANCIERE") ? policyInfoButton : marketInfoButton);
@@ -209,8 +208,8 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 
 	private void showEmptyState() {
 		logoPanel.setTeamName("");
-		cityLabel.setText("Aucune");
-		teamLabel.setText("selection");
+		cityLabel.setText("Aucune equipe n'est selectionnee.");
+		teamLabel.setText("Selectionnez une franchise pour definir sa politique.");
 		setButtonsEnabled(false);
 		selectedPolicy = null;
 		selectedMarketSize = null;
@@ -310,7 +309,7 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 		if (sectionTitleLabels != null) {
 			for (int i = 0; i < sectionTitleLabels.length; i++) {
 				if (sectionTitleLabels[i] != null) {
-					sectionTitleLabels[i].setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+					LabelStyleUtil.styleSubtitleLabel(sectionTitleLabels[i], 11);
 				}
 			}
 		}

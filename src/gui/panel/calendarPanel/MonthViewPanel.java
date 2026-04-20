@@ -23,6 +23,7 @@ import data.calendar.GameDay;
 import data.sport.setup.Game;
 import gui.dashboard.MatchDashboard;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
 import process.utility.CalendarUtility;
@@ -68,7 +69,8 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 		label.setOpaque(true);
 		label.setBackground(DashboardPanelUtil.getCalendarHeaderBackgroundColor());
 		label.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
-		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+		LabelStyleUtil.styleValueLabel(label, 15);
+		label.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 		label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, getGridColor()));
 		return label;
 	}
@@ -96,7 +98,7 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 		topPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 0, 8));
 
 		JLabel dayNumberLabel = new JLabel(String.valueOf(date.getDayOfMonth()), JLabel.CENTER);
-		dayNumberLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+		LabelStyleUtil.styleValueLabel(dayNumberLabel, 16);
 		if (!sameMonth) {
 			dayNumberLabel.setForeground(getOutsideMonthTextColor());
 		} else {
@@ -141,8 +143,7 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 		JLabel label = new JLabel(text);
 		label.setOpaque(true);
 		label.setBackground(getMatchChipColor());
-		label.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+		LabelStyleUtil.styleValueLabel(label, 11);
 		label.setBorder(BorderFactory.createEmptyBorder(3, 6, 3 + bottomSpacing, 6));
 		label.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
 		return label;

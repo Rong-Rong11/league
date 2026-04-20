@@ -1,6 +1,5 @@
 package gui.panel.mapPanel.effectifPanel;
 
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
@@ -10,6 +9,7 @@ import javax.swing.JPanel;
 import data.player.Player;
 import data.team.Team;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.ThemeAware;
 import gui.utility.PlayerStatUtility;
 
@@ -25,8 +25,8 @@ public class MapTeamPlayersPanel extends JPanel implements ThemeAware {
 	private void create() {
 		playerLabels = new JLabel[10];
 		for (int i = 0; i < playerLabels.length; i++) {
-			playerLabels[i] = new JLabel("-");
-			playerLabels[i].setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
+			playerLabels[i] = new JLabel("Aucun joueur n'est disponible.");
+			LabelStyleUtil.styleSubtitleLabel(playerLabels[i], 13);
 		}
 	}
 
@@ -42,7 +42,8 @@ public class MapTeamPlayersPanel extends JPanel implements ThemeAware {
 	public void updateTeam(Team team, boolean currentSeasonSelected) {
 		if (team == null) {
 			for (int i = 0; i < playerLabels.length; i++) {
-				playerLabels[i].setText("-");
+				playerLabels[i].setText("Aucun joueur n'est disponible.");
+				LabelStyleUtil.styleSubtitleLabel(playerLabels[i], 13);
 			}
 			return;
 		}
@@ -59,8 +60,10 @@ public class MapTeamPlayersPanel extends JPanel implements ThemeAware {
 				Player player = players.get(i);
 				playerLabels[i]
 						.setText((int) Math.round(PlayerStatUtility.getDisplayedNote(player)) + "  " + player.getName());
+				LabelStyleUtil.styleValueLabel(playerLabels[i], 13);
 			} else {
-				playerLabels[i].setText("-");
+				playerLabels[i].setText("Aucun joueur n'est disponible.");
+				LabelStyleUtil.styleSubtitleLabel(playerLabels[i], 13);
 			}
 		}
 	}
@@ -68,7 +71,11 @@ public class MapTeamPlayersPanel extends JPanel implements ThemeAware {
 	@Override
 	public void applyTheme() {
 		for (int i = 0; i < playerLabels.length; i++) {
-			playerLabels[i].setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+			if (playerLabels[i].getText().startsWith("Aucun joueur")) {
+				LabelStyleUtil.styleSubtitleLabel(playerLabels[i], 13);
+			} else {
+				LabelStyleUtil.styleValueLabel(playerLabels[i], 13);
+			}
 		}
 	}
 

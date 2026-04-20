@@ -13,7 +13,7 @@ import gui.panel.financePanel.LeagueFinanceViewPanel;
 import gui.panel.financePanel.TeamFinanceViewPanel;
 import process.orchestrator.interf.GUIInterface;
 
-public class FinanceDashboard extends JPanel implements ThemeAware {
+public class FinanceDashboard extends JPanel implements ThemeAware, RefreshableDashboard {
 
 	private static final int DASHBOARD_SPACING = 16;
 	private static final String LEAGUE_VIEW = "league";
@@ -66,6 +66,11 @@ public class FinanceDashboard extends JPanel implements ThemeAware {
 		leagueViewPanel.refreshData();
 		teamViewPanel.refreshData();
 		refreshView();
+	}
+
+	@Override
+	public void refresh() {
+		refreshData();
 	}
 
 	private void refreshView() {

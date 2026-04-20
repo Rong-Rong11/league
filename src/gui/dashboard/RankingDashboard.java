@@ -17,7 +17,7 @@ import process.orchestrator.interf.GUIInterface;
 /**
  * Dashboard dedie a la page Classement.
  */
-public class RankingDashboard extends JPanel implements ThemeAware {
+public class RankingDashboard extends JPanel implements ThemeAware, RefreshableDashboard {
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 50;
 	private static final int IDEAL_DASHBOARD_RIGHT_COLUMN_WIDTH = 250;
@@ -42,6 +42,11 @@ public class RankingDashboard extends JPanel implements ThemeAware {
 	public void refreshRanking() {
 		rankingLeagueViewPanel.refreshRanking();
 		rankingPerformancePanel.refreshPerformance();
+	}
+
+	@Override
+	public void refresh() {
+		refreshRanking();
 	}
 
 	private void organize() {

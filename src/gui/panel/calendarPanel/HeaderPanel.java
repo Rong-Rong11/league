@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.CustomProgressBar;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
@@ -68,11 +69,11 @@ public class HeaderPanel extends RoundedPanel implements ThemeAware {
 		monthButton = new RoundedButton("Mois");
 		weekButton = new RoundedButton("Semaine");
 
-		progressTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
-		progressSubtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		percentageLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-		monthLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
-		weekLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+		LabelStyleUtil.styleTitleLabel(progressTitleLabel, 15);
+		LabelStyleUtil.styleSubtitleLabel(progressSubtitleLabel, 12);
+		LabelStyleUtil.styleValueLabel(percentageLabel, 18);
+		LabelStyleUtil.styleValueLabel(monthLabel, 16);
+		LabelStyleUtil.styleValueLabel(weekLabel, 16);
 		monthLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		weekLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		monthLabel.setPreferredSize(new Dimension(210, 36));
@@ -168,8 +169,10 @@ public class HeaderPanel extends RoundedPanel implements ThemeAware {
 		int percentage = 0;
 		if (totalDays > 0) {
 			percentage = (completedDays * 100) / totalDays;
+			progressSubtitleLabel.setText(completedDays + " jours completes sur " + totalDays + ".");
+		} else {
+			progressSubtitleLabel.setText("La progression sera disponible apres le lancement de la saison.");
 		}
-		progressSubtitleLabel.setText(completedDays + " jours completes sur " + totalDays);
 		percentageLabel.setText(percentage + "%");
 		progressBar.setValue(percentage);
 	}

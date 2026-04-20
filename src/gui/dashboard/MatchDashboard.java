@@ -23,7 +23,7 @@ import gui.panel.matchPanel.MatchFinancePanel;
 import gui.panel.matchPanel.MatchHeaderPanel;
 import process.orchestrator.interf.GUIInterface;
 
-public class MatchDashboard extends JPanel implements ThemeAware {
+public class MatchDashboard extends JPanel implements ThemeAware, RefreshableDashboard {
 	private static final int DASHBOARD_SPACING = 16;
 	private static final int LEFT_COLUMN_WIDTH = 270;
 	private static final int RIGHT_COLUMN_WIDTH = 300;
@@ -123,6 +123,13 @@ public class MatchDashboard extends JPanel implements ThemeAware {
 			return;
 		}
 		selectedDate = date;
+		if (!guiInterface.isSeasonInitialized()) {
+			headerPanel.updateDate(date);
+			selectedGameDay = null;
+			matchDayListPanel.showSeasonNotStartedState();
+			resetSelectedGame();
+			return;
+		}
 		GameDay gameDay = guiInterface.getGameDay(date);
 		showGameDay(gameDay, date);
 	}
@@ -156,6 +163,11 @@ public class MatchDashboard extends JPanel implements ThemeAware {
 		if (selectedGame != null) {
 			updateSelectedGame(selectedGame);
 		}
+	}
+
+	@Override
+	public void refresh() {
+		refreshSelectedGame();
 	}
 
 	private void updateSelectedGame(Game game) {

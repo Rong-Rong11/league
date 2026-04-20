@@ -1,8 +1,6 @@
 package gui.panel.mapPanel.effectifPanel;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -11,7 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import data.team.Team;
+import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
@@ -59,9 +59,8 @@ public class MapTeamSummaryPanel extends JPanel implements ThemeAware {
 		teamLogoPanel = new TeamLogoPanel("", 56);
 		teamLogoPanel.setTeamQueryInterface(guiInterface);
 
-		teamNameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-		teamNameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		openRosterButton.setFocusPainted(false);
+		LabelStyleUtil.styleTitleLabel(teamNameLabel, 20);
+		ButtonStyleUtil.styleActionButton(openRosterButton, 220, 44, 14);
 		openRosterButton.setBackground(DashboardPanelUtil.getPrimaryActionColor());
 		openRosterButton.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 	}
@@ -111,8 +110,8 @@ public class MapTeamSummaryPanel extends JPanel implements ThemeAware {
 		row.setLayout(new BoxLayout(row, BoxLayout.Y_AXIS));
 
 		JLabel titleLabel = new JLabel(title);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		valueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
+		LabelStyleUtil.styleSubtitleLabel(titleLabel, 12);
+		LabelStyleUtil.styleValueLabel(valueLabel, 18);
 		storeInfoTitleLabel(titleLabel);
 
 		row.add(titleLabel);
@@ -144,16 +143,16 @@ public class MapTeamSummaryPanel extends JPanel implements ThemeAware {
 
 	private void showEmptyState() {
 		teamLogoPanel.setTeamName("");
-		teamNameLabel.setText("Aucune equipe");
-		cityLabel.setText("-");
-		conferenceLabel.setText("-");
-		divisionLabel.setText("-");
-		arenaLabel.setText("-");
-		budgetLabel.setText("-");
-		capacityLabel.setText("-");
-		averageNoteLabel.setText("-");
-		financialPolicyLabel.setText("-");
-		marketSizeLabel.setText("-");
+		teamNameLabel.setText("Aucune equipe n'est selectionnee.");
+		cityLabel.setText("Selectionnez une franchise sur la carte.");
+		conferenceLabel.setText("La conference sera affichee apres la selection.");
+		divisionLabel.setText("La division sera affichee apres la selection.");
+		arenaLabel.setText("L'arene sera affichee apres la selection.");
+		budgetLabel.setText("Le budget sera affiche apres la selection.");
+		capacityLabel.setText("La capacite sera affichee apres la selection.");
+		averageNoteLabel.setText("La note moyenne sera affichee apres la selection.");
+		financialPolicyLabel.setText("La politique financiere sera affichee apres la selection.");
+		marketSizeLabel.setText("La taille du marche sera affichee apres la selection.");
 		openRosterButton.setEnabled(false);
 		revalidate();
 		repaint();
@@ -191,22 +190,41 @@ public class MapTeamSummaryPanel extends JPanel implements ThemeAware {
 
 	@Override
 	public void applyTheme() {
-		teamNameLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		cityLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		conferenceLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		divisionLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		arenaLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		budgetLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		capacityLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		averageNoteLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleTitleLabel(teamNameLabel, 20);
+		applyInfoValueStyle(cityLabel);
+		applyInfoValueStyle(conferenceLabel);
+		applyInfoValueStyle(divisionLabel);
+		applyInfoValueStyle(arenaLabel);
+		applyInfoValueStyle(budgetLabel);
+		applyInfoValueStyle(capacityLabel);
+		applyInfoValueStyle(averageNoteLabel);
+		applyInfoValueStyle(financialPolicyLabel);
+		applyInfoValueStyle(marketSizeLabel);
 		openRosterButton.setBackground(DashboardPanelUtil.getPrimaryActionColor());
 		openRosterButton.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 		if (infoTitleLabels != null) {
 			for (int i = 0; i < infoTitleLabels.length; i++) {
 				if (infoTitleLabels[i] != null) {
-					infoTitleLabels[i].setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+					LabelStyleUtil.styleSubtitleLabel(infoTitleLabels[i], 12);
 				}
 			}
 		}
+	}
+
+	private void applyInfoValueStyle(JLabel label) {
+		if (isPlaceholderText(label.getText())) {
+			LabelStyleUtil.styleSubtitleLabel(label, 13);
+			return;
+		}
+		LabelStyleUtil.styleValueLabel(label, 18);
+	}
+
+	private boolean isPlaceholderText(String text) {
+		return text != null
+				&& (text.startsWith("Aucune")
+						|| text.startsWith("Selectionnez")
+						|| text.startsWith("La ")
+						|| text.startsWith("Le ")
+						|| text.startsWith("L'"));
 	}
 }

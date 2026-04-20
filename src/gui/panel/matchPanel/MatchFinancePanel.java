@@ -15,6 +15,7 @@ import data.finance.GameStat;
 import data.finance.TeamGameFinance;
 import data.sport.setup.Game;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.ThemeAware;
 
 public class MatchFinancePanel extends JPanel implements ThemeAware {
@@ -62,14 +63,21 @@ public class MatchFinancePanel extends JPanel implements ThemeAware {
 
 	public void showHiddenState() {
 		attendanceValueLabel.setText("-");
-		attendanceInfoLabel.setText("Capacite: -");
-		setPositiveValue(ticketValueLabel, "-");
-		setPositiveValue(merchandisingValueLabel, "-");
-		setPositiveValue(concessionsValueLabel, "-");
-		setPositiveValue(tvValueLabel, "-");
-		setNegativeValue(travelValueLabel, "-");
-		setNegativeValue(expenseValueLabel, "-");
-		setPositiveValue(netValueLabel, "-");
+		attendanceInfoLabel.setText("-");
+		ticketValueLabel.setText("-");
+		ticketValueLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		merchandisingValueLabel.setText("-");
+		merchandisingValueLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		concessionsValueLabel.setText("-");
+		concessionsValueLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		tvValueLabel.setText("-");
+		tvValueLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		travelValueLabel.setText("-");
+		travelValueLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		expenseValueLabel.setText("-");
+		expenseValueLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		netValueLabel.setText("-");
+		netValueLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
 	}
 
 	public void showGameFinance(Game game, GameStat gameStat) {
@@ -116,10 +124,10 @@ public class MatchFinancePanel extends JPanel implements ThemeAware {
 		rightPanel.setOpaque(false);
 
 		attendanceValueLabel = new JLabel("-", SwingConstants.RIGHT);
-		attendanceValueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
+		LabelStyleUtil.styleValueLabel(attendanceValueLabel, 18);
 
-		attendanceInfoLabel = new JLabel("Capacite: -", SwingConstants.RIGHT);
-		attendanceInfoLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+		attendanceInfoLabel = new JLabel("-", SwingConstants.RIGHT);
+		LabelStyleUtil.styleSubtitleLabel(attendanceInfoLabel, 12);
 
 		rightPanel.add(attendanceValueLabel);
 		rightPanel.add(attendanceInfoLabel);
@@ -136,7 +144,7 @@ public class MatchFinancePanel extends JPanel implements ThemeAware {
 
 		JLabel nameLabel = buildNameLabel(name);
 		JLabel valueLabel = new JLabel("-", SwingConstants.RIGHT);
-		valueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+		LabelStyleUtil.styleValueLabel(valueLabel, 15);
 
 		if ("Billetterie".equals(name)) {
 			storeMoneyRowPanel(0, row);
@@ -176,10 +184,10 @@ public class MatchFinancePanel extends JPanel implements ThemeAware {
 		applySectionBorder(panel, 2, 18);
 
 		netTitleLabel = new JLabel("RESULTAT NET");
-		netTitleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+		LabelStyleUtil.styleTitleLabel(netTitleLabel, 16);
 
 		netValueLabel = new JLabel("-", SwingConstants.RIGHT);
-		netValueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
+		LabelStyleUtil.styleValueLabel(netValueLabel, 18);
 
 		panel.add(netTitleLabel, BorderLayout.WEST);
 		panel.add(netValueLabel, BorderLayout.EAST);
@@ -188,8 +196,7 @@ public class MatchFinancePanel extends JPanel implements ThemeAware {
 
 	private JLabel buildNameLabel(String text) {
 		JLabel label = new JLabel(text);
-		label.setForeground(new Color(90, 90, 90));
-		label.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
+		LabelStyleUtil.styleSubtitleLabel(label, 14);
 		return label;
 	}
 
@@ -209,8 +216,8 @@ public class MatchFinancePanel extends JPanel implements ThemeAware {
 
 	private void setPositiveValue(JLabel label, String value) {
 		label.setForeground(getPositiveColor());
-		if ("-".equals(value)) {
-			label.setText("-");
+		if (isUnavailableValue(value)) {
+			label.setText(value);
 			return;
 		}
 		label.setText("+" + value);
@@ -218,8 +225,8 @@ public class MatchFinancePanel extends JPanel implements ThemeAware {
 
 	private void setNegativeValue(JLabel label, String value) {
 		label.setForeground(NEGATIVE_COLOR);
-		if ("-".equals(value)) {
-			label.setText("-");
+		if (isUnavailableValue(value)) {
+			label.setText(value);
 			return;
 		}
 		label.setText("-" + value);
@@ -259,16 +266,19 @@ public class MatchFinancePanel extends JPanel implements ThemeAware {
 			applySectionBorder(netPanel, 2, 18);
 		}
 		attendanceTitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
-		attendanceValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		attendanceInfoLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleValueLabel(attendanceValueLabel, 18);
+		LabelStyleUtil.styleSubtitleLabel(attendanceInfoLabel, 12);
+		if (isUnavailableValue(attendanceValueLabel.getText())) {
+			attendanceValueLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		}
 		if (moneyNameLabels != null) {
 			for (int i = 0; i < moneyNameLabels.length; i++) {
 				if (moneyNameLabels[i] != null) {
-					moneyNameLabels[i].setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+					LabelStyleUtil.styleSubtitleLabel(moneyNameLabels[i], 14);
 				}
 			}
 		}
-		netTitleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleTitleLabel(netTitleLabel, 16);
 		setPositiveValue(ticketValueLabel, stripSign(ticketValueLabel.getText()));
 		setPositiveValue(merchandisingValueLabel, stripSign(merchandisingValueLabel.getText()));
 		setPositiveValue(concessionsValueLabel, stripSign(concessionsValueLabel.getText()));
@@ -296,12 +306,20 @@ public class MatchFinancePanel extends JPanel implements ThemeAware {
 	}
 
 	private String stripSign(String text) {
-		if (text == null || "-".equals(text)) {
-			return "-";
+		if (text == null || isUnavailableValue(text)) {
+			return text;
 		}
 		if (text.startsWith("+") || text.startsWith("-")) {
 			return text.substring(1);
 		}
 		return text;
+	}
+
+	private boolean isUnavailableValue(String text) {
+		return text == null
+				|| text.startsWith("Aucune")
+				|| text.startsWith("Les ")
+				|| text.startsWith("Le ")
+				|| text.startsWith("La ");
 	}
 }

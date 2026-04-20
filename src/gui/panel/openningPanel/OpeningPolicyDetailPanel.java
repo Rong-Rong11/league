@@ -1,7 +1,6 @@
 package gui.panel.openningPanel;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
@@ -10,6 +9,7 @@ import javax.swing.JPanel;
 
 import data.team.Team;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.ThemeAware;
 import process.orchestrator.interf.GUIInterface;
 import gui.utility.TeamDisplayUtility;
@@ -49,9 +49,8 @@ public class OpeningPolicyDetailPanel extends JPanel implements ThemeAware {
 	}
 
 	private JLabel createValueLabel() {
-		JLabel valueLabel = new JLabel("-");
-		valueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
-		valueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		JLabel valueLabel = new JLabel("Aucune information n'est disponible.");
+		LabelStyleUtil.styleValueLabel(valueLabel, 16);
 		return valueLabel;
 	}
 
@@ -63,7 +62,7 @@ public class OpeningPolicyDetailPanel extends JPanel implements ThemeAware {
 				BorderFactory.createEmptyBorder(0, 12, 0, 12)));
 
 		JLabel titleLabel = new JLabel(title);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+		LabelStyleUtil.styleSubtitleLabel(titleLabel, 12);
 		storeTitleLabel(titleLabel);
 
 		row.add(titleLabel);
@@ -92,10 +91,14 @@ public class OpeningPolicyDetailPanel extends JPanel implements ThemeAware {
 	}
 
 	private void showEmptyState() {
-		teamValueLabel.setText("-");
-		cityValueLabel.setText("-");
-		conferenceValueLabel.setText("-");
-		divisionValueLabel.setText("-");
+		teamValueLabel.setText("Aucune equipe n'est selectionnee.");
+		cityValueLabel.setText("Selectionnez une franchise sur la carte.");
+		conferenceValueLabel.setText("La conference apparaitra apres la selection.");
+		divisionValueLabel.setText("La division apparaitra apres la selection.");
+		LabelStyleUtil.styleSubtitleLabel(teamValueLabel, 12);
+		LabelStyleUtil.styleSubtitleLabel(cityValueLabel, 12);
+		LabelStyleUtil.styleSubtitleLabel(conferenceValueLabel, 12);
+		LabelStyleUtil.styleSubtitleLabel(divisionValueLabel, 12);
 	}
 
 	private void showTeamState(Team team) {
@@ -107,14 +110,21 @@ public class OpeningPolicyDetailPanel extends JPanel implements ThemeAware {
 
 	@Override
 	public void applyTheme() {
-		teamValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		cityValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		conferenceValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		divisionValueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		if (teamValueLabel.getText().contains("Aucune") || cityValueLabel.getText().contains("Selectionnez")) {
+			LabelStyleUtil.styleSubtitleLabel(teamValueLabel, 12);
+			LabelStyleUtil.styleSubtitleLabel(cityValueLabel, 12);
+			LabelStyleUtil.styleSubtitleLabel(conferenceValueLabel, 12);
+			LabelStyleUtil.styleSubtitleLabel(divisionValueLabel, 12);
+		} else {
+			LabelStyleUtil.styleValueLabel(teamValueLabel, 16);
+			LabelStyleUtil.styleValueLabel(cityValueLabel, 16);
+			LabelStyleUtil.styleValueLabel(conferenceValueLabel, 16);
+			LabelStyleUtil.styleValueLabel(divisionValueLabel, 16);
+		}
 		if (titleLabels != null) {
 			for (int i = 0; i < titleLabels.length; i++) {
 				if (titleLabels[i] != null) {
-					titleLabels[i].setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+					LabelStyleUtil.styleSubtitleLabel(titleLabels[i], 12);
 				}
 			}
 		}
