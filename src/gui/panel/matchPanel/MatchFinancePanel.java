@@ -2,7 +2,6 @@ package gui.panel.matchPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;

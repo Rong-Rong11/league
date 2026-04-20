@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 
 import data.player.Player;
 import data.team.Team;
-import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.ThemeAware;
 import gui.utility.PlayerStatUtility;
