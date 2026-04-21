@@ -51,10 +51,10 @@ public abstract class GameRevenueCalculator {
 		double performatingRate = (game.getGameContext().getHomeTeam().getTeamPerformance().getPerformanceRating()
 				+ game.getGameContext().getAwayTeam().getTeamPerformance().getPerformanceRating()) / 2;
 
-		double popularityRate = (gameScore * 0.6) + (performatingRate * 0.4);
+		double popularityRate = (gameScore * 0.5) + (performatingRate * 0.5);
 
 		int winStreak = homeTeam.getTeamPerformance().getCurrentWinStreak();
-		popularityRate += Math.min(winStreak, 8) * 0.01;
+		popularityRate += Math.min(winStreak, 10) * 0.015;
 
 		popularityRate += getPopularityBonusRate(game, date, homeTeam);
 
@@ -109,8 +109,8 @@ public abstract class GameRevenueCalculator {
 				|| CalendarUtility.isSpecialEvent(league.getRegularSeason(), date) ? 0.20 : 0.0;
 		double gameTimeBonus = getGameTimeAttendanceBonus(game);
 
-		double attendanceRate = (0.36
-				+ (popularityRate * 0.5)
+		double attendanceRate = (0.32
+				+ (popularityRate * 0.58)
 				+ importantDayBonus);
 
 		attendanceRate += mediaMarket.getFanBaseModifier() * 0.12;

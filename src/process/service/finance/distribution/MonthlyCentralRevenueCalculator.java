@@ -42,7 +42,7 @@ public class MonthlyCentralRevenueCalculator {
 
 		double revenue = (0.82 * teamCount)
 				+ (averagePopularity * 0.100)
-				+ (averagePerformance * 1.48)
+				+ (averagePerformance * 1.90)
 				+ (averagePrestige * 2.78)
 				+ (averageTeamValue * 3.45)
 				+ (starTeams * 0.27);

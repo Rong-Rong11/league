@@ -8,16 +8,16 @@ public class GameMomentAttendanceBonusVisitor implements GameMomentVisitor<Doubl
 
 	@Override
 	public Double visit(Afternoon afternoon) {
-		return -0.04;
+		return 0.01;
 	}
 
 	@Override
 	public Double visit(Evening evening) {
-		return 0.05;
+		return 0.10;
 	}
 
 	@Override
 	public Double visit(Night night) {
-		return 0.10;
+		return 0.06;
 	}
 }

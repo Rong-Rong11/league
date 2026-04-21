@@ -15,7 +15,7 @@ import gui.panel.common.ThemeAware;
 import process.orchestrator.interf.TeamGetterInterface;
 
 public class TeamLogoPanel extends JPanel implements ThemeAware {
-	private static final String LOGO_FOLDER_PATH = "resources/nba_logos/";
+	private static final String LOGO_FOLDER_PATH = "src/resources/nba_logos/";
 	private static final int DEFAULT_LOGO_SIZE = 64;
 
 	private JLabel logoLabel;

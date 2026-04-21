@@ -126,6 +126,7 @@ public class LeagueBuilder {
 
 	private BufferedReader createReader() throws IOException {
 		Path[] candidatePaths = {
+				Paths.get("src", "resources", "nba.csv"),
 				Paths.get("resources", "nba.csv"),
 				Paths.get("league", "resources", "nba.csv")
 		};
@@ -136,7 +137,7 @@ public class LeagueBuilder {
 			}
 		}
 
-		throw new IOException("Impossible de trouver nba.csv dans resources/ ou league/resources/");
+		throw new IOException("Impossible de trouver nba.csv dans src/resources/, resources/ ou league/resources/");
 	}
 
 }

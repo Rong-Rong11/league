@@ -153,17 +153,17 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 	}
 
 	private void applySidebarIcons() {
-		matchButton.setIcon(loadSidebarIcon("resources/logo_dash/match.png"));
-		calendarButton.setIcon(loadSidebarIcon("resources/logo_dash/calendar.png"));
-		rankingButton.setIcon(loadSidebarIcon("resources/logo_dash/classement.png"));
-		financeButton.setIcon(loadSidebarIcon("resources/logo_dash/finance.png"));
-		mapButton.setIcon(loadSidebarIcon("resources/logo_dash/map.png"));
+		matchButton.setIcon(loadSidebarIcon("src/resources/logo_dash/match.png"));
+		calendarButton.setIcon(loadSidebarIcon("src/resources/logo_dash/calendar.png"));
+		rankingButton.setIcon(loadSidebarIcon("src/resources/logo_dash/classement.png"));
+		financeButton.setIcon(loadSidebarIcon("src/resources/logo_dash/finance.png"));
+		mapButton.setIcon(loadSidebarIcon("src/resources/logo_dash/map.png"));
 		themeButton.setIcon(loadSidebarIcon(
-				DashboardPanelUtil.isDarkMode() ? "resources/logo_dash/sun_mode_icon.png"
-						: "resources/logo_dash/moon_mode_icon.png"));
+				DashboardPanelUtil.isDarkMode() ? "src/resources/logo_dash/sun_mode_icon.png"
+						: "src/resources/logo_dash/moon_mode_icon.png"));
 		exitButton.setIcon(loadSidebarIcon(
-				DashboardPanelUtil.isDarkMode() ? "resources/logo_dash/exit_dark.png"
-						: "resources/logo_dash/exit_light.png"));
+				DashboardPanelUtil.isDarkMode() ? "src/resources/logo_dash/exit_dark.png"
+						: "src/resources/logo_dash/exit_light.png"));
 	}
 
 	private ImageIcon loadSidebarIcon(String path) {

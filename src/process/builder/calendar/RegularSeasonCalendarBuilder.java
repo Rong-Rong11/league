@@ -77,11 +77,11 @@ public class RegularSeasonCalendarBuilder extends CalendarBuilder {
 			Game game = sortedGames.get(index);
 
 			if (index < veryImportantLimit) {
-				game.getGameContext().setGameMoment(new Afternoon());
+				game.getGameContext().setGameMoment(new Evening());
 			} else if (index < importantLimit) {
 				game.getGameContext().setGameMoment(new Night());
 			} else {
-				game.getGameContext().setGameMoment(new Evening());
+				game.getGameContext().setGameMoment(new Afternoon());
 			}
 		}
 	}

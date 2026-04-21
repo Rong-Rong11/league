@@ -38,11 +38,14 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 				double marketMultiplier = getMarketMultiplier(marketSize);
 				double popularityFactor = team.getCurrentPopularity() / 100.0;
 				double starFactor = team.hasStarPlayer() ? 1.1 : 1.0;
-				double performanceFactor = 0.90 + (team.getTeamPerformance().getPerformanceRating() * 0.20);
+				double performanceFactor = 0.82 + (team.getTeamPerformance().getPerformanceRating() * 0.38);
 
 				double localSponsoring = 2.05 * marketMultiplier * popularityFactor * starFactor;
 				double localMerchandising = 1.45 * marketMultiplier * popularityFactor * starFactor;
 				double otherRevenue = 0.48 * marketMultiplier * performanceFactor;
+
+				localSponsoring *= (0.92 + team.getTeamPerformance().getPerformanceRating() * 0.16);
+				localMerchandising *= (0.88 + team.getTeamPerformance().getPerformanceRating() * 0.24);
 
 				localSponsoring *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.35);
 				localMerchandising *= (1 + mediaMarket.getPrestigeModifier() * 0.20);

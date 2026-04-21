@@ -1,4 +1,4 @@
-package manual;
+package test.manual;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import data.player.Player;
-import input.InputParameter;
+import test.input.InputParameter;
 import process.factory.PlayerFactory;
 
 public class TestCsv {

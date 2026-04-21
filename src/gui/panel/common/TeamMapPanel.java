@@ -11,8 +11,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class TeamMapPanel extends JPanel implements ThemeAware {
-	private static final String LIGHT_MAP_IMAGE_PATH = "resources/map.png";
-	private static final String DARK_MAP_IMAGE_PATH = "resources/map(dark).png";
+	private static final String LIGHT_MAP_IMAGE_PATH = "src/resources/map.png";
+	private static final String DARK_MAP_IMAGE_PATH = "src/resources/map(dark).png";
 	private static final int TEAM_POINT_RADIUS = 6;
 	private static final double SOURCE_IMAGE_WIDTH = 1000.0;
 	private static final double SOURCE_IMAGE_HEIGHT = 667.0;

@@ -117,8 +117,8 @@ private double calculateMonthlySpecificVariation(Team team) {
 	double variation = 0.0;
 	double performance = team.getTeamPerformance().getPerformanceRating();
 	int winStreak = team.getTeamPerformance().getCurrentWinStreak();
-	variation += (performance - 0.5) * 4.0;
-	variation += Math.min(winStreak, 8) * 0.25;
+	variation += (performance - 0.5) * 6.0;
+	variation += Math.min(winStreak, 10) * 0.35;
 
 	return variation;
 }

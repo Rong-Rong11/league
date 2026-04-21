@@ -13,7 +13,7 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
 
 public class PlayerPortraitPanel extends JPanel implements ThemeAware {
-	private static final String PORTRAIT_FOLDER_PATH = "resources/portraits/";
+	private static final String PORTRAIT_FOLDER_PATH = "src/resources/portraits/";
 	private static final int DEFAULT_PORTRAIT_WIDTH = 80;
 	private static final int DEFAULT_PORTRAIT_HEIGHT = 58;
 

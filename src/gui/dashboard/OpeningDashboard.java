@@ -77,7 +77,7 @@ public class OpeningDashboard extends JPanel implements ThemeAware {
 	}
 
 	private ImageIcon createRandomIcon() {
-		ImageIcon icon = new ImageIcon("resources/randomIcon.png");
+		ImageIcon icon = new ImageIcon("src/resources/randomIcon.png");
 		Image scaledImage = icon.getImage().getScaledInstance(28, 28, Image.SCALE_SMOOTH);
 		return new ImageIcon(scaledImage);
 	}
