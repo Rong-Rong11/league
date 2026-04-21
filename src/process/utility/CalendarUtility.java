@@ -66,10 +66,10 @@ public class CalendarUtility {
 			score += 40.0;
 		}
 		if (home.hasStarPlayer()) {
-			score += 30.0;
+			score += 40.0;
 		}
 		if (away.hasStarPlayer()) {
-			score += 30.0;
+			score += 40.0;
 		}
 		switch (game.getGameContext().getTypeGame()) {
 			case 2:

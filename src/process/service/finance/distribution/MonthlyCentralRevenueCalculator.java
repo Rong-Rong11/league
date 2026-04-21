@@ -48,7 +48,7 @@ public class MonthlyCentralRevenueCalculator {
 				+ (starTeams * 0.27);
 
 		revenue *= profile.getTvRate();
-		revenue *= getImportantGamesRevenueRate(month, 0.0015);
+		revenue *= getImportantGamesRevenueRate(month, 0.0024);
 		revenue *= getPlayoffGamesRevenueRate(month, 0.0045);
 		revenue *= getActivePlayoffTeamsRate(month, 0.0038);
 		revenue *= getSeasonMomentumRate(month, 0.06);
@@ -76,7 +76,7 @@ public class MonthlyCentralRevenueCalculator {
 				+ (starTeams * 0.20);
 
 		revenue *= profile.getSponsoringRate();
-		revenue *= getImportantGamesRevenueRate(month, 0.0022);
+		revenue *= getImportantGamesRevenueRate(month, 0.0034);
 		revenue *= getPlayoffGamesRevenueRate(month, 0.0043);
 		revenue *= getActivePlayoffTeamsRate(month, 0.0036);
 		revenue *= getSeasonMomentumRate(month, 0.07);
@@ -104,7 +104,7 @@ public class MonthlyCentralRevenueCalculator {
 				+ (starTeams * 0.19);
 
 		revenue *= profile.getMerchandisingRate();
-		revenue *= getImportantGamesRevenueRate(month, 0.0032);
+		revenue *= getImportantGamesRevenueRate(month, 0.0048);
 		revenue *= getPlayoffGamesRevenueRate(month, 0.0060);
 		revenue *= getActivePlayoffTeamsRate(month, 0.0048);
 		revenue *= getSeasonMomentumRate(month, 0.10);

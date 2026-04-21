@@ -27,7 +27,7 @@ public void updateMonthlyPopularity() {
 }
 
 public void applyPlayoffQualificationBonus(Team team) {
-	double bonus = 2.0;
+	double bonus = 3.0;
 	double newPopularity = clampPopularity(team.getCurrentPopularity() + bonus);
 	team.setCurrentPopularity(newPopularity);
 }
@@ -78,7 +78,7 @@ private double calculateCommonPopularityBase(Team team) {
 	MediaMarket mediaMarket = team.getTeamFinance().getMediaMarket();
 
 	if (team.hasStarPlayer()) {
-		variation += 1.0;
+		variation += 1.4;
 	}
 
 	variation += economicProfil.getFanLoyalty() - 0.5 * 1.5;
@@ -134,13 +134,13 @@ private double getPlayoffRoundPopularityBonus(PlayoffRound round) {
 
 	switch (round) {
 		case FIRST_ROUND:
-			return 2.5;
+			return 3.0;
 		case CONFERENCE_SEMIFINALS:
-			return 3.5;
+			return 4.5;
 		case CONFERENCE_FINALS:
-			return 5.0;
+			return 6.5;
 		case NBA_FINALS:
-			return 7.0;
+			return 9.0;
 		default:
 			return 0.0;
 	}

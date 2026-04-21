@@ -76,6 +76,10 @@ public abstract class GameRevenueCalculator {
 		double popularityFactor = 1 + (popularityRate - 0.5) * 0.28;
 		double price = base * popularityFactor;
 
+		if (homeTeam.hasStarPlayer()) {
+			price *= 1.06;
+		}
+
 		price *= (1 + mediaMarket.getPricingPowerModifier() * 0.09);
 		price *= (1 + economicProfil.getHistoricalPrestige() * 0.04);
 		price *= (1 - economicProfil.getPriceElasticity() * 0.18);
@@ -118,6 +122,9 @@ public abstract class GameRevenueCalculator {
 		attendanceRate += economicProfil.getHistoricalPrestige() * 0.06;
 		attendanceRate += teamValueFactor * 0.05;
 		attendanceRate += getAttendanceBonusRate(homeTeam, popularityRate);
+		if (homeTeam.hasStarPlayer()) {
+			attendanceRate += 0.04;
+		}
 		attendanceRate += gameTimeBonus;
 
 		double financeBoost = (mediaMarket.getFanBaseModifier() * 0.40)
@@ -232,6 +239,13 @@ public abstract class GameRevenueCalculator {
 		double homeShare = leagueTVPerGame * 0.6;
 		double awayShare = leagueTVPerGame * 0.4;
 
+		if (game.getGameContext().getHomeTeam().hasStarPlayer()) {
+			homeShare *= 1.10;
+		}
+		if (game.getGameContext().getAwayTeam().hasStarPlayer()) {
+			awayShare *= 1.08;
+		}
+
 		homeShare *= (1 + getHomeTvBonusRate(game));
 		awayShare *= (1 + getAwayTvBonusRate(game));
 
@@ -273,6 +287,11 @@ public abstract class GameRevenueCalculator {
 		if (rivalryGame) {
 			purchaseRate += 0.006;
 			averageSpend *= 1.05;
+		}
+
+		if (homeTeam.hasStarPlayer()) {
+			purchaseRate += 0.012;
+			averageSpend *= 1.08;
 		}
 
 		purchaseRate += teamValueFactor * 0.01;

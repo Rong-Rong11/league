@@ -159,7 +159,7 @@ public class CentralRevenueDistributor {
 		score += FinanceUtility.getNormalizedTeamValue(team) * 0.7;
 
 		if (team.hasStarPlayer()) {
-			score += 0.5;
+			score += 0.7;
 		}
 
 		return score;
@@ -174,7 +174,7 @@ public class CentralRevenueDistributor {
 		score += FinanceUtility.getNormalizedTeamValue(team) * 0.5;
 
 		if (team.hasStarPlayer()) {
-			score += 0.4;
+			score += 0.55;
 		}
 
 		return score;

@@ -67,7 +67,7 @@ public class LeagueExpenseCalculator {
 	  if (CalendarUtility.isImportantMonth(month)) {
 		 cost *= 1.16;
 	  }
-	  cost *= getImportantGamesExpenseRate(month, 0.0018);
+	  cost *= getImportantGamesExpenseRate(month, 0.0024);
 	  cost *= getPlayoffGamesExpenseRate(month, 0.0048);
 	  cost *= getActivePlayoffTeamsExpenseRate(month, 0.0032);
 	  cost *= getSeasonExpenseRate(month, 0.08);
@@ -80,7 +80,7 @@ public class LeagueExpenseCalculator {
 	  if (CalendarUtility.isImportantMonth(month)) {
 		 cost *= 1.28;
 	  }
-	  cost *= getImportantGamesExpenseRate(month, 0.0024);
+	  cost *= getImportantGamesExpenseRate(month, 0.0032);
 	  cost *= getPlayoffGamesExpenseRate(month, 0.0054);
 	  cost *= getActivePlayoffTeamsExpenseRate(month, 0.0038);
 	  cost *= getSeasonExpenseRate(month, 0.10);
@@ -93,7 +93,7 @@ public class LeagueExpenseCalculator {
 	  if (CalendarUtility.isImportantMonth(month)) {
 		 cost *= 1.10;
 	  }
-	  cost *= getImportantGamesExpenseRate(month, 0.0018);
+	  cost *= getImportantGamesExpenseRate(month, 0.0023);
 	  cost *= getPlayoffGamesExpenseRate(month, 0.0058);
 	  cost *= getActivePlayoffTeamsExpenseRate(month, 0.0038);
 	  cost *= getSeasonExpenseRate(month, 0.08);

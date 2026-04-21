@@ -263,13 +263,13 @@ public class PlayoffFinancialRules {
 
 	  switch (round) {
 		 case FIRST_ROUND:
-			return 1.5;
+			return 2.2;
 		 case CONFERENCE_SEMIFINALS:
-			return 2.5;
+			return 3.6;
 		 case CONFERENCE_FINALS:
-			return 4.0;
+			return 5.5;
 		 case NBA_FINALS:
-			return 6.5;
+			return 8.5;
 		 default:
 			return 0.0;
 	  }

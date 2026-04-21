@@ -178,7 +178,7 @@ public class FinanceManager {
 
 	// Playoff bonuses
 	public void applyPlayoffQualificationBonus(Team team, int month) {
-		double bonus = 0.8;
+		double bonus = 1.6;
 
 		FinanceUtility.addIncome(
 				team.getTeamFinance().getBudget(),
