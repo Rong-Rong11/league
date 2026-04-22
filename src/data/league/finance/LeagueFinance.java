@@ -1,5 +1,8 @@
 package data.league.finance;
 
+import java.util.HashMap;
+
+import data.finance.MonthlyCentralRevenueData;
 import data.finance.budget.Budget;
 
 public class LeagueFinance {
@@ -7,6 +10,7 @@ public class LeagueFinance {
 	private Budget budget;
 	private LeagueFinancialRules leagueFinancialRules;
 	private LeagueRedistributionPolicy leagueRedistributionPolicy = new LeagueRedistributionPolicy();
+	private HashMap<Integer, MonthlyCentralRevenueData> monthlyCentralRevenueHistory = new HashMap<>();
 
 	public LeagueFinance(Budget budget, double salaryCap, double luxuryTaxLine, double minimumTeamSalary,
 			double leagueValue) {
@@ -46,6 +50,10 @@ public class LeagueFinance {
 
 	public void setLeagueValue(double leagueValue) {
 		this.leagueValue = leagueValue;
+	}
+
+	public HashMap<Integer, MonthlyCentralRevenueData> getMonthlyCentralRevenueHistory() {
+		return monthlyCentralRevenueHistory;
 	}
 
 	// les sommes en millions

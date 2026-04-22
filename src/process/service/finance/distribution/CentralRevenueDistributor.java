@@ -1,6 +1,7 @@
 package process.service.finance.distribution;
 
 import config.FinanceConfiguration;
+import data.finance.MonthlyCentralRevenueData;
 import data.finance.budget.Budget;
 import data.finance.budget.income.Income;
 import data.finance.budget.income.IncomeType;
@@ -54,6 +55,9 @@ public class CentralRevenueDistributor {
 
 	private void distribute(double tvRevenue, double globalSponsors, double merchandisingRevenue, int month) {
 		Budget leagueBudget = league.getLeagueFinance().getBudget();
+		double leagueTvCut = tvRevenue * FinanceConfiguration.LEAGUE_OPERATING_RATE;
+		double leagueSponsorsCut = globalSponsors * FinanceConfiguration.LEAGUE_OPERATING_RATE;
+		double leagueMerchandisingCut = merchandisingRevenue * FinanceConfiguration.LEAGUE_OPERATING_RATE;
 
 		double distributableTv = retainLeagueCut(
 				leagueBudget,
@@ -76,8 +80,26 @@ public class CentralRevenueDistributor {
 		distributeTvShare(distributableTv, month);
 		distributeNationalSponsoringShare(distributableSponsors, month);
 		distributeMerchandisingShare(distributableMerchandising, month);
+		storeMonthlyCentralRevenueData(month, tvRevenue, globalSponsors, merchandisingRevenue,
+				leagueTvCut + leagueSponsorsCut + leagueMerchandisingCut);
 
 		FinanceUtility.updateBudget(leagueBudget);
+	}
+
+	private void storeMonthlyCentralRevenueData(int month, double tvRevenue, double globalSponsors,
+			double merchandisingRevenue, double leagueRetainedRevenue) {
+		double totalCentralRevenue = tvRevenue + globalSponsors + merchandisingRevenue;
+		double redistributedRevenue = totalCentralRevenue - leagueRetainedRevenue;
+
+		MonthlyCentralRevenueData revenueData = new MonthlyCentralRevenueData(
+				month,
+				tvRevenue,
+				globalSponsors,
+				merchandisingRevenue,
+				leagueRetainedRevenue,
+				redistributedRevenue);
+
+		league.getLeagueFinance().getMonthlyCentralRevenueHistory().put(month, revenueData);
 	}
 
 	private double retainLeagueCut(Budget leagueBudget, double revenue, IncomeType incomeType, int month) {

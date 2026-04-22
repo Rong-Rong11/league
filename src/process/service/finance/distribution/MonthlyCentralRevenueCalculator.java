@@ -48,12 +48,14 @@ public class MonthlyCentralRevenueCalculator {
 				+ (starTeams * 0.27);
 
 		revenue *= profile.getTvRate();
-		revenue *= getImportantGamesRevenueRate(month, 0.0024);
+		revenue *= getLeagueMonthlyAttractivenessRate(month);
+		revenue *= getImportantGamesRevenueRate(month, 0.0040);
 		revenue *= getPlayoffGamesRevenueRate(month, 0.0045);
 		revenue *= getActivePlayoffTeamsRate(month, 0.0038);
-		revenue *= getSeasonMomentumRate(month, 0.06);
-		revenue *= getControlledEconomicNoise(month, 0.012);
+		revenue *= getSeasonMomentumRate(month, 0.10);
+		revenue *= getControlledEconomicNoise(month, 0.130);
 		revenue *= getRevenueTypeMonthlyRate(month, 0.012, 0.006, 0.0);
+		revenue += getLeagueMonthlyAdditiveBonus(month) * 0.40;
 
 		return revenue;
 	}
@@ -76,12 +78,14 @@ public class MonthlyCentralRevenueCalculator {
 				+ (starTeams * 0.20);
 
 		revenue *= profile.getSponsoringRate();
-		revenue *= getImportantGamesRevenueRate(month, 0.0034);
+		revenue *= getLeagueMonthlyAttractivenessRate(month);
+		revenue *= getImportantGamesRevenueRate(month, 0.0055);
 		revenue *= getPlayoffGamesRevenueRate(month, 0.0043);
 		revenue *= getActivePlayoffTeamsRate(month, 0.0036);
-		revenue *= getSeasonMomentumRate(month, 0.07);
-		revenue *= getControlledEconomicNoise(month, 0.022);
+		revenue *= getSeasonMomentumRate(month, 0.12);
+		revenue *= getControlledEconomicNoise(month, 0.180);
 		revenue *= getRevenueTypeMonthlyRate(month, 0.030, 0.016, 0.7);
+		revenue += getLeagueMonthlyAdditiveBonus(month) * 0.35;
 
 		return revenue;
 	}
@@ -104,12 +108,14 @@ public class MonthlyCentralRevenueCalculator {
 				+ (starTeams * 0.19);
 
 		revenue *= profile.getMerchandisingRate();
-		revenue *= getImportantGamesRevenueRate(month, 0.0048);
+		revenue *= getLeagueMonthlyAttractivenessRate(month);
+		revenue *= getImportantGamesRevenueRate(month, 0.0075);
 		revenue *= getPlayoffGamesRevenueRate(month, 0.0060);
 		revenue *= getActivePlayoffTeamsRate(month, 0.0048);
-		revenue *= getSeasonMomentumRate(month, 0.10);
-		revenue *= getControlledEconomicNoise(month, 0.030);
+		revenue *= getSeasonMomentumRate(month, 0.16);
+		revenue *= getControlledEconomicNoise(month, 0.240);
 		revenue *= getRevenueTypeMonthlyRate(month, 0.050, 0.024, 1.4);
+		revenue += getLeagueMonthlyAdditiveBonus(month) * 0.25;
 
 		return revenue;
 	}
@@ -184,6 +190,153 @@ public class MonthlyCentralRevenueCalculator {
 		return count;
 	}
 
+	private double calculateMonthlyLeagueAttractiveness(int month) {
+		double totalScore = 0.0;
+		int gameCount = 0;
+
+		for (GameDay gameDay : getAllGameDaysForMonth(month)) {
+			LocalDate date = gameDay.getDate();
+			for (Game game : gameDay.getGames()) {
+				totalScore += CalendarUtility.popularityScoreGame(game, date);
+				gameCount++;
+			}
+		}
+
+		if (gameCount == 0) {
+			return 0.0;
+		}
+
+		return totalScore / gameCount;
+	}
+
+	private double getLeagueMonthlyAttractivenessRate(int month) {
+		double attractiveness = calculateMonthlyLeagueAttractiveness(month);
+
+		if (attractiveness < 60) {
+			return 0.65;
+		}
+		if (attractiveness < 74) {
+			return 0.82;
+		}
+		if (attractiveness < 90) {
+			return 1.00;
+		}
+		if (attractiveness < 108) {
+			return 1.20;
+		}
+		return 1.45;
+	}
+
+	private double getPlayoffMonthlyBonus(int month) {
+		int playoffGames = countPlayoffGamesInMonth(month);
+		return playoffGames * 0.12;
+	}
+
+	private double getLeagueMonthlyAdditiveBonus(int month) {
+		double totalAttractiveness = 0.0;
+		double totalAttendance = 0.0;
+		int gameCount = 0;
+		int importantGames = 0;
+		int premiumGames = 0;
+		int highAttendanceGames = 0;
+		int rivalryGames = 0;
+		int starGames = 0;
+		int starRivalryGames = 0;
+
+		for (GameDay gameDay : getAllGameDaysForMonth(month)) {
+			LocalDate date = gameDay.getDate();
+			for (Game game : gameDay.getGames()) {
+				double score = CalendarUtility.popularityScoreGame(game, date);
+				totalAttractiveness += score;
+				gameCount++;
+
+				if (isImportantGame(game, date)) {
+					importantGames++;
+				}
+				if (score >= 110) {
+					premiumGames++;
+				}
+
+				boolean rivalry = game.getGameContext().isRivalry();
+				boolean starGame = game.getGameContext().getHomeTeam().hasStarPlayer()
+						|| game.getGameContext().getAwayTeam().hasStarPlayer();
+
+				if (rivalry) {
+					rivalryGames++;
+				}
+				if (starGame) {
+					starGames++;
+				}
+				if (rivalry && starGame) {
+					starRivalryGames++;
+				}
+
+				if (financeManager != null) {
+					GameStat gameStat = financeManager.getGameStat(game);
+					if (gameStat != null) {
+						totalAttendance += gameStat.getAttendanceRate();
+						if (gameStat.getAttendanceRate() >= 0.92) {
+							highAttendanceGames++;
+						}
+					}
+				}
+			}
+		}
+
+		double averageAttractiveness = gameCount == 0 ? 0.0 : totalAttractiveness / gameCount;
+		double averageAttendance = gameCount == 0 ? 0.0 : totalAttendance / gameCount;
+
+		double bonus = 0.0;
+		bonus += getAttractivenessBonus(averageAttractiveness);
+		bonus += getAttendanceBonus(averageAttendance);
+		bonus += getVolumeBonus(importantGames, premiumGames, highAttendanceGames);
+		bonus += getStarRivalryBonus(rivalryGames, starGames, starRivalryGames);
+		bonus += getPlayoffMonthlyBonus(month);
+
+		return bonus;
+	}
+
+	private double getAttractivenessBonus(double averageAttractiveness) {
+		if (averageAttractiveness < 60) {
+			return -2.0;
+		}
+		if (averageAttractiveness < 74) {
+			return -0.8;
+		}
+		if (averageAttractiveness >= 108) {
+			return 2.5;
+		}
+		if (averageAttractiveness >= 90) {
+			return 1.2;
+		}
+		return 0.0;
+	}
+
+	private double getAttendanceBonus(double averageAttendance) {
+		if (averageAttendance < 0.72) {
+			return -1.0;
+		}
+		if (averageAttendance >= 0.90) {
+			return 1.6;
+		}
+		if (averageAttendance >= 0.82) {
+			return 0.8;
+		}
+		return 0.0;
+	}
+
+	private double getVolumeBonus(int importantGames, int premiumGames, int highAttendanceGames) {
+		return (importantGames * 0.08)
+				+ (premiumGames * 0.12)
+				+ (highAttendanceGames * 0.10);
+	}
+
+	private double getStarRivalryBonus(int rivalryGames, int starGames, int starRivalryGames) {
+		return (rivalryGames * 0.03)
+				+ (starGames * 0.02)
+				+ (starRivalryGames * 0.07);
+	}
+
 	private double getImportantGamesRevenueRate(int month, double ratePerGame) {
 		int importantGames = countImportantGamesInMonth(month);
 		return 1 + (importantGames * ratePerGame);
@@ -206,7 +359,7 @@ public class MonthlyCentralRevenueCalculator {
 			return 1 + playoffBonusRate;
 		}
 		if (CalendarUtility.isImportantMonth(month)) {
-			return 1.03;
+			return 1.20;
 		}
 		return 1.0;
 	}
@@ -245,6 +398,28 @@ public class MonthlyCentralRevenueCalculator {
 			count += gameDay.getGames().size();
 		}
 		return count;
+	}
+
+	private List<GameDay> getAllGameDaysForMonth(int month) {
+		List<GameDay> gameDays = new ArrayList<>();
+
+		if (league.getRegularSeason() != null && league.getRegularSeason().getNbaCalendar() != null) {
+			for (GameDay gameDay : league.getRegularSeason().getNbaCalendar().getCalendar().values()) {
+				if (gameDay.getDate() != null && matchesFinanceMonth(gameDay.getDate(), month)) {
+					gameDays.add(gameDay);
+				}
+			}
+		}
+
+		if (league.getPlayoff() != null && league.getPlayoff().getNbaCalendar() != null) {
+			for (GameDay gameDay : league.getPlayoff().getNbaCalendar().getCalendar().values()) {
+				if (gameDay.getDate() != null && matchesFinanceMonth(gameDay.getDate(), month)) {
+					gameDays.add(gameDay);
+				}
+			}
+		}
+
+		return gameDays;
 	}
 
 	private int countImportantGamesForSeasonMonth(int month, boolean playoff) {
@@ -313,7 +488,7 @@ public class MonthlyCentralRevenueCalculator {
 	}
 
 	private boolean isImportantGame(Game game, LocalDate date) {
-		return CalendarUtility.popularityScoreGame(game, date) >= 80 || game.getGameContext().isRivalry();
+		return CalendarUtility.popularityScoreGame(game, date) >= 72 || game.getGameContext().isRivalry();
 	}
 
 	private boolean hasHighAttendance(Game game) {
