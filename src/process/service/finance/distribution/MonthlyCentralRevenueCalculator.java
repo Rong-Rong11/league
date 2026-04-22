@@ -40,12 +40,12 @@ public class MonthlyCentralRevenueCalculator {
 		double averageTeamValue = calculateAverageTeamValue(teams);
 		int starTeams = countTeamsWithStarPlayer(teams);
 
-		double revenue = (0.82 * teamCount)
+		double revenue = (0.72 * teamCount)
 				+ (averagePopularity * 0.100)
-				+ (averagePerformance * 1.90)
-				+ (averagePrestige * 2.78)
-				+ (averageTeamValue * 3.45)
-				+ (starTeams * 0.27);
+				+ (averagePerformance * 1.65)
+				+ (averagePrestige * 2.35)
+				+ (averageTeamValue * 2.95)
+				+ (starTeams * 0.22);
 
 		revenue *= profile.getTvRate();
 		revenue *= getLeagueMonthlyAttractivenessRate(month);
@@ -70,12 +70,12 @@ public class MonthlyCentralRevenueCalculator {
 		double averageTeamValue = calculateAverageTeamValue(teams);
 		int starTeams = countTeamsWithStarPlayer(teams);
 
-		double revenue = (0.40 * teamCount)
+		double revenue = (0.34 * teamCount)
 				+ (averagePopularity * 0.080)
-				+ (averageCommercialAggressiveness * 2.28)
-				+ (averageBusinessOpportunity * 1.96)
-				+ (averageTeamValue * 1.98)
-				+ (starTeams * 0.20);
+				+ (averageCommercialAggressiveness * 1.95)
+				+ (averageBusinessOpportunity * 1.68)
+				+ (averageTeamValue * 1.70)
+				+ (starTeams * 0.16);
 
 		revenue *= profile.getSponsoringRate();
 		revenue *= getLeagueMonthlyAttractivenessRate(month);
@@ -100,12 +100,12 @@ public class MonthlyCentralRevenueCalculator {
 		double averageTeamValue = calculateAverageTeamValue(teams);
 		int starTeams = countTeamsWithStarPlayer(teams);
 
-		double revenue = (0.23 * teamCount)
+		double revenue = (0.19 * teamCount)
 				+ (averagePopularity * 0.062)
-				+ (averageFanLoyalty * 2.05)
-				+ (averagePrestige * 1.68)
-				+ (averageTeamValue * 1.24)
-				+ (starTeams * 0.19);
+				+ (averageFanLoyalty * 1.80)
+				+ (averagePrestige * 1.42)
+				+ (averageTeamValue * 1.02)
+				+ (starTeams * 0.15);
 
 		revenue *= profile.getMerchandisingRate();
 		revenue *= getLeagueMonthlyAttractivenessRate(month);
