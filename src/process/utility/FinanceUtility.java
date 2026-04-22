@@ -96,11 +96,13 @@ public class FinanceUtility {
 		double excess = payroll - luxuryTaxLine;
 		double penaltyRate;
 		if (excess <= 5) {
-			penaltyRate = luxuryTax;
-		} else if (excess <= 10) {
-			penaltyRate = luxuryTax * 1.25;
-		} else {
 			penaltyRate = luxuryTax * 1.5;
+		} else if (excess <= 10) {
+			penaltyRate = luxuryTax * 2.5;
+		} else if (excess <= 20) {
+			penaltyRate = luxuryTax * 3.45;
+		} else {
+			penaltyRate = luxuryTax * 5.25;
 		}
 		return excess * penaltyRate;
 	}

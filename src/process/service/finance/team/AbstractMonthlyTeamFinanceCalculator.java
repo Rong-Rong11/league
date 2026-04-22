@@ -41,9 +41,9 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 		double starFactor = team.hasStarPlayer() ? 1.18 : 1.0;
 		double performanceFactor = 0.82 + (team.getTeamPerformance().getPerformanceRating() * 0.38);
 
-		double localSponsoring = 2.05 * marketMultiplier * popularityFactor * starFactor;
-		double localMerchandising = 1.45 * marketMultiplier * popularityFactor * starFactor;
-		double otherRevenue = 0.48 * marketMultiplier * performanceFactor;
+		double localSponsoring = 1.78 * marketMultiplier * popularityFactor * starFactor;
+		double localMerchandising = 1.22 * marketMultiplier * popularityFactor * starFactor;
+		double otherRevenue = 0.40 * marketMultiplier * performanceFactor;
 
 		localSponsoring *= (0.92 + team.getTeamPerformance().getPerformanceRating() * 0.16);
 		localMerchandising *= (0.88 + team.getTeamPerformance().getPerformanceRating() * 0.24);
@@ -57,14 +57,14 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 		localSponsoring *= (1 + teamValueFactor * 0.25);
 		localSponsoring *= getSmallMarketRevenueBoost(marketSize, 1.25);
 		localSponsoring *= getLocalSponsoringMultiplier();
-		localSponsoring *= getMonthlyLocalRevenueRate(team, month, 0.080, 0.045);
+		localSponsoring *= getMonthlyLocalRevenueRate(team, month, 0.070, 0.040);
 
 		localMerchandising *= (1 + economicProfil.getFanLoyalty() * 0.25);
 		localMerchandising *= (1 + economicProfil.getHistoricalPrestige() * 0.20);
 		localMerchandising *= (1 + teamValueFactor * 0.22);
 		localMerchandising *= getSmallMarketRevenueBoost(marketSize, 1.30);
 		localMerchandising *= getLocalMerchandisingMultiplier();
-		localMerchandising *= getMonthlyLocalRevenueRate(team, month, 0.120, 0.060);
+		localMerchandising *= getMonthlyLocalRevenueRate(team, month, 0.105, 0.055);
 
 		otherRevenue *= (1 + economicProfil.getOwnerDeficitTolerance() * 0.08);
 		otherRevenue *= (1 + teamValueFactor * 0.15);
@@ -88,9 +88,9 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 				financialPolicy);
 		double seasonExpenseMultiplier = getSeasonContextExpenseMultiplier(month);
 
-		stadiumMaintenance *= getMonthlyExpenseRate(team, month, 0.070, 0.035);
-		staffCost *= getMonthlyExpenseRate(team, month, 0.090, 0.045);
-		administrativeCost *= getMonthlyExpenseRate(team, month, 0.075, 0.040);
+		stadiumMaintenance *= getMonthlyExpenseRate(team, month, 0.220, 0.130);
+		staffCost *= getMonthlyExpenseRate(team, month, 0.280, 0.170);
+		administrativeCost *= getMonthlyExpenseRate(team, month, 0.240, 0.145);
 
 		stadiumMaintenance *= seasonExpenseMultiplier;
 		staffCost *= seasonExpenseMultiplier;
@@ -129,9 +129,9 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 				financialPolicy);
 		double seasonExpenseMultiplier = getSeasonContextExpenseMultiplier(month);
 
-		stadiumMaintenance *= getMonthlyExpenseRate(team, month, 0.070, 0.035);
-		staffCost *= getMonthlyExpenseRate(team, month, 0.090, 0.045);
-		administrativeCost *= getMonthlyExpenseRate(team, month, 0.075, 0.040);
+		stadiumMaintenance *= getMonthlyExpenseRate(team, month, 0.220, 0.130);
+		staffCost *= getMonthlyExpenseRate(team, month, 0.280, 0.170);
+		administrativeCost *= getMonthlyExpenseRate(team, month, 0.240, 0.145);
 
 		stadiumMaintenance *= seasonExpenseMultiplier;
 		staffCost *= seasonExpenseMultiplier;
@@ -176,10 +176,10 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 	private double calculateStadiumMaintenance(Team team, double marketMultiplier, MediaMarket mediaMarket,
 			EconomicProfil economicProfil, FinancialPolicy financialPolicy) {
 		double capacityFactor = team.getStadium().getCapacity() / 20000.0;
-		double maintenance = 0.22 * marketMultiplier * capacityFactor;
+		double maintenance = 2 * marketMultiplier * capacityFactor;
 
-		maintenance *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.10);
-		maintenance *= (1 + economicProfil.getHistoricalPrestige() * 0.05);
+		maintenance *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.26);
+		maintenance *= (1 + economicProfil.getHistoricalPrestige() * 0.15);
 		maintenance *= 1.15;
 		maintenance *= financialPolicy.accept(new MaintenanceCostMultiplierVisitor());
 		maintenance *= getSmallMarketCostFactor(team.getTeamFinance().getMarketSize(), 0.88);
@@ -190,11 +190,11 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 	private double calculateStaffCost(Team team, double marketMultiplier, EconomicProfil economicProfil,
 			FinancialPolicy financialPolicy) {
 		int numberOfPlayers = team.getCurrentPlayers().size();
-		double popularityFactor = 0.80 + (team.getCurrentPopularity() / 500.0);
-		double staffCost = ((0.015 * numberOfPlayers) + 0.10) * marketMultiplier * popularityFactor;
+		double popularityFactor = 0.80 + (team.getCurrentPopularity() / 100.0);
+		double staffCost = ((0.15 * numberOfPlayers) + 2) * marketMultiplier * popularityFactor;
 
-		staffCost *= (1 + economicProfil.getFanLoyalty() * 0.08);
-		staffCost *= (1 + economicProfil.getCommercialAggressiveness() * 0.05);
+		staffCost *= (1 + economicProfil.getFanLoyalty() * 0.25);
+		staffCost *= (1 + economicProfil.getCommercialAggressiveness() * 0.40);
 		staffCost *= 1.12;
 		staffCost *= getSmallMarketCostFactor(team.getTeamFinance().getMarketSize(), 0.92);
 		staffCost *= financialPolicy.accept(new StaffCostMultiplierVisitor());
@@ -205,7 +205,7 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 
 	private double calculateAdministrativeCost(Team team, double marketMultiplier, MediaMarket mediaMarket,
 			EconomicProfil economicProfil, FinancialPolicy financialPolicy) {
-		double administrativeCost = 0.18 * marketMultiplier;
+		double administrativeCost = 2 * marketMultiplier;
 
 		administrativeCost *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.10);
 		administrativeCost *= (1 + economicProfil.getCommercialAggressiveness() * 0.10);
@@ -244,7 +244,7 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 
 	private double getSeasonContextRevenueMultiplier(int month) {
 		if (CalendarUtility.isImportantMonth(month)) {
-			return 1.08;
+			return 1.04;
 		}
 		return 1.0;
 	}
