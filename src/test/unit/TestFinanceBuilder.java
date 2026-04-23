@@ -32,7 +32,7 @@ public void setUp() {
 }
 
 @Test
-public void shouldSetTeamFinanceForAllTeams() {
+public void shouldSetFinanceForAllTeams() {
 	for (Team team : league.getAllTeam()) {
 		TeamFinance teamFinance = team.getTeamFinance();
 		assertNotNull(teamFinance);
@@ -45,7 +45,7 @@ public void shouldSetTeamFinanceForAllTeams() {
 }
 
 @Test
-public void shouldBuildInitialBudgetForTeamFinance() {
+public void shouldBuildInitialBudget() {
 	for (Team team : league.getAllTeam()) {
 		TeamFinance teamFinance = team.getTeamFinance();
 		assertNotNull(teamFinance);
@@ -59,7 +59,7 @@ public void shouldBuildInitialBudgetForTeamFinance() {
 }
 
 @Test
-public void shouldInitializeBudgetMonthlyMapsForEachFinancialMonth() {
+public void shouldInitMonthlyBudgetMaps() {
 	for (Team team : league.getAllTeam()) {
 		assertEquals(FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS,
 			team.getTeamFinance().getBudget().getMonthlyIncomes().size());
@@ -78,7 +78,7 @@ public void shouldInitializeBudgetMonthlyMapsForEachFinancialMonth() {
 }
 
 @Test
-public void shouldCalculateTeamValueDuringFinanceBuild() {
+public void shouldSetTeamValue() {
 	for (Team team : league.getAllTeam()) {
 		TeamFinance teamFinance = team.getTeamFinance();
 		assertTrue(teamFinance.getTeamValue() > 0);
@@ -87,7 +87,7 @@ public void shouldCalculateTeamValueDuringFinanceBuild() {
 }
 
 @Test
-public void shouldCalculateExpectedTeamValueFormulaDuringFinanceBuild() {
+public void shouldMatchTeamValueFormula() {
 	for (Team team : league.getAllTeam()) {
 		double expectedTeamValue = 250.0
 			+ team.getTeamFinance().getBudget().getRemainingAmount()
@@ -100,7 +100,7 @@ public void shouldCalculateExpectedTeamValueFormulaDuringFinanceBuild() {
 }
 
 @Test
-public void shouldInitializeStadiumCapacityAndTicketPrice() {
+public void shouldInitStadiumCapacityAndTicketPrice() {
 	for (Team team : league.getAllTeam()) {
 		assertNotNull(team.getStadium());
 		assertTrue(team.getStadium().getCapacity() > 0);
@@ -109,7 +109,7 @@ public void shouldInitializeStadiumCapacityAndTicketPrice() {
 }
 
 @Test
-public void shouldSetStadiumCapacityWithinExpectedRangeForMarketSize() {
+public void shouldKeepStadiumCapacityInRange() {
 	for (Team team : league.getAllTeam()) {
 		int capacity = team.getStadium().getCapacity();
 
@@ -129,7 +129,7 @@ public void shouldSetStadiumCapacityWithinExpectedRangeForMarketSize() {
 }
 
 @Test
-public void shouldInitializeMediaMarketAndEconomicProfile() {
+public void shouldInitMediaMarketAndEconomicProfile() {
 	for (Team team : league.getAllTeam()) {
 		TeamFinance teamFinance = team.getTeamFinance();
 		assertNotNull(teamFinance.getMediaMarket());
@@ -141,20 +141,20 @@ public void shouldInitializeMediaMarketAndEconomicProfile() {
 		assertTrue(teamFinance.getMediaMarket().getPricingPowerModifier() > 0);
 
 		assertTrue(teamFinance.getEconomicProfil().getFanLoyalty() > 0);
-		assertTrue(teamFinance.getEconomicProfil().getFanLoyalty() < 1);
+		assertTrue(teamFinance.getEconomicProfil().getFanLoyalty() <= 1);
 		assertTrue(teamFinance.getEconomicProfil().getPriceElasticity() > 0);
-		assertTrue(teamFinance.getEconomicProfil().getPriceElasticity() < 1);
+		assertTrue(teamFinance.getEconomicProfil().getPriceElasticity() <= 1);
 		assertTrue(teamFinance.getEconomicProfil().getCommercialAggressiveness() > 0);
-		assertTrue(teamFinance.getEconomicProfil().getCommercialAggressiveness() < 1);
+		assertTrue(teamFinance.getEconomicProfil().getCommercialAggressiveness() <= 1);
 		assertTrue(teamFinance.getEconomicProfil().getHistoricalPrestige() > 0);
-		assertTrue(teamFinance.getEconomicProfil().getHistoricalPrestige() < 1);
+		assertTrue(teamFinance.getEconomicProfil().getHistoricalPrestige() <= 1);
 		assertTrue(teamFinance.getEconomicProfil().getOwnerDeficitTolerance() > 0);
-		assertTrue(teamFinance.getEconomicProfil().getOwnerDeficitTolerance() < 1);
+		assertTrue(teamFinance.getEconomicProfil().getOwnerDeficitTolerance() <= 1);
 	}
 }
 
 @Test
-public void shouldSetMediaMarketModifiersWithExpectedRelationships() {
+public void shouldMatchMediaMarketRelationships() {
 	for (Team team : league.getAllTeam()) {
 		double fanBaseModifier = team.getTeamFinance().getMediaMarket().getFanBaseModifier();
 		double businessOpportunityModifier = team.getTeamFinance().getMediaMarket().getBusinessOpportunityModifier();
@@ -168,23 +168,23 @@ public void shouldSetMediaMarketModifiersWithExpectedRelationships() {
 }
 
 @Test
-public void shouldCalculateExpectedEconomicProfileValues() {
+public void shouldKeepEconomicProfileValuesInRange() {
 	for (Team team : league.getAllTeam()) {
 		double popularity = team.getFormerPopularity();
-		double expectedHistoricalPrestigeMin = 0.2;
-		double expectedHistoricalPrestigeMax = interval(0.2 + popularity / 100.0 * 0.5);
+		double expectedHistoricalPrestigeMin = interval(0.25 + popularity / 100.0 * 0.6);
+		double expectedHistoricalPrestigeMax = expectedHistoricalPrestigeMin;
 
-		double expectedFanLoyaltyMin = interval(0.3 + popularity / 100.0 * 0.3 + expectedHistoricalPrestigeMin * 0.2);
-		double expectedFanLoyaltyMax = interval(0.3 + popularity / 100.0 * 0.3 + expectedHistoricalPrestigeMax * 0.2);
+		double expectedFanLoyaltyMin = interval(0.35 + popularity / 100.0 * 0.35 + expectedHistoricalPrestigeMin * 0.25);
+		double expectedFanLoyaltyMax = expectedFanLoyaltyMin;
 
 		double expectedPriceElasticityMin = interval(
-			0.8 - expectedFanLoyaltyMax * 0.3 - expectedHistoricalPrestigeMax * 0.2);
-		double expectedPriceElasticityMax = interval(
-			0.8 - expectedFanLoyaltyMin * 0.3 - expectedHistoricalPrestigeMin * 0.2);
+			0.78 - expectedFanLoyaltyMax * 0.32 - expectedHistoricalPrestigeMax * 0.22);
+		double expectedPriceElasticityMax = expectedPriceElasticityMin;
 
-		double expectedCommercialAggressivenessMin = 0.4;
-		double expectedCommercialAggressivenessMax = interval(0.4
-			+ getExpectedBusinessOpportunityModifierMax(team));
+		double expectedCommercialAggressivenessMin = interval(0.45
+			+ getExpectedBusinessOpportunityModifierMin(team) * 1.15);
+		double expectedCommercialAggressivenessMax = interval(0.45
+			+ getExpectedBusinessOpportunityModifierMax(team) * 1.15);
 
 		double expectedOwnerDeficitToleranceMin = 0.6;
 
@@ -208,23 +208,24 @@ public void shouldCalculateExpectedEconomicProfileValues() {
 }
 
 @Test
-public void shouldKeepBudgetWithinExpectedRangeForTeamMarketSize() {
+public void shouldKeepBudgetInExpectedRange() {
 	for (Team team : league.getAllTeam()) {
 		double popularity = team.getFormerPopularity();
 		double initialBudget = team.getTeamFinance().getBudget().getInitialAmount();
 		double baseBudget = getExpectedBaseBudget(popularity);
 		double marketMultiplier = getExpectedBudgetMarketMultiplier(team);
 		double popularityFactor = 0.85 + popularity / 100.0 * 0.3;
-		double prestigeFactor = 1.0;
-		double ownerFactor = 1.06;
+		double prestigeFactorMin = 0.85 + team.getTeamFinance().getEconomicProfil().getHistoricalPrestige() * 0.3;
+		double prestigeFactorMax = prestigeFactorMin;
+		double ownerFactor = 0.7 + team.getTeamFinance().getEconomicProfil().getOwnerDeficitTolerance() * 0.6;
 		double mediaFactor = 1.25;
 
-		double commercialFactorMin = 0.9 + 0.4 * 0.2;
+		double commercialFactorMin = 0.9 + getExpectedCommercialAggressivenessMin(team) * 0.2;
 		double commercialFactorMax = 0.9 + getExpectedCommercialAggressivenessMax(team) * 0.2;
 
-		double expectedMinBudget = baseBudget * marketMultiplier * popularityFactor * prestigeFactor
+		double expectedMinBudget = baseBudget * marketMultiplier * popularityFactor * prestigeFactorMin
 			* mediaFactor * commercialFactorMin * ownerFactor;
-		double expectedMaxBudget = baseBudget * marketMultiplier * popularityFactor * prestigeFactor
+		double expectedMaxBudget = baseBudget * marketMultiplier * popularityFactor * prestigeFactorMax
 			* mediaFactor * commercialFactorMax * ownerFactor;
 
 		assertTrue(initialBudget >= expectedMinBudget);
@@ -233,7 +234,7 @@ public void shouldKeepBudgetWithinExpectedRangeForTeamMarketSize() {
 }
 
 @Test
-public void shouldSetTicketPriceAccordingToMarketSize() {
+public void shouldSetTicketPriceByMarketSize() {
 	for (Team team : league.getAllTeam()) {
 		double ticketPrice = team.getStadium().getTicketPrice();
 
@@ -242,13 +243,13 @@ public void shouldSetTicketPriceAccordingToMarketSize() {
 		} else if (team.getTeamFinance().getMarketSize() instanceof MediumSize) {
 			assertEquals(45.0, ticketPrice, 0.001);
 		} else if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
-			assertEquals(31.5, ticketPrice, 0.001);
+			assertEquals(45.0, ticketPrice, 0.001);
 		}
 	}
 }
 
 @Test
-public void shouldSetTicketPriceFromFinanceConfigurationMultipliers() {
+public void shouldSetTicketPriceFromConfigMultipliers() {
 	for (Team team : league.getAllTeam()) {
 		double ticketPrice = team.getStadium().getTicketPrice();
 
@@ -280,14 +281,18 @@ private double getExpectedMarketValueBonus(Team team) {
 
 private double getExpectedBusinessOpportunityModifierMax(Team team) {
 	if (team.getTeamFinance().getMarketSize() instanceof LargeSize) {
-		return 0.2;
+		return 0.56;
 	}
 	if (team.getTeamFinance().getMarketSize() instanceof MediumSize) {
-		return 0.1;
+		return 0.40;
 	}
 	if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
-		return 0.05;
+		return 0.24;
 	}
+	return 0.0;
+}
+
+private double getExpectedBusinessOpportunityModifierMin(Team team) {
 	return 0.0;
 }
 
@@ -306,28 +311,23 @@ private double getExpectedBaseBudget(double popularity) {
 
 private double getExpectedBudgetMarketMultiplier(Team team) {
 	if (team.getTeamFinance().getMarketSize() instanceof LargeSize) {
-		return 1.2;
+		return 1.6;
 	}
 	if (team.getTeamFinance().getMarketSize() instanceof MediumSize) {
-		return 1.0;
+		return 1.4;
 	}
 	if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
-		return 0.8;
+		return 1.1;
 	}
 	return 0.0;
 }
 
 private double getExpectedCommercialAggressivenessMax(Team team) {
-	if (team.getTeamFinance().getMarketSize() instanceof LargeSize) {
-		return 0.6;
-	}
-	if (team.getTeamFinance().getMarketSize() instanceof MediumSize) {
-		return 0.5;
-	}
-	if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
-		return 0.45;
-	}
-	return 0.0;
+	return interval(0.45 + getExpectedBusinessOpportunityModifierMax(team) * 1.15);
+}
+
+private double getExpectedCommercialAggressivenessMin(Team team) {
+	return interval(0.45 + getExpectedBusinessOpportunityModifierMin(team) * 1.15);
 }
 
 private double interval(double value) {

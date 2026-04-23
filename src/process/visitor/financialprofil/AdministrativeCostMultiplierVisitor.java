@@ -8,16 +8,16 @@ public class AdministrativeCostMultiplierVisitor implements FinancialProfilVisit
 
 	@Override
 	public Double visit(ThriftyPolicy thriftyPolicy) {
-	  return 0.90;
+		return 0.80;
 	}
 
 	@Override
 	public Double visit(BalancedPolicy balancedPolicy) {
-	  return 1.00;
+		return 1.1;
 	}
 
 	@Override
 	public Double visit(AmbitiousPolicy ambitiousPolicy) {
-	  return 1.14;
+		return 1.3;
 	}
 }

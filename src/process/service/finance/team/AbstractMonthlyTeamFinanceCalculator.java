@@ -41,34 +41,34 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 		double starFactor = team.hasStarPlayer() ? 1.18 : 1.0;
 		double performanceFactor = 0.82 + (team.getTeamPerformance().getPerformanceRating() * 0.38);
 
-		double localSponsoring = 1.78 * marketMultiplier * popularityFactor * starFactor;
-		double localMerchandising = 1.22 * marketMultiplier * popularityFactor * starFactor;
-		double otherRevenue = 0.40 * marketMultiplier * performanceFactor;
+		double localSponsoring = 4.8 * marketMultiplier * popularityFactor * starFactor;
+		double localMerchandising = 2 * marketMultiplier * popularityFactor * starFactor;
+		double otherRevenue = 0.3 * marketMultiplier * performanceFactor;
 
-		localSponsoring *= (0.92 + team.getTeamPerformance().getPerformanceRating() * 0.16);
-		localMerchandising *= (0.88 + team.getTeamPerformance().getPerformanceRating() * 0.24);
+		localSponsoring *= (1 + team.getTeamPerformance().getPerformanceRating() * 0.30);
+		localMerchandising *= (1. + team.getTeamPerformance().getPerformanceRating() * 0.22);
 
-		localSponsoring *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.35);
-		localMerchandising *= (1 + mediaMarket.getPrestigeModifier() * 0.20);
+		localSponsoring *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.28);
+		localMerchandising *= (1 + mediaMarket.getPrestigeModifier() * 0.16);
 		otherRevenue *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.10);
 
-		localSponsoring *= (1 + economicProfil.getCommercialAggressiveness() * 0.30);
-		localSponsoring *= (1 + economicProfil.getHistoricalPrestige() * 0.15);
-		localSponsoring *= (1 + teamValueFactor * 0.25);
-		localSponsoring *= getSmallMarketRevenueBoost(marketSize, 1.25);
+		localSponsoring *= (1 + economicProfil.getCommercialAggressiveness() * 0.22);
+		localSponsoring *= (1 + economicProfil.getHistoricalPrestige() * 0.10);
+		localSponsoring *= (1 + teamValueFactor * 0.15);
+		localSponsoring *= getSmallMarketRevenueBoost(marketSize, 1.15);
 		localSponsoring *= getLocalSponsoringMultiplier();
 		localSponsoring *= getMonthlyLocalRevenueRate(team, month, 0.070, 0.040);
 
-		localMerchandising *= (1 + economicProfil.getFanLoyalty() * 0.25);
-		localMerchandising *= (1 + economicProfil.getHistoricalPrestige() * 0.20);
-		localMerchandising *= (1 + teamValueFactor * 0.22);
-		localMerchandising *= getSmallMarketRevenueBoost(marketSize, 1.30);
+		localMerchandising *= (1 + economicProfil.getFanLoyalty() * 0.24);
+		localMerchandising *= (1 + economicProfil.getHistoricalPrestige() * 0.12);
+		localMerchandising *= (1 + teamValueFactor * 0.14);
+		localMerchandising *= getSmallMarketRevenueBoost(marketSize, 1.16);
 		localMerchandising *= getLocalMerchandisingMultiplier();
 		localMerchandising *= getMonthlyLocalRevenueRate(team, month, 0.105, 0.055);
 
-		otherRevenue *= (1 + economicProfil.getOwnerDeficitTolerance() * 0.08);
-		otherRevenue *= (1 + teamValueFactor * 0.15);
-		otherRevenue *= getSmallMarketRevenueBoost(marketSize, 1.20);
+		otherRevenue *= (1 + economicProfil.getOwnerDeficitTolerance() * 0.05);
+		otherRevenue *= (1 + teamValueFactor * 0.08);
+		otherRevenue *= getSmallMarketRevenueBoost(marketSize, 1.10);
 		otherRevenue *= getOtherRevenueMultiplier();
 		otherRevenue *= getMonthlyLocalRevenueRate(team, month, 0.080, 0.045);
 
@@ -88,9 +88,9 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 				financialPolicy);
 		double seasonExpenseMultiplier = getSeasonContextExpenseMultiplier(month);
 
-		stadiumMaintenance *= getMonthlyExpenseRate(team, month, 0.220, 0.130);
-		staffCost *= getMonthlyExpenseRate(team, month, 0.280, 0.170);
-		administrativeCost *= getMonthlyExpenseRate(team, month, 0.240, 0.145);
+		stadiumMaintenance *= getMonthlyExpenseRate(team, month, 0.180, 0.100);
+		staffCost *= getMonthlyExpenseRate(team, month, 0.090, 0.050);
+		administrativeCost *= getMonthlyExpenseRate(team, month, 0.200, 0.120);
 
 		stadiumMaintenance *= seasonExpenseMultiplier;
 		staffCost *= seasonExpenseMultiplier;
@@ -129,9 +129,9 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 				financialPolicy);
 		double seasonExpenseMultiplier = getSeasonContextExpenseMultiplier(month);
 
-		stadiumMaintenance *= getMonthlyExpenseRate(team, month, 0.220, 0.130);
-		staffCost *= getMonthlyExpenseRate(team, month, 0.280, 0.170);
-		administrativeCost *= getMonthlyExpenseRate(team, month, 0.240, 0.145);
+		stadiumMaintenance *= getMonthlyExpenseRate(team, month, 0.180, 0.100);
+		staffCost *= getMonthlyExpenseRate(team, month, 0.120, 0.070);
+		administrativeCost *= getMonthlyExpenseRate(team, month, 0.200, 0.120);
 
 		stadiumMaintenance *= seasonExpenseMultiplier;
 		staffCost *= seasonExpenseMultiplier;
@@ -176,7 +176,7 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 	private double calculateStadiumMaintenance(Team team, double marketMultiplier, MediaMarket mediaMarket,
 			EconomicProfil economicProfil, FinancialPolicy financialPolicy) {
 		double capacityFactor = team.getStadium().getCapacity() / 20000.0;
-		double maintenance = 2 * marketMultiplier * capacityFactor;
+		double maintenance = 3 * marketMultiplier * capacityFactor;
 
 		maintenance *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.26);
 		maintenance *= (1 + economicProfil.getHistoricalPrestige() * 0.15);
@@ -190,13 +190,15 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 	private double calculateStaffCost(Team team, double marketMultiplier, EconomicProfil economicProfil,
 			FinancialPolicy financialPolicy) {
 		int numberOfPlayers = team.getCurrentPlayers().size();
-		double popularityFactor = 0.80 + (team.getCurrentPopularity() / 100.0);
-		double staffCost = ((0.15 * numberOfPlayers) + 2) * marketMultiplier * popularityFactor;
+		double popularityFactor = (team.getCurrentPopularity() / 100.0);
+		double staffCost = ((0.06 * numberOfPlayers) + 6) * marketMultiplier * popularityFactor;
 
-		staffCost *= (1 + economicProfil.getFanLoyalty() * 0.25);
-		staffCost *= (1 + economicProfil.getCommercialAggressiveness() * 0.40);
-		staffCost *= 1.12;
-		staffCost *= getSmallMarketCostFactor(team.getTeamFinance().getMarketSize(), 0.92);
+		staffCost *= (1 + economicProfil.getFanLoyalty() * 0.23);
+		staffCost *= (1 + economicProfil.getCommercialAggressiveness() * 0.1);
+		staffCost *= getSmallMarketCostFactor(team.getTeamFinance().getMarketSize(), 0.75);
+		if (team.hasStarPlayer()) {
+			staffCost *= 1.10;
+		}
 		staffCost *= financialPolicy.accept(new StaffCostMultiplierVisitor());
 		staffCost *= getOperationalPressureMultiplier(team);
 
@@ -205,7 +207,7 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 
 	private double calculateAdministrativeCost(Team team, double marketMultiplier, MediaMarket mediaMarket,
 			EconomicProfil economicProfil, FinancialPolicy financialPolicy) {
-		double administrativeCost = 2 * marketMultiplier;
+		double administrativeCost = 3 * (1 + marketMultiplier);
 
 		administrativeCost *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.10);
 		administrativeCost *= (1 + economicProfil.getCommercialAggressiveness() * 0.10);
@@ -224,7 +226,7 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 
 		double multiplier = 1.0;
 
-		if (remainingBudget < 420) {
+		if (remainingBudget < 500) {
 			multiplier *= 0.82;
 		} else if (remainingBudget < 520) {
 			multiplier *= 0.90;
@@ -244,14 +246,14 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 
 	private double getSeasonContextRevenueMultiplier(int month) {
 		if (CalendarUtility.isImportantMonth(month)) {
-			return 1.04;
+			return 1.3;
 		}
 		return 1.0;
 	}
 
 	private double getSeasonContextExpenseMultiplier(int month) {
 		if (CalendarUtility.isImportantMonth(month)) {
-			return 1.05;
+			return 1.13;
 		}
 		return 1.0;
 	}
@@ -261,7 +263,7 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 	}
 
 	private double getMonthlyLocalRevenueRate(Team team, int month, double monthAmplitude, double teamAmplitude) {
-		String teamKey = team.getName() == null ? "" : team.getName();
+		String teamKey = team.getName();
 		double teamPhase = Math.abs(teamKey.hashCode() % 17) * 0.19;
 		double monthWave = Math.sin((month * 1.35) + teamPhase);
 		double secondWave = Math.cos((month * 0.72) + (teamPhase * 0.55));
@@ -270,7 +272,7 @@ public abstract class AbstractMonthlyTeamFinanceCalculator {
 	}
 
 	private double getMonthlyExpenseRate(Team team, int month, double monthAmplitude, double teamAmplitude) {
-		String teamKey = team.getName() == null ? "" : team.getName();
+		String teamKey = team.getName();
 		double teamPhase = Math.abs(teamKey.hashCode() % 19) * 0.21;
 		double monthWave = Math.cos((month * 1.18) + teamPhase);
 		double secondWave = Math.sin((month * 0.81) + (teamPhase * 0.48));

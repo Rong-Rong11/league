@@ -9,6 +9,8 @@ import data.finance.budget.expense.ExpenseType;
 import data.league.League;
 import data.sport.setup.Game;
 import data.sport.setup.PlayoffSeries;
+import data.team.Team;
+import process.repository.TeamRepository;
 import process.service.finance.FinanceManager;
 import process.utility.CalendarUtility;
 import process.utility.FinanceUtility;
@@ -17,9 +19,12 @@ public class LeagueExpenseCalculator {
 
 	private League league;
 	private FinanceManager financeManager;
+	private final TeamRepository teamRepository = TeamRepository.getInstance();
+	private final double initialAveragePopularity;
 
 	public LeagueExpenseCalculator(League league) {
 		this.league = league;
+		this.initialAveragePopularity = calculateAverageTeamPopularity();
 	}
 
 	public void setFinanceManager(FinanceManager financeManager) {
@@ -59,45 +64,47 @@ public class LeagueExpenseCalculator {
 
 	// complexifier
 	private double calculateAdministrativeCost() {
-		return FinanceConfiguration.LEAGUE_ADMINISTRATIVE_COST * 7.5;
+		return FinanceConfiguration.LEAGUE_ADMINISTRATIVE_COST * 1.6;
 	}
 
 	private double calculateMediaCost(int month) {
-		double cost = FinanceConfiguration.LEAGUE_MEDIA_COST * 7.5;
+		double cost = FinanceConfiguration.LEAGUE_MEDIA_COST * 1.2;
 		if (CalendarUtility.isImportantMonth(month)) {
-			cost *= 1.38;
+			cost *= 1.22;
 		}
-		cost *= getImportantGamesExpenseRate(month, 0.12);
-		cost *= getPlayoffGamesExpenseRate(month, 0.3);
-		cost *= getActivePlayoffTeamsExpenseRate(month, 0.22);
-		cost *= getSeasonExpenseRate(month, 0.16);
-		cost *= getControlledEconomicNoise(month, 0.100);
+		cost *= getImportantGamesExpenseRate(month, 0.035);
+		cost *= getPlayoffGamesExpenseRate(month, 0.060);
+		cost *= getActivePlayoffTeamsExpenseRate(month, 0.022);
+		cost *= getSeasonExpenseRate(month, 0.15);
+		cost *= getPopularitySeasonExpenseRate();
+		cost *= getControlledEconomicNoise(month, 0.075);
 		return cost;
 	}
 
 	private double calculateMarketingCost(int month) {
-		double cost = FinanceConfiguration.LEAGUE_MARKETING_COST * 7.5;
+		double cost = FinanceConfiguration.LEAGUE_MARKETING_COST * 1.8;
 		if (CalendarUtility.isImportantMonth(month)) {
-			cost *= 1.52;
+			cost *= 1.28;
 		}
-		cost *= getImportantGamesExpenseRate(month, 0.1);
-		cost *= getPlayoffGamesExpenseRate(month, 0.3);
-		cost *= getActivePlayoffTeamsExpenseRate(month, 0.22);
-		cost *= getSeasonExpenseRate(month, 0.18);
-		cost *= getControlledEconomicNoise(month, 0.100);
+		cost *= getImportantGamesExpenseRate(month, 0.042);
+		cost *= getPlayoffGamesExpenseRate(month, 0.070);
+		cost *= getActivePlayoffTeamsExpenseRate(month, 0.028);
+		cost *= getSeasonExpenseRate(month, 0.22);
+		cost *= getPopularitySeasonExpenseRate();
+		cost *= getControlledEconomicNoise(month, 0.085);
 		return cost;
 	}
 
 	private double calculateOfficiatingCost(int month) {
-		double cost = FinanceConfiguration.LEAGUE_OFFICIATING_COST * 2.85;
+		double cost = FinanceConfiguration.LEAGUE_OFFICIATING_COST * 1.7;
 		if (CalendarUtility.isImportantMonth(month)) {
-			cost *= 1.30;
+			cost *= 1.18;
 		}
-		cost *= getImportantGamesExpenseRate(month, 0.0055);
-		cost *= getPlayoffGamesExpenseRate(month, 0.0105);
-		cost *= getActivePlayoffTeamsExpenseRate(month, 0.0060);
-		cost *= getSeasonExpenseRate(month, 0.15);
-		cost *= getControlledEconomicNoise(month, 0.085);
+		cost *= getImportantGamesExpenseRate(month, 0.014);
+		cost *= getPlayoffGamesExpenseRate(month, 0.016);
+		cost *= getActivePlayoffTeamsExpenseRate(month, 0.0080);
+		cost *= getSeasonExpenseRate(month, 0.18);
+		cost *= getControlledEconomicNoise(month, 0.12);
 		return cost;
 	}
 
@@ -121,7 +128,7 @@ public class LeagueExpenseCalculator {
 			return 1 + playoffBonusRate;
 		}
 		if (CalendarUtility.isImportantMonth(month)) {
-			return 1.03;
+			return 1.06;
 		}
 		return 1.0;
 	}
@@ -132,6 +139,34 @@ public class LeagueExpenseCalculator {
 		int activeTeams = countActivePlayoffTeams();
 		double wave = Math.cos((month * 1.41) + (importantGames * 0.13) + (playoffGames * 0.21) + (activeTeams * 0.17));
 		return 1 + (wave * maxAmplitude);
+	}
+
+	private double calculateAverageTeamPopularity() {
+		double total = 0.0;
+		int teamCount = 0;
+
+		for (Team team : teamRepository.getAllTeams()) {
+			total += team.getCurrentPopularity();
+			teamCount++;
+		}
+
+		return teamCount == 0 ? 0.0 : total / teamCount;
+	}
+
+	private double getPopularitySeasonExpenseRate() {
+		double currentAveragePopularity = calculateAverageTeamPopularity();
+		double growth = currentAveragePopularity - initialAveragePopularity;
+
+		if (growth <= 0) {
+			return 1.0;
+		}
+		if (growth < 3) {
+			return 1.04;
+		}
+		if (growth < 6) {
+			return 1.08;
+		}
+		return 1.14;
 	}
 
 	private int countImportantGamesInMonth(int month) {
