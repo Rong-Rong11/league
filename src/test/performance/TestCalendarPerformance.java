@@ -21,7 +21,7 @@ public class TestCalendarPerformance {
 
 	@Test
 	public void shouldBuildRegularSeasonCalendarQuickly() {
-		League league = PerformanceSupport.buildLeagueWithFinance();
+		League league = TestSupport.buildLeagueWithFinance();
 		RegularSeasonCalendarBuilder calendarBuilder = new RegularSeasonCalendarBuilder(league);
 
 		long start = System.nanoTime();
@@ -30,6 +30,6 @@ public class TestCalendarPerformance {
 
 		assertTrue(!calendar.getCalendar().isEmpty());
 
-		PerformanceSupport.assertBelow("regularSeasonCalendar", elapsedMs, REGULAR_SEASON_CALENDAR_MAX_MS);
+		TestSupport.assertBelow("regularSeasonCalendar", elapsedMs, REGULAR_SEASON_CALENDAR_MAX_MS);
 	}
 }

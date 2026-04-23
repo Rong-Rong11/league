@@ -23,7 +23,7 @@ public class TestLivePerformance {
 
 	@Before
 	public void setUp() {
-		League league = PerformanceSupport.buildLeagueWithFinance();
+		League league = TestSupport.buildLeagueWithFinance();
 		ArrayList<Team> teams = TestSupport.firstTeams(league, 2);
 		homeTeam = teams.get(0);
 		awayTeam = teams.get(1);
@@ -41,7 +41,7 @@ public class TestLivePerformance {
 
 		assertTrue(liveMatchService.getCurrentState().getHomePoints() >= 0);
 
-		PerformanceSupport.assertBelow("playCurrentQuarter", elapsedMs, PLAY_QUARTER_MAX_MS);
+		TestSupport.assertBelow("playCurrentQuarter", elapsedMs, PLAY_QUARTER_MAX_MS);
 	}
 
 	@Test
@@ -63,6 +63,6 @@ public class TestLivePerformance {
 
 		assertTrue(game.isDisplayed() || liveMatchService.getCurrentState().getHomePoints() >= 0);
 
-		PerformanceSupport.assertBelow("fullLivePlayback", elapsedMs, FULL_LIVE_PLAYBACK_MAX_MS);
+		TestSupport.assertBelow("fullLivePlayback", elapsedMs, FULL_LIVE_PLAYBACK_MAX_MS);
 	}
 }
