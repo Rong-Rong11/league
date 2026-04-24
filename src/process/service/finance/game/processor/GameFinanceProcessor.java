@@ -7,8 +7,8 @@ import data.finance.GameStat;
 import data.finance.budget.FinanceSeasonMoment;
 import data.league.League;
 import data.sport.setup.Game;
-import process.service.finance.game.GameExpenseCalculator;
-import process.service.finance.game.GameRevenueCalculator;
+import process.service.finance.game.expense.GameExpenseCalculator;
+import process.service.finance.game.revenue.GameRevenueCalculator;
 import process.utility.FinanceUtility;
 
 public abstract class GameFinanceProcessor {

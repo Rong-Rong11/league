@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import data.calendar.GameDay;
 import data.calendar.NBACalendar;
 import data.league.League;
-import process.builder.calendar.tools.GameGenerator;
+import process.builder.calendar.generator.PlayoffGameGenerator;
 
 public class SemiCalendarBuilder extends PlayoffCalendarBuilder {
 
@@ -34,7 +34,7 @@ public class SemiCalendarBuilder extends PlayoffCalendarBuilder {
 	@Override
 	protected void generateGames() {
 	  // TODO Auto-generated method stub
-	  GameGenerator.generateSecondRoundPlayoffGames(getLeague().getPlayoff());
+	  PlayoffGameGenerator.generateSecondRoundPlayoffGames(getLeague().getPlayoff());
 
 	}
 

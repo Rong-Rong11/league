@@ -2,7 +2,7 @@ package process.builder.calendar;
 
 import data.calendar.NBACalendar;
 import data.league.League;
-import process.builder.calendar.tools.ScheduleReset;
+import process.builder.calendar.schedule.ScheduleReset;
 
 public abstract class CalendarBuilder {
 	private ScheduleReset scheduleReset = new ScheduleReset();

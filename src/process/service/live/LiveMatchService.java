@@ -2,13 +2,17 @@ package process.service.live;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import config.GameConfiguration;
 import data.sport.play.action.ActionResult;
 import data.sport.setup.Game;
 import data.sport.setup.GameResult;
+import log.LoggerUtility;
 import process.visitor.actionresult.LiveActionTextVisitor;
 
 public class LiveMatchService {
+private static final Logger logger = LoggerUtility.getLogger(LiveMatchService.class, "text");
 private static final int LIVE_ROWS = 10;
 private static final int GAME_SECONDS_PER_TICK = 2;
 
@@ -32,6 +36,8 @@ public LiveMatchService() {
 }
 
 public void setGame(Game game) {
+	logger.debug("Selecting live game " + (game == null ? "<none>" : game.getGameContext().getHomeTeam().getName()
+			+ " vs " + game.getGameContext().getAwayTeam().getName()));
 	pauseLiveMatch();
 	this.game = game;
 	if (game == null) {
@@ -52,6 +58,7 @@ public boolean isLiveMatchAvailable(Game game) {
 
 public void startLiveMatch() {
 	if (!isMatchAvailable() || running) {
+		logger.debug("Unable to start live match because it is unavailable or already running");
 		return;
 	}
 	if (liveActionIndex >= liveActions.size()) {
@@ -59,6 +66,7 @@ public void startLiveMatch() {
 	}
 
 	running = true;
+	logger.debug("Live match started");
 	if (liveActionIndex < liveActions.size()) {
 		LiveMatchStatistics.LiveAction currentAction = liveActions.get(liveActionIndex);
 		displayedQuarter = currentAction.getQuarter();
@@ -70,14 +78,19 @@ public void startLiveMatch() {
 }
 
 public void pauseLiveMatch() {
+	if (running) {
+		logger.debug("Live match paused");
+	}
 	running = false;
 }
 
 public void playCurrentLiveQuarter() {
 	pauseLiveMatch();
 	if (!isMatchAvailable() || liveActionIndex >= liveActions.size()) {
+		logger.debug("Unable to play current live quarter because live match is unavailable or already finished");
 		return;
 	}
+	logger.debug("Playing current live quarter");
 	int quarterToPlay = liveActions.get(liveActionIndex).getQuarter();
 	while (liveActionIndex < liveActions.size() && liveActions.get(liveActionIndex).getQuarter() == quarterToPlay) {
 		playNextAction();
@@ -85,6 +98,7 @@ public void playCurrentLiveQuarter() {
 }
 
 public void resetLiveMatch() {
+	logger.debug("Resetting live match state");
 	pauseLiveMatch();
 	liveActionIndex = 0;
 	liveMatchStatistics.reset();
@@ -171,11 +185,13 @@ private void buildLiveActions() {
 
 private void playNextAction() {
 	if (!isMatchAvailable()) {
+		logger.debug("Stopping live playback because match is no longer available");
 		pauseLiveMatch();
 		return;
 	}
 	if (liveActionIndex >= liveActions.size()) {
 		revealCurrentGame();
+		logger.debug("Live playback reached the end of the game");
 		pauseLiveMatch();
 		return;
 	}
@@ -187,6 +203,7 @@ private void playNextAction() {
 	displayedRemainingTimeSeconds = liveAction.getRemainingTimeSeconds();
 	if (liveActionIndex >= liveActions.size()) {
 		revealCurrentGame();
+		logger.debug("Live playback finished after action processing");
 		pauseLiveMatch();
 	} else {
 		LiveMatchStatistics.LiveAction nextAction = liveActions.get(liveActionIndex);
@@ -289,6 +306,7 @@ private boolean isMatchAvailable() {
 private void revealCurrentGame() {
 	if (game != null) {
 		game.setDisplayed(true);
+		logger.debug("Current live game revealed in UI state");
 	}
 }
 }

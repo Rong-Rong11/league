@@ -1,39 +1,13 @@
 package process.builder.league;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-import config.CalendarConfiguration;
-import config.FinanceConfiguration;
-import data.finance.budget.Budget;
-import data.finance.budget.income.Income;
-import data.finance.budget.income.IncomeType;
-import data.league.Division;
 import data.league.League;
-import data.league.finance.LeagueFinance;
-import data.player.Player;
-import data.team.Team;
-import process.factory.PlayerFactory;
-import process.factory.TeamFactory;
-import process.repository.CurrentSeasonAssetRepository;
-import process.repository.DivisionRepository;
-import process.repository.PlayerRepository;
-import process.repository.PreSeasonAssetRepository;
-import process.repository.TeamRepository;
-import process.utility.FinanceUtility;
-import process.utility.TeamUtility;
 
 public class LeagueBuilder {
 
-	private PlayerRepository playerRepositery = PlayerRepository.getInstance();
-	private TeamRepository teamRepositery = TeamRepository.getInstance();
-	private DivisionRepository divisionRepositery = DivisionRepository.getInstance();
-	private PreSeasonAssetRepository preSeasonAssetRepositery = PreSeasonAssetRepository.getInstance();
-	private CurrentSeasonAssetRepository currentSeasonAssetRepositery = CurrentSeasonAssetRepository.getInstance();
+	private LeagueRosterBuilder leagueRosterBuilder = new LeagueRosterBuilder();
 
 	public LeagueBuilder() {
 
@@ -42,102 +16,15 @@ public class LeagueBuilder {
 	public League build() {
 		League league = new League();
 		try {
-			BufferedReader bufferedReader = this.createReader();
-			String line;
-			bufferedReader.readLine();
-
-			while ((line = bufferedReader.readLine()) != null) {
-				if (line.startsWith("player_id")) {
-					continue;
-				}
-				String[] data = line.split(",", -1);
-				String teamName = data[2];
-				String conferenceName = data[4];
-				String divisionName = data[5];
-
-				Player player = PlayerFactory.createPlayer(line);
-
-				if (divisionRepositery.getDivision(divisionName) == null) {
-					Division division = new Division(divisionName);
-					if (conferenceName.equals("Ouest")) {
-						league.addDivisionWesternConference(division);
-					} else {
-						league.addDivisionEasternConference(division);
-					}
-					divisionRepositery.register(divisionName, division);
-				}
-
-				if (teamRepositery.getTeam(teamName) == null) {
-					Team team = TeamFactory.createTeam(line);
-					if (conferenceName.equals("Ouest")) {
-						league.addTeamWesternConference(team, divisionName);
-					} else {
-						league.addTeamEasternConference(team, divisionName);
-					}
-					teamRepositery.register(teamName, team);
-
-				}
-
-				teamRepositery.getTeam(teamName).addFirstPlayer(player);
-				playerRepositery.register(player.getName(), player);
-				preSeasonAssetRepositery.register(player, player.getPreSeasonAssets());
-				currentSeasonAssetRepositery.register(player, player.getCurrentSeasonAssets());
-			}
-			setStarPlayerTeams();
+			BufferedReader bufferedReader = LeagueCsvReader.createReader();
+			leagueRosterBuilder.buildRoster(league, bufferedReader);
 			bufferedReader.close();
 
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
-		buildFinanceLeague(league);
+		LeagueFinanceBuilder.buildFinanceLeague(league);
 		return league;
-	}
-
-	private void setStarPlayerTeams() {
-		for (Team team : teamRepositery.getAllTeams()) {
-			TeamUtility.setStarPlayer(team);
-		}
-	}
-
-	private void buildFinanceLeague(League league) {
-		double annualRevenueEstimate = FinanceConfiguration.INITIAL_LEAGUE_BUDGET;
-		double openingTreasury = annualRevenueEstimate * 0.20;
-
-		Budget budget = new Budget(openingTreasury);
-		FinanceUtility.initiateBudget(budget);
-
-		FinanceUtility.addIncome(budget, new Income(IncomeType.NATIONAL_TV, openingTreasury * 0.55),
-				0);
-		FinanceUtility.addIncome(budget,
-				new Income(IncomeType.NATIONAL_SPONSORING, openingTreasury * 0.20), 0);
-		FinanceUtility.addIncome(budget,
-				new Income(IncomeType.NATIONAL_MERCHANDISING, openingTreasury * 0.10), 0);
-		FinanceUtility.addIncome(budget, new Income(IncomeType.OTHER, openingTreasury * 0.15), 0);
-
-		double salaryCap = (annualRevenueEstimate * FinanceConfiguration.PLAYER_SHARE)
-				/ CalendarConfiguration.NUMBER_OF_TEAM;
-		double luxuryTaxLine = salaryCap * FinanceConfiguration.LUXURYTAX_THRESHOLD_RATE;
-		double minimumTeamSalary = salaryCap * FinanceConfiguration.MINIMUM_TEAM_SALARY_RATE;
-
-		LeagueFinance leagueFinance = new LeagueFinance(budget, salaryCap, luxuryTaxLine, minimumTeamSalary,
-				FinanceConfiguration.INITIAL_LEAGUE_VALUE);
-		league.setLeagueFinance(leagueFinance);
-	}
-
-	private BufferedReader createReader() throws IOException {
-		Path[] candidatePaths = {
-				Paths.get("src", "resources", "nba.csv"),
-				Paths.get("resources", "nba.csv"),
-				Paths.get("league", "resources", "nba.csv")
-		};
-
-		for (Path path : candidatePaths) {
-			if (Files.exists(path)) {
-				return new BufferedReader(new FileReader(path.toFile()));
-			}
-		}
-
-		throw new IOException("Impossible de trouver nba.csv dans src/resources/, resources/ ou league/resources/");
 	}
 
 }

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
+
 import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.league.League;
@@ -31,8 +33,10 @@ import process.service.playoff.SemiPlayoffManager;
 import process.service.ranking.RegularSeasonRankingManager;
 import process.simulator.GameSimulator;
 import process.utility.LeagueUtility;
+import log.LoggerUtility;
 
 public class GameManager {
+	private static final Logger logger = LoggerUtility.getLogger(GameManager.class, "text");
 
 	private League league;
 	private GameSimulator gameSimulator = new GameSimulator();
@@ -80,6 +84,7 @@ public class GameManager {
 		GameDay gameDay = regularSeasonCalendar.get(date);
 
 		if (gameDay != null && !gameDay.isSimulated()) {
+			logger.debug("Simulating regular season day " + date + " for month " + month);
 			GameDaySimulationProcessor processor = new RegularSeasonGameDaySimulationProcessor(
 					league,
 					gameSimulator,
@@ -89,14 +94,17 @@ public class GameManager {
 			processor.simulateGameDay(gameDay, date, month);
 			return true;
 		}
+		logger.debug("No regular season games simulated for " + date);
 
 		return false;
 	}
 
 	public void simulatePlayoffDay(LocalDate date, int month, PlayoffRound currentRound) {
 		if (currentRound == null) {
+			logger.warn("Ignoring playoff day simulation because current round is null");
 			return;
 		}
+		logger.debug("Simulating playoff day " + date + " for round " + currentRound);
 
 		switch (currentRound) {
 			case FIRST_ROUND:
@@ -126,7 +134,9 @@ public class GameManager {
 			GameDaySimulationProcessor processor = new PlayoffGameDaySimulationProcessor(
 					gameSimulator, financeManager, playoffManager, round);
 			processor.simulateGameDay(gameDay, date, month);
+			return;
 		}
+		logger.debug("No playoff games simulated for " + date + " in round " + round);
 	}
 
 	public Team getRegularSeasonWestWinner() {
@@ -170,6 +180,7 @@ public class GameManager {
 		TreeMap<LocalDate, GameDay> playoffCalendar = playoff.getNbaCalendar().getCalendar();
 		GameDay gameDay = playoffCalendar.get(date);
 		if (gameDay != null && !gameDay.isSimulated()) {
+			logger.debug("Simulating managed playoff day " + date + " for month " + month);
 			simulateGameDay(gameDay, date, month);
 			for (Game game : gameDay.getGames()) {
 				playoffManager.handlePlayedGame(game, date);

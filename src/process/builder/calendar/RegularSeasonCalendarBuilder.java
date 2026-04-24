@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
+
 import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.calendar.NBACalendar;
@@ -14,13 +16,15 @@ import data.sport.setup.Afternoon;
 import data.sport.setup.Evening;
 import data.sport.setup.Game;
 import data.sport.setup.Night;
-import process.builder.calendar.tools.GameGenerator;
-import process.builder.calendar.tools.GameSelector;
-import process.builder.calendar.tools.ScheduleNotifier;
-import process.builder.calendar.tools.SpecialEventPlanner;
+import process.builder.calendar.generator.RegularSeasonGameGenerator;
+import process.builder.calendar.schedule.ScheduleNotifier;
+import process.builder.calendar.schedule.SpecialEventPlanner;
+import process.builder.calendar.selector.GameSelector;
 import process.utility.CalendarUtility;
+import log.LoggerUtility;
 
 public class RegularSeasonCalendarBuilder extends CalendarBuilder {
+	private static final Logger logger = LoggerUtility.getLogger(RegularSeasonCalendarBuilder.class, "text");
 	private GameSelector gameSelector;
 
 	public RegularSeasonCalendarBuilder(League league) {
@@ -33,10 +37,11 @@ public class RegularSeasonCalendarBuilder extends CalendarBuilder {
 	}
 
 	protected void generateGames() {
-		GameGenerator.generateAllGamesRegularSeason(getLeague());
+		RegularSeasonGameGenerator.generateAllGamesRegularSeason(getLeague());
 	}
 
 	public NBACalendar build() {
+		logger.info("Building regular season calendar");
 		specialEventsPlacement();
 		RegularSeason regularSeason = getLeague().getRegularSeason();
 		TreeMap<LocalDate, GameDay> calendar = new TreeMap<LocalDate, GameDay>();
@@ -58,6 +63,7 @@ public class RegularSeasonCalendarBuilder extends CalendarBuilder {
 			currentDate = currentDate.plusDays(1L);
 		}
 		NBACalendar newCalendar = new NBACalendar(calendar);
+		logger.info("Regular season calendar built with " + calendar.size() + " game days");
 		return newCalendar;
 
 	}

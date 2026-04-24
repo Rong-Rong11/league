@@ -14,8 +14,8 @@ import data.league.PlayoffRound;
 import data.sport.setup.Game;
 import data.sport.setup.GameContext;
 import data.team.Team;
-import process.service.finance.game.PlayoffGameExpenseCalculator;
-import process.service.finance.game.RegularSeasonGameExpenseCalculator;
+import process.service.finance.game.expense.PlayoffGameExpenseCalculator;
+import process.service.finance.game.expense.RegularSeasonGameExpenseCalculator;
 import test.support.TestSupport;
 
 public class TestGameExpenseCalculators {

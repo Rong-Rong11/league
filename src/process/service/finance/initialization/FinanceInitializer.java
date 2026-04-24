@@ -11,8 +11,8 @@ public class FinanceInitializer {
 	}
 
 	public void initializeFinance() {
-	  for (Team team : teamRepositery.getAllTeams()) {
-		 team.setTeamFinance(FinanceBuilder.buildTeamFinance(team));
-	  }
+		for (Team team : teamRepositery.getAllTeams()) {
+			team.setTeamFinance(FinanceBuilder.buildTeamFinance(team));
+		}
 	}
 }

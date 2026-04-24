@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
+
 import data.finance.GameStat;
 import data.finance.budget.income.Income;
 import data.finance.budget.income.IncomeType;
@@ -14,7 +16,7 @@ import data.team.Team;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import process.repository.TeamRepository;
-import process.service.finance.distribution.CentralRevenueDistributor;
+import process.service.finance.distribution.central.CentralRevenueDistributor;
 import process.service.finance.expense.LeagueExpenseCalculator;
 import process.service.finance.game.processor.PlayoffGameFinanceProcessor;
 import process.service.finance.game.processor.RegularSeasonGameFinanceProcessor;
@@ -25,8 +27,10 @@ import process.service.finance.team.RegularSeasonMonthlyTeamFinanceCalculator;
 import process.utility.FinanceUtility;
 import process.utility.TeamUtility;
 import process.visitor.financialprofil.ChooseTransferStrategyVisitor;
+import log.LoggerUtility;
 
 public class FinanceManager {
+	private static final Logger logger = LoggerUtility.getLogger(FinanceManager.class, "text");
 	private League league;
 	private final TeamRepository teamRepository = TeamRepository.getInstance();
 	private final FinanceInitializer financeInitializer = new FinanceInitializer();
@@ -51,15 +55,18 @@ public class FinanceManager {
 		regularSeasonGameProcessor = new RegularSeasonGameFinanceProcessor(league);
 		centralRevenueDistributor.setFinanceManager(this);
 		leagueExpenseCalculator.setFinanceManager(this);
+		logger.debug("Finance manager initialized");
 	}
 
 	// Initialization
 	public void initializeFinance() {
+		logger.info("Initializing finance data");
 		financeInitializer.initializeFinance();
 	}
 
 	// Monthly simulation
 	public void applyMonthlyFinance(int month) {
+		logger.debug("Applying regular season monthly finance for month " + month);
 		applyRegularSeasonMonthlyFinanceToAllTeams(month);
 		distributeCentralRevenue(month);
 		applyLeagueExpenses(month);
@@ -67,6 +74,8 @@ public class FinanceManager {
 	}
 
 	public void applyPlayoffMonthlyFinance(int month, ArrayList<Team> activePlayoffTeams) {
+		logger.debug("Applying playoff monthly finance for month " + month + " with " + activePlayoffTeams.size()
+				+ " active playoff teams");
 		for (Team team : teamRepository.getAllTeams()) {
 			if (activePlayoffTeams.contains(team)) {
 				applyPlayoffMonthlyFinanceToTeam(team, month);
@@ -93,10 +102,12 @@ public class FinanceManager {
 
 	// Game finance
 	public void calculateRegularSeasonGame(Game game, LocalDate date, int month) {
+		logger.debug("Calculating regular season game finance for " + date + " month " + month);
 		regularSeasonGameProcessor.calculateGame(game, date, month);
 	}
 
 	public void calculatePlayoffGame(Game game, LocalDate date, int month, PlayoffRound round) {
+		logger.debug("Calculating playoff game finance for round " + round + " at " + date + " month " + month);
 		PlayoffGameFinanceProcessor playoffGameFinanceProcessor = getOrCreatePlayoffGameProcessor(round);
 		playoffGameFinanceProcessor.calculateGame(game, date, month);
 	}
@@ -149,6 +160,7 @@ public class FinanceManager {
 
 	// Team finance setup
 	public void randomFinancialPolicy() {
+		logger.debug("Randomizing financial policy for all teams");
 		for (Team team : teamRepository.getAllTeams()) {
 			FinancialPolicy financialPolicy = TeamUtility.randomFinancialProfil();
 			chooseFinancialPolicy(team, financialPolicy);
@@ -166,6 +178,7 @@ public class FinanceManager {
 	}
 
 	public void randomMarketSize() {
+		logger.debug("Randomizing market size for all teams");
 		for (Team team : teamRepository.getAllTeams()) {
 			MarketSize marketSize = TeamUtility.randomMarketSize();
 			chooseMarketSize(team, marketSize);
@@ -178,6 +191,7 @@ public class FinanceManager {
 
 	// Playoff bonuses
 	public void applyPlayoffQualificationBonus(Team team, int month) {
+		logger.debug("Applying playoff qualification bonus to " + team.getName() + " for month " + month);
 		double bonus = calculatePlayoffQualificationBonus(team);
 
 		FinanceUtility.addIncome(
@@ -219,8 +233,10 @@ public class FinanceManager {
 		double bonus = playoffFinancialRules.getRoundQualificationBonus();
 
 		if (bonus <= 0) {
+			logger.warn("Ignoring playoff round bonus because computed bonus is non-positive for round " + round);
 			return;
 		}
+		logger.debug("Applying playoff round bonus to " + team.getName() + " for round " + round + " month " + month);
 
 		FinanceUtility.addIncome(
 				team.getTeamFinance().getBudget(),

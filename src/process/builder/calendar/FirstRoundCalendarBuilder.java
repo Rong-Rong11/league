@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import data.calendar.GameDay;
 import data.calendar.NBACalendar;
 import data.league.League;
-import process.builder.calendar.tools.GameGenerator;
+import process.builder.calendar.generator.PlayoffGameGenerator;
 
 public class FirstRoundCalendarBuilder extends PlayoffCalendarBuilder {
 	public FirstRoundCalendarBuilder(League league) {
@@ -29,7 +29,7 @@ public class FirstRoundCalendarBuilder extends PlayoffCalendarBuilder {
 
 	@Override
 	protected void generateGames() {
-	  GameGenerator.generateFirstRoundPlayoffGames(getLeague().getPlayoff());
+	  PlayoffGameGenerator.generateFirstRoundPlayoffGames(getLeague().getPlayoff());
 
 	}
 
