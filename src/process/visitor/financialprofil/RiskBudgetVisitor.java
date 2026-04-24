@@ -27,7 +27,7 @@ public class RiskBudgetVisitor implements FinancialProfilVisitor<Boolean> {
 
 	@Override
 	public Boolean visit(AmbitiousPolicy ambitiousProfil) {
-		return budget.getRemainingAmount() < budget.getInitialAmount() * 0.6;
+		return budget.getRemainingAmount() < budget.getInitialAmount() * 0.5;
 	}
 
 }

@@ -19,6 +19,10 @@ public class PlayoffBuilder {
 	public Playoff buldFirstRoundPlayoffs() {
 	  Ranking ranking = league.getRegularSeason().getRanking();
 	  Playoff playoff = league.getPlayoff();
+	  playoff.getQualifiedEastTeams().clear();
+	  playoff.getQualifiedWestTeams().clear();
+	  playoff.getEastFirstRound().clear();
+	  playoff.getWestFirstRound().clear();
 
 	  TreeMap<Integer, Team> eastRanking = ranking.getEastRanking();
 	  TreeMap<Integer, Team> westRanking = ranking.getWestRanking();

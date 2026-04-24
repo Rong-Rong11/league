@@ -28,6 +28,7 @@ public class EconomicProfileFactory {
 		economicProfil.setFanLoyalty(fanLoyalty);
 		economicProfil.setPriceElasticity(priceElasticity);
 		economicProfil.setCommercialAggressiveness(commercialAggressiveness);
+		economicProfil.setHistoricalPrestige(historicalPrestige);
 		economicProfil.setOwnerDeficitTolerance(ownerDeficitTolerance);
 	}
 

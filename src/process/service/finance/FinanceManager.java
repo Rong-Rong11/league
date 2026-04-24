@@ -178,7 +178,7 @@ public class FinanceManager {
 
 	// Playoff bonuses
 	public void applyPlayoffQualificationBonus(Team team, int month) {
-		double bonus = 1.6;
+		double bonus = calculatePlayoffQualificationBonus(team);
 
 		FinanceUtility.addIncome(
 				team.getTeamFinance().getBudget(),
@@ -186,6 +186,26 @@ public class FinanceManager {
 				month);
 
 		FinanceUtility.updateBudget(team.getTeamFinance().getBudget());
+	}
+
+	private double calculatePlayoffQualificationBonus(Team team) {
+		double bonus = 7;
+
+		double performance = team.getTeamPerformance().getPerformanceRating();
+		double popularity = team.getCurrentPopularity() / 100.0;
+		double marketExposure = team.getTeamFinance().getMediaMarket().getBusinessOpportunityModifier();
+		double prestige = team.getTeamFinance().getEconomicProfil().getHistoricalPrestige();
+
+		bonus += performance * 0.9;
+		bonus += popularity * 0.8;
+		bonus += marketExposure * 0.5;
+		bonus += prestige * 0.4;
+
+		if (team.hasStarPlayer()) {
+			bonus += 0.5;
+		}
+
+		return bonus;
 	}
 
 	public void applyPlayoffQualificationBonus(ArrayList<Team> teams, int month) {

@@ -9,18 +9,18 @@ public abstract class CalendarBuilder {
 	private League league;
 
 	public CalendarBuilder(League league) {
-	  this.league = league;
+		this.league = league;
 	}
 
 	public NBACalendar buildCalendar() {
-	  resetSchedule();
-	  generateGames();
-	  NBACalendar newCalendar = build();
-	  return newCalendar;
+		resetSchedule();
+		generateGames();
+		NBACalendar newCalendar = build();
+		return newCalendar;
 	}
 
 	protected void resetSchedule() {
-	  scheduleReset.initialization();
+		scheduleReset.initialization();
 	}
 
 	protected abstract void generateGames();
@@ -28,19 +28,19 @@ public abstract class CalendarBuilder {
 	protected abstract NBACalendar build();
 
 	public ScheduleReset getScheduleReset() {
-	  return scheduleReset;
+		return scheduleReset;
 	}
 
 	public void setScheduleReset(ScheduleReset scheduleReset) {
-	  this.scheduleReset = scheduleReset;
+		this.scheduleReset = scheduleReset;
 	}
 
 	public League getLeague() {
-	  return league;
+		return league;
 	}
 
 	public void setLeague(League league) {
-	  this.league = league;
+		this.league = league;
 	}
 
 }
