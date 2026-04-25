@@ -18,7 +18,7 @@ public class StaffCostMultiplierVisitor implements FinancialProfilVisitor<Double
 
 	@Override
 	public Double visit(AmbitiousPolicy ambitiousPolicy) {
-		return 1.35;
+		return 1.45;
 	}
 
 }

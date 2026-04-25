@@ -69,6 +69,72 @@ public class MonthlyGameRevenueAnalyzer {
 		return count;
 	}
 
+	public int countPremiumGamesInMonth(int month) {
+		int count = 0;
+		for (GameDay gameDay : getAllGameDaysForMonth(month)) {
+			LocalDate date = gameDay.getDate();
+			for (Game game : gameDay.getGames()) {
+				if (CalendarUtility.popularityScoreGame(game, date) >= 110) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	public int countHighAttendanceGamesInMonth(int month) {
+		int count = 0;
+		for (GameDay gameDay : getAllGameDaysForMonth(month)) {
+			for (Game game : gameDay.getGames()) {
+				if (getAttendanceRate(game) >= 0.92) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	public int countRivalryGamesInMonth(int month) {
+		int count = 0;
+		for (GameDay gameDay : getAllGameDaysForMonth(month)) {
+			for (Game game : gameDay.getGames()) {
+				if (game.getGameContext().isRivalry()) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	public int countStarGamesInMonth(int month) {
+		int count = 0;
+		for (GameDay gameDay : getAllGameDaysForMonth(month)) {
+			for (Game game : gameDay.getGames()) {
+				boolean starGame = game.getGameContext().getHomeTeam().hasStarPlayer()
+						|| game.getGameContext().getAwayTeam().hasStarPlayer();
+				if (starGame) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	public int countStarRivalryGamesInMonth(int month) {
+		int count = 0;
+		for (GameDay gameDay : getAllGameDaysForMonth(month)) {
+			for (Game game : gameDay.getGames()) {
+				boolean rivalry = game.getGameContext().isRivalry();
+				boolean starGame = game.getGameContext().getHomeTeam().hasStarPlayer()
+						|| game.getGameContext().getAwayTeam().hasStarPlayer();
+				if (rivalry && starGame) {
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
 	public int countPlayoffGamesInMonth(int month) {
 		logger.debug("Counting playoff games for month " + month);
 		int count = 0;
