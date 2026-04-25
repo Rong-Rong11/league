@@ -16,8 +16,8 @@ import data.league.PlayoffRound;
 import data.sport.setup.Game;
 import data.sport.setup.GameContext;
 import data.team.Team;
-import process.service.finance.game.PlayoffGameRevenueCalculator;
-import process.service.finance.game.RegularSeasonGameRevenueCalculator;
+import process.service.finance.game.revenue.PlayoffGameRevenueCalculator;
+import process.service.finance.game.revenue.RegularSeasonGameRevenueCalculator;
 import test.support.TestSupport;
 
 public class TestGameRevenueCalculators {

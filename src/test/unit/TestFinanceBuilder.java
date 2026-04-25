@@ -37,10 +37,10 @@ public void shouldSetFinanceForAllTeams() {
 		TeamFinance teamFinance = team.getTeamFinance();
 		assertNotNull(teamFinance);
 		assertNotNull(teamFinance.getBudget());
-		assertNotNull(teamFinance.getEconomicProfil());
-		assertNotNull(teamFinance.getMediaMarket());
-		assertNotNull(teamFinance.getMarketSize());
-		assertNotNull(teamFinance.getFinancialProfil());
+		assertNotNull(teamFinance.getStructure().getEconomicProfil());
+		assertNotNull(teamFinance.getStructure().getMediaMarket());
+		assertNotNull(teamFinance.getStructure().getMarketSize());
+		assertNotNull(teamFinance.getBehavior().getFinancialProfil());
 	}
 }
 
@@ -113,13 +113,13 @@ public void shouldKeepStadiumCapacityInRange() {
 	for (Team team : league.getAllTeam()) {
 		int capacity = team.getStadium().getCapacity();
 
-		if (team.getTeamFinance().getMarketSize() instanceof LargeSize) {
+		if (team.getTeamFinance().getStructure().getMarketSize() instanceof LargeSize) {
 			assertTrue(capacity >= 40000);
 			assertTrue(capacity < 80000);
-		} else if (team.getTeamFinance().getMarketSize() instanceof MediumSize) {
+		} else if (team.getTeamFinance().getStructure().getMarketSize() instanceof MediumSize) {
 			assertTrue(capacity >= 15000);
 			assertTrue(capacity < 35000);
-		} else if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
+		} else if (team.getTeamFinance().getStructure().getMarketSize() instanceof SmallSize) {
 			assertTrue(capacity >= 5000);
 			assertTrue(capacity < 10000);
 		} else {
@@ -132,34 +132,34 @@ public void shouldKeepStadiumCapacityInRange() {
 public void shouldInitMediaMarketAndEconomicProfile() {
 	for (Team team : league.getAllTeam()) {
 		TeamFinance teamFinance = team.getTeamFinance();
-		assertNotNull(teamFinance.getMediaMarket());
-		assertNotNull(teamFinance.getEconomicProfil());
+		assertNotNull(teamFinance.getStructure().getMediaMarket());
+		assertNotNull(teamFinance.getStructure().getEconomicProfil());
 
-		assertTrue(teamFinance.getMediaMarket().getFanBaseModifier() > 0);
-		assertTrue(teamFinance.getMediaMarket().getBusinessOpportunityModifier() > 0);
-		assertTrue(teamFinance.getMediaMarket().getPrestigeModifier() > 0);
-		assertTrue(teamFinance.getMediaMarket().getPricingPowerModifier() > 0);
+		assertTrue(teamFinance.getStructure().getMediaMarket().getFanBaseModifier() > 0);
+		assertTrue(teamFinance.getStructure().getMediaMarket().getBusinessOpportunityModifier() > 0);
+		assertTrue(teamFinance.getStructure().getMediaMarket().getPrestigeModifier() > 0);
+		assertTrue(teamFinance.getStructure().getMediaMarket().getPricingPowerModifier() > 0);
 
-		assertTrue(teamFinance.getEconomicProfil().getFanLoyalty() > 0);
-		assertTrue(teamFinance.getEconomicProfil().getFanLoyalty() <= 1);
-		assertTrue(teamFinance.getEconomicProfil().getPriceElasticity() > 0);
-		assertTrue(teamFinance.getEconomicProfil().getPriceElasticity() <= 1);
-		assertTrue(teamFinance.getEconomicProfil().getCommercialAggressiveness() > 0);
-		assertTrue(teamFinance.getEconomicProfil().getCommercialAggressiveness() <= 1);
-		assertTrue(teamFinance.getEconomicProfil().getHistoricalPrestige() > 0);
-		assertTrue(teamFinance.getEconomicProfil().getHistoricalPrestige() <= 1);
-		assertTrue(teamFinance.getEconomicProfil().getOwnerDeficitTolerance() > 0);
-		assertTrue(teamFinance.getEconomicProfil().getOwnerDeficitTolerance() <= 1);
+		assertTrue(teamFinance.getStructure().getEconomicProfil().getFanLoyalty() > 0);
+		assertTrue(teamFinance.getStructure().getEconomicProfil().getFanLoyalty() <= 1);
+		assertTrue(teamFinance.getStructure().getEconomicProfil().getPriceElasticity() > 0);
+		assertTrue(teamFinance.getStructure().getEconomicProfil().getPriceElasticity() <= 1);
+		assertTrue(teamFinance.getStructure().getEconomicProfil().getCommercialAggressiveness() > 0);
+		assertTrue(teamFinance.getStructure().getEconomicProfil().getCommercialAggressiveness() <= 1);
+		assertTrue(teamFinance.getStructure().getEconomicProfil().getHistoricalPrestige() > 0);
+		assertTrue(teamFinance.getStructure().getEconomicProfil().getHistoricalPrestige() <= 1);
+		assertTrue(teamFinance.getStructure().getEconomicProfil().getOwnerDeficitTolerance() > 0);
+		assertTrue(teamFinance.getStructure().getEconomicProfil().getOwnerDeficitTolerance() <= 1);
 	}
 }
 
 @Test
 public void shouldMatchMediaMarketRelationships() {
 	for (Team team : league.getAllTeam()) {
-		double fanBaseModifier = team.getTeamFinance().getMediaMarket().getFanBaseModifier();
-		double businessOpportunityModifier = team.getTeamFinance().getMediaMarket().getBusinessOpportunityModifier();
-		double prestigeModifier = team.getTeamFinance().getMediaMarket().getPrestigeModifier();
-		double pricingPowerModifier = team.getTeamFinance().getMediaMarket().getPricingPowerModifier();
+		double fanBaseModifier = team.getTeamFinance().getStructure().getMediaMarket().getFanBaseModifier();
+		double businessOpportunityModifier = team.getTeamFinance().getStructure().getMediaMarket().getBusinessOpportunityModifier();
+		double prestigeModifier = team.getTeamFinance().getStructure().getMediaMarket().getPrestigeModifier();
+		double pricingPowerModifier = team.getTeamFinance().getStructure().getMediaMarket().getPricingPowerModifier();
 
 		assertEquals(fanBaseModifier, businessOpportunityModifier, 0.0001);
 		assertEquals(fanBaseModifier, pricingPowerModifier, 0.0001);
@@ -188,22 +188,22 @@ public void shouldKeepEconomicProfileValuesInRange() {
 
 		double expectedOwnerDeficitToleranceMin = 0.6;
 
-		assertTrue(team.getTeamFinance().getEconomicProfil().getHistoricalPrestige() >= expectedHistoricalPrestigeMin);
-		assertTrue(team.getTeamFinance().getEconomicProfil().getHistoricalPrestige() <= expectedHistoricalPrestigeMax);
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil().getHistoricalPrestige() >= expectedHistoricalPrestigeMin);
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil().getHistoricalPrestige() <= expectedHistoricalPrestigeMax);
 
-		assertTrue(team.getTeamFinance().getEconomicProfil().getFanLoyalty() >= expectedFanLoyaltyMin);
-		assertTrue(team.getTeamFinance().getEconomicProfil().getFanLoyalty() <= expectedFanLoyaltyMax);
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil().getFanLoyalty() >= expectedFanLoyaltyMin);
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil().getFanLoyalty() <= expectedFanLoyaltyMax);
 
-		assertTrue(team.getTeamFinance().getEconomicProfil().getPriceElasticity() >= expectedPriceElasticityMin);
-		assertTrue(team.getTeamFinance().getEconomicProfil().getPriceElasticity() <= expectedPriceElasticityMax);
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil().getPriceElasticity() >= expectedPriceElasticityMin);
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil().getPriceElasticity() <= expectedPriceElasticityMax);
 
-		assertTrue(team.getTeamFinance().getEconomicProfil()
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil()
 			.getCommercialAggressiveness() >= expectedCommercialAggressivenessMin);
-		assertTrue(team.getTeamFinance().getEconomicProfil()
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil()
 			.getCommercialAggressiveness() <= expectedCommercialAggressivenessMax);
 
 		assertEquals(expectedOwnerDeficitToleranceMin,
-			team.getTeamFinance().getEconomicProfil().getOwnerDeficitTolerance(), 0.0001);
+			team.getTeamFinance().getStructure().getEconomicProfil().getOwnerDeficitTolerance(), 0.0001);
 	}
 }
 
@@ -215,9 +215,9 @@ public void shouldKeepBudgetInExpectedRange() {
 		double baseBudget = getExpectedBaseBudget(popularity);
 		double marketMultiplier = getExpectedBudgetMarketMultiplier(team);
 		double popularityFactor = 0.85 + popularity / 100.0 * 0.3;
-		double prestigeFactorMin = 0.85 + team.getTeamFinance().getEconomicProfil().getHistoricalPrestige() * 0.3;
+		double prestigeFactorMin = 0.85 + team.getTeamFinance().getStructure().getEconomicProfil().getHistoricalPrestige() * 0.3;
 		double prestigeFactorMax = prestigeFactorMin;
-		double ownerFactor = 0.7 + team.getTeamFinance().getEconomicProfil().getOwnerDeficitTolerance() * 0.6;
+		double ownerFactor = 0.7 + team.getTeamFinance().getStructure().getEconomicProfil().getOwnerDeficitTolerance() * 0.6;
 		double mediaFactor = 1.25;
 
 		double commercialFactorMin = 0.9 + getExpectedCommercialAggressivenessMin(team) * 0.2;
@@ -238,11 +238,11 @@ public void shouldSetTicketPriceByMarketSize() {
 	for (Team team : league.getAllTeam()) {
 		double ticketPrice = team.getStadium().getTicketPrice();
 
-		if (team.getTeamFinance().getMarketSize() instanceof LargeSize) {
+		if (team.getTeamFinance().getStructure().getMarketSize() instanceof LargeSize) {
 			assertEquals(58.5, ticketPrice, 0.001);
-		} else if (team.getTeamFinance().getMarketSize() instanceof MediumSize) {
+		} else if (team.getTeamFinance().getStructure().getMarketSize() instanceof MediumSize) {
 			assertEquals(45.0, ticketPrice, 0.001);
-		} else if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
+		} else if (team.getTeamFinance().getStructure().getMarketSize() instanceof SmallSize) {
 			assertEquals(45.0, ticketPrice, 0.001);
 		}
 	}
@@ -253,13 +253,13 @@ public void shouldSetTicketPriceFromConfigMultipliers() {
 	for (Team team : league.getAllTeam()) {
 		double ticketPrice = team.getStadium().getTicketPrice();
 
-		if (team.getTeamFinance().getMarketSize() instanceof LargeSize) {
+		if (team.getTeamFinance().getStructure().getMarketSize() instanceof LargeSize) {
 			assertEquals(FinanceConfiguration.BASE_TICKET_PRICE * FinanceConfiguration.MARKET_SIZE_LARGE_MULTIPLIER,
 				ticketPrice, 0.001);
-		} else if (team.getTeamFinance().getMarketSize() instanceof MediumSize) {
+		} else if (team.getTeamFinance().getStructure().getMarketSize() instanceof MediumSize) {
 			assertEquals(FinanceConfiguration.BASE_TICKET_PRICE * FinanceConfiguration.MARKET_SIZE_MEDIUM_MULTIPLIER,
 				ticketPrice, 0.001);
-		} else if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
+		} else if (team.getTeamFinance().getStructure().getMarketSize() instanceof SmallSize) {
 			assertEquals(FinanceConfiguration.BASE_TICKET_PRICE * FinanceConfiguration.MARKET_SIZE_SMALL_MULTIPLIER,
 				ticketPrice, 0.001);
 		}
@@ -267,26 +267,26 @@ public void shouldSetTicketPriceFromConfigMultipliers() {
 }
 
 private double getExpectedMarketValueBonus(Team team) {
-	if (team.getTeamFinance().getMarketSize() instanceof LargeSize) {
+	if (team.getTeamFinance().getStructure().getMarketSize() instanceof LargeSize) {
 		return 140.0;
 	}
-	if (team.getTeamFinance().getMarketSize() instanceof MediumSize) {
+	if (team.getTeamFinance().getStructure().getMarketSize() instanceof MediumSize) {
 		return 80.0;
 	}
-	if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
+	if (team.getTeamFinance().getStructure().getMarketSize() instanceof SmallSize) {
 		return 40.0;
 	}
 	return 0.0;
 }
 
 private double getExpectedBusinessOpportunityModifierMax(Team team) {
-	if (team.getTeamFinance().getMarketSize() instanceof LargeSize) {
+	if (team.getTeamFinance().getStructure().getMarketSize() instanceof LargeSize) {
 		return 0.56;
 	}
-	if (team.getTeamFinance().getMarketSize() instanceof MediumSize) {
+	if (team.getTeamFinance().getStructure().getMarketSize() instanceof MediumSize) {
 		return 0.40;
 	}
-	if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
+	if (team.getTeamFinance().getStructure().getMarketSize() instanceof SmallSize) {
 		return 0.24;
 	}
 	return 0.0;
@@ -310,13 +310,13 @@ private double getExpectedBaseBudget(double popularity) {
 }
 
 private double getExpectedBudgetMarketMultiplier(Team team) {
-	if (team.getTeamFinance().getMarketSize() instanceof LargeSize) {
+	if (team.getTeamFinance().getStructure().getMarketSize() instanceof LargeSize) {
 		return 1.6;
 	}
-	if (team.getTeamFinance().getMarketSize() instanceof MediumSize) {
+	if (team.getTeamFinance().getStructure().getMarketSize() instanceof MediumSize) {
 		return 1.4;
 	}
-	if (team.getTeamFinance().getMarketSize() instanceof SmallSize) {
+	if (team.getTeamFinance().getStructure().getMarketSize() instanceof SmallSize) {
 		return 1.1;
 	}
 	return 0.0;

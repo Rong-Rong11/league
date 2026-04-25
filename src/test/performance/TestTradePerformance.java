@@ -10,8 +10,8 @@ import config.FinanceConfiguration;
 import data.league.League;
 import data.league.finance.LeagueFinancialRules;
 import process.repository.TeamRepository;
-import process.service.trade.PreSeasonTradeService;
-import process.service.trade.RegularSeasonTradeService;
+import process.service.trade.preseason.PreSeasonTradeService;
+import process.service.trade.regularseason.RegularSeasonTradeService;
 import test.support.TestSupport;
 
 public class TestTradePerformance {

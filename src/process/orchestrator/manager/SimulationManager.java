@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
+
 import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.finance.GameStat;
@@ -21,6 +23,9 @@ import data.team.finance.financialpolicy.ThriftyPolicy;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
+import gui.utility.TeamDisplayUtility;
+import gui.utility.TeamStatUtility;
+import log.LoggerUtility;
 import process.builder.calendar.FirstRoundCalendarBuilder;
 import process.builder.calendar.RegularSeasonCalendarBuilder;
 import process.builder.league.LeagueBuilder;
@@ -33,17 +38,16 @@ import process.service.game.GameManager;
 import process.service.league.TeamPopularityUpdater;
 import process.service.live.LiveMatchService;
 import process.service.live.LiveMatchState;
-import process.service.trade.PreSeasonTradeService;
-import process.service.trade.RegularSeasonTradeService;
 import process.service.trade.TradeService;
+import process.service.trade.preseason.PreSeasonTradeService;
+import process.service.trade.regularseason.RegularSeasonTradeService;
 import process.utility.CalendarUtility;
 import process.utility.FinanceUtility;
-import gui.utility.TeamDisplayUtility;
-import gui.utility.TeamStatUtility;
 
 //cerveau de la simulation 
 public class SimulationManager implements GUIInterface {
 	private static final DateTimeFormatter WEEK_FORMATTER = DateTimeFormatter.ofPattern("dd/MM");
+	private static final Logger logger = LoggerUtility.getLogger(SimulationManager.class, "text");
 
 	private League league;
 	private LeagueBuilder leagueBuilder = new LeagueBuilder();
@@ -61,12 +65,16 @@ public class SimulationManager implements GUIInterface {
 	private LiveMatchService liveMatchService = new LiveMatchService();
 
 	public SimulationManager() {
+		logger.debug("Initializing simulation manager");
 		league = leagueBuilder.build();
+		logger.debug("League built for simulation manager");
 		FinanceUtility.updateFormerLeaguePayroll();
+		logger.trace("Former league payroll updated");
 		playoffBuilder = new PlayoffBuilder(league);
 		firstRoundCalendarBuilder = new FirstRoundCalendarBuilder(league);
 
 		clock = new SimulationClock(CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE);
+		logger.debug("Simulation clock initialized at " + CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE);
 		regularSeasonCalendarBuilder = new RegularSeasonCalendarBuilder(league);
 		financeManager = new FinanceManager(league);
 		gameManager = new GameManager(league, financeManager, regularSeasonCalendarBuilder, playoffBuilder,
@@ -78,6 +86,7 @@ public class SimulationManager implements GUIInterface {
 				leagueFinancialRules.getLuxuryTaxLine());
 		playoffBuilder = new PlayoffBuilder(league);
 		firstRoundCalendarBuilder = new FirstRoundCalendarBuilder(league);
+		logger.debug("Simulation manager ready");
 	}
 
 	@Override
@@ -90,56 +99,86 @@ public class SimulationManager implements GUIInterface {
 		return clock == null ? 1 : clock.getCurrentMonth();
 	}
 
-	// methddes pour la presaison
-	// pour page de garde
+	@Override
+	public double getLeagueNetForMonth(int month) {
+		if (league == null || league.getLeagueFinance() == null || league.getLeagueFinance().getBudget() == null) {
+			return 0.0;
+		}
+		return league.getLeagueFinance().getBudget().getNetForMonth(month);
+	}
+
+	@Override
+	public double getTeamNetForMonth(Team team, int month) {
+		if (team == null || team.getTeamFinance() == null || team.getTeamFinance().getBudget() == null) {
+			return 0.0;
+		}
+		return team.getTeamFinance().getBudget().getNetForMonth(month);
+	}
+
 	@Override
 	public void randomFinance() {
+		logger.debug("Randomizing financial setup for all teams");
 		financeManager.randomFinancialPolicy();
 		financeManager.randomMarketSize();
 	}
 
 	@Override
 	public void chooseAmbitiousPolicy(Team team) {
+		logger.debug("Choosing ambitious financial policy for " + (team == null ? "<none>" : team.getName()));
 		financeManager.chooseFinancialPolicy(team, new AmbitiousPolicy());
 	}
 
 	@Override
 	public void chooseBalancedPolicy(Team team) {
+		logger.debug("Choosing balanced financial policy for " + (team == null ? "<none>" : team.getName()));
 		financeManager.chooseFinancialPolicy(team, new BalancedPolicy());
 	}
 
 	@Override
 	public void chooseThriftyPolicy(Team team) {
+		logger.debug("Choosing thrifty financial policy for " + (team == null ? "<none>" : team.getName()));
 		financeManager.chooseFinancialPolicy(team, new ThriftyPolicy());
 	}
 
 	@Override
 	public void chooseLargeMarketSize(Team team) {
+		logger.debug("Choosing large market size for " + (team == null ? "<none>" : team.getName()));
 		financeManager.chooseMarketSize(team, new LargeSize());
 	}
 
 	@Override
 	public void chooseMediumMarketSize(Team team) {
+		logger.debug("Choosing medium market size for " + (team == null ? "<none>" : team.getName()));
 		financeManager.chooseMarketSize(team, new MediumSize());
 	}
 
 	@Override
 	public void chooseSmallMarketSize(Team team) {
+		logger.debug("Choosing small market size for " + (team == null ? "<none>" : team.getName()));
 		financeManager.chooseMarketSize(team, new SmallSize());
 	}
 
 	// methode a utiliser pour lancer la saison
 	@Override
 	public void startSeason() {
+		logger.info("Starting season initialization");
+		logger.debug("Initializing team and league finance");
 		financeManager.initializeFinance();
 		simulatePreSeasonTrade();
+		logger.debug("Updating team popularity before season");
 		teamPopularityUpdater.updateBeforeSeason();
 		league.getRegularSeason().setNbaCalendar(regularSeasonCalendarBuilder.buildCalendar());
+		logger.debug("Regular season calendar initialized with "
+				+ league.getRegularSeason().getNbaCalendar().getCalendar().size()
+				+ " game days");
 		league.getLeagueFinance().getBudget().getInitialAmount();
 		clock.reset();
+		logger.debug("Simulation clock reset to " + clock.getCurrentDate());
+		logger.info("Season initialized successfully");
 	}
 
 	private void simulatePreSeasonTrade() {
+		logger.info("Simulating preseason trades");
 		preSeasonTradeService.simulateTrade(config.FinanceConfiguration.PRESEASON_TRADE, 0);
 	}
 
@@ -147,20 +186,25 @@ public class SimulationManager implements GUIInterface {
 	// tous seul
 	@Override
 	public void simulateDay(LocalDate date) {
+		logger.debug("Simulating day " + date);
 		clock.setDate(date);
 		if (isRegularSeasonDate(date)) {
+			logger.trace("Day " + date + " is in regular season");
 			gameManager.simulateRegularSeasonDay(date, clock.getCurrentMonth());
 		}
 
 		if (isPlayoffDate(date)) {
+			logger.trace("Day " + date + " is in playoffs");
 			gameManager.simulatePlayoffDay(date, clock.getCurrentMonth(), league.getPlayoff().getCurrentRound());
 		}
 		verifyTimeline();
+		logger.trace("Day simulation completed for " + date);
 	}
 
 	@Override
 	public void simulateAndDisplayDay(LocalDate date) {
 		if (!isSeasonInitialized() || date == null) {
+			logger.warn("Ignoring simulateAndDisplayDay because season is not initialized or date is null");
 			return;
 		}
 		simulateDay(date);
@@ -170,11 +214,14 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public boolean makeLiveMatchAvailable(Game game, LocalDate date) {
 		if (game == null || date == null) {
+			logger.warn("Unable to make live match available because game or date is null");
 			return false;
 		}
 		if (isLiveMatchAvailable(game)) {
+			logger.debug("Live match already available for date " + date);
 			return true;
 		}
+		logger.debug("Simulating day to make live match available for date " + date);
 		simulateAndDisplayDay(date);
 		return isLiveMatchAvailable(game);
 	}
@@ -182,29 +229,41 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public void simulateWeek(LocalDate startDate) {
 		if (!isSeasonInitialized() || startDate == null) {
+			logger.warn("Ignoring simulateWeek because season is not initialized or date is null");
 			return;
 		}
+		logger.info("Simulating week from " + startDate);
 		LocalDate weekStart = getWeekStartDate(startDate);
 		LocalDate weekEnd = weekStart.plusDays(6);
+		int simulatedDays = 0;
 		for (LocalDate day = weekStart; !day.isAfter(weekEnd); day = day.plusDays(1)) {
 			GameDay gameDay = getGameDay(day);
 			if (gameDay != null && !gameDay.isEmpty()) {
 				simulateAndDisplayDay(day);
+				simulatedDays++;
 			}
 		}
+		logger.info("Week simulation completed from " + weekStart + " to " + weekEnd + " with " + simulatedDays
+				+ " simulated game days");
 	}
 
 	@Override
 	public void simulateSeasonFrom(LocalDate startDate) {
 		if (!isSeasonInitialized() || startDate == null) {
+			logger.warn("Ignoring simulateSeasonFrom because season is not initialized or date is null");
 			return;
 		}
+		logger.info("Simulating season from " + startDate);
+		int simulatedDays = 0;
 		for (LocalDate day : getSeasonCalendar().keySet()) {
 			if (day.isBefore(startDate)) {
 				continue;
 			}
 			simulateAndDisplayDay(day);
+			simulatedDays++;
 		}
+		logger.info("Season simulation from " + startDate + " completed with " + simulatedDays
+				+ " simulated game days");
 	}
 
 	private boolean isRegularSeasonDate(LocalDate date) {
@@ -217,17 +276,21 @@ public class SimulationManager implements GUIInterface {
 
 	private void verifyTimeline() {
 		if (clock.hasMonthChanged()) {
+			logger.trace("Month transition detected at " + clock.getCurrentDate());
 			newMonth(clock.refreshMonth());
 		}
 		if (clock.hasWeekChanged()) {
+			logger.trace("Week transition detected at " + clock.getCurrentDate());
 			newWeek(clock.getCurrentDate(), clock.refreshWeek());
 		}
 		if (clock.isRegularSeasonEnd()) {
+			logger.trace("Regular season end detected at " + clock.getCurrentDate());
 			endRegularSeason();
 		}
 	}
 
 	private void newMonth(int month) {
+		logger.debug("Applying month transition for month " + month);
 		teamPopularityUpdater.updateMonthlyPopularity();
 		if (isRegularSeasonDate(clock.getCurrentDate())) {
 			financeManager.applyMonthlyFinance(month);
@@ -242,6 +305,7 @@ public class SimulationManager implements GUIInterface {
 		Playoff playoff = league.getPlayoff();
 
 		if (playoff == null || playoff.getCurrentRound() == null) {
+			logger.warn("No active playoff teams because playoff or current round is null");
 			return new ArrayList<>(activeTeams);
 		}
 		for (PlayoffSeries series : CalendarUtility.getCurrentRoundSeries(playoff)) {
@@ -251,21 +315,28 @@ public class SimulationManager implements GUIInterface {
 			activeTeams.add(series.getHigherTeam());
 			activeTeams.add(series.getLowerTeam());
 		}
+		logger.debug("Found " + activeTeams.size() + " active playoff teams for round " + playoff.getCurrentRound());
 		return activeTeams;
 	}
 
 	private void newWeek(LocalDate date, int month) {
+		logger.debug("Applying week transition at " + date + " for finance month " + month);
 		regularSeasonTradeService.simulateTrade(date, month);
 	}
 
 	@Override
 	public void endRegularSeason() {
+		logger.info("Ending regular season and initializing playoffs");
 		league.setPlayoff(playoffBuilder.buldFirstRoundPlayoffs());
 		applyPlayoffQualificationBonuses(clock.getCurrentMonth());
 		applyPlayoffQualificationPopularityBonuses();
 		applyMissedPlayoffPenalties();
 		league.getPlayoff().setCurrentRound(PlayoffRound.FIRST_ROUND);
 		league.getPlayoff().setNbaCalendar(firstRoundCalendarBuilder.buildCalendar());
+		logger.debug("Playoff calendar initialized with "
+				+ league.getPlayoff().getNbaCalendar().getCalendar().size()
+				+ " game days");
+		logger.info("Playoffs initialized");
 	}
 
 	private void applyPlayoffQualificationBonuses(int month) {
@@ -273,6 +344,7 @@ public class SimulationManager implements GUIInterface {
 		qualifiedTeams.addAll(league.getPlayoff().getQualifiedEastTeams());
 		qualifiedTeams.addAll(league.getPlayoff().getQualifiedWestTeams());
 
+		logger.debug("Applying playoff qualification finance bonuses to " + qualifiedTeams.size() + " teams");
 		financeManager.applyPlayoffQualificationBonus(qualifiedTeams, month);
 	}
 
@@ -281,7 +353,9 @@ public class SimulationManager implements GUIInterface {
 		qualifiedTeams.addAll(league.getPlayoff().getQualifiedEastTeams());
 		qualifiedTeams.addAll(league.getPlayoff().getQualifiedWestTeams());
 
+		logger.debug("Applying playoff qualification popularity bonuses to " + qualifiedTeams.size() + " teams");
 		for (Team team : qualifiedTeams) {
+			logger.trace("Applying playoff qualification popularity bonus to " + team.getName());
 			teamPopularityUpdater.applyPlayoffQualificationBonus(team);
 		}
 	}
@@ -291,8 +365,10 @@ public class SimulationManager implements GUIInterface {
 		qualifiedTeams.addAll(league.getPlayoff().getQualifiedEastTeams());
 		qualifiedTeams.addAll(league.getPlayoff().getQualifiedWestTeams());
 
+		logger.debug("Applying missed playoff penalties");
 		for (Team team : TeamRepository.getInstance().getAllTeams()) {
 			if (!qualifiedTeams.contains(team)) {
+				logger.trace("Applying missed playoff penalty to " + team.getName());
 				teamPopularityUpdater.applyMissedPlayoffPenalty(team);
 			}
 		}
@@ -301,11 +377,13 @@ public class SimulationManager implements GUIInterface {
 	// simuler la fin de saison régulière ou fin playoff
 	@Override
 	public void simulateRegularSeason() {
+		logger.info("Simulating full regular season");
 		while (!clock.getCurrentDate().equals(CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
 			simulateDay(clock.getCurrentDate());
 			nextDay();
 		}
 		endRegularSeason();
+		logger.info("Regular season simulation completed");
 	}
 
 	private void nextDay() {
@@ -609,10 +687,11 @@ public class SimulationManager implements GUIInterface {
 
 	@Override
 	public String getTeamFinancialPolicyLabel(Team team) {
-		if (team == null || team.getTeamFinance() == null || team.getTeamFinance().getFinancialProfil() == null) {
+		if (team == null || team.getTeamFinance() == null
+				|| team.getTeamFinance().getBehavior().getFinancialProfil() == null) {
 			return "-";
 		}
-		String className = team.getTeamFinance().getFinancialProfil().getClass().getSimpleName();
+		String className = team.getTeamFinance().getBehavior().getFinancialProfil().getClass().getSimpleName();
 		if ("AmbitiousPolicy".equals(className)) {
 			return "Ambitieuse";
 		}
@@ -627,10 +706,11 @@ public class SimulationManager implements GUIInterface {
 
 	@Override
 	public String getTeamMarketSizeLabel(Team team) {
-		if (team == null || team.getTeamFinance() == null || team.getTeamFinance().getMarketSize() == null) {
+		if (team == null || team.getTeamFinance() == null
+				|| team.getTeamFinance().getStructure().getMarketSize() == null) {
 			return "-";
 		}
-		String className = team.getTeamFinance().getMarketSize().getClass().getSimpleName();
+		String className = team.getTeamFinance().getStructure().getMarketSize().getClass().getSimpleName();
 		if ("LargeSize".equals(className)) {
 			return "Grand";
 		}
@@ -690,6 +770,7 @@ public class SimulationManager implements GUIInterface {
 
 	@Override
 	public void displayCurrentSeason() {
+		logger.debug("Displaying current season calendar");
 		for (GameDay gameDay : getSeasonCalendar().values()) {
 			gameDay.setDisplayed(true);
 			for (Game game : gameDay.getGames()) {
@@ -701,8 +782,10 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public void displayWeek(LocalDate startDate) {
 		if (startDate == null) {
+			logger.warn("Skipping week display because start date is null");
 			return;
 		}
+		logger.debug("Displaying week from " + startDate);
 		for (int offset = 0; offset < 7; offset++) {
 			displayGameDay(startDate.plusDays(offset));
 		}
@@ -712,8 +795,10 @@ public class SimulationManager implements GUIInterface {
 	public void displayGameDay(LocalDate date) {
 		GameDay gameDay = getGameDay(date);
 		if (gameDay == null) {
+			logger.trace("No game day to display for " + date);
 			return;
 		}
+		logger.trace("Displaying game day " + date + " with " + gameDay.getGames().size() + " games");
 		gameDay.setDisplayed(true);
 		for (Game game : gameDay.getGames()) {
 			game.setDisplayed(true);
@@ -727,31 +812,48 @@ public class SimulationManager implements GUIInterface {
 
 	@Override
 	public void setLiveGame(Game game) {
+		logger.debug("Setting live game " + getGameLabel(game));
 		liveMatchService.setGame(game);
+	}
+
+	private String getGameLabel(Game game) {
+		if (game == null || game.getGameContext() == null) {
+			return "<none>";
+		}
+		Team awayTeam = game.getGameContext().getAwayTeam();
+		Team homeTeam = game.getGameContext().getHomeTeam();
+		String awayName = awayTeam == null ? "<unknown>" : awayTeam.getName();
+		String homeName = homeTeam == null ? "<unknown>" : homeTeam.getName();
+		return awayName + " at " + homeName;
 	}
 
 	@Override
 	public void startLiveMatch() {
+		logger.debug("Starting live match from simulation manager");
 		liveMatchService.startLiveMatch();
 	}
 
 	@Override
 	public void pauseLiveMatch() {
+		logger.debug("Pausing live match from simulation manager");
 		liveMatchService.pauseLiveMatch();
 	}
 
 	@Override
 	public void playCurrentLiveQuarter() {
+		logger.debug("Playing current live quarter from simulation manager");
 		liveMatchService.playCurrentLiveQuarter();
 	}
 
 	@Override
 	public void resetLiveMatch() {
+		logger.debug("Resetting live match from simulation manager");
 		liveMatchService.resetLiveMatch();
 	}
 
 	@Override
 	public void tickLiveMatch() {
+		logger.trace("Ticking live match from simulation manager");
 		liveMatchService.tickLiveMatch();
 	}
 

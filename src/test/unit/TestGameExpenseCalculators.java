@@ -14,8 +14,8 @@ import data.league.PlayoffRound;
 import data.sport.setup.Game;
 import data.sport.setup.GameContext;
 import data.team.Team;
-import process.service.finance.game.PlayoffGameExpenseCalculator;
-import process.service.finance.game.RegularSeasonGameExpenseCalculator;
+import process.service.finance.game.expense.PlayoffGameExpenseCalculator;
+import process.service.finance.game.expense.RegularSeasonGameExpenseCalculator;
 import test.support.TestSupport;
 
 public class TestGameExpenseCalculators {
@@ -113,7 +113,7 @@ public class TestGameExpenseCalculators {
 
 		new RegularSeasonGameExpenseCalculator(gameStat).calculateGameExpenses(game);
 
-		double loyaltyFactor = 1 + awayTeam.getTeamFinance().getEconomicProfil().getFanLoyalty() * 0.32;
+		double loyaltyFactor = 1 + awayTeam.getTeamFinance().getStructure().getEconomicProfil().getFanLoyalty() * 0.32;
 		double expected = config.FinanceConfiguration.BASE_TRAVEL_INTER_CONFERENCE_COST * loyaltyFactor;
 		assertEquals(expected, gameStat.getAwayFinance().getTravelCosts(), 0.0001);
 	}
