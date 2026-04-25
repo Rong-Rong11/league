@@ -25,15 +25,18 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
+import process.orchestrator.interf.GUIInterface;
 import process.utility.CalendarUtility;
 import gui.utility.TeamDisplayUtility;
 
 public class MonthViewPanel extends JPanel implements ThemeAware {
 	private static final String[] DAY_NAMES = { "LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM" };
+	private GUIInterface guiInterface;
 	private MatchDashboard matchDashboard;
 	private Runnable showMatchDashboardAction;
 
-	public MonthViewPanel() {
+	public MonthViewPanel(GUIInterface guiInterface) {
+		this.guiInterface = guiInterface;
 		setLayout(new GridLayout(0, 7));
 		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
 	}
@@ -88,6 +91,11 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 		if (gameDay != null && gameDay.isDisplayed()) {
 			dayPanel.setBackground(getDisplayedDayBackground());
 		}
+		if (sameMonth && isPlayoffGameDay(gameDay)) {
+			dayPanel.setBackground(gameDay.isDisplayed()
+					? getDisplayedPlayoffDayBackground()
+					: getPlayoffDayBackground());
+		}
 		if (!sameMonth) {
 			dayPanel.setBackground(getOtherMonthBackground());
 		}
@@ -130,7 +138,8 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 				String homeTeam = TeamDisplayUtility.getAbbreviation(displayedGames.get(i).getGameContext().getHomeTeam());
 				String awayTeam = TeamDisplayUtility.getAbbreviation(displayedGames.get(i).getGameContext().getAwayTeam());
 				boolean hasBottomSpacing = i < matchCount - 1;
-				matchesPanel.add(buildMatchLabel(homeTeam + " vs " + awayTeam, hasBottomSpacing ? 4 : 0));
+				matchesPanel.add(buildMatchLabel(displayedGames.get(i), buildMatchText(displayedGames.get(i), homeTeam, awayTeam),
+						hasBottomSpacing ? 4 : 0));
 			}
 			dayPanel.add(matchesPanel, BorderLayout.CENTER);
 		}
@@ -138,14 +147,25 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 		return dayPanel;
 	}
 
-	private JLabel buildMatchLabel(String text, int bottomSpacing) {
+	private JLabel buildMatchLabel(Game game, String text, int bottomSpacing) {
 		JLabel label = new JLabel(text);
 		label.setOpaque(true);
-		label.setBackground(getMatchChipColor());
+		label.setBackground(game.getPlayoffRound() == null ? getMatchChipColor() : getPlayoffMatchChipColor());
 		LabelStyleUtil.styleValueLabel(label, 11);
 		label.setBorder(BorderFactory.createEmptyBorder(3, 6, 3 + bottomSpacing, 6));
 		label.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
 		return label;
+	}
+
+	private String buildMatchText(Game game, String homeTeam, String awayTeam) {
+		if (game.getPlayoffRound() == null || guiInterface == null) {
+			return homeTeam + " vs " + awayTeam;
+		}
+		String bestOfLabel = guiInterface.getPlayoffGameLabel(game);
+		if (bestOfLabel == null || bestOfLabel.equals("")) {
+			return homeTeam + "-" + awayTeam;
+		}
+		return bestOfLabel + " " + homeTeam + "-" + awayTeam;
 	}
 
 	private boolean isSameMonth(LocalDate date, YearMonth displayedMonth) {
@@ -185,6 +205,30 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 
 	private Color getMatchChipColor() {
 		return DashboardPanelUtil.getCalendarMatchChipColor();
+	}
+
+	private Color getPlayoffDayBackground() {
+		return DashboardPanelUtil.getCalendarPlayoffDayBackgroundColor();
+	}
+
+	private Color getDisplayedPlayoffDayBackground() {
+		return DashboardPanelUtil.getCalendarDisplayedPlayoffDayBackgroundColor();
+	}
+
+	private Color getPlayoffMatchChipColor() {
+		return DashboardPanelUtil.getCalendarPlayoffMatchChipColor();
+	}
+
+	private boolean isPlayoffGameDay(GameDay gameDay) {
+		if (gameDay == null) {
+			return false;
+		}
+		for (Game game : gameDay.getGames()) {
+			if (game.getPlayoffRound() != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

@@ -15,9 +15,16 @@ import data.sport.setup.Game;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedPanel;
 import gui.utility.TeamDisplayUtility;
+import process.orchestrator.interf.GUIInterface;
 import process.visitor.gamemoment.GameMomentSlotKeyVisitor;
 
 public class WeekScheduleCardFactory {
+	private GUIInterface guiInterface;
+
+	public WeekScheduleCardFactory(GUIInterface guiInterface) {
+		this.guiInterface = guiInterface;
+	}
+
 	public ArrayList<Game> getGamesForSlot(GameDay gameDay, String slotKey) {
 		ArrayList<Game> slotGames = new ArrayList<Game>();
 		for (Game game : gameDay.getGames()) {
@@ -33,7 +40,7 @@ public class WeekScheduleCardFactory {
 		card.setLayout(new BorderLayout(0, 4));
 		card.setBackground(getCardColor(game, slotKey));
 		card.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(getBorderColor(slotKey), 1),
+				BorderFactory.createLineBorder(getBorderColor(game, slotKey), 1),
 				BorderFactory.createEmptyBorder(6, 8, 6, 8)));
 		card.setPreferredSize(new Dimension(120, 54));
 		card.setMinimumSize(new Dimension(110, 54));
@@ -54,10 +61,21 @@ public class WeekScheduleCardFactory {
 	private JLabel buildMatchupLabel(Game game, String slotKey) {
 		String awayTeam = TeamDisplayUtility.getAbbreviation(game.getGameContext().getAwayTeam());
 		String homeTeam = TeamDisplayUtility.getAbbreviation(game.getGameContext().getHomeTeam());
-		JLabel matchupLabel = new JLabel(awayTeam + " vs " + homeTeam);
+		JLabel matchupLabel = new JLabel(buildMatchText(game, awayTeam, homeTeam));
 		matchupLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
 		matchupLabel.setForeground(getTitleColor(slotKey));
 		return matchupLabel;
+	}
+
+	private String buildMatchText(Game game, String awayTeam, String homeTeam) {
+		if (game.getPlayoffRound() == null || guiInterface == null) {
+			return awayTeam + " vs " + homeTeam;
+		}
+		String bestOfLabel = guiInterface.getPlayoffGameLabel(game);
+		if (bestOfLabel == null || bestOfLabel.equals("")) {
+			return awayTeam + "-" + homeTeam;
+		}
+		return bestOfLabel + " " + awayTeam + "-" + homeTeam;
 	}
 
 	private JPanel buildCardContent(Game game, String slotKey) {
@@ -93,13 +111,22 @@ public class WeekScheduleCardFactory {
 	}
 
 	private Color getCardColor(Game game, String slotKey) {
+		if (game.getPlayoffRound() != null) {
+			if (game.isDisplayed()) {
+				return DashboardPanelUtil.getCalendarPlayoffSlotDisplayedColor();
+			}
+			return DashboardPanelUtil.getCalendarPlayoffSlotBaseColor();
+		}
 		if (!game.isDisplayed()) {
 			return getSlotColor(slotKey);
 		}
 		return DashboardPanelUtil.getCalendarSlotDisplayedColor(slotKey);
 	}
 
-	private Color getBorderColor(String slotKey) {
+	private Color getBorderColor(Game game, String slotKey) {
+		if (game.getPlayoffRound() != null) {
+			return DashboardPanelUtil.EXPENSE_COLOR;
+		}
 		if ("AFTERNOON".equals(slotKey)) {
 			return DashboardPanelUtil.NEUTRAL_ACCENT_COLOR;
 		}

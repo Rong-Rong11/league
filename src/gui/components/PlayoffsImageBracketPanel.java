@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,13 +29,17 @@ public class PlayoffsImageBracketPanel extends JPanel {
 	private Image bracketImage;
 	private int imageWidth = REFERENCE_IMAGE_WIDTH;
 	private int imageHeight = REFERENCE_IMAGE_HEIGHT;
+	private int drawWidth = REFERENCE_IMAGE_WIDTH;
+	private int drawHeight = REFERENCE_IMAGE_HEIGHT;
+	private int drawX = 0;
+	private int drawY = 0;
 	private HashMap<String, JLabel> labels = new HashMap<String, JLabel>();
 	private HashMap<String, BracketPosition> positions = new HashMap<String, BracketPosition>();
 
 	public PlayoffsImageBracketPanel() {
 		setLayout(null);
 		setBackground(Color.WHITE);
-		setPreferredSize(new Dimension(REFERENCE_IMAGE_WIDTH, REFERENCE_IMAGE_HEIGHT));
+		setPreferredSize(new Dimension(980, 820));
 		loadImage();
 		createLabels();
 	}
@@ -44,7 +50,6 @@ public class PlayoffsImageBracketPanel extends JPanel {
 			bracketImage = icon.getImage();
 			imageWidth = icon.getIconWidth();
 			imageHeight = icon.getIconHeight();
-			setPreferredSize(new Dimension(imageWidth, imageHeight));
 		}
 	}
 
@@ -72,13 +77,15 @@ public class PlayoffsImageBracketPanel extends JPanel {
 	}
 
 	private void applyLabelBounds(JLabel label, int baseCenterX, int baseCenterY, int baseWidth, int baseHeight) {
-		double scaleX = imageWidth / (double) REFERENCE_IMAGE_WIDTH;
-		double scaleY = imageHeight / (double) REFERENCE_IMAGE_HEIGHT;
-		int width = (int) Math.round(baseWidth * scaleX);
-		int height = (int) Math.round(baseHeight * scaleY);
-		int centerX = (int) Math.round(baseCenterX * scaleX);
-		int centerY = (int) Math.round(baseCenterY * scaleY);
+		double scaleX = drawWidth / (double) REFERENCE_IMAGE_WIDTH;
+		double scaleY = drawHeight / (double) REFERENCE_IMAGE_HEIGHT;
+		int width = Math.max(40, (int) Math.round(baseWidth * scaleX));
+		int height = Math.max(16, (int) Math.round(baseHeight * scaleY));
+		int centerX = drawX + (int) Math.round(baseCenterX * scaleX);
+		int centerY = drawY + (int) Math.round(baseCenterY * scaleY);
 		label.setBounds(centerX - width / 2, centerY - height / 2, width, height);
+		label.setFont(new Font(Font.SANS_SERIF, label.getText() != null && label.getText().length() > 3 ? Font.PLAIN
+				: Font.BOLD, Math.max(9, (int) Math.round(14 * Math.min(scaleX, scaleY)))));
 	}
 
 	private JLabel createLabel(String position) {
@@ -130,8 +137,11 @@ public class PlayoffsImageBracketPanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if (bracketImage != null) {
+			updateDrawBounds();
 			refreshLabelBounds();
-			g.drawImage(bracketImage, 0, 0, imageWidth, imageHeight, this);
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			g2.drawImage(bracketImage, drawX, drawY, drawWidth, drawHeight, this);
 			return;
 		}
 		g.setColor(new Color(0xF7, 0xF8, 0xFA));
@@ -139,6 +149,16 @@ public class PlayoffsImageBracketPanel extends JPanel {
 		g.setColor(SECONDARY_TEXT);
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
 		g.drawString("Ajoutez l'image src/resources/playoffs_bracket_empty.png pour afficher l'arbre.", 260, 640);
+	}
+
+	private void updateDrawBounds() {
+		int availableWidth = Math.max(1, getWidth());
+		int availableHeight = Math.max(1, getHeight());
+		double scale = Math.min(availableWidth / (double) imageWidth, availableHeight / (double) imageHeight);
+		drawWidth = (int) Math.round(imageWidth * scale);
+		drawHeight = (int) Math.round(imageHeight * scale);
+		drawX = (availableWidth - drawWidth) / 2;
+		drawY = (availableHeight - drawHeight) / 2;
 	}
 
 	private static class BracketPosition {

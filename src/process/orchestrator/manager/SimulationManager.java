@@ -40,6 +40,7 @@ import process.service.trade.RegularSeasonTradeService;
 import process.service.trade.TradeService;
 import process.utility.CalendarUtility;
 import process.utility.FinanceUtility;
+import process.utility.PlayoffUtility;
 import gui.utility.TeamDisplayUtility;
 import gui.utility.TeamStatUtility;
 
@@ -62,7 +63,6 @@ public class SimulationManager implements GUIInterface {
 	private PlayoffBuilder playoffBuilder;
 	private LiveMatchService liveMatchService = new LiveMatchService();
 	private boolean userConfirmedPlayoffs = false;
-	private String lastPlayoffWinnerName = "-";
 
 	public SimulationManager() {
 		league = leagueBuilder.build();
@@ -98,12 +98,6 @@ public class SimulationManager implements GUIInterface {
 	public PlayoffRound getCurrentPlayoffRound() {
 		Playoff playoff = getPlayoff();
 		return playoff == null ? null : playoff.getCurrentRound();
-	}
-
-	@Override
-	public Team getPlayoffChampion() {
-		Playoff playoff = getPlayoff();
-		return playoff == null ? null : playoff.getChampion();
 	}
 
 	@Override
@@ -152,6 +146,44 @@ public class SimulationManager implements GUIInterface {
 			positions.put("e1", getTeamShortCode(playoff.getChampion()));
 		}
 		return positions;
+	}
+
+	@Override
+	public String getPlayoffGameLabel(Game game) {
+		if (game == null || game.getPlayoffRound() == null || league == null || league.getPlayoff() == null) {
+			return "";
+		}
+		for (PlayoffSeries series : getAllPlayoffSeries()) {
+			if (containsGame(series, game)) {
+				return PlayoffUtility.getBestOfLabel(series, game);
+			}
+		}
+		return "";
+	}
+
+	private ArrayList<PlayoffSeries> getAllPlayoffSeries() {
+		ArrayList<PlayoffSeries> series = new ArrayList<PlayoffSeries>();
+		Playoff playoff = league.getPlayoff();
+		series.addAll(playoff.getEastFirstRound());
+		series.addAll(playoff.getWestFirstRound());
+		series.addAll(playoff.getEastConferenceSemis());
+		series.addAll(playoff.getWestConferenceSemis());
+		series.addAll(playoff.getEastConferenceFinals());
+		series.addAll(playoff.getWestConferenceFinals());
+		series.addAll(playoff.getNbaFinals());
+		return series;
+	}
+
+	private boolean containsGame(PlayoffSeries series, Game game) {
+		if (series == null || game == null) {
+			return false;
+		}
+		for (Game expectedGame : series.getExpectedGames()) {
+			if (expectedGame == game) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void fillFirstRoundPositions(HashMap<String, String> positions, ArrayList<PlayoffSeries> seriesList,
@@ -242,102 +274,6 @@ public class SimulationManager implements GUIInterface {
 	}
 
 	@Override
-	public void simulateNextPlayoffMatch() {
-		GameDay gameDay = getNextUnsimulatedPlayoffGameDay();
-		if (gameDay == null) {
-			return;
-		}
-		simulateAndDisplayDay(gameDay.getDate());
-		updateLastPlayoffWinner(gameDay);
-	}
-
-	@Override
-	public void simulateNextPlayoffRound() {
-		PlayoffRound startRound = getCurrentPlayoffRound();
-		if (startRound == null || startRound == PlayoffRound.FINISHED) {
-			return;
-		}
-		while (getCurrentPlayoffRound() == startRound && getNextUnsimulatedPlayoffGameDay() != null) {
-			simulateNextPlayoffMatch();
-		}
-	}
-
-	@Override
-	public void simulateAllPlayoffs() {
-		int safety = 0;
-		while (getCurrentPlayoffRound() != null
-				&& getCurrentPlayoffRound() != PlayoffRound.FINISHED
-				&& getNextUnsimulatedPlayoffGameDay() != null
-				&& safety < 200) {
-			simulateNextPlayoffMatch();
-			safety++;
-		}
-	}
-
-	@Override
-	public int getRemainingPlayoffGames() {
-		if (league == null || league.getPlayoff() == null || league.getPlayoff().getNbaCalendar() == null) {
-			return 0;
-		}
-		int count = 0;
-		for (GameDay gameDay : league.getPlayoff().getNbaCalendar().getCalendar().values()) {
-			if (!gameDay.isSimulated()) {
-				count += gameDay.getGames().size();
-			}
-		}
-		return count;
-	}
-
-	@Override
-	public String getLastPlayoffWinnerName() {
-		return lastPlayoffWinnerName;
-	}
-
-	private GameDay getNextUnsimulatedPlayoffGameDay() {
-		if (league == null || league.getPlayoff() == null || league.getPlayoff().getNbaCalendar() == null) {
-			return null;
-		}
-		PlayoffRound currentRound = league.getPlayoff().getCurrentRound();
-		for (GameDay gameDay : league.getPlayoff().getNbaCalendar().getCalendar().values()) {
-			if (!gameDay.isSimulated() && hasCurrentRoundGame(gameDay, currentRound)) {
-				return gameDay;
-			}
-		}
-		return null;
-	}
-
-	private boolean hasCurrentRoundGame(GameDay gameDay, PlayoffRound currentRound) {
-		if (gameDay == null || gameDay.isEmpty() || currentRound == null) {
-			return false;
-		}
-		for (Game game : gameDay.getGames()) {
-			if (currentRound.equals(game.getPlayoffRound())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private void updateLastPlayoffWinner(GameDay gameDay) {
-		if (gameDay == null) {
-			return;
-		}
-		for (Game game : gameDay.getGames()) {
-			Team winner = game.getWinner();
-			if (winner == null) {
-				if (game.getHomeFinalScore() > game.getAwayFinalScore()) {
-					winner = game.getGameContext().getHomeTeam();
-				} else if (game.getAwayFinalScore() > game.getHomeFinalScore()) {
-					winner = game.getGameContext().getAwayTeam();
-				}
-			}
-			if (winner != null) {
-				lastPlayoffWinnerName = getTeamShortCode(winner);
-			}
-		}
-	}
-
-	@Override
 	public int getCurrentFinanceMonth() {
 		return clock == null ? 1 : clock.getCurrentMonth();
 	}
@@ -384,7 +320,6 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public void startSeason() {
 		userConfirmedPlayoffs = false;
-		lastPlayoffWinnerName = "-";
 		financeManager.initializeFinance();
 		simulatePreSeasonTrade();
 		teamPopularityUpdater.updateBeforeSeason();

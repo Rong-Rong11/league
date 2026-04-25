@@ -15,7 +15,6 @@ import gui.dashboard.LiveMatchDashboard;
 import gui.dashboard.MapDashboard;
 import gui.dashboard.MatchDashboard;
 import gui.dashboard.OpeningDashboard;
-import gui.dashboard.PlayoffsDashboard;
 import gui.dashboard.RefreshableDashboard;
 import gui.dashboard.RankingDashboard;
 import gui.dashboard.RegularSeasonEndDashboard;
@@ -37,7 +36,6 @@ public class MainGui extends JFrame {
 	private RegularSeasonEndDashboard regularSeasonEndDashboard;
 	private JPanel mainPanel;
 	private CalendarDashboard calendarDashboard;
-	private PlayoffsDashboard playoffsDashboard;
 	private MatchDashboard matchDashboard;
 	private LiveMatchDashboard liveMatchDashboard;
 	private RankingDashboard rankingDashboard;
@@ -120,7 +118,6 @@ public class MainGui extends JFrame {
 		rosterDashboard = new RosterDashboard(guiInterface);
 		calendarDashboard = new CalendarDashboard(guiInterface, matchDashboard, new ShowMatchDashboardAction(),
 				rosterDashboard, mapDashboard);
-		playoffsDashboard = new PlayoffsDashboard(guiInterface);
 		rankingDashboard = new RankingDashboard(guiInterface);
 		financeDashboard = new FinanceDashboard(guiInterface);
 	}
@@ -129,7 +126,6 @@ public class MainGui extends JFrame {
 		dashboardPanel.add(matchDashboard, "match");
 		dashboardPanel.add(liveMatchDashboard, "liveMatch");
 		dashboardPanel.add(calendarDashboard, "calendar");
-		dashboardPanel.add(playoffsDashboard, "playoffs");
 		dashboardPanel.add(rankingDashboard, "ranking");
 		dashboardPanel.add(financeDashboard, "finance");
 		dashboardPanel.add(mapDashboard, "map");
@@ -164,7 +160,6 @@ public class MainGui extends JFrame {
 	private void registerRefreshableDashboards() {
 		refreshableDashboards.put("match", matchDashboard);
 		refreshableDashboards.put("calendar", calendarDashboard);
-		refreshableDashboards.put("playoffs", playoffsDashboard);
 		refreshableDashboards.put("ranking", rankingDashboard);
 		refreshableDashboards.put("finance", financeDashboard);
 		refreshableDashboards.put("map", mapDashboard);
@@ -202,10 +197,6 @@ public class MainGui extends JFrame {
 					showRegularSeasonEndDashboard();
 					return;
 				}
-				refreshDashboard("playoffs");
-				sidebar.setActiveSection("calendar");
-				showDashboardCard("playoffs");
-				return;
 			}
 			refreshDashboard(cardName);
 			sidebar.setActiveSection(cardName);
@@ -240,9 +231,9 @@ public class MainGui extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			guiInterface.initializePlayoffs();
 			guiInterface.setUserConfirmedPlayoffs(true);
-			playoffsDashboard.refresh();
-			sidebar.setActiveSection("calendar");
-			showDashboardCard("playoffs");
+			rankingDashboard.showPlayoffs();
+			sidebar.setActiveSection("ranking");
+			showDashboardCard("ranking");
 			showRootCard("main");
 		}
 	}
@@ -343,9 +334,6 @@ public class MainGui extends JFrame {
 		}
 		if (calendarDashboard != null) {
 			calendarDashboard.applyTheme();
-		}
-		if (playoffsDashboard != null) {
-			playoffsDashboard.refresh();
 		}
 		if (regularSeasonEndDashboard != null) {
 			regularSeasonEndDashboard.refresh();

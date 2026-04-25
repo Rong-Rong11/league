@@ -40,7 +40,7 @@ public class WeekScheduleGridPanel extends RoundedPanel implements ThemeAware {
 	private final LocalDate indicatorDay;
 	private final OpenDayAction openDayAction;
 	private final DaySimulationAction daySimulationAction;
-	private final WeekScheduleCardFactory cardFactory = new WeekScheduleCardFactory();
+	private final WeekScheduleCardFactory cardFactory;
 
 	public WeekScheduleGridPanel(GUIInterface guiInterface, LocalDate weekStart, LocalDate indicatorDay,
 			OpenDayAction openDayAction, DaySimulationAction daySimulationAction) {
@@ -50,6 +50,7 @@ public class WeekScheduleGridPanel extends RoundedPanel implements ThemeAware {
 		this.indicatorDay = indicatorDay;
 		this.openDayAction = openDayAction;
 		this.daySimulationAction = daySimulationAction;
+		this.cardFactory = new WeekScheduleCardFactory(guiInterface);
 		setLayout(new BorderLayout());
 		setBackground(getCellBackground());
 		setBorder(BorderFactory.createLineBorder(getGridBorderColor(), 1));

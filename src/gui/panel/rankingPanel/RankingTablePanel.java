@@ -288,6 +288,10 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		refreshRanking();
 	}
 
+	public void showPlayoffs() {
+		setSelectedSeason(PLAYOFFS);
+	}
+
 	private void updateModeButtons() {
 		styleFilterButton(globalButton, GLOBAL_MODE.equals(selectedMode));
 		styleFilterButton(eastButton, EAST_MODE.equals(selectedMode));

@@ -62,7 +62,7 @@ public class CalendarDashboard extends JPanel implements ThemeAware, Refreshable
 		weekViewPanel.setDisplayedDateChangeListener(new WeekDisplayedDateChangeListener());
 		OpenMatchDayAction openMatchDayAction = new OpenMatchDayAction(matchDashboard, showMatchDashboardAction);
 		weekViewPanel.setOpenMatchDayAction(openMatchDayAction);
-		monthViewPanel = new MonthViewPanel();
+		monthViewPanel = new MonthViewPanel(guiInterface);
 		contentLayout = new CardLayout();
 		contentPanel = new JPanel(contentLayout);
 		contentPanel.setOpaque(false);

@@ -183,6 +183,27 @@ public class DashboardPanelUtil {
 		return new Color(236, 242, 250);
 	}
 
+	public static Color getCalendarPlayoffDayBackgroundColor() {
+		if (isDarkMode()) {
+			return new Color(45, 38, 31);
+		}
+		return new Color(255, 247, 232);
+	}
+
+	public static Color getCalendarDisplayedPlayoffDayBackgroundColor() {
+		if (isDarkMode()) {
+			return new Color(55, 43, 33);
+		}
+		return new Color(250, 235, 211);
+	}
+
+	public static Color getCalendarPlayoffMatchChipColor() {
+		if (isDarkMode()) {
+			return new Color(111, 70, 43);
+		}
+		return new Color(255, 214, 153);
+	}
+
 	public static Color getCurrentDayBackgroundColor() {
 		if (isDarkMode()) {
 			return new Color(48, 54, 66);
@@ -214,6 +235,20 @@ public class DashboardPanelUtil {
 			return new Color(0xC8, 0xEE, 0xF6);
 		}
 		return new Color(0x4D, 0x46, 0xF0);
+	}
+
+	public static Color getCalendarPlayoffSlotBaseColor() {
+		if (isDarkMode()) {
+			return new Color(0x6D, 0x45, 0x2A);
+		}
+		return new Color(0xFF, 0xD0, 0x8A);
+	}
+
+	public static Color getCalendarPlayoffSlotDisplayedColor() {
+		if (isDarkMode()) {
+			return new Color(0x5C, 0x39, 0x24);
+		}
+		return new Color(0xF2, 0xBC, 0x73);
 	}
 
 	public static Color getCalendarSlotDisplayedColor(String slotKey) {

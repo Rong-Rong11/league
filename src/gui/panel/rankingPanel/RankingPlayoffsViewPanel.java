@@ -14,6 +14,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import gui.components.PlayoffsImageBracketPanel;
 import data.league.League;
 import data.league.Playoff;
 import data.league.PlayoffRound;
@@ -36,10 +37,12 @@ public class RankingPlayoffsViewPanel extends JPanel implements ThemeAware {
 
 	private final GUIInterface guiInterface;
 	private String selectedMode;
+	private PlayoffsImageBracketPanel bracketPanel;
 
 	public RankingPlayoffsViewPanel(GUIInterface guiInterface) {
 		this.guiInterface = guiInterface;
 		selectedMode = GLOBAL_MODE;
+		bracketPanel = new PlayoffsImageBracketPanel();
 		setLayout(new BorderLayout());
 		setOpaque(false);
 		setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -73,19 +76,22 @@ public class RankingPlayoffsViewPanel extends JPanel implements ThemeAware {
 
 		JPanel content = new JPanel();
 		content.setOpaque(false);
-		content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-		content.add(buildSummaryCard(playoff));
-		content.add(Box.createVerticalStrut(16));
-		content.add(buildConferenceSection(playoff));
-
-		if (shouldShowFinals() && !playoff.getNbaFinals().isEmpty()) {
-			content.add(Box.createVerticalStrut(16));
-			content.add(buildFinalsCard(playoff.getNbaFinals()));
-		}
+		content.setLayout(new BorderLayout(0, 16));
+		content.add(buildSummaryCard(playoff), BorderLayout.NORTH);
+		content.add(buildBracketCard(), BorderLayout.CENTER);
 
 		add(content, BorderLayout.CENTER);
 		revalidate();
 		repaint();
+	}
+
+	private JPanel buildBracketCard() {
+		DashboardCard card = new DashboardCard();
+		card.setLayout(new BorderLayout());
+		card.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+		bracketPanel.refreshFromPlayoffsData(guiInterface.getPlayoffPositionMap());
+		card.add(bracketPanel, BorderLayout.CENTER);
+		return card;
 	}
 
 	private Playoff getPlayoff() {

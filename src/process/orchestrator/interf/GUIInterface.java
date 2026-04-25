@@ -5,7 +5,7 @@ import java.util.Map;
 import data.league.League;
 import data.league.Playoff;
 import data.league.PlayoffRound;
-import data.team.Team;
+import data.sport.setup.Game;
 
 public interface GUIInterface
 			extends SimulationInterface, SeasonGetterInterface, TeamGetterInterface, MatchGetterInterface,
@@ -15,8 +15,6 @@ public interface GUIInterface
 	  Playoff getPlayoff();
 
 	  PlayoffRound getCurrentPlayoffRound();
-
-	  Team getPlayoffChampion();
 
 	  boolean hasPlayoffsStarted();
 
@@ -30,15 +28,7 @@ public interface GUIInterface
 
 	  Map<String, String> getPlayoffPositionMap();
 
-	  void simulateNextPlayoffMatch();
-
-	  void simulateNextPlayoffRound();
-
-	  void simulateAllPlayoffs();
-
-	  int getRemainingPlayoffGames();
-
-	  String getLastPlayoffWinnerName();
+	  String getPlayoffGameLabel(Game game);
 
 	  int getCurrentFinanceMonth();
 }
