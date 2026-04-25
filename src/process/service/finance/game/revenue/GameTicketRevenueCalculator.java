@@ -15,7 +15,6 @@ public class GameTicketRevenueCalculator {
 	public GameTicketRevenueCalculator(GameStat gameStat, GameRevenueBonusProvider bonusProvider) {
 		this.gameStat = gameStat;
 		this.bonusProvider = bonusProvider;
-		logger.debug("Game ticket revenue calculator initialized");
 	}
 
 	public void calculateTicketRevenue(int attendees, double ticketPrice, Game game) {

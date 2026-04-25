@@ -18,7 +18,7 @@ public class TeamFactory {
 
 	private static String checkRivalTeam(String rivalTeam) {
 		if (rivalTeam.equals("")) {
-			logger.warn("Rival team is empty, using default value none");
+			logger.debug("Rival team is empty, using default value none");
 			return "none";
 		}
 		logger.trace("Using rival team " + rivalTeam);

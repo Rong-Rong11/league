@@ -17,7 +17,6 @@ public class StaffCostCalculator {
 	public StaffCostCalculator(GameStat gameStat, GameExpenseBonusProvider bonusProvider) {
 		this.gameStat = gameStat;
 		this.bonusProvider = bonusProvider;
-		logger.debug("Staff cost calculator initialized");
 	}
 
 	public void calculateStaffCosts(Team homeTeam, Game game) {

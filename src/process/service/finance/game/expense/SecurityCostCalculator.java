@@ -17,7 +17,6 @@ public class SecurityCostCalculator {
 	public SecurityCostCalculator(GameStat gameStat, GameExpenseBonusProvider bonusProvider) {
 		this.gameStat = gameStat;
 		this.bonusProvider = bonusProvider;
-		logger.debug("Security cost calculator initialized");
 	}
 
 	public void calculateSecurityCosts(Team homeTeam, int attendees, Game game) {

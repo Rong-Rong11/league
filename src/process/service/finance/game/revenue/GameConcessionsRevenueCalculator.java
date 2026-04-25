@@ -18,7 +18,6 @@ public class GameConcessionsRevenueCalculator {
 	public GameConcessionsRevenueCalculator(GameStat gameStat, GameRevenueBonusProvider bonusProvider) {
 		this.gameStat = gameStat;
 		this.bonusProvider = bonusProvider;
-		logger.debug("Game concessions revenue calculator initialized");
 	}
 
 	public void calculateConcessionsRevenue(Team homeTeam, int attendees, double popularityRate, Game game) {

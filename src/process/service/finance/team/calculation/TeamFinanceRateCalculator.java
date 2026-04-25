@@ -17,7 +17,6 @@ public class TeamFinanceRateCalculator {
 
 	public TeamFinanceRateCalculator(League league) {
 		this.league = league;
-		logger.debug("Team finance rate calculator initialized");
 	}
 
 	public double getOperationalPressureMultiplier(Team team) {
@@ -46,7 +45,7 @@ public class TeamFinanceRateCalculator {
 			multiplier *= 0.95;
 		}
 
-		logger.debug("Operational pressure multiplier for "
+		logger.trace("Operational pressure multiplier for "
 				+ team.getName()
 				+ " is "
 				+ multiplier
@@ -59,19 +58,19 @@ public class TeamFinanceRateCalculator {
 
 	public double getSeasonContextRevenueMultiplier(int month) {
 		if (CalendarUtility.isImportantMonth(month)) {
-			logger.debug("Season context revenue multiplier is 1.3 for important month " + month);
+			logger.trace("Season context revenue multiplier is 1.3 for important month " + month);
 			return 1.3;
 		}
-		logger.debug("Season context revenue multiplier is 1.0 for month " + month);
+		logger.trace("Season context revenue multiplier is 1.0 for month " + month);
 		return 1.0;
 	}
 
 	public double getSeasonContextExpenseMultiplier(int month) {
 		if (CalendarUtility.isImportantMonth(month)) {
-			logger.debug("Season context expense multiplier is 1.13 for important month " + month);
+			logger.trace("Season context expense multiplier is 1.13 for important month " + month);
 			return 1.13;
 		}
-		logger.debug("Season context expense multiplier is 1.0 for month " + month);
+		logger.trace("Season context expense multiplier is 1.0 for month " + month);
 		return 1.0;
 	}
 
@@ -81,7 +80,7 @@ public class TeamFinanceRateCalculator {
 			return 1.0;
 		}
 		double multiplier = marketSize.accept(new CalculateMonthlyTeamFinanceVisitor());
-		logger.debug("Market multiplier for " + marketSize.getClass().getSimpleName() + " is " + multiplier);
+		logger.trace("Market multiplier for " + marketSize.getClass().getSimpleName() + " is " + multiplier);
 		return multiplier;
 	}
 
@@ -104,7 +103,7 @@ public class TeamFinanceRateCalculator {
 				+ secondWave
 				+ ", teamPhase="
 				+ teamPhase);
-		logger.debug("Monthly local revenue rate for " + team.getName() + " month " + month + " is " + rate);
+		logger.trace("Monthly local revenue rate for " + team.getName() + " month " + month + " is " + rate);
 		return rate;
 	}
 
@@ -127,7 +126,7 @@ public class TeamFinanceRateCalculator {
 				+ secondWave
 				+ ", teamPhase="
 				+ teamPhase);
-		logger.debug("Monthly expense rate for " + team.getName() + " month " + month + " is " + rate);
+		logger.trace("Monthly expense rate for " + team.getName() + " month " + month + " is " + rate);
 		return rate;
 	}
 
@@ -139,11 +138,11 @@ public class TeamFinanceRateCalculator {
 
 		double marketMultiplier = getMarketMultiplier(marketSize);
 		if (marketMultiplier <= FinanceConfiguration.MARKET_SIZE_SMALL_MULTIPLIER) {
-			logger.debug("Small market revenue boost is " + boost + " for " + marketSize.getClass().getSimpleName());
+			logger.trace("Small market revenue boost is " + boost + " for " + marketSize.getClass().getSimpleName());
 			return boost;
 		}
 
-		logger.debug("Small market revenue boost is 1.0 for " + marketSize.getClass().getSimpleName());
+		logger.trace("Small market revenue boost is 1.0 for " + marketSize.getClass().getSimpleName());
 		return 1.0;
 	}
 
@@ -155,11 +154,11 @@ public class TeamFinanceRateCalculator {
 
 		double marketMultiplier = getMarketMultiplier(marketSize);
 		if (marketMultiplier <= FinanceConfiguration.MARKET_SIZE_SMALL_MULTIPLIER) {
-			logger.debug("Small market cost factor is " + factor + " for " + marketSize.getClass().getSimpleName());
+			logger.trace("Small market cost factor is " + factor + " for " + marketSize.getClass().getSimpleName());
 			return factor;
 		}
 
-		logger.debug("Small market cost factor is 1.0 for " + marketSize.getClass().getSimpleName());
+		logger.trace("Small market cost factor is 1.0 for " + marketSize.getClass().getSimpleName());
 		return 1.0;
 	}
 }

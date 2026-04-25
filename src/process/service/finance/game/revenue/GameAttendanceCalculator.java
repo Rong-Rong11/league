@@ -27,7 +27,6 @@ public class GameAttendanceCalculator {
 		this.league = league;
 		this.gameStat = gameStat;
 		this.bonusProvider = bonusProvider;
-		logger.debug("Game attendance calculator initialized");
 	}
 
 	public int calculateAttendees(int capacity, double attendanceRate) {

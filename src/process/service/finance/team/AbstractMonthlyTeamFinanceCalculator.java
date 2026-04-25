@@ -26,7 +26,6 @@ public abstract class AbstractMonthlyTeamFinanceCalculator implements MonthlyTea
 		TeamFinanceRateCalculator rateCalculator = new TeamFinanceRateCalculator(league);
 		this.revenueCalculator = new MonthlyTeamRevenueCalculator(rateCalculator, this);
 		this.expenseCalculator = new MonthlyTeamExpenseCalculator(league, rateCalculator);
-		logger.debug("Abstract monthly team finance calculator initialized");
 	}
 
 	public void applyMonthlyFinance(Team team, int month) {

@@ -19,7 +19,6 @@ public class GameMerchRevenueCalculator {
 	public GameMerchRevenueCalculator(GameStat gameStat, GameRevenueBonusProvider bonusProvider) {
 		this.gameStat = gameStat;
 		this.bonusProvider = bonusProvider;
-		logger.debug("Game merch revenue calculator initialized");
 	}
 
 	public void calculateMerchRevenue(Team homeTeam, double popularityRate, int attendees, Game game) {

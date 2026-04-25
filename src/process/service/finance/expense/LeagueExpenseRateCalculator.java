@@ -15,13 +15,12 @@ public class LeagueExpenseRateCalculator {
 			LeaguePopularityExpenseTracker popularityTracker) {
 		this.gameAnalyzer = gameAnalyzer;
 		this.popularityTracker = popularityTracker;
-		logger.debug("League expense rate calculator initialized");
 	}
 
 	public double getImportantGamesExpenseRate(int month, double ratePerGame) {
 		int importantGames = gameAnalyzer.countImportantGamesInMonth(month);
 		double rate = 1 + (importantGames * ratePerGame);
-		logger.debug("Important games expense rate is "
+		logger.trace("Important games expense rate is "
 				+ rate
 				+ " for month "
 				+ month
@@ -34,7 +33,7 @@ public class LeagueExpenseRateCalculator {
 	public double getPlayoffGamesExpenseRate(int month, double ratePerGame) {
 		int playoffGames = gameAnalyzer.countPlayoffGamesInMonth(month);
 		double rate = 1 + (playoffGames * ratePerGame);
-		logger.debug("Playoff games expense rate is "
+		logger.trace("Playoff games expense rate is "
 				+ rate
 				+ " for month "
 				+ month
@@ -46,12 +45,12 @@ public class LeagueExpenseRateCalculator {
 
 	public double getActivePlayoffTeamsExpenseRate(int month, double ratePerTeam) {
 		if (!isPlayoffMonth(month)) {
-			logger.debug("Active playoff teams expense rate is 1.0 because month " + month + " is not a playoff month");
+			logger.trace("Active playoff teams expense rate is 1.0 because month " + month + " is not a playoff month");
 			return 1.0;
 		}
 		int activePlayoffTeams = gameAnalyzer.countActivePlayoffTeams();
 		double rate = 1 + (activePlayoffTeams * ratePerTeam);
-		logger.debug("Active playoff teams expense rate is "
+		logger.trace("Active playoff teams expense rate is "
 				+ rate
 				+ " for month "
 				+ month
@@ -64,14 +63,14 @@ public class LeagueExpenseRateCalculator {
 	public double getSeasonExpenseRate(int month, double playoffBonusRate) {
 		if (isPlayoffMonth(month)) {
 			double rate = 1 + playoffBonusRate;
-			logger.debug("Season expense rate is " + rate + " for playoff month " + month);
+			logger.trace("Season expense rate is " + rate + " for playoff month " + month);
 			return rate;
 		}
 		if (CalendarUtility.isImportantMonth(month)) {
-			logger.debug("Season expense rate is 1.06 for important month " + month);
+			logger.trace("Season expense rate is 1.06 for important month " + month);
 			return 1.06;
 		}
-		logger.debug("Season expense rate is 1.0 for month " + month);
+		logger.trace("Season expense rate is 1.0 for month " + month);
 		return 1.0;
 	}
 
@@ -91,13 +90,13 @@ public class LeagueExpenseRateCalculator {
 				+ playoffGames
 				+ ", activeTeams="
 				+ activeTeams);
-		logger.debug("Controlled league expense noise rate is " + rate + " for month " + month);
+		logger.trace("Controlled league expense noise rate is " + rate + " for month " + month);
 		return rate;
 	}
 
 	public double getPopularitySeasonExpenseRate() {
 		double rate = popularityTracker.getPopularitySeasonExpenseRate();
-		logger.debug("Popularity season expense rate is " + rate);
+		logger.trace("Popularity season expense rate is " + rate);
 		return rate;
 	}
 

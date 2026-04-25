@@ -20,7 +20,6 @@ public class StadiumCostCalculator {
 	public StadiumCostCalculator(GameStat gameStat, GameExpenseBonusProvider bonusProvider) {
 		this.gameStat = gameStat;
 		this.bonusProvider = bonusProvider;
-		logger.debug("Stadium cost calculator initialized");
 	}
 
 	public void calculateStadiumCosts(Team homeTeam, int attendees, double gamePopularity, Game game) {

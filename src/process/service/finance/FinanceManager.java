@@ -58,7 +58,6 @@ public class FinanceManager {
 		regularSeasonGameProcessor = new RegularSeasonGameFinanceProcessor(league);
 		centralRevenueDistributor.setFinanceManager(this);
 		leagueExpenseCalculator.setFinanceManager(this);
-		logger.debug("Finance manager initialized");
 	}
 
 	// Initialization

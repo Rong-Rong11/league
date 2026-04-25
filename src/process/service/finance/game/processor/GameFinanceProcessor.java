@@ -23,7 +23,6 @@ public abstract class GameFinanceProcessor {
 
 	public GameFinanceProcessor(League league) {
 		this.league = league;
-		logger.debug("Game finance processor initialized");
 	}
 
 	public final void calculateGame(Game game, LocalDate date, int month) {

@@ -11,7 +11,7 @@ public class PlayerFactory {
 
 	private static Double checkPlayerNote(String playerNote) {
 		if (playerNote.equals("")) {
-			logger.warn("Player note is empty, using default value 0.01");
+			logger.debug("Player note is empty, using default value 0.01");
 			return 0.01;
 		}
 		logger.trace("Parsing player note " + playerNote);
@@ -20,7 +20,7 @@ public class PlayerFactory {
 
 	private static Double checkPlayerTrueShooting(String trueShooting) {
 		if (trueShooting.equals("")) {
-			logger.warn("Player true shooting is empty, using default value 0.01");
+			logger.debug("Player true shooting is empty, using default value 0.01");
 			return 0.01;
 		}
 		logger.trace("Parsing player true shooting " + trueShooting);

@@ -19,7 +19,6 @@ public class TravelCostCalculator {
 	public TravelCostCalculator(GameStat gameStat, GameExpenseBonusProvider bonusProvider) {
 		this.gameStat = gameStat;
 		this.bonusProvider = bonusProvider;
-		logger.debug("Travel cost calculator initialized");
 	}
 
 	public void calculateAwayTravelCost(Team awayTeam, Game game) {

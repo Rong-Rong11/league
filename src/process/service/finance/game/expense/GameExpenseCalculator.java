@@ -24,7 +24,6 @@ public abstract class GameExpenseCalculator implements GameExpenseBonusProvider 
 		this.securityCostCalculator = new SecurityCostCalculator(gameStat, this);
 		this.logisticsCostCalculator = new LogisticsCostCalculator(gameStat, this);
 		this.travelCostCalculator = new TravelCostCalculator(gameStat, this);
-		logger.debug("Game expense calculator initialized");
 	}
 
 	public final void calculateGameExpenses(Game game) {

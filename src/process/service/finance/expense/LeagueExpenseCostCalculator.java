@@ -13,7 +13,6 @@ public class LeagueExpenseCostCalculator {
 
 	public LeagueExpenseCostCalculator(LeagueExpenseRateCalculator rateCalculator) {
 		this.rateCalculator = rateCalculator;
-		logger.debug("League expense cost calculator initialized");
 	}
 
 	public double calculateAdministrativeCost() {

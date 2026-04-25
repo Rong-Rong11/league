@@ -22,7 +22,6 @@ public class MonthlyTeamRevenueCalculator {
 			MonthlyTeamFinanceMultiplierProvider multiplierProvider) {
 		this.rateCalculator = rateCalculator;
 		this.multiplierProvider = multiplierProvider;
-		logger.debug("Monthly team revenue calculator initialized");
 	}
 
 	public MonthlyTeamRevenue calculateRevenue(Team team, int month) {

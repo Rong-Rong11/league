@@ -12,36 +12,35 @@ public class MonthlyRevenueRateCalculator {
 
 	public MonthlyRevenueRateCalculator(MonthlyGameRevenueAnalyzer gameRevenueAnalyzer) {
 		this.gameRevenueAnalyzer = gameRevenueAnalyzer;
-		logger.debug("Monthly revenue rate calculator initialized");
 	}
 
 	public double getLeagueMonthlyAttractivenessRate(int month) {
 		double attractiveness = gameRevenueAnalyzer.calculateMonthlyLeagueAttractiveness(month);
 
 		if (attractiveness < 60) {
-			logger.debug("League monthly attractiveness rate is 0.60 for month " + month);
+			logger.trace("League monthly attractiveness rate is 0.60 for month " + month);
 			return 0.60;
 		}
 		if (attractiveness < 74) {
-			logger.debug("League monthly attractiveness rate is 0.78 for month " + month);
+			logger.trace("League monthly attractiveness rate is 0.78 for month " + month);
 			return 0.78;
 		}
 		if (attractiveness < 90) {
-			logger.debug("League monthly attractiveness rate is 1.00 for month " + month);
+			logger.trace("League monthly attractiveness rate is 1.00 for month " + month);
 			return 1.00;
 		}
 		if (attractiveness < 108) {
-			logger.debug("League monthly attractiveness rate is 1.24 for month " + month);
+			logger.trace("League monthly attractiveness rate is 1.24 for month " + month);
 			return 1.24;
 		}
-		logger.debug("League monthly attractiveness rate is 1.52 for month " + month);
+		logger.trace("League monthly attractiveness rate is 1.52 for month " + month);
 		return 1.52;
 	}
 
 	public double getImportantGamesRevenueRate(int month, double ratePerGame) {
 		int importantGames = gameRevenueAnalyzer.countImportantGamesInMonth(month);
 		double rate = 1 + (importantGames * ratePerGame);
-		logger.debug("Important games revenue rate is "
+		logger.trace("Important games revenue rate is "
 				+ rate
 				+ " for month "
 				+ month
@@ -54,7 +53,7 @@ public class MonthlyRevenueRateCalculator {
 	public double getPlayoffGamesRevenueRate(int month, double ratePerGame) {
 		int playoffGames = gameRevenueAnalyzer.countPlayoffGamesInMonth(month);
 		double rate = 1 + (playoffGames * ratePerGame);
-		logger.debug("Playoff games revenue rate is "
+		logger.trace("Playoff games revenue rate is "
 				+ rate
 				+ " for month "
 				+ month
@@ -66,12 +65,12 @@ public class MonthlyRevenueRateCalculator {
 
 	public double getActivePlayoffTeamsRate(int month, double ratePerTeam) {
 		if (!isPlayoffMonth(month)) {
-			logger.debug("Active playoff teams rate is 1.0 because month " + month + " is not a playoff month");
+			logger.trace("Active playoff teams rate is 1.0 because month " + month + " is not a playoff month");
 			return 1.0;
 		}
 		int activePlayoffTeams = gameRevenueAnalyzer.countActivePlayoffTeams();
 		double rate = 1 + (activePlayoffTeams * ratePerTeam);
-		logger.debug("Active playoff teams revenue rate is "
+		logger.trace("Active playoff teams revenue rate is "
 				+ rate
 				+ " for month "
 				+ month
@@ -84,14 +83,14 @@ public class MonthlyRevenueRateCalculator {
 	public double getSeasonMomentumRate(int month, double playoffBonusRate) {
 		if (isPlayoffMonth(month)) {
 			double rate = 1 + playoffBonusRate;
-			logger.debug("Season momentum rate is " + rate + " for playoff month " + month);
+			logger.trace("Season momentum rate is " + rate + " for playoff month " + month);
 			return rate;
 		}
 		if (CalendarUtility.isImportantMonth(month)) {
-			logger.debug("Season momentum rate is 1.28 for important month " + month);
+			logger.trace("Season momentum rate is 1.28 for important month " + month);
 			return 1.28;
 		}
-		logger.debug("Season momentum rate is 1.0 for month " + month);
+		logger.trace("Season momentum rate is 1.0 for month " + month);
 		return 1.0;
 	}
 
@@ -111,7 +110,7 @@ public class MonthlyRevenueRateCalculator {
 				+ playoffGames
 				+ ", activeTeams="
 				+ activeTeams);
-		logger.debug("Controlled economic noise rate is " + rate + " for month " + month);
+		logger.trace("Controlled economic noise rate is " + rate + " for month " + month);
 		return rate;
 	}
 
@@ -127,7 +126,7 @@ public class MonthlyRevenueRateCalculator {
 				+ secondaryWave
 				+ " for month "
 				+ month);
-		logger.debug("Revenue type monthly rate is " + rate + " for month " + month);
+		logger.trace("Revenue type monthly rate is " + rate + " for month " + month);
 		return rate;
 	}
 

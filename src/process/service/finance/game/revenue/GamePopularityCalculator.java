@@ -19,7 +19,6 @@ public class GamePopularityCalculator {
 	public GamePopularityCalculator(GameStat gameStat, GameRevenueBonusProvider bonusProvider) {
 		this.gameStat = gameStat;
 		this.bonusProvider = bonusProvider;
-		logger.debug("Game popularity calculator initialized");
 	}
 
 	public double calculatePopularityRate(Game game, LocalDate date) {

@@ -26,7 +26,6 @@ public class MonthlyTeamExpenseCalculator {
 	public MonthlyTeamExpenseCalculator(League league, TeamFinanceRateCalculator rateCalculator) {
 		this.league = league;
 		this.rateCalculator = rateCalculator;
-		logger.debug("Monthly team expense calculator initialized");
 	}
 
 	public MonthlyTeamExpense calculateExpense(Team team, int month, boolean fixedCostsOnly) {

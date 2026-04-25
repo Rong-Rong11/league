@@ -32,7 +32,6 @@ public abstract class GameRevenueCalculator implements GameRevenueBonusProvider 
 		this.parkingRevenueCalculator = new GameParkingRevenueCalculator(gameStat, this);
 		this.tvRevenueCalculator = new GameTvRevenueCalculator(gameStat, this);
 		this.merchRevenueCalculator = new GameMerchRevenueCalculator(gameStat, this);
-		logger.debug("Game revenue calculator initialized");
 	}
 
 	public final void calculateGameRevenue(Game game, LocalDate date) {

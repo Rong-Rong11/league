@@ -27,7 +27,6 @@ public class RevenueSharingManager {
 
 	public RevenueSharingManager(League league) {
 		this.league = league;
-		logger.debug("Revenue sharing manager initialized");
 	}
 
 	public void applyRevenueSharing(int month) {

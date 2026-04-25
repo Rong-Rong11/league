@@ -29,7 +29,7 @@ public class GameSelector {
 	}
 
 	public ArrayList<Game> selectGamesForDay() {
-		logger.info("Selecting games for " + date);
+		logger.debug("Selecting games for " + date);
 		ArrayList<Game> selectedGames = new ArrayList<Game>();
 		ArrayList<Game> candidates = candidateFinder.getCandidates(date);
 		logger.debug("Found " + candidates.size() + " candidate games for " + date);
@@ -65,7 +65,7 @@ public class GameSelector {
 
 		}
 		logger.debug("Selected " + selectedGames.size() + " games for " + date);
-		logger.info("Game selection completed for " + date);
+		logger.debug("Game selection completed for " + date);
 		return selectedGames;
 	}
 

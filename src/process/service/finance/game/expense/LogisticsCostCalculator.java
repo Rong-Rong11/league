@@ -19,7 +19,6 @@ public class LogisticsCostCalculator {
 	public LogisticsCostCalculator(GameStat gameStat, GameExpenseBonusProvider bonusProvider) {
 		this.gameStat = gameStat;
 		this.bonusProvider = bonusProvider;
-		logger.debug("Logistics cost calculator initialized");
 	}
 
 	public void calculateLogisticCosts(Game game) {

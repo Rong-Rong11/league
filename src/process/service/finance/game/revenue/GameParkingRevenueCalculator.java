@@ -18,7 +18,6 @@ public class GameParkingRevenueCalculator {
 	public GameParkingRevenueCalculator(GameStat gameStat, GameRevenueBonusProvider bonusProvider) {
 		this.gameStat = gameStat;
 		this.bonusProvider = bonusProvider;
-		logger.debug("Game parking revenue calculator initialized");
 	}
 
 	public void calculateParkingRevenue(Team homeTeam, int attendees, Game game) {

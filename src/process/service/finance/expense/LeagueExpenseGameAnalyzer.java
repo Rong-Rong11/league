@@ -19,7 +19,6 @@ public class LeagueExpenseGameAnalyzer {
 
 	public LeagueExpenseGameAnalyzer(League league) {
 		this.league = league;
-		logger.debug("League expense game analyzer initialized");
 	}
 
 	public void setFinanceManager(FinanceManager financeManager) {

@@ -23,7 +23,6 @@ public class LeagueExpenseCalculator {
 		LeaguePopularityExpenseTracker popularityTracker = new LeaguePopularityExpenseTracker();
 		LeagueExpenseRateCalculator rateCalculator = new LeagueExpenseRateCalculator(gameAnalyzer, popularityTracker);
 		this.costCalculator = new LeagueExpenseCostCalculator(rateCalculator);
-		logger.debug("League expense calculator initialized");
 	}
 
 	public void setFinanceManager(FinanceManager financeManager) {

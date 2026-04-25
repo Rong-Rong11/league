@@ -26,7 +26,6 @@ public class MonthlyCentralRevenueCalculator {
 		this.gameRevenueAnalyzer = new MonthlyGameRevenueAnalyzer(league);
 		this.rateCalculator = new MonthlyRevenueRateCalculator(gameRevenueAnalyzer);
 		this.bonusCalculator = new MonthlyRevenueBonusCalculator(gameRevenueAnalyzer);
-		logger.debug("Monthly central revenue calculator initialized");
 	}
 
 	public void setFinanceManager(FinanceManager financeManager) {
@@ -35,7 +34,7 @@ public class MonthlyCentralRevenueCalculator {
 	}
 
 	public double calculateNationalTvRevenue(CentralRevenueProfile profile, int month) {
-		logger.info("Calculating national TV revenue for month " + month);
+		logger.debug("Calculating national TV revenue for month " + month);
 		ArrayList<Team> teams = teamRepository.getAllTeams();
 		int teamCount = teams.size();
 		if (profile == null) {
@@ -82,7 +81,7 @@ public class MonthlyCentralRevenueCalculator {
 	}
 
 	public double calculateNationalSponsoringRevenue(CentralRevenueProfile profile, int month) {
-		logger.info("Calculating national sponsoring revenue for month " + month);
+		logger.debug("Calculating national sponsoring revenue for month " + month);
 		ArrayList<Team> teams = teamRepository.getAllTeams();
 		int teamCount = teams.size();
 		if (profile == null) {
@@ -129,7 +128,7 @@ public class MonthlyCentralRevenueCalculator {
 	}
 
 	public double calculateNationalMerchandisingRevenue(CentralRevenueProfile profile, int month) {
-		logger.info("Calculating national merchandising revenue for month " + month);
+		logger.debug("Calculating national merchandising revenue for month " + month);
 		ArrayList<Team> teams = teamRepository.getAllTeams();
 		int teamCount = teams.size();
 		if (profile == null) {

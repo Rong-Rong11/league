@@ -28,7 +28,6 @@ public class CentralRevenueDistributor {
 	public CentralRevenueDistributor(League league) {
 		this.league = league;
 		monthlyCentralRevenueCalculator = new MonthlyCentralRevenueCalculator(league);
-		logger.debug("Central revenue distributor initialized");
 	}
 
 	public void setFinanceManager(FinanceManager financeManager) {

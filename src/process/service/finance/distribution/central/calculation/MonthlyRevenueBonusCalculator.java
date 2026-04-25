@@ -16,7 +16,6 @@ public class MonthlyRevenueBonusCalculator {
 
 	public MonthlyRevenueBonusCalculator(MonthlyGameRevenueAnalyzer gameRevenueAnalyzer) {
 		this.gameRevenueAnalyzer = gameRevenueAnalyzer;
-		logger.debug("Monthly revenue bonus calculator initialized");
 	}
 
 	public double getLeagueMonthlyAdditiveBonus(int month) {

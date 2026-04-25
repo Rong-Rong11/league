@@ -22,7 +22,6 @@ public class GameTicketPriceCalculator {
 	public GameTicketPriceCalculator(GameStat gameStat, GameRevenueBonusProvider bonusProvider) {
 		this.gameStat = gameStat;
 		this.bonusProvider = bonusProvider;
-		logger.debug("Game ticket price calculator initialized");
 	}
 
 	public int calculateTicketPrice(Team homeTeam, Stadium stadium, double popularityRate, int attendees, Game game) {

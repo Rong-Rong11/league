@@ -15,7 +15,6 @@ public class GameTvRevenueCalculator {
 	public GameTvRevenueCalculator(GameStat gameStat, GameRevenueBonusProvider bonusProvider) {
 		this.gameStat = gameStat;
 		this.bonusProvider = bonusProvider;
-		logger.debug("Game TV revenue calculator initialized");
 	}
 
 	public void calculateTVRevenue(Game game) {

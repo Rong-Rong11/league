@@ -23,7 +23,6 @@ public class MonthlyGameRevenueAnalyzer {
 
 	public MonthlyGameRevenueAnalyzer(League league) {
 		this.league = league;
-		logger.debug("Monthly game revenue analyzer initialized");
 	}
 
 	public void setFinanceManager(FinanceManager financeManager) {
