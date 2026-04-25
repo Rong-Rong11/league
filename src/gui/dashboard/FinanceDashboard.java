@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
+import gui.panel.financePanel.CentralFinanceViewPanel;
 import gui.panel.financePanel.FinanceHeaderPanel;
 import gui.panel.financePanel.LeagueFinanceViewPanel;
 import gui.panel.financePanel.TeamFinanceViewPanel;
@@ -17,11 +18,13 @@ public class FinanceDashboard extends JPanel implements ThemeAware, RefreshableD
 
 	private static final int DASHBOARD_SPACING = 16;
 	private static final String LEAGUE_VIEW = "league";
+	private static final String CENTRAL_VIEW = "central";
 	private static final String TEAM_VIEW = "team";
 
 	private final FinanceHeaderPanel headerPanel;
 	private final JPanel centerContentPanel;
 	private final LeagueFinanceViewPanel leagueViewPanel;
+	private final CentralFinanceViewPanel centralViewPanel;
 	private final TeamFinanceViewPanel teamViewPanel;
 
 	private String selectedView;
@@ -32,6 +35,7 @@ public class FinanceDashboard extends JPanel implements ThemeAware, RefreshableD
 		centerContentPanel = new JPanel(new BorderLayout());
 		centerContentPanel.setOpaque(false);
 		leagueViewPanel = new LeagueFinanceViewPanel(guiInterface);
+		centralViewPanel = new CentralFinanceViewPanel(guiInterface);
 		teamViewPanel = new TeamFinanceViewPanel(guiInterface);
 
 		organize();
@@ -51,6 +55,7 @@ public class FinanceDashboard extends JPanel implements ThemeAware, RefreshableD
 
 	private void actions() {
 		headerPanel.getLeagueButton().addActionListener(new ShowLeagueViewAction());
+		headerPanel.getCentralButton().addActionListener(new ShowCentralViewAction());
 		headerPanel.getTeamsButton().addActionListener(new ShowTeamViewAction());
 	}
 
@@ -64,6 +69,7 @@ public class FinanceDashboard extends JPanel implements ThemeAware, RefreshableD
 
 	public void refreshData() {
 		leagueViewPanel.refreshData();
+		centralViewPanel.refreshData();
 		teamViewPanel.refreshData();
 		refreshView();
 	}
@@ -75,15 +81,20 @@ public class FinanceDashboard extends JPanel implements ThemeAware, RefreshableD
 
 	private void refreshView() {
 		headerPanel.setSelectedView(selectedView);
-		centerContentPanel.removeAll();
 		JPanel currentViewPanel = getCurrentViewPanel();
+		centerContentPanel.removeAll();
 		centerContentPanel.add(currentViewPanel, BorderLayout.CENTER);
 		DashboardPanelUtil.refreshTheme(currentViewPanel);
 		centerContentPanel.revalidate();
 		centerContentPanel.repaint();
+		currentViewPanel.revalidate();
+		currentViewPanel.repaint();
 	}
 
 	private JPanel getCurrentViewPanel() {
+		if (CENTRAL_VIEW.equals(selectedView)) {
+			return centralViewPanel;
+		}
 		if (TEAM_VIEW.equals(selectedView)) {
 			return teamViewPanel;
 		}
@@ -95,9 +106,17 @@ public class FinanceDashboard extends JPanel implements ThemeAware, RefreshableD
 		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
 		headerPanel.applyTheme();
 		leagueViewPanel.applyTheme();
+		centralViewPanel.applyTheme();
 		teamViewPanel.applyTheme();
 		refreshData();
 		DashboardPanelUtil.refreshChildrenTheme(this);
+	}
+
+	private class ShowCentralViewAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			switchView(CENTRAL_VIEW);
+		}
 	}
 
 	private class ShowLeagueViewAction implements ActionListener {

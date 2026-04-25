@@ -1,6 +1,7 @@
 package process.service.trade.regularseason;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 import config.CalendarConfiguration;
@@ -12,7 +13,7 @@ import process.service.trade.evaluation.TradeSatisfactionEvaluator;
 
 public class RegularSeasonTradeService extends TradeService {
 
-	private final TreeMap<LocalDate, Trade> seasonTrades = new TreeMap<LocalDate, Trade>();
+	private final TreeMap<LocalDate, ArrayList<Trade>> seasonTrades = new TreeMap<LocalDate, ArrayList<Trade>>();
 
 	public RegularSeasonTradeService(double salaryCap, double luxuryTaxLine) {
 		super(salaryCap, luxuryTaxLine);
@@ -35,7 +36,12 @@ public class RegularSeasonTradeService extends TradeService {
 
 	@Override
 	protected void recordTrade(Team teamA, Team teamB, Player playerAToTrade, Player playerBToTrade, LocalDate date) {
-		seasonTrades.put(date, new Trade(playerAToTrade, teamA, playerBToTrade, teamB, date));
+		ArrayList<Trade> tradesAtDate = seasonTrades.get(date);
+		if (tradesAtDate == null) {
+			tradesAtDate = new ArrayList<Trade>();
+			seasonTrades.put(date, tradesAtDate);
+		}
+		tradesAtDate.add(new Trade(playerAToTrade, teamA, playerBToTrade, teamB, date));
 	}
 
 	@Override
