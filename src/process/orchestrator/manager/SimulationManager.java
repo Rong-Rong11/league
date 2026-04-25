@@ -199,7 +199,7 @@ public class SimulationManager implements GUIInterface {
 		if (!isSeasonInitialized() || startDate == null) {
 			return;
 		}
-		for (LocalDate day : getSeasonCalendar().keySet()) {
+		for (LocalDate day : league.getRegularSeason().getNbaCalendar().getCalendar().keySet()) {
 			if (day.isBefore(startDate)) {
 				continue;
 			}
@@ -333,6 +333,11 @@ public class SimulationManager implements GUIInterface {
 			return null;
 		}
 
+		LocalDate firstPlayoffGameDay = getFirstPlayoffGameDay();
+		if (simulationDate.equals(getRegularSeasonEndDate()) && firstPlayoffGameDay != null) {
+			return firstPlayoffGameDay;
+		}
+
 		GameDay currentGameDay = getGameDay(simulationDate);
 		if (currentGameDay == null || currentGameDay.isEmpty()) {
 			return getNextGameDay(simulationDate);
@@ -382,8 +387,8 @@ public class SimulationManager implements GUIInterface {
 		if (!isSeasonInitialized()) {
 			return null;
 		}
-		LocalDate simulationDate = getCurrentDate();
-		return simulationDate != null ? simulationDate : displayedDate;
+		LocalDate currentDisplayDate = getCurrentCalendarOrSimulationDate();
+		return currentDisplayDate != null ? currentDisplayDate : displayedDate;
 	}
 
 	private LocalDate getCurrentCalendarOrSimulationDate() {
@@ -400,15 +405,7 @@ public class SimulationManager implements GUIInterface {
 		if (!isSeasonInitialized() || startDate == null) {
 			return null;
 		}
-
-		for (LocalDate day = startDate; !day.isAfter(getRegularSeasonEndDate()); day = day.plusDays(1)) {
-			GameDay gameDay = getGameDay(day);
-			if (gameDay != null && !gameDay.isEmpty()) {
-				return day;
-			}
-		}
-
-		return null;
+		return getSeasonCalendar().ceilingKey(startDate);
 	}
 
 	@Override
@@ -416,13 +413,7 @@ public class SimulationManager implements GUIInterface {
 		if (!isSeasonInitialized() || startDate == null) {
 			return null;
 		}
-		for (LocalDate day = startDate; !day.isBefore(getRegularSeasonStartDate()); day = day.minusDays(1)) {
-			GameDay gameDay = getGameDay(day);
-			if (gameDay != null && !gameDay.isEmpty()) {
-				return day;
-			}
-		}
-		return null;
+		return getSeasonCalendar().floorKey(startDate);
 	}
 
 	@Override
@@ -430,16 +421,19 @@ public class SimulationManager implements GUIInterface {
 		if (!isSeasonInitialized()) {
 			return getRegularSeasonStartDate();
 		}
-		LocalDate currentDate = getCurrentDate();
+		LocalDate currentDate = getCurrentCalendarOrSimulationDate();
+		if (currentDate == null) {
+			return getNextGameDay(getRegularSeasonStartDate());
+		}
+		GameDay currentGameDay = getGameDay(currentDate);
+		if (currentGameDay != null && !currentGameDay.isEmpty()) {
+			return currentDate;
+		}
 		LocalDate previousGameDay = getPreviousGameDay(currentDate.minusDays(1));
 		if (previousGameDay != null) {
 			return previousGameDay;
 		}
-		LocalDate currentGameDay = getPreviousGameDay(currentDate);
-		if (currentGameDay != null) {
-			return currentGameDay;
-		}
-		return getNextGameDay(getRegularSeasonStartDate());
+		return getNextGameDay(currentDate);
 	}
 
 	@Override
@@ -497,7 +491,7 @@ public class SimulationManager implements GUIInterface {
 		}
 		LocalDate currentWeekStart = getWeekStartDate(displayedDate);
 		LocalDate nextWeekStart = currentWeekStart.plusDays(7);
-		LocalDate endSeasonWeekStart = getWeekStartDate(getRegularSeasonEndDate());
+		LocalDate endSeasonWeekStart = getWeekStartDate(getDisplayedSeasonEndDate());
 		if (nextWeekStart.isAfter(endSeasonWeekStart)) {
 			return displayedDate;
 		}
@@ -523,7 +517,14 @@ public class SimulationManager implements GUIInterface {
 		if (!isSeasonInitialized() || date == null) {
 			return null;
 		}
-		return league.getRegularSeason().getNbaCalendar().getCalendar().get(date);
+		GameDay regularSeasonGameDay = league.getRegularSeason().getNbaCalendar().getCalendar().get(date);
+		if (regularSeasonGameDay != null) {
+			return regularSeasonGameDay;
+		}
+		if (league.getPlayoff() == null || league.getPlayoff().getNbaCalendar() == null) {
+			return null;
+		}
+		return league.getPlayoff().getNbaCalendar().getCalendar().get(date);
 	}
 
 	@Override
@@ -531,7 +532,7 @@ public class SimulationManager implements GUIInterface {
 		if (!isSeasonInitialized()) {
 			return new TreeMap<LocalDate, GameDay>();
 		}
-		return new TreeMap<LocalDate, GameDay>(league.getRegularSeason().getNbaCalendar().getCalendar());
+		return getCombinedSeasonCalendar();
 	}
 
 	@Override
@@ -540,6 +541,39 @@ public class SimulationManager implements GUIInterface {
 				&& league.getRegularSeason() != null
 				&& league.getRegularSeason().getNbaCalendar() != null
 				&& !league.getRegularSeason().getNbaCalendar().getCalendar().isEmpty();
+	}
+
+	private TreeMap<LocalDate, GameDay> getCombinedSeasonCalendar() {
+		TreeMap<LocalDate, GameDay> combinedCalendar = new TreeMap<LocalDate, GameDay>();
+		if (league == null) {
+			return combinedCalendar;
+		}
+		if (league.getRegularSeason() != null && league.getRegularSeason().getNbaCalendar() != null) {
+			combinedCalendar.putAll(league.getRegularSeason().getNbaCalendar().getCalendar());
+		}
+		if (league.getPlayoff() != null && league.getPlayoff().getNbaCalendar() != null) {
+			combinedCalendar.putAll(league.getPlayoff().getNbaCalendar().getCalendar());
+		}
+		return combinedCalendar;
+	}
+
+	private LocalDate getDisplayedSeasonEndDate() {
+		TreeMap<LocalDate, GameDay> seasonCalendar = getCombinedSeasonCalendar();
+		if (seasonCalendar.isEmpty()) {
+			return getRegularSeasonEndDate();
+		}
+		return seasonCalendar.lastKey();
+	}
+
+	private LocalDate getFirstPlayoffGameDay() {
+		if (league == null || league.getPlayoff() == null || league.getPlayoff().getNbaCalendar() == null) {
+			return null;
+		}
+		TreeMap<LocalDate, GameDay> playoffCalendar = league.getPlayoff().getNbaCalendar().getCalendar();
+		if (playoffCalendar.isEmpty()) {
+			return null;
+		}
+		return playoffCalendar.firstKey();
 	}
 
 	@Override

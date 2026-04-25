@@ -202,8 +202,15 @@ public class WeekScheduleGridPanel extends RoundedPanel implements ThemeAware {
 	}
 
 	private boolean isOutsideSeason(LocalDate day) {
+		if (!guiInterface.isSeasonInitialized()) {
+			return true;
+		}
+		java.util.TreeMap<LocalDate, GameDay> seasonCalendar = guiInterface.getSeasonCalendar();
+		if (seasonCalendar.isEmpty()) {
+			return true;
+		}
 		return day.isBefore(guiInterface.getRegularSeasonStartDate())
-				|| day.isAfter(guiInterface.getRegularSeasonEndDate());
+				|| day.isAfter(seasonCalendar.lastKey());
 	}
 
 	private Color getGridBorderColor() {

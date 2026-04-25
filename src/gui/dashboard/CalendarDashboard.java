@@ -258,7 +258,11 @@ public class CalendarDashboard extends JPanel implements ThemeAware, Refreshable
 		public void actionPerformed(ActionEvent e) {
 			weekViewPanel.advanceSeason();
 			rosterDashboard.refreshSelectedTeam();
-			currentCalendarDate = weekViewPanel.getSimulationDate();
+			if (weekViewPanel.getCurrentDate() != null) {
+				currentCalendarDate = weekViewPanel.getCurrentDate();
+			} else {
+				currentCalendarDate = weekViewPanel.getSimulationDate();
+			}
 			updateDisplayedMonth(currentCalendarDate);
 			updateDashboardState();
 			mapDashboard.refreshSelectedTeam();
@@ -327,10 +331,10 @@ public class CalendarDashboard extends JPanel implements ThemeAware, Refreshable
 
 	private void checkDisplayedMonth() {
 		if (isBeforeSeasonStartMonth(displayedMonth)) {
-			displayedMonth = buildDisplayedMonth(CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE);
+			displayedMonth = buildDisplayedMonth(getSeasonStartDate());
 		}
 		if (isAfterSeasonEndMonth(displayedMonth)) {
-			displayedMonth = buildDisplayedMonth(CalendarConfiguration.REGULAR_SEASON_END_DATE);
+			displayedMonth = buildDisplayedMonth(getSeasonEndDate());
 		}
 	}
 
@@ -346,33 +350,52 @@ public class CalendarDashboard extends JPanel implements ThemeAware, Refreshable
 	}
 
 	private boolean isSeasonStartMonth(YearMonth month) {
-		return month.getYear() == CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE.getYear()
-				&& month.getMonthValue() == CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE.getMonthValue();
+		LocalDate seasonStartDate = getSeasonStartDate();
+		return month.getYear() == seasonStartDate.getYear()
+				&& month.getMonthValue() == seasonStartDate.getMonthValue();
 	}
 
 	private boolean isSeasonEndMonth(YearMonth month) {
-		return month.getYear() == CalendarConfiguration.REGULAR_SEASON_END_DATE.getYear()
-				&& month.getMonthValue() == CalendarConfiguration.REGULAR_SEASON_END_DATE.getMonthValue();
+		LocalDate seasonEndDate = getSeasonEndDate();
+		return month.getYear() == seasonEndDate.getYear()
+				&& month.getMonthValue() == seasonEndDate.getMonthValue();
 	}
 
 	private boolean isBeforeSeasonStartMonth(YearMonth month) {
-		if (month.getYear() < CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE.getYear()) {
+		LocalDate seasonStartDate = getSeasonStartDate();
+		if (month.getYear() < seasonStartDate.getYear()) {
 			return true;
 		}
-		if (month.getYear() > CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE.getYear()) {
+		if (month.getYear() > seasonStartDate.getYear()) {
 			return false;
 		}
-		return month.getMonthValue() < CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE.getMonthValue();
+		return month.getMonthValue() < seasonStartDate.getMonthValue();
 	}
 
 	private boolean isAfterSeasonEndMonth(YearMonth month) {
-		if (month.getYear() > CalendarConfiguration.REGULAR_SEASON_END_DATE.getYear()) {
+		LocalDate seasonEndDate = getSeasonEndDate();
+		if (month.getYear() > seasonEndDate.getYear()) {
 			return true;
 		}
-		if (month.getYear() < CalendarConfiguration.REGULAR_SEASON_END_DATE.getYear()) {
+		if (month.getYear() < seasonEndDate.getYear()) {
 			return false;
 		}
-		return month.getMonthValue() > CalendarConfiguration.REGULAR_SEASON_END_DATE.getMonthValue();
+		return month.getMonthValue() > seasonEndDate.getMonthValue();
+	}
+
+	private LocalDate getSeasonStartDate() {
+		return CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE;
+	}
+
+	private LocalDate getSeasonEndDate() {
+		if (!guiInterface.isSeasonInitialized()) {
+			return CalendarConfiguration.REGULAR_SEASON_END_DATE;
+		}
+		TreeMap<LocalDate, GameDay> seasonCalendar = guiInterface.getSeasonCalendar();
+		if (seasonCalendar.isEmpty()) {
+			return CalendarConfiguration.REGULAR_SEASON_END_DATE;
+		}
+		return seasonCalendar.lastKey();
 	}
 
 	@Override

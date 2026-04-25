@@ -52,7 +52,7 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		selectedMode = GLOBAL_MODE;
 		selectedSeason = REGULAR_SEASON;
 		globalPageIndex = 0;
-		playoffsViewPanel = new RankingPlayoffsViewPanel();
+		playoffsViewPanel = new RankingPlayoffsViewPanel(guiInterface);
 		setLayout(new BorderLayout(0, 12));
 		setOpaque(false);
 
@@ -190,6 +190,8 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		tableContentPanel.removeAll();
 
 		if (PLAYOFFS.equals(selectedSeason)) {
+			playoffsViewPanel.setSelectedMode(selectedMode);
+			playoffsViewPanel.refreshPlayoffs();
 			tableContentPanel.add(playoffsViewPanel, BorderLayout.CENTER);
 			revalidate();
 			repaint();
