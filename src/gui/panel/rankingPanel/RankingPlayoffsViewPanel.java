@@ -54,8 +54,17 @@ public class RankingPlayoffsViewPanel extends JPanel implements ThemeAware {
 		removeAll();
 
 		Playoff playoff = getPlayoff();
+		if (guiInterface == null || !guiInterface.hasPlayoffsStarted()) {
+			add(new PlaceholderPanel("Les playoffs ne sont pas encore disponibles. "
+					+ "Terminez ou simulez la saison reguliere pour generer le tableau."),
+					BorderLayout.CENTER);
+			revalidate();
+			repaint();
+			return;
+		}
 		if (!hasPlayoffData(playoff)) {
-			add(new PlaceholderPanel("Les playoffs seront affiches ici en fin de saison reguliere."),
+			add(new PlaceholderPanel("Les playoffs ne sont pas encore disponibles. "
+					+ "Terminez ou simulez la saison reguliere pour generer le tableau."),
 					BorderLayout.CENTER);
 			revalidate();
 			repaint();
@@ -80,8 +89,7 @@ public class RankingPlayoffsViewPanel extends JPanel implements ThemeAware {
 	}
 
 	private Playoff getPlayoff() {
-		League league = guiInterface == null ? null : guiInterface.getLeague();
-		return league == null ? null : league.getPlayoff();
+		return guiInterface == null ? null : guiInterface.getPlayoff();
 	}
 
 	private boolean hasPlayoffData(Playoff playoff) {
@@ -117,6 +125,13 @@ public class RankingPlayoffsViewPanel extends JPanel implements ThemeAware {
 		textPanel.add(titleLabel);
 		textPanel.add(Box.createVerticalStrut(4));
 		textPanel.add(subtitleLabel);
+		if (playoff.getChampion() != null) {
+			JLabel championLabel = new JLabel("Champion NBA : "
+					+ TeamDisplayUtility.getShortName(playoff.getChampion()));
+			LabelStyleUtil.styleValueLabel(championLabel, 13);
+			textPanel.add(Box.createVerticalStrut(6));
+			textPanel.add(championLabel);
+		}
 
 		JPanel badgesPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
 		badgesPanel.setOpaque(false);

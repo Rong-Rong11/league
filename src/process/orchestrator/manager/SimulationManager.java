@@ -3,6 +3,8 @@ package process.orchestrator.manager;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 import config.CalendarConfiguration;
@@ -59,6 +61,8 @@ public class SimulationManager implements GUIInterface {
 	private TeamPopularityUpdater teamPopularityUpdater = new TeamPopularityUpdater();
 	private PlayoffBuilder playoffBuilder;
 	private LiveMatchService liveMatchService = new LiveMatchService();
+	private boolean userConfirmedPlayoffs = false;
+	private String lastPlayoffWinnerName = "-";
 
 	public SimulationManager() {
 		league = leagueBuilder.build();
@@ -83,6 +87,254 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public League getLeague() {
 		return league;
+	}
+
+	@Override
+	public Playoff getPlayoff() {
+		return league == null ? null : league.getPlayoff();
+	}
+
+	@Override
+	public PlayoffRound getCurrentPlayoffRound() {
+		Playoff playoff = getPlayoff();
+		return playoff == null ? null : playoff.getCurrentRound();
+	}
+
+	@Override
+	public Team getPlayoffChampion() {
+		Playoff playoff = getPlayoff();
+		return playoff == null ? null : playoff.getChampion();
+	}
+
+	@Override
+	public boolean hasPlayoffsStarted() {
+		return getCurrentPlayoffRound() != null;
+	}
+
+	@Override
+	public boolean isRegularSeasonFinished() {
+		return hasPlayoffsStarted() || clock.getCurrentDate().isAfter(getRegularSeasonEndDate());
+	}
+
+	@Override
+	public boolean hasUserConfirmedPlayoffs() {
+		return userConfirmedPlayoffs;
+	}
+
+	@Override
+	public void setUserConfirmedPlayoffs(boolean confirmed) {
+		userConfirmedPlayoffs = confirmed;
+	}
+
+	@Override
+	public void initializePlayoffs() {
+		if (!hasPlayoffsStarted()) {
+			endRegularSeason();
+		}
+	}
+
+	@Override
+	public Map<String, String> getPlayoffPositionMap() {
+		HashMap<String, String> positions = new HashMap<String, String>();
+		Playoff playoff = getPlayoff();
+		if (playoff == null) {
+			return positions;
+		}
+
+		fillFirstRoundPositions(positions, playoff.getEastFirstRound(), 1, 1);
+		fillFirstRoundPositions(positions, playoff.getWestFirstRound(), 9, 5);
+		fillSemifinalPositions(positions, playoff.getEastConferenceSemis(), 1, 1);
+		fillSemifinalPositions(positions, playoff.getWestConferenceSemis(), 5, 3);
+		fillConferenceFinalPositions(positions, playoff.getEastConferenceFinals(), 1, 1);
+		fillConferenceFinalPositions(positions, playoff.getWestConferenceFinals(), 3, 2);
+		fillNbaFinalPositions(positions, playoff.getNbaFinals());
+		if (playoff.getChampion() != null) {
+			positions.put("e1", getTeamShortCode(playoff.getChampion()));
+		}
+		return positions;
+	}
+
+	private void fillFirstRoundPositions(HashMap<String, String> positions, ArrayList<PlayoffSeries> seriesList,
+			int startAIndex, int startBIndex) {
+		int[] visualOrder = { 0, 3, 1, 2 };
+		for (int visualIndex = 0; visualIndex < visualOrder.length; visualIndex++) {
+			int seriesIndex = visualOrder[visualIndex];
+			if (seriesIndex >= seriesList.size()) {
+				continue;
+			}
+			PlayoffSeries series = seriesList.get(seriesIndex);
+			int aIndex = startAIndex + visualIndex * 2;
+			positions.put("a" + aIndex, getTeamShortCode(series.getHigherTeam()));
+			positions.put("a" + (aIndex + 1), getTeamShortCode(series.getLowerTeam()));
+			Team winner = getFinishedSeriesWinner(series);
+			if (winner != null) {
+				positions.put("b" + (startBIndex + visualIndex), getTeamShortCode(winner));
+			}
+		}
+	}
+
+	private void fillSemifinalPositions(HashMap<String, String> positions, ArrayList<PlayoffSeries> seriesList,
+			int startBIndex, int startCIndex) {
+		for (int i = 0; i < seriesList.size(); i++) {
+			PlayoffSeries series = seriesList.get(i);
+			int bIndex = startBIndex + i * 2;
+			putTeamPosition(positions, "b" + bIndex, series.getHigherTeam());
+			putTeamPosition(positions, "b" + (bIndex + 1), series.getLowerTeam());
+			putWinnerPosition(positions, "c" + (startCIndex + i), series);
+		}
+	}
+
+	private void fillConferenceFinalPositions(HashMap<String, String> positions, ArrayList<PlayoffSeries> seriesList,
+			int startCIndex, int dIndex) {
+		if (seriesList.isEmpty()) {
+			return;
+		}
+		PlayoffSeries series = seriesList.get(0);
+		putTeamPosition(positions, "c" + startCIndex, series.getHigherTeam());
+		putTeamPosition(positions, "c" + (startCIndex + 1), series.getLowerTeam());
+		putWinnerPosition(positions, "d" + dIndex, series);
+	}
+
+	private void fillNbaFinalPositions(HashMap<String, String> positions, ArrayList<PlayoffSeries> seriesList) {
+		if (seriesList.isEmpty()) {
+			return;
+		}
+		PlayoffSeries series = seriesList.get(0);
+		putTeamPosition(positions, "d1", series.getHigherTeam());
+		putTeamPosition(positions, "d2", series.getLowerTeam());
+		putWinnerPosition(positions, "e1", series);
+	}
+
+	private void putTeamPosition(HashMap<String, String> positions, String position, Team team) {
+		if (team != null) {
+			positions.put(position, getTeamShortCode(team));
+		}
+	}
+
+	private void putWinnerPosition(HashMap<String, String> positions, String position, PlayoffSeries series) {
+		Team winner = getFinishedSeriesWinner(series);
+		if (winner != null) {
+			positions.put(position, getTeamShortCode(winner));
+		}
+	}
+
+	private Team getFinishedSeriesWinner(PlayoffSeries series) {
+		if (series == null || !series.isFinished()) {
+			return null;
+		}
+		if (series.getHigherTeamWins() > series.getLowerTeamWins()) {
+			return series.getHigherTeam();
+		}
+		return series.getLowerTeam();
+	}
+
+	private String getTeamShortCode(Team team) {
+		if (team == null) {
+			return "";
+		}
+		if (team.getAbbreviation() != null && !team.getAbbreviation().equals("")) {
+			return team.getAbbreviation();
+		}
+		if (team.getShortName() != null && !team.getShortName().equals("")) {
+			return team.getShortName();
+		}
+		return team.getName();
+	}
+
+	@Override
+	public void simulateNextPlayoffMatch() {
+		GameDay gameDay = getNextUnsimulatedPlayoffGameDay();
+		if (gameDay == null) {
+			return;
+		}
+		simulateAndDisplayDay(gameDay.getDate());
+		updateLastPlayoffWinner(gameDay);
+	}
+
+	@Override
+	public void simulateNextPlayoffRound() {
+		PlayoffRound startRound = getCurrentPlayoffRound();
+		if (startRound == null || startRound == PlayoffRound.FINISHED) {
+			return;
+		}
+		while (getCurrentPlayoffRound() == startRound && getNextUnsimulatedPlayoffGameDay() != null) {
+			simulateNextPlayoffMatch();
+		}
+	}
+
+	@Override
+	public void simulateAllPlayoffs() {
+		int safety = 0;
+		while (getCurrentPlayoffRound() != null
+				&& getCurrentPlayoffRound() != PlayoffRound.FINISHED
+				&& getNextUnsimulatedPlayoffGameDay() != null
+				&& safety < 200) {
+			simulateNextPlayoffMatch();
+			safety++;
+		}
+	}
+
+	@Override
+	public int getRemainingPlayoffGames() {
+		if (league == null || league.getPlayoff() == null || league.getPlayoff().getNbaCalendar() == null) {
+			return 0;
+		}
+		int count = 0;
+		for (GameDay gameDay : league.getPlayoff().getNbaCalendar().getCalendar().values()) {
+			if (!gameDay.isSimulated()) {
+				count += gameDay.getGames().size();
+			}
+		}
+		return count;
+	}
+
+	@Override
+	public String getLastPlayoffWinnerName() {
+		return lastPlayoffWinnerName;
+	}
+
+	private GameDay getNextUnsimulatedPlayoffGameDay() {
+		if (league == null || league.getPlayoff() == null || league.getPlayoff().getNbaCalendar() == null) {
+			return null;
+		}
+		PlayoffRound currentRound = league.getPlayoff().getCurrentRound();
+		for (GameDay gameDay : league.getPlayoff().getNbaCalendar().getCalendar().values()) {
+			if (!gameDay.isSimulated() && hasCurrentRoundGame(gameDay, currentRound)) {
+				return gameDay;
+			}
+		}
+		return null;
+	}
+
+	private boolean hasCurrentRoundGame(GameDay gameDay, PlayoffRound currentRound) {
+		if (gameDay == null || gameDay.isEmpty() || currentRound == null) {
+			return false;
+		}
+		for (Game game : gameDay.getGames()) {
+			if (currentRound.equals(game.getPlayoffRound())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void updateLastPlayoffWinner(GameDay gameDay) {
+		if (gameDay == null) {
+			return;
+		}
+		for (Game game : gameDay.getGames()) {
+			Team winner = game.getWinner();
+			if (winner == null) {
+				if (game.getHomeFinalScore() > game.getAwayFinalScore()) {
+					winner = game.getGameContext().getHomeTeam();
+				} else if (game.getAwayFinalScore() > game.getHomeFinalScore()) {
+					winner = game.getGameContext().getAwayTeam();
+				}
+			}
+			if (winner != null) {
+				lastPlayoffWinnerName = getTeamShortCode(winner);
+			}
+		}
 	}
 
 	@Override
@@ -131,6 +383,8 @@ public class SimulationManager implements GUIInterface {
 	// methode a utiliser pour lancer la saison
 	@Override
 	public void startSeason() {
+		userConfirmedPlayoffs = false;
+		lastPlayoffWinnerName = "-";
 		financeManager.initializeFinance();
 		simulatePreSeasonTrade();
 		teamPopularityUpdater.updateBeforeSeason();
@@ -260,7 +514,10 @@ public class SimulationManager implements GUIInterface {
 
 	@Override
 	public void endRegularSeason() {
-		league.setPlayoff(playoffBuilder.buldFirstRoundPlayoffs());
+		if (hasPlayoffsStarted()) {
+			return;
+		}
+		league.setPlayoff(playoffBuilder.buildFirstRoundPlayoffs());
 		applyPlayoffQualificationBonuses(clock.getCurrentMonth());
 		applyPlayoffQualificationPopularityBonuses();
 		applyMissedPlayoffPenalties();

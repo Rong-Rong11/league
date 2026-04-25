@@ -7,6 +7,7 @@ import data.league.Conference;
 import data.league.Division;
 import data.league.League;
 import data.league.Playoff;
+import data.league.PlayoffRound;
 import data.sport.setup.Game;
 import data.sport.setup.GameContext;
 import data.sport.setup.PlayoffSeries;
@@ -109,10 +110,10 @@ public class GameGenerator {
 		ArrayList<PlayoffSeries> eastFirstRound = playoff.getEastFirstRound();
 		ArrayList<PlayoffSeries> westFirstRound = playoff.getWestFirstRound();
 		for (PlayoffSeries playoffSeries : eastFirstRound) {
-			createGameForSeries(playoffSeries);
+			createGameForSeries(playoffSeries, PlayoffRound.FIRST_ROUND);
 		}
 		for (PlayoffSeries playoffSeries : westFirstRound) {
-			createGameForSeries(playoffSeries);
+			createGameForSeries(playoffSeries, PlayoffRound.FIRST_ROUND);
 		}
 	}
 
@@ -120,10 +121,10 @@ public class GameGenerator {
 		ArrayList<PlayoffSeries> eastSemis = playoff.getEastConferenceSemis();
 		ArrayList<PlayoffSeries> westSemis = playoff.getWestConferenceSemis();
 		for (PlayoffSeries playoffSeries : eastSemis) {
-			createGameForSeries(playoffSeries);
+			createGameForSeries(playoffSeries, PlayoffRound.CONFERENCE_SEMIFINALS);
 		}
 		for (PlayoffSeries playoffSeries : westSemis) {
-			createGameForSeries(playoffSeries);
+			createGameForSeries(playoffSeries, PlayoffRound.CONFERENCE_SEMIFINALS);
 		}
 	}
 
@@ -131,21 +132,21 @@ public class GameGenerator {
 		ArrayList<PlayoffSeries> eastConferenceFinals = playoff.getEastConferenceFinals();
 		ArrayList<PlayoffSeries> westConferenceFinals = playoff.getWestConferenceFinals();
 		for (PlayoffSeries playoffSeries : eastConferenceFinals) {
-			createGameForSeries(playoffSeries);
+			createGameForSeries(playoffSeries, PlayoffRound.CONFERENCE_FINALS);
 		}
 		for (PlayoffSeries playoffSeries : westConferenceFinals) {
-			createGameForSeries(playoffSeries);
+			createGameForSeries(playoffSeries, PlayoffRound.CONFERENCE_FINALS);
 		}
 	}
 
 	public static void generateNbaFinalsPlayoffGames(Playoff playoff) {
 		ArrayList<PlayoffSeries> nbaFinals = playoff.getNbaFinals();
 		for (PlayoffSeries playoffSeries : nbaFinals) {
-			createGameForSeries(playoffSeries);
+			createGameForSeries(playoffSeries, PlayoffRound.NBA_FINALS);
 		}
 	}
 
-	private static void createGameForSeries(PlayoffSeries playoffSeries) {
+	private static void createGameForSeries(PlayoffSeries playoffSeries, PlayoffRound playoffRound) {
 		for (int i = 1; i <= 7; i++) {
 			Team higherTeam = playoffSeries.getHigherTeam();
 			Team lowerTeam = playoffSeries.getLowerTeam();
@@ -155,6 +156,7 @@ public class GameGenerator {
 			} else {
 				game = new Game(new GameContext(lowerTeam, higherTeam, GameConfiguration.GAME_INTRA_CONFERENCE));
 			}
+			game.setPlayoffRound(playoffRound);
 			addGameToTeam(game, lowerTeam);
 			addGameToTeam(game, higherTeam);
 			playoffSeries.addExpectedGame(game, i);

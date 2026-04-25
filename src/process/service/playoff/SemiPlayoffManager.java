@@ -37,6 +37,6 @@ public class SemiPlayoffManager extends PlayoffManager {
 	  league.getPlayoff().setCurrentRound(PlayoffRound.CONFERENCE_FINALS);
 	  ConferenceFinalCalendarBuilder conferenceFinalCalendarBuilder = new ConferenceFinalCalendarBuilder(league,
 			roundEndDate);
-	  league.getPlayoff().setNbaCalendar(conferenceFinalCalendarBuilder.buildCalendar());
+	  mergePlayoffCalendar(conferenceFinalCalendarBuilder.buildCalendar());
 	}
 }

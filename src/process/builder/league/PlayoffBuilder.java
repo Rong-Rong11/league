@@ -16,7 +16,7 @@ public class PlayoffBuilder {
 	  this.league = league;
 	}
 
-	public Playoff buldFirstRoundPlayoffs() {
+	public Playoff buildFirstRoundPlayoffs() {
 	  Ranking ranking = league.getRegularSeason().getRanking();
 	  Playoff playoff = league.getPlayoff();
 
@@ -61,7 +61,11 @@ public class PlayoffBuilder {
 	  return playoff;
 	}
 
-	public Playoff buldSecondRoundPlayoffs() {
+	public Playoff buldFirstRoundPlayoffs() {
+	  return buildFirstRoundPlayoffs();
+	}
+
+	public Playoff buildSecondRoundPlayoffs() {
 	  Playoff playoff = league.getPlayoff();
 
 	  ArrayList<PlayoffSeries> eastSemis = new ArrayList<PlayoffSeries>();
@@ -86,6 +90,10 @@ public class PlayoffBuilder {
 	  playoff.setEastConferenceSemis(eastSemis);
 	  playoff.setWestConferenceSemis(westSemis);
 	  return playoff;
+	}
+
+	public Playoff buldSecondRoundPlayoffs() {
+	  return buildSecondRoundPlayoffs();
 	}
 
 	public Playoff buildConferenceFinalsPlayoffs() {
@@ -123,6 +131,9 @@ public class PlayoffBuilder {
 	}
 
 	private Team getSeriesWinner(PlayoffSeries series) {
+	  if (series == null || !series.isFinished()) {
+		 throw new IllegalStateException("Impossible de construire le round suivant avant la fin de la serie.");
+	  }
 	  if (series.getHigherTeamWins() > series.getLowerTeamWins()) {
 		 return series.getHigherTeam();
 	  }

@@ -39,6 +39,7 @@ public class CalendarDashboard extends JPanel implements ThemeAware, Refreshable
 	private LocalDate currentCalendarDate;
 	private MatchDashboard matchDashboard;
 	private Runnable showMatchDashboardAction;
+	private Runnable regularSeasonEndAction;
 	private RosterDashboard rosterDashboard;
 	private MapDashboard mapDashboard;
 
@@ -126,6 +127,10 @@ public class CalendarDashboard extends JPanel implements ThemeAware, Refreshable
 		weekViewPanel.syncToSimulationDate(simulationDate);
 		updateDisplayedMonth(currentCalendarDate);
 		updateDashboardState();
+	}
+
+	public void setRegularSeasonEndAction(Runnable regularSeasonEndAction) {
+		this.regularSeasonEndAction = regularSeasonEndAction;
 	}
 
 	private JPanel buildBody() {
@@ -236,6 +241,7 @@ public class CalendarDashboard extends JPanel implements ThemeAware, Refreshable
 			updateDisplayedMonth(currentCalendarDate);
 			updateDashboardState();
 			mapDashboard.refreshSelectedTeam();
+			notifyRegularSeasonEndIfNecessary();
 		}
 	}
 
@@ -250,6 +256,7 @@ public class CalendarDashboard extends JPanel implements ThemeAware, Refreshable
 			updateDisplayedMonth(currentCalendarDate);
 			updateDashboardState();
 			mapDashboard.refreshSelectedTeam();
+			notifyRegularSeasonEndIfNecessary();
 		}
 	}
 
@@ -266,6 +273,15 @@ public class CalendarDashboard extends JPanel implements ThemeAware, Refreshable
 			updateDisplayedMonth(currentCalendarDate);
 			updateDashboardState();
 			mapDashboard.refreshSelectedTeam();
+			notifyRegularSeasonEndIfNecessary();
+		}
+	}
+
+	private void notifyRegularSeasonEndIfNecessary() {
+		if (regularSeasonEndAction != null
+				&& guiInterface.isRegularSeasonFinished()
+				&& !guiInterface.hasUserConfirmedPlayoffs()) {
+			regularSeasonEndAction.run();
 		}
 	}
 

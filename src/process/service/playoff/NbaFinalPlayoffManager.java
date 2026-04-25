@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import data.league.League;
+import data.league.PlayoffRound;
 import data.sport.setup.PlayoffSeries;
+import data.team.Team;
 import process.builder.calendar.NbaFinalCalendarBuilder;
 import process.builder.league.PlayoffBuilder;
 import process.service.finance.FinanceManager;
@@ -29,5 +31,14 @@ public class NbaFinalPlayoffManager extends PlayoffManager {
 
 	@Override
 	public void advanceToNextRound(LocalDate roundEndDate) {
+	  if (getManagedSeries().isEmpty()) {
+		 return;
+	  }
+	  Team champion = getSeriesWinner(getManagedSeries().get(0));
+	  if (champion == null) {
+		 return;
+	  }
+	  getLeague().getPlayoff().setChampion(champion);
+	  getLeague().getPlayoff().setCurrentRound(PlayoffRound.FINISHED);
 	}
 }

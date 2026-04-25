@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import data.calendar.GameDay;
+import data.calendar.NBACalendar;
 import data.league.League;
 import data.sport.setup.Game;
 import data.sport.setup.PlayoffSeries;
@@ -116,12 +117,21 @@ public abstract class PlayoffManager {
 
 	private Team getWinner(Game game) {
 	  if (game.getHomeFinalScore() == game.getAwayFinalScore()) {
-		 return null;
-	  }
-	  if (game.getHomeFinalScore() > game.getAwayFinalScore()) {
+		 game.setHomeFinalScore(game.getHomeFinalScore() + 1);
+		 game.setWinner(game.getGameContext().getHomeTeam());
+		 game.setLoser(game.getGameContext().getAwayTeam());
 		 return game.getGameContext().getHomeTeam();
 	  }
-	  return game.getGameContext().getAwayTeam();
+	  if (game.getHomeFinalScore() > game.getAwayFinalScore()) {
+		 Team winner = game.getGameContext().getHomeTeam();
+		 game.setWinner(winner);
+		 game.setLoser(game.getGameContext().getAwayTeam());
+		 return winner;
+	  }
+	  Team winner = game.getGameContext().getAwayTeam();
+	  game.setWinner(winner);
+	  game.setLoser(game.getGameContext().getHomeTeam());
+	  return winner;
 	}
 
 	private boolean containsGame(PlayoffSeries series, Game game) {
@@ -147,5 +157,13 @@ public abstract class PlayoffManager {
 
 	public PlayoffCalendarBuilder getCurrentRoundCalendarBuilder() {
 	  return currentRoundCalendarBuilder;
+	}
+
+	protected void mergePlayoffCalendar(NBACalendar newRoundCalendar) {
+	  if (newRoundCalendar == null || newRoundCalendar.getCalendar() == null) {
+		 return;
+	  }
+	  TreeMap<LocalDate, GameDay> playoffCalendar = league.getPlayoff().getNbaCalendar().getCalendar();
+	  playoffCalendar.putAll(newRoundCalendar.getCalendar());
 	}
 }

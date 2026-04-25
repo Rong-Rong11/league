@@ -48,15 +48,32 @@ public abstract class PlayoffCalendarBuilder extends CalendarBuilder {
 		 return;
 	  }
 	  int nextGameIndex = series.getNumberPlayedGames();
+	  if (nextGameIndex < 4) {
+		 return;
+	  }
 	  Game[] expectedGames = series.getExpectedGames();
 	  if (nextGameIndex >= expectedGames.length) {
 		 return;
 	  }
 	  Game nextGame = expectedGames[nextGameIndex];
+	  if (isGameAlreadyScheduled(playoffCalendar, nextGame)) {
+		 return;
+	  }
 	  LocalDate nextDate = lastGameDate.plusDays(2);
 	  addGameToCalendar(playoffCalendar, nextGame, nextDate);
 	  nextGame.getGameContext().setGameMoment(new Night());
 	  ScheduleNotifier.notifySchedule(nextDate, nextGame);
+	}
+
+	private boolean isGameAlreadyScheduled(TreeMap<LocalDate, GameDay> playoffCalendar, Game game) {
+	  for (GameDay gameDay : playoffCalendar.values()) {
+		 for (Game scheduledGame : gameDay.getGames()) {
+			if (scheduledGame == game) {
+			   return true;
+			}
+		 }
+	  }
+	  return false;
 	}
 
 	protected void addGameToCalendar(TreeMap<LocalDate, GameDay> playoffCalendar, Game game, LocalDate gameDate) {
