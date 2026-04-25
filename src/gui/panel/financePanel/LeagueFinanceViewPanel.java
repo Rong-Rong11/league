@@ -177,14 +177,15 @@ public class LeagueFinanceViewPanel extends JPanel implements ThemeAware {
 		int selectedMonth = FinanceDataUtil.selectedMonth(monthSelector);
 		double selectedRevenue = FinanceDataUtil.totalIncome(leagueBudget.getIncomesForMonth(selectedMonth));
 		double selectedExpense = FinanceDataUtil.totalExpense(leagueBudget.getExpensesForMonth(selectedMonth));
+		double selectedNet = FinanceDataUtil.leagueMonthNet(guiInterface, selectedMonth);
 
 		remainingBudgetValueLabel.setText(FinanceDataUtil.formatMoney(leagueBudget.getRemainingAmount()));
 		leagueValueValueLabel.setText(FinanceDataUtil.formatMoney(league.getLeagueFinance().getLeagueValue()));
 		summaryRevenueValueLabel.setText(FinanceDataUtil.formatMoney(selectedRevenue));
-		summaryNetValueLabel.setText(FinanceDataUtil.formatMoney(selectedRevenue - selectedExpense));
+		summaryNetValueLabel.setText(FinanceDataUtil.formatMoney(selectedNet));
 		snapshotRevenueValueLabel.setText(FinanceDataUtil.formatMoney(selectedRevenue));
 		snapshotExpenseValueLabel.setText(FinanceDataUtil.formatMoney(selectedExpense));
-		snapshotNetValueLabel.setText(FinanceDataUtil.formatMoney(selectedRevenue - selectedExpense));
+		snapshotNetValueLabel.setText(FinanceDataUtil.formatMoney(selectedNet));
 		salaryCapValueLabel.setText(FinanceDataUtil.formatMoney(rules.getSalaryCap()));
 		luxuryTaxValueLabel.setText(FinanceDataUtil.formatMoney(rules.getLuxuryTaxLine()));
 		minimumSalaryValueLabel.setText(FinanceDataUtil.formatMoney(rules.getMinimumTeamSalary()));
@@ -197,10 +198,10 @@ public class LeagueFinanceViewPanel extends JPanel implements ThemeAware {
 		remainingBudgetValueLabel.setForeground(DashboardPanelUtil.NEUTRAL_ACCENT_COLOR);
 		leagueValueValueLabel.setForeground(DashboardPanelUtil.POLICY_BALANCED_COLOR);
 		FinanceDataUtil.setRevenueColor(summaryRevenueValueLabel);
-		FinanceDataUtil.setAmountColor(summaryNetValueLabel, selectedRevenue - selectedExpense);
+		FinanceDataUtil.setAmountColor(summaryNetValueLabel, selectedNet);
 		FinanceDataUtil.setRevenueColor(snapshotRevenueValueLabel);
 		FinanceDataUtil.setExpenseColor(snapshotExpenseValueLabel);
-		FinanceDataUtil.setAmountColor(snapshotNetValueLabel, selectedRevenue - selectedExpense);
+		FinanceDataUtil.setAmountColor(snapshotNetValueLabel, selectedNet);
 		salaryCapValueLabel.setForeground(DashboardPanelUtil.NEUTRAL_ACCENT_COLOR);
 		luxuryTaxValueLabel.setForeground(DashboardPanelUtil.EXPENSE_COLOR);
 		minimumSalaryValueLabel.setForeground(DashboardPanelUtil.POLICY_BALANCED_COLOR);
@@ -309,7 +310,7 @@ public class LeagueFinanceViewPanel extends JPanel implements ThemeAware {
 
 		for (int index = 0; index < Math.min(5, sortedTeams.size()); index++) {
 			Team team = sortedTeams.get(index);
-			double net = FinanceDataUtil.monthNet(FinanceDataUtil.teamBudget(team), month);
+			double net = FinanceDataUtil.teamMonthNet(guiInterface, team, month);
 			topTeamsPanel.add(FinanceViewFactory.valueRow((index + 1) + ". " + team.getName(),
 					FinanceDataUtil.formatMoney(net), DashboardPanelUtil.getValueColorForAmount(net)));
 			if (index < 4) {
@@ -338,8 +339,8 @@ public class LeagueFinanceViewPanel extends JPanel implements ThemeAware {
 
 		@Override
 		public int compare(Team teamA, Team teamB) {
-			double valueA = FinanceDataUtil.monthNet(FinanceDataUtil.teamBudget(teamA), month);
-			double valueB = FinanceDataUtil.monthNet(FinanceDataUtil.teamBudget(teamB), month);
+			double valueA = FinanceDataUtil.teamMonthNet(guiInterface, teamA, month);
+			double valueB = FinanceDataUtil.teamMonthNet(guiInterface, teamB, month);
 			return Double.compare(valueB, valueA);
 		}
 	}

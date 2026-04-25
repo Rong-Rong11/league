@@ -90,7 +90,7 @@ public class FinanceManager {
 				continue;
 			}
 
-			applyPlayoffFixedCostsToTeam(team, month);
+			applyInactivePlayoffMonthlyFinanceToTeam(team, month);
 		}
 		distributeCentralRevenue(month);
 		applyLeagueExpenses(month);
@@ -160,6 +160,15 @@ public class FinanceManager {
 		}
 		logger.trace("Applying playoff fixed costs to " + team.getName() + " month " + month);
 		playoffMonthlyFinanceCalculator.applyMonthlyFixedCosts(team, month);
+	}
+
+	private void applyInactivePlayoffMonthlyFinanceToTeam(Team team, int month) {
+		if (team == null) {
+			logger.warn("Skipping inactive playoff monthly finance because team is null");
+			return;
+		}
+		logger.trace("Applying inactive playoff monthly finance to " + team.getName() + " month " + month);
+		regularSeasonMonthlyFinanceCalculator.applyMonthlyFinance(team, month);
 	}
 
 	private void applyPlayoffMonthlyFinanceToTeam(Team team, int month) {

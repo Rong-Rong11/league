@@ -23,6 +23,9 @@ import data.team.finance.financialpolicy.ThriftyPolicy;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
+import gui.utility.TeamDisplayUtility;
+import gui.utility.TeamStatUtility;
+import log.LoggerUtility;
 import process.builder.calendar.FirstRoundCalendarBuilder;
 import process.builder.calendar.RegularSeasonCalendarBuilder;
 import process.builder.league.LeagueBuilder;
@@ -40,9 +43,6 @@ import process.service.trade.preseason.PreSeasonTradeService;
 import process.service.trade.regularseason.RegularSeasonTradeService;
 import process.utility.CalendarUtility;
 import process.utility.FinanceUtility;
-import gui.utility.TeamDisplayUtility;
-import gui.utility.TeamStatUtility;
-import log.LoggerUtility;
 
 //cerveau de la simulation 
 public class SimulationManager implements GUIInterface {
@@ -99,8 +99,22 @@ public class SimulationManager implements GUIInterface {
 		return clock == null ? 1 : clock.getCurrentMonth();
 	}
 
-	// methddes pour la presaison
-	// pour page de garde
+	@Override
+	public double getLeagueNetForMonth(int month) {
+		if (league == null || league.getLeagueFinance() == null || league.getLeagueFinance().getBudget() == null) {
+			return 0.0;
+		}
+		return league.getLeagueFinance().getBudget().getNetForMonth(month);
+	}
+
+	@Override
+	public double getTeamNetForMonth(Team team, int month) {
+		if (team == null || team.getTeamFinance() == null || team.getTeamFinance().getBudget() == null) {
+			return 0.0;
+		}
+		return team.getTeamFinance().getBudget().getNetForMonth(month);
+	}
+
 	@Override
 	public void randomFinance() {
 		logger.debug("Randomizing financial setup for all teams");
@@ -673,7 +687,8 @@ public class SimulationManager implements GUIInterface {
 
 	@Override
 	public String getTeamFinancialPolicyLabel(Team team) {
-		if (team == null || team.getTeamFinance() == null || team.getTeamFinance().getBehavior().getFinancialProfil() == null) {
+		if (team == null || team.getTeamFinance() == null
+				|| team.getTeamFinance().getBehavior().getFinancialProfil() == null) {
 			return "-";
 		}
 		String className = team.getTeamFinance().getBehavior().getFinancialProfil().getClass().getSimpleName();
@@ -691,7 +706,8 @@ public class SimulationManager implements GUIInterface {
 
 	@Override
 	public String getTeamMarketSizeLabel(Team team) {
-		if (team == null || team.getTeamFinance() == null || team.getTeamFinance().getStructure().getMarketSize() == null) {
+		if (team == null || team.getTeamFinance() == null
+				|| team.getTeamFinance().getStructure().getMarketSize() == null) {
 			return "-";
 		}
 		String className = team.getTeamFinance().getStructure().getMarketSize().getClass().getSimpleName();

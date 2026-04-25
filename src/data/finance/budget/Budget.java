@@ -12,6 +12,7 @@ public class Budget {
 	private double remainingAmount;
 	private HashMap<Integer, HashMap<String, Income>> monthlyIncomes = new HashMap<>();
 	private HashMap<Integer, HashMap<String, Expense>> monthlyExpenses = new HashMap<>();
+	private HashMap<Integer, Double> monthlyNetHistory = new HashMap<>();
 
 	public Budget(double d) {
 		this.initialAmount = d;
@@ -48,5 +49,13 @@ public class Budget {
 
 	public HashMap<Integer, HashMap<String, Expense>> getMonthlyExpenses() {
 		return this.monthlyExpenses;
+	}
+
+	public HashMap<Integer, Double> getMonthlyNetHistory() {
+		return this.monthlyNetHistory;
+	}
+
+	public double getNetForMonth(int month) {
+		return this.monthlyNetHistory.getOrDefault(month, 0.0);
 	}
 }

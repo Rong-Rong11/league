@@ -193,9 +193,10 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		budgetValueLabel.setText(budget == null ? "-" : FinanceDataUtil.formatMoney(budget.getRemainingAmount()));
 		double selectedRevenue = FinanceDataUtil.totalIncome(FinanceDataUtil.teamIncomes(team, month));
 		double selectedExpense = FinanceDataUtil.totalExpense(FinanceDataUtil.teamExpenses(team, month));
+		double selectedNet = FinanceDataUtil.teamMonthNet(guiInterface, team, month);
 		selectedRevenueValueLabel.setText(FinanceDataUtil.formatMoney(selectedRevenue));
 		selectedExpenseValueLabel.setText(FinanceDataUtil.formatMoney(selectedExpense));
-		selectedNetValueLabel.setText(FinanceDataUtil.formatMoney(selectedRevenue - selectedExpense));
+		selectedNetValueLabel.setText(FinanceDataUtil.formatMoney(selectedNet));
 		luxuryTaxValueLabel.setText(FinanceDataUtil.formatMoney(getLuxuryTaxPaid(team)));
 		profileValueLabel.setText(FinanceDataUtil.formatPolicy(getFinancialPolicy(team)));
 		marketValueLabel.setText(FinanceDataUtil.formatMarket(getMarketSize(team)));
@@ -207,7 +208,7 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		budgetValueLabel.setForeground(DashboardPanelUtil.NEUTRAL_ACCENT_COLOR);
 		FinanceDataUtil.setRevenueColor(selectedRevenueValueLabel);
 		FinanceDataUtil.setExpenseColor(selectedExpenseValueLabel);
-		FinanceDataUtil.setAmountColor(selectedNetValueLabel, selectedRevenue - selectedExpense);
+		FinanceDataUtil.setAmountColor(selectedNetValueLabel, selectedNet);
 		luxuryTaxValueLabel.setForeground(DashboardPanelUtil.EXPENSE_COLOR);
 		FinanceDataUtil.setPolicyColor(profileValueLabel, profileValueLabel.getText());
 		FinanceDataUtil.setMarketColor(marketValueLabel, marketValueLabel.getText());
@@ -251,10 +252,10 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		expenseMetricsPanel.add(FinanceViewFactory.valueRow("Total depenses", FinanceDataUtil.formatMoney(total),
 				DashboardPanelUtil.EXPENSE_COLOR));
 		expenseMetricsPanel.add(Box.createVerticalStrut(8));
+		double monthNet = FinanceDataUtil.teamMonthNet(guiInterface, team, month);
 		expenseMetricsPanel.add(FinanceViewFactory.valueRow("Net du mois",
-				FinanceDataUtil.formatMoney(FinanceDataUtil.totalIncome(FinanceDataUtil.teamIncomes(team, month)) - total),
-				DashboardPanelUtil.getValueColorForAmount(
-						FinanceDataUtil.totalIncome(FinanceDataUtil.teamIncomes(team, month)) - total)));
+				FinanceDataUtil.formatMoney(monthNet),
+				DashboardPanelUtil.getValueColorForAmount(monthNet)));
 
 		if (expenses != null && !expenses.isEmpty()) {
 			for (Expense expense : expenses.values()) {
