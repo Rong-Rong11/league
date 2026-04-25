@@ -30,5 +30,7 @@ public interface GUIInterface
 
 	  String getPlayoffGameLabel(Game game);
 
+	  void simulateNextPlayoffRound();
+
 	  int getCurrentFinanceMonth();
 }

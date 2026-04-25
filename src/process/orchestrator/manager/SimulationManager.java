@@ -186,6 +186,45 @@ public class SimulationManager implements GUIInterface {
 		return false;
 	}
 
+	@Override
+	public void simulateNextPlayoffRound() {
+		PlayoffRound startRound = getCurrentPlayoffRound();
+		if (startRound == null || startRound == PlayoffRound.FINISHED) {
+			return;
+		}
+		int safety = 0;
+		while (startRound == getCurrentPlayoffRound() && getNextUnsimulatedPlayoffGameDay(startRound) != null
+				&& safety < 80) {
+			GameDay gameDay = getNextUnsimulatedPlayoffGameDay(startRound);
+			simulateAndDisplayDay(gameDay.getDate());
+			safety++;
+		}
+	}
+
+	private GameDay getNextUnsimulatedPlayoffGameDay(PlayoffRound round) {
+		if (league == null || league.getPlayoff() == null || league.getPlayoff().getNbaCalendar() == null) {
+			return null;
+		}
+		for (GameDay gameDay : league.getPlayoff().getNbaCalendar().getCalendar().values()) {
+			if (!gameDay.isSimulated() && hasPlayoffRoundGame(gameDay, round)) {
+				return gameDay;
+			}
+		}
+		return null;
+	}
+
+	private boolean hasPlayoffRoundGame(GameDay gameDay, PlayoffRound round) {
+		if (gameDay == null || gameDay.isEmpty() || round == null) {
+			return false;
+		}
+		for (Game game : gameDay.getGames()) {
+			if (round.equals(game.getPlayoffRound())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private void fillFirstRoundPositions(HashMap<String, String> positions, ArrayList<PlayoffSeries> seriesList,
 			int startAIndex, int startBIndex) {
 		int[] visualOrder = { 0, 3, 1, 2 };

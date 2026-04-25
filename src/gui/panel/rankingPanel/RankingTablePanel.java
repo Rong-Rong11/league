@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import data.league.PlayoffRound;
 import data.team.Team;
 import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
@@ -34,9 +35,11 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 
 	private GUIInterface guiInterface;
 	private JPanel tableContentPanel;
+	private JPanel modeFilterPanel;
 	private JButton globalButton;
 	private JButton eastButton;
 	private JButton westButton;
+	private JButton simulatePlayoffRoundButton;
 	private JButton regularSeasonButton;
 	private JButton playoffsButton;
 	private JButton previousPageButton;
@@ -66,17 +69,19 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		JPanel topBar = new JPanel(new BorderLayout());
 		topBar.setOpaque(false);
 
-		JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
-		leftPanel.setOpaque(false);
+		modeFilterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+		modeFilterPanel.setOpaque(false);
 		globalButton = createFilterButton("Global", true);
 		eastButton = createFilterButton("Est", false);
 		westButton = createFilterButton("Ouest", false);
+		simulatePlayoffRoundButton = new RoundedButton("Simuler le tour");
 		globalButton.addActionListener(new ModeAction(GLOBAL_MODE));
 		eastButton.addActionListener(new ModeAction(EAST_MODE));
 		westButton.addActionListener(new ModeAction(WEST_MODE));
-		leftPanel.add(globalButton);
-		leftPanel.add(eastButton);
-		leftPanel.add(westButton);
+		simulatePlayoffRoundButton.addActionListener(new SimulatePlayoffRoundAction());
+		modeFilterPanel.add(globalButton);
+		modeFilterPanel.add(eastButton);
+		modeFilterPanel.add(westButton);
 
 		JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
 		rightPanel.setOpaque(false);
@@ -87,7 +92,7 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		rightPanel.add(regularSeasonButton);
 		rightPanel.add(playoffsButton);
 
-		topBar.add(leftPanel, BorderLayout.WEST);
+		topBar.add(modeFilterPanel, BorderLayout.WEST);
 		topBar.add(rightPanel, BorderLayout.EAST);
 		return topBar;
 	}
@@ -301,6 +306,39 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 	private void updateSeasonButtons() {
 		styleFilterButton(regularSeasonButton, REGULAR_SEASON.equals(selectedSeason));
 		styleFilterButton(playoffsButton, PLAYOFFS.equals(selectedSeason));
+		if (modeFilterPanel != null) {
+			modeFilterPanel.removeAll();
+			if (PLAYOFFS.equals(selectedSeason)) {
+				modeFilterPanel.add(simulatePlayoffRoundButton);
+				updatePlayoffRoundButton();
+			} else {
+				modeFilterPanel.add(globalButton);
+				modeFilterPanel.add(eastButton);
+				modeFilterPanel.add(westButton);
+				updateModeButtons();
+			}
+			modeFilterPanel.revalidate();
+			modeFilterPanel.repaint();
+		}
+	}
+
+	private void updatePlayoffRoundButton() {
+		ButtonStyleUtil.styleActionButton(simulatePlayoffRoundButton, 190, 44, 15);
+		PlayoffRound round = guiInterface.getCurrentPlayoffRound();
+		boolean enabled = round != null && round != PlayoffRound.FINISHED;
+		simulatePlayoffRoundButton.setEnabled(enabled);
+		if (round == PlayoffRound.FINISHED) {
+			simulatePlayoffRoundButton.setText("Playoffs termines");
+		} else {
+			simulatePlayoffRoundButton.setText("Simuler le tour");
+		}
+		if (enabled) {
+			simulatePlayoffRoundButton.setBackground(DashboardPanelUtil.getPrimaryActionColor());
+			simulatePlayoffRoundButton.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
+		} else {
+			simulatePlayoffRoundButton.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
+			simulatePlayoffRoundButton.setForeground(DashboardPanelUtil.BUTTON_TEXT_COLOR);
+		}
 	}
 
 	private void styleFilterButton(JButton button, boolean selected) {
@@ -405,6 +443,15 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			setSelectedSeason(season);
+		}
+	}
+
+	private class SimulatePlayoffRoundAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			guiInterface.simulateNextPlayoffRound();
+			refreshRanking();
+			updatePlayoffRoundButton();
 		}
 	}
 

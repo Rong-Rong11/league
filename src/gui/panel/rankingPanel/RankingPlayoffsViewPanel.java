@@ -89,6 +89,7 @@ public class RankingPlayoffsViewPanel extends JPanel implements ThemeAware {
 		DashboardCard card = new DashboardCard();
 		card.setLayout(new BorderLayout());
 		card.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+		bracketPanel.applyTheme();
 		bracketPanel.refreshFromPlayoffsData(guiInterface.getPlayoffPositionMap());
 		card.add(bracketPanel, BorderLayout.CENTER);
 		return card;
@@ -429,6 +430,7 @@ public class RankingPlayoffsViewPanel extends JPanel implements ThemeAware {
 
 	@Override
 	public void applyTheme() {
+		bracketPanel.applyTheme();
 		refreshPlayoffs();
 	}
 }

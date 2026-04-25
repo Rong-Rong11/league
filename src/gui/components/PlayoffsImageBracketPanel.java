@@ -15,18 +15,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class PlayoffsImageBracketPanel extends JPanel {
+import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
+
+public class PlayoffsImageBracketPanel extends JPanel implements ThemeAware {
 	private static final int REFERENCE_IMAGE_WIDTH = 1343;
 	private static final int REFERENCE_IMAGE_HEIGHT = 1171;
 	private static final int LABEL_WIDTH = 120;
 	private static final int LABEL_HEIGHT = 24;
 	private static final int CHAMPION_LABEL_WIDTH = 130;
 	private static final int CHAMPION_LABEL_HEIGHT = 28;
-	private static final String IMAGE_PATH = "src/resources/playoffs_bracket_empty.png";
-	private static final Color MAIN_BLUE = new Color(0x17, 0x31, 0x74);
-	private static final Color SECONDARY_TEXT = new Color(0x6D, 0x75, 0x83);
+	private static final String LIGHT_IMAGE_PATH = "src/resources/playoffs_bracket_empty.png";
+	private static final String DARK_IMAGE_PATH = "src/resources/playoffs_bracket_empty_dark.png";
 
 	private Image bracketImage;
+	private String currentImagePath;
 	private int imageWidth = REFERENCE_IMAGE_WIDTH;
 	private int imageHeight = REFERENCE_IMAGE_HEIGHT;
 	private int drawWidth = REFERENCE_IMAGE_WIDTH;
@@ -38,19 +41,35 @@ public class PlayoffsImageBracketPanel extends JPanel {
 
 	public PlayoffsImageBracketPanel() {
 		setLayout(null);
-		setBackground(Color.WHITE);
+		setBackground(getImageBackgroundColor());
 		setPreferredSize(new Dimension(980, 820));
 		loadImage();
 		createLabels();
 	}
 
 	private void loadImage() {
-		ImageIcon icon = new ImageIcon(IMAGE_PATH);
+		String imagePath = getImagePath();
+		if (imagePath.equals(currentImagePath) && bracketImage != null) {
+			return;
+		}
+		ImageIcon icon = new ImageIcon(imagePath);
+		if (icon.getIconWidth() <= 0) {
+			imagePath = LIGHT_IMAGE_PATH;
+			icon = new ImageIcon(imagePath);
+		}
 		if (icon.getIconWidth() > 0) {
 			bracketImage = icon.getImage();
 			imageWidth = icon.getIconWidth();
 			imageHeight = icon.getIconHeight();
+			currentImagePath = imagePath;
 		}
+	}
+
+	private String getImagePath() {
+		if (DashboardPanelUtil.isDarkMode()) {
+			return DARK_IMAGE_PATH;
+		}
+		return LIGHT_IMAGE_PATH;
 	}
 
 	private void createLabels() {
@@ -93,7 +112,7 @@ public class PlayoffsImageBracketPanel extends JPanel {
 		label.setOpaque(false);
 		label.setFont(new Font(Font.SANS_SERIF, "e1".equals(position) ? Font.BOLD : Font.PLAIN,
 				"e1".equals(position) ? 16 : 14));
-		label.setForeground(MAIN_BLUE);
+		label.setForeground(getFilledLabelColor());
 		return label;
 	}
 
@@ -103,7 +122,7 @@ public class PlayoffsImageBracketPanel extends JPanel {
 			return;
 		}
 		label.setText(shortName == null ? "" : shortName);
-		label.setForeground(shortName == null || shortName.equals("") ? SECONDARY_TEXT : MAIN_BLUE);
+		label.setForeground(shortName == null || shortName.equals("") ? getEmptyLabelColor() : getFilledLabelColor());
 	}
 
 	public void clearPosition(String position) {
@@ -111,6 +130,7 @@ public class PlayoffsImageBracketPanel extends JPanel {
 	}
 
 	public void refreshFromPlayoffsData(Map<String, String> positions) {
+		loadImage();
 		for (String key : labels.keySet()) {
 			clearPosition(key);
 		}
@@ -124,6 +144,38 @@ public class PlayoffsImageBracketPanel extends JPanel {
 		repaint();
 	}
 
+	@Override
+	public void applyTheme() {
+		setBackground(getImageBackgroundColor());
+		loadImage();
+		refreshLabelColors();
+		repaint();
+	}
+
+	private void refreshLabelColors() {
+		for (String key : labels.keySet()) {
+			JLabel label = labels.get(key);
+			label.setForeground(label.getText() == null || label.getText().equals("")
+					? getEmptyLabelColor()
+					: getFilledLabelColor());
+		}
+	}
+
+	private Color getFilledLabelColor() {
+		return DashboardPanelUtil.TITLE_TEXT_COLOR;
+	}
+
+	private Color getEmptyLabelColor() {
+		return DashboardPanelUtil.SUBTITLE_TEXT_COLOR;
+	}
+
+	private Color getImageBackgroundColor() {
+		if (DashboardPanelUtil.isDarkMode()) {
+			return new Color(0x08, 0x0F, 0x1C);
+		}
+		return DashboardPanelUtil.PANEL_SURFACE_COLOR;
+	}
+
 	private void refreshLabelBounds() {
 		for (String key : labels.keySet()) {
 			BracketPosition position = positions.get(key);
@@ -135,6 +187,7 @@ public class PlayoffsImageBracketPanel extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
+		setBackground(getImageBackgroundColor());
 		super.paintComponent(g);
 		if (bracketImage != null) {
 			updateDrawBounds();
@@ -144,11 +197,11 @@ public class PlayoffsImageBracketPanel extends JPanel {
 			g2.drawImage(bracketImage, drawX, drawY, drawWidth, drawHeight, this);
 			return;
 		}
-		g.setColor(new Color(0xF7, 0xF8, 0xFA));
+		g.setColor(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		g.setColor(SECONDARY_TEXT);
+		g.setColor(getEmptyLabelColor());
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
-		g.drawString("Ajoutez l'image src/resources/playoffs_bracket_empty.png pour afficher l'arbre.", 260, 640);
+		g.drawString("Ajoutez l'image de l'arbre dans src/resources pour afficher les playoffs.", 260, 640);
 	}
 
 	private void updateDrawBounds() {
