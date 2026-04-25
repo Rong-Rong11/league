@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.finance.GameStat;
+import data.finance.transfer.Trade;
 import data.league.League;
 import data.league.Playoff;
 import data.league.PlayoffRound;
@@ -33,9 +34,9 @@ import process.service.game.GameManager;
 import process.service.league.TeamPopularityUpdater;
 import process.service.live.LiveMatchService;
 import process.service.live.LiveMatchState;
-import process.service.trade.PreSeasonTradeService;
-import process.service.trade.RegularSeasonTradeService;
 import process.service.trade.TradeService;
+import process.service.trade.preseason.PreSeasonTradeService;
+import process.service.trade.regularseason.RegularSeasonTradeService;
 import process.utility.CalendarUtility;
 import process.utility.FinanceUtility;
 import gui.utility.TeamDisplayUtility;
@@ -88,6 +89,14 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public int getCurrentFinanceMonth() {
 		return clock == null ? 1 : clock.getCurrentMonth();
+	}
+
+	@Override
+	public ArrayList<Trade> getTradesForTeam(Team team) {
+		ArrayList<Trade> teamTrades = new ArrayList<Trade>();
+		teamTrades.addAll(preSeasonTradeService.getTradesForTeam(team));
+		teamTrades.addAll(regularSeasonTradeService.getTradesForTeam(team));
+		return teamTrades;
 	}
 
 	// methddes pour la presaison
