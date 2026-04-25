@@ -1,4 +1,4 @@
-package process.service.finance.distribution.central.profile;
+package data.league.finance;
 
 public class CentralRevenueProfile {
 	private final double tvRate;

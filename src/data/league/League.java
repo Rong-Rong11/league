@@ -19,6 +19,10 @@ public class League {
 	private Playoff playoff = new Playoff(CalendarConfiguration.PLAYOFF_DEBUT_DATE,
 			CalendarConfiguration.PLAYOFF_END_DATE);
 
+	public League() {
+
+	}
+
 	public Conference getWesternConference() {
 		return this.westernConference;
 	}

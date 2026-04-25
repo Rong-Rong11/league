@@ -292,14 +292,17 @@ public class FinanceUtility {
 		double popularity = team.getCurrentPopularity() / 100.0;
 
 		double historicalPrestige = team.getTeamFinance()
+				.getStructure()
 				.getEconomicProfil()
 				.getHistoricalPrestige();
 
 		double fanLoyalty = team.getTeamFinance()
+				.getStructure()
 				.getEconomicProfil()
 				.getFanLoyalty();
 
 		double mediaPrestige = team.getTeamFinance()
+				.getStructure()
 				.getMediaMarket()
 				.getPrestigeModifier();
 

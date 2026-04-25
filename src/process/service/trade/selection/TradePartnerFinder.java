@@ -1,4 +1,4 @@
-package process.service.trade;
+package process.service.trade.selection;
 
 import config.FinanceConfiguration;
 import data.team.Team;
@@ -7,18 +7,18 @@ import process.repository.TeamRepository;
 import process.utility.TeamUtility;
 import process.visitor.teamtransfer.EvaluateSeasonIntentVisitor;
 
-public class TradeFinder {
+public class TradePartnerFinder {
 
-	private TeamRepository teamRepositery = TeamRepository.getInstance();
+	private TeamRepository teamRepository = TeamRepository.getInstance();
 	private double salaryCap;
 
-	public TradeFinder(double salaryCap) {
+	public TradePartnerFinder(double salaryCap) {
 		super();
 		this.salaryCap = salaryCap;
 	}
 
 	public Team findTeamForTrade(Team teamA, boolean season) {
-		for (Team teamB : teamRepositery.getAllTeams()) {
+		for (Team teamB : teamRepository.getAllTeams()) {
 			if (teamB.equals(teamA)) {
 				continue;
 			}
@@ -47,8 +47,8 @@ public class TradeFinder {
 	}
 
 	private boolean isTradeCompatible(Team teamA, Team teamB, boolean season) {
-		TeamTransferStrategy strategyA = teamA.getTeamFinance().getTeamTransferStrategy();
-		TeamTransferStrategy strategyB = teamB.getTeamFinance().getTeamTransferStrategy();
+		TeamTransferStrategy strategyA = teamA.getTeamFinance().getBehavior().getTeamTransferStrategy();
+		TeamTransferStrategy strategyB = teamB.getTeamFinance().getBehavior().getTeamTransferStrategy();
 		if (isSelling(teamA, strategyA, season) && isBuying(teamB, strategyB, season)) {
 			return true;
 		}

@@ -21,16 +21,27 @@ public class PlayoffBuilder {
 	}
 
 	public Playoff buldFirstRoundPlayoffs() {
+		if (league == null || league.getRegularSeason() == null || league.getPlayoff() == null) {
+			logger.warn("Skipping first round playoff build because league, regular season or playoff is null");
+			return null;
+		}
+
 		logger.info("Building first round playoffs");
 		Ranking ranking = league.getRegularSeason().getRanking();
+		if (ranking == null) {
+			logger.warn("Skipping first round playoff build because ranking is null");
+			return league.getPlayoff();
+		}
 		Playoff playoff = league.getPlayoff();
 		playoff.getQualifiedEastTeams().clear();
 		playoff.getQualifiedWestTeams().clear();
 		playoff.getEastFirstRound().clear();
 		playoff.getWestFirstRound().clear();
+		logger.debug("Cleared previous qualified teams and first round series");
 
 		TreeMap<Integer, Team> eastRanking = ranking.getEastRanking();
 		TreeMap<Integer, Team> westRanking = ranking.getWestRanking();
+		logger.debug("Loaded east and west rankings for first round playoff build");
 
 		addEastQualifiedTeam(eastRanking, playoff);
 		addWestQualifiedTeam(westRanking, playoff);
@@ -67,11 +78,21 @@ public class PlayoffBuilder {
 
 		playoff.setEastFirstRound(firstEastRound);
 		playoff.setWestFirstRound(firstWestRound);
+		logger.debug("First round built with "
+				+ firstEastRound.size()
+				+ " eastern series and "
+				+ firstWestRound.size()
+				+ " western series");
 		logger.info("First round playoffs built");
 		return playoff;
 	}
 
 	public Playoff buldSecondRoundPlayoffs() {
+		if (league == null || league.getPlayoff() == null) {
+			logger.warn("Skipping conference semifinals build because league or playoff is null");
+			return null;
+		}
+
 		logger.info("Building conference semifinals playoffs");
 		Playoff playoff = league.getPlayoff();
 
@@ -96,11 +117,21 @@ public class PlayoffBuilder {
 
 		playoff.setEastConferenceSemis(eastSemis);
 		playoff.setWestConferenceSemis(westSemis);
+		logger.debug("Conference semifinals built with "
+				+ eastSemis.size()
+				+ " eastern series and "
+				+ westSemis.size()
+				+ " western series");
 		logger.info("Conference semifinals playoffs built");
 		return playoff;
 	}
 
 	public Playoff buildConferenceFinalsPlayoffs() {
+		if (league == null || league.getPlayoff() == null) {
+			logger.warn("Skipping conference finals build because league or playoff is null");
+			return null;
+		}
+
 		logger.info("Building conference finals playoffs");
 		Playoff playoff = league.getPlayoff();
 
@@ -118,11 +149,21 @@ public class PlayoffBuilder {
 
 		playoff.setEastConferenceFinals(eastConferenceFinals);
 		playoff.setWestConferenceFinals(westConferenceFinals);
+		logger.debug("Conference finals built with "
+				+ eastConferenceFinals.size()
+				+ " eastern series and "
+				+ westConferenceFinals.size()
+				+ " western series");
 		logger.info("Conference finals playoffs built");
 		return playoff;
 	}
 
 	public Playoff buildNbaFinalsPlayoffs() {
+		if (league == null || league.getPlayoff() == null) {
+			logger.warn("Skipping NBA finals build because league or playoff is null");
+			return null;
+		}
+
 		logger.info("Building NBA finals playoffs");
 		Playoff playoff = league.getPlayoff();
 
@@ -134,26 +175,49 @@ public class PlayoffBuilder {
 		nbaFinals.add(new PlayoffSeries(eastWinner, westWinner));
 
 		playoff.setNbaFinals(nbaFinals);
+		logger.debug("NBA finals built with matchup " + eastWinner.getName() + " vs " + westWinner.getName());
 		logger.info("NBA finals playoffs built");
 		return playoff;
 	}
 
 	private Team getSeriesWinner(PlayoffSeries series) {
+		if (series == null) {
+			logger.warn("Unable to determine series winner because series is null");
+			return null;
+		}
 		if (series.getHigherTeamWins() > series.getLowerTeamWins()) {
+			logger.trace("Series winner is higher seed " + series.getHigherTeam().getName());
 			return series.getHigherTeam();
 		}
+		logger.trace("Series winner is lower seed " + series.getLowerTeam().getName());
 		return series.getLowerTeam();
 	}
 
 	private void addEastQualifiedTeam(TreeMap<Integer, Team> eastRanking, Playoff playoff) {
+		if (eastRanking == null || playoff == null) {
+			logger.warn("Skipping east qualified team registration because ranking or playoff is null");
+			return;
+		}
 		for (int i = 1; i <= 8; i++) {
-			playoff.addQualifiedEastTeam(eastRanking.get(i));
+			Team qualifiedTeam = eastRanking.get(i);
+			playoff.addQualifiedEastTeam(qualifiedTeam);
+			if (qualifiedTeam != null) {
+				logger.trace("Registered east qualified team " + qualifiedTeam.getName() + " at seed " + i);
+			}
 		}
 	}
 
 	private void addWestQualifiedTeam(TreeMap<Integer, Team> westRanking, Playoff playoff) {
+		if (westRanking == null || playoff == null) {
+			logger.warn("Skipping west qualified team registration because ranking or playoff is null");
+			return;
+		}
 		for (int i = 1; i <= 8; i++) {
-			playoff.addQualifiedWestTeam(westRanking.get(i));
+			Team qualifiedTeam = westRanking.get(i);
+			playoff.addQualifiedWestTeam(qualifiedTeam);
+			if (qualifiedTeam != null) {
+				logger.trace("Registered west qualified team " + qualifiedTeam.getName() + " at seed " + i);
+			}
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package process.service.trade;
+package process.service.trade.preseason;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,6 +7,8 @@ import config.FinanceConfiguration;
 import data.finance.transfer.Trade;
 import data.player.Player;
 import data.team.Team;
+import process.service.trade.TradeService;
+import process.service.trade.evaluation.TradeSatisfactionEvaluator;
 
 public class PreSeasonTradeService extends TradeService {
 
@@ -22,12 +24,12 @@ public class PreSeasonTradeService extends TradeService {
 	}
 
 	@Override
-	protected boolean isSatisfied(EvaluateTradeSatisfaction evaluateTradeSatisfaction) {
-		return evaluateTradeSatisfaction.isSatisfied(false);
+	protected boolean isSatisfied(TradeSatisfactionEvaluator tradeSatisfactionEvaluator) {
+		return tradeSatisfactionEvaluator.isSatisfied(false);
 	}
 
 	@Override
-	protected boolean canTryTradeAtDate(EvaluateTradeSatisfaction evaluateTradeSatisfaction, LocalDate date) {
+	protected boolean canTryTradeAtDate(TradeSatisfactionEvaluator tradeSatisfactionEvaluator, LocalDate date) {
 		return true;
 	}
 

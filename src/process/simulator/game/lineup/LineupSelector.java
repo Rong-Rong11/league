@@ -1,4 +1,4 @@
-package process.simulator.gametools;
+package process.simulator.game.lineup;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +25,7 @@ public class LineupSelector {
 		double averageSalary = FinanceUtility.getAverageSalary(team);
 		TreeMap<Double, Player> scoredPlayers = new TreeMap<Double, Player>(Collections.reverseOrder());
 
-		FinancialPolicy teamFinancialProfil = team.getTeamFinance().getFinancialProfil();
+		FinancialPolicy teamFinancialProfil = team.getTeamFinance().getBehavior().getFinancialProfil();
 		double ecoWeight, matchProfileWeight;
 		if (teamFinancialProfil instanceof AmbitiousPolicy) {
 			ecoWeight = 0.6;

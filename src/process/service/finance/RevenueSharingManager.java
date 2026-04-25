@@ -1,5 +1,7 @@
 package process.service.finance;
 
+import org.apache.log4j.Logger;
+
 import config.FinanceConfiguration;
 import data.finance.budget.Budget;
 import data.finance.budget.expense.Expense;
@@ -12,48 +14,84 @@ import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
+import log.LoggerUtility;
 import process.repository.TeamRepository;
 import process.utility.FinanceUtility;
 import process.visitor.marketsize.CalculateMonthlyTeamFinanceVisitor;
 
 public class RevenueSharingManager {
+	private static final Logger logger = LoggerUtility.getLogger(RevenueSharingManager.class, "text");
+
 	private TeamRepository teamRepositery = TeamRepository.getInstance();
 	private League league;
 
 	public RevenueSharingManager(League league) {
 		this.league = league;
+		logger.debug("Revenue sharing manager initialized");
 	}
 
 	public void applyRevenueSharing(int month) {
+		if (league == null || league.getLeagueFinance() == null) {
+			logger.warn("Skipping revenue sharing because league or league finance is null");
+			return;
+		}
+		logger.info("Applying revenue sharing for month " + month);
 		LeagueRedistributionPolicy leagueRedistributionPolicy = league.getLeagueFinance()
 				.getLeagueRedistributionPolicy();
 		double leagueAverage = calculateLeagueLocalAverage(month);
 		double redistributionRate = calculateEffectiveRedistributionRate(leagueRedistributionPolicy, month);
+		logger.debug("Revenue sharing inputs: leagueAverage="
+				+ leagueAverage
+				+ ", redistributionRate="
+				+ redistributionRate);
 
 		double pool = collectFromRichTeams(leagueAverage, redistributionRate, month);
+		logger.debug("Revenue sharing collected pool " + pool + " for month " + month);
 
 		double leagueKeeps = pool * leagueRedistributionPolicy.getBaseLeagueRetentionRate();
 		FinanceUtility.addIncome(
 				league.getLeagueFinance().getBudget(),
 				new Income(IncomeType.LEAGUE_KEEPS, leagueKeeps),
 				month);
+		logger.debug("League keeps " + leagueKeeps + " from revenue sharing pool");
 
 		double remainingPool = pool - leagueKeeps;
 		double equalSharePool = remainingPool * leagueRedistributionPolicy.getBaseEqualShareRate();
 		double weightedSharePool = remainingPool * leagueRedistributionPolicy.getBaseWeightedShareRate();
+		logger.debug("Revenue sharing pools: remaining="
+				+ remainingPool
+				+ ", equalShare="
+				+ equalSharePool
+				+ ", weightedShare="
+				+ weightedSharePool);
 
 		distributeEqualShare(equalSharePool, month);
 		distributeToSmallTeams(leagueAverage, weightedSharePool, month);
+		logger.info("Revenue sharing applied for month " + month);
 	}
 
 	private double calculateLeagueLocalAverage(int month) {
 		double total = 0.0;
-
-		for (Team team : teamRepositery.getAllTeams()) {
-			total += calculateAdjustedLocalRevenue(team, month);
+		int teamCount = teamRepositery.getAllTeams().size();
+		if (teamCount == 0) {
+			logger.warn("League local average is 0 because no teams are registered");
+			return 0.0;
 		}
 
-		return total / teamRepositery.getAllTeams().size();
+		for (Team team : teamRepositery.getAllTeams()) {
+			double adjustedLocalRevenue = calculateAdjustedLocalRevenue(team, month);
+			logger.trace("Adjusted local revenue for "
+					+ team.getName()
+					+ " month "
+					+ month
+					+ " is "
+					+ adjustedLocalRevenue);
+			total += adjustedLocalRevenue;
+		}
+
+		double average = total / teamCount;
+		logger.debug("Calculated league local average " + average + " for month " + month);
+		return average;
 	}
 
 	private double collectFromRichTeams(double leagueAverage, double redistributionRate, int month) {
@@ -71,6 +109,12 @@ public class RevenueSharingManager {
 
 				if (excess > 0) {
 					double contribution = excess * redistributionRate;
+					logger.trace("Collecting revenue sharing contribution "
+							+ contribution
+							+ " from "
+							+ team.getName()
+							+ " with excess "
+							+ excess);
 
 					FinanceUtility.addExpense(
 							budget,
@@ -84,15 +128,22 @@ public class RevenueSharingManager {
 			}
 		}
 
+		logger.debug("Collected revenue sharing pool " + pool + " for month " + month);
 		return pool;
 	}
 
 	private void distributeEqualShare(double pool, int month) {
 		if (pool <= 0) {
+			logger.trace("Skipping equal share distribution because pool is non-positive");
 			return;
 		}
 		int teamCount = teamRepositery.getAllTeams().size();
+		if (teamCount == 0) {
+			logger.warn("Skipping equal share distribution because no teams are registered");
+			return;
+		}
 		double share = pool / teamCount;
+		logger.debug("Distributing equal share " + share + " to " + teamCount + " teams for month " + month);
 		for (Team team : teamRepositery.getAllTeams()) {
 			Budget budget = team.getTeamFinance().getBudget();
 			FinanceUtility.addIncome(
@@ -105,6 +156,7 @@ public class RevenueSharingManager {
 
 	private void distributeToSmallTeams(double leagueAverage, double pool, int month) {
 		if (pool <= 0) {
+			logger.trace("Skipping weighted share distribution because pool is non-positive");
 			return;
 		}
 		double totalNeed = 0;
@@ -115,8 +167,15 @@ public class RevenueSharingManager {
 			}
 		}
 		if (totalNeed <= 0) {
+			logger.trace("Skipping weighted share distribution because total need is non-positive");
 			return;
 		}
+		logger.debug("Distributing weighted revenue sharing pool "
+				+ pool
+				+ " with total need "
+				+ totalNeed
+				+ " for month "
+				+ month);
 		for (Team team : teamRepositery.getAllTeams()) {
 			double adjustedLocalRevenue = calculateAdjustedLocalRevenue(team, month);
 			Budget budget = team.getTeamFinance().getBudget();
@@ -124,6 +183,12 @@ public class RevenueSharingManager {
 			if (adjustedLocalRevenue < leagueAverage) {
 				double need = calculateWeightedNeed(team, leagueAverage, adjustedLocalRevenue);
 				double share = (need / totalNeed) * pool;
+				logger.trace("Distributing weighted revenue sharing share "
+						+ share
+						+ " to "
+						+ team.getName()
+						+ " with need "
+						+ need);
 
 				FinanceUtility.addIncome(
 						budget,
@@ -141,6 +206,12 @@ public class RevenueSharingManager {
 
 		double leagueAveragePopularity = calculateLeagueAveragePopularity();
 		double inequality = calculateRevenueInequality(month);
+		logger.trace("Calculating effective redistribution rate with base="
+				+ rate
+				+ ", averagePopularity="
+				+ leagueAveragePopularity
+				+ ", inequality="
+				+ inequality);
 
 		if (leagueAveragePopularity < 65) {
 			rate += 0.03;
@@ -154,19 +225,28 @@ public class RevenueSharingManager {
 			rate -= 0.03;
 		}
 
-		return Math.max(
+		double effectiveRate = Math.max(
 				leagueRedistributionPolicy.getMinimumRedistributionRate(),
 				Math.min(leagueRedistributionPolicy.getMaximumRedistributionRate(), rate));
+		logger.debug("Effective redistribution rate is " + effectiveRate + " for month " + month);
+		return effectiveRate;
 	}
 
 	private double calculateLeagueAveragePopularity() {
 		double total = 0.0;
+		int teamCount = teamRepositery.getAllTeams().size();
+		if (teamCount == 0) {
+			logger.warn("League average popularity is 0 because no teams are registered");
+			return 0.0;
+		}
 
 		for (Team team : teamRepositery.getAllTeams()) {
 			total += team.getCurrentPopularity();
 		}
 
-		return total / teamRepositery.getAllTeams().size();
+		double averagePopularity = total / teamCount;
+		logger.trace("League average popularity is " + averagePopularity);
+		return averagePopularity;
 	}
 
 	private double calculateRevenueInequality(int month) {
@@ -183,9 +263,12 @@ public class RevenueSharingManager {
 			}
 		}
 		if (maxRevenue <= 0) {
+			logger.trace("Revenue inequality is 0 because max revenue is non-positive");
 			return 0.0;
 		}
-		return (maxRevenue - minRevenue) / maxRevenue;
+		double inequality = (maxRevenue - minRevenue) / maxRevenue;
+		logger.trace("Revenue inequality is " + inequality + " with min=" + minRevenue + " and max=" + maxRevenue);
+		return inequality;
 	}
 
 	private double calculateWeightedNeed(Team team, double leagueAverage, double adjustedLocalRevenue) {
@@ -195,7 +278,7 @@ public class RevenueSharingManager {
 			return 0.0;
 		}
 
-		MarketSize marketSize = team.getTeamFinance().getMarketSize();
+		MarketSize marketSize = team.getTeamFinance().getStructure().getMarketSize();
 		double multiplier = 1.0;
 
 		if (marketSize != null) {
@@ -210,7 +293,14 @@ public class RevenueSharingManager {
 			}
 		}
 
-		return baseNeed * multiplier;
+		double weightedNeed = baseNeed * multiplier;
+		logger.trace("Weighted need for "
+				+ team.getName()
+				+ " is "
+				+ weightedNeed
+				+ " with multiplier "
+				+ multiplier);
+		return weightedNeed;
 	}
 
 	private double calculateAdjustedLocalRevenue(Team team, int month) {
@@ -221,7 +311,16 @@ public class RevenueSharingManager {
 			return localRevenue;
 		}
 
-		return localRevenue / contextFactor;
+		double adjustedRevenue = localRevenue / contextFactor;
+		logger.trace("Adjusted local revenue for "
+				+ team.getName()
+				+ " is "
+				+ adjustedRevenue
+				+ " from localRevenue="
+				+ localRevenue
+				+ " and contextFactor="
+				+ contextFactor);
+		return adjustedRevenue;
 	}
 
 	private double getRegularSeasonRevenueBase(Team team, int month) {
@@ -233,9 +332,9 @@ public class RevenueSharingManager {
 		double factor = 0.75;
 		double valueFactor = FinanceUtility.getNormalizedTeamValue(team);
 
-		MarketSize marketSize = team.getTeamFinance().getMarketSize();
-		MediaMarket mediaMarket = team.getTeamFinance().getMediaMarket();
-		EconomicProfil economicProfil = team.getTeamFinance().getEconomicProfil();
+		MarketSize marketSize = team.getTeamFinance().getStructure().getMarketSize();
+		MediaMarket mediaMarket = team.getTeamFinance().getStructure().getMediaMarket();
+		EconomicProfil economicProfil = team.getTeamFinance().getStructure().getEconomicProfil();
 
 		factor *= getMarketMultiplier(marketSize);
 
@@ -255,13 +354,18 @@ public class RevenueSharingManager {
 		factor *= combinedFactor;
 		factor *= (1 + valueFactor * 0.12);
 
-		return Math.max(0.75, factor);
+		double contextFactor = Math.max(0.75, factor);
+		logger.trace("Revenue context factor for " + team.getName() + " is " + contextFactor);
+		return contextFactor;
 	}
 
 	private double getMarketMultiplier(MarketSize marketSize) {
 		if (marketSize == null) {
+			logger.warn("Using neutral market multiplier for revenue sharing because market size is null");
 			return 1.0;
 		}
-		return marketSize.accept(new CalculateMonthlyTeamFinanceVisitor());
+		double multiplier = marketSize.accept(new CalculateMonthlyTeamFinanceVisitor());
+		logger.trace("Revenue sharing market multiplier is " + multiplier);
+		return multiplier;
 	}
 }

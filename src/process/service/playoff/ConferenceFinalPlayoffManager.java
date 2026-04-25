@@ -15,27 +15,27 @@ import process.service.league.TeamPopularityUpdater;
 public class ConferenceFinalPlayoffManager extends PlayoffManager {
 
 	public ConferenceFinalPlayoffManager(League league,
-		 ConferenceFinalCalendarBuilder conferenceFinalCalendarBuilder,
-		 PlayoffBuilder playoffBuilder,
-		 FinanceManager financeManager,
-		 TeamPopularityUpdater teamPopularityUpdater) {
-	  super(league, conferenceFinalCalendarBuilder, playoffBuilder, financeManager, teamPopularityUpdater);
+			ConferenceFinalCalendarBuilder conferenceFinalCalendarBuilder,
+			PlayoffBuilder playoffBuilder,
+			FinanceManager financeManager,
+			TeamPopularityUpdater teamPopularityUpdater) {
+		super(league, conferenceFinalCalendarBuilder, playoffBuilder, financeManager, teamPopularityUpdater);
 	}
 
 	@Override
 	public ArrayList<PlayoffSeries> getManagedSeries() {
-	  ArrayList<PlayoffSeries> managedSeries = new ArrayList<PlayoffSeries>();
-	  managedSeries.addAll(getLeague().getPlayoff().getEastConferenceFinals());
-	  managedSeries.addAll(getLeague().getPlayoff().getWestConferenceFinals());
-	  return managedSeries;
+		ArrayList<PlayoffSeries> managedSeries = new ArrayList<PlayoffSeries>();
+		managedSeries.addAll(getLeague().getPlayoff().getEastConferenceFinals());
+		managedSeries.addAll(getLeague().getPlayoff().getWestConferenceFinals());
+		return managedSeries;
 	}
 
 	@Override
 	public void advanceToNextRound(LocalDate roundEndDate) {
-	  League league = getLeague();
-	  league.setPlayoff(getPlayoffBuilder().buildNbaFinalsPlayoffs());
-	  league.getPlayoff().setCurrentRound(PlayoffRound.NBA_FINALS);
-	  NbaFinalCalendarBuilder nbaFinalCalendarBuilder = new NbaFinalCalendarBuilder(league, roundEndDate);
-	  league.getPlayoff().setNbaCalendar(nbaFinalCalendarBuilder.buildCalendar());
+		League league = getLeague();
+		league.setPlayoff(getPlayoffBuilder().buildNbaFinalsPlayoffs());
+		league.getPlayoff().setCurrentRound(PlayoffRound.NBA_FINALS);
+		NbaFinalCalendarBuilder nbaFinalCalendarBuilder = new NbaFinalCalendarBuilder(league, roundEndDate);
+		league.getPlayoff().setNbaCalendar(nbaFinalCalendarBuilder.buildCalendar());
 	}
 }

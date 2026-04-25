@@ -1,22 +1,19 @@
 /*
 	* Decompiled with CFR 0.152.
 	*/
-package process.simulator;
+package process.service.trade.execution;
 
 import java.util.ArrayList;
 
 import data.player.Player;
 import data.team.Team;
-import process.simulator.tradetools.TradeApplier;
-import process.simulator.tradetools.TradeImpact;
-import process.simulator.tradetools.TradeValidator;
 
-public class TradeSimulator {
+public class TradeProcessor {
 	private TradeValidator tradeValidator = new TradeValidator();
 	private TradeApplier tradeApplier = new TradeApplier();
 	private TradeImpact tradeImpact = new TradeImpact();
 
-	public boolean validateTrade(Team teamA, Team teamB, ArrayList<Player> teamAIncoming,
+	public boolean processTrade(Team teamA, Team teamB, ArrayList<Player> teamAIncoming,
 			ArrayList<Player> teamBIncoming, int month, double salaryCap, double luxuryTaxLine) {
 		if (!this.tradeValidator.validateTrade(teamA, teamB, teamAIncoming, teamBIncoming, salaryCap)) {
 			return false;

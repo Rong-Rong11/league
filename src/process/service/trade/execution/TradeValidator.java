@@ -1,7 +1,7 @@
 /*
 * Decompiled with CFR 0.152.
 */
-package process.simulator.tradetools;
+package process.service.trade.execution;
 
 import java.util.ArrayList;
 
@@ -31,7 +31,7 @@ public class TradeValidator {
 	}
 
 	public static boolean respectPayroll(Team team, double outgoingPayroll, double incomingPayroll, double salaryCap) {
-		FinancialPolicy financialProfil = team.getTeamFinance().getFinancialProfil();
+		FinancialPolicy financialProfil = team.getTeamFinance().getBehavior().getFinancialProfil();
 		if (incomingPayroll < salaryCap) {
 			return true;
 		}
@@ -41,12 +41,12 @@ public class TradeValidator {
 		ValidateTradeVisitor validateTradeVisitor = new ValidateTradeVisitor(
 				incomingPayroll,
 				salaryCap,
-				team.getTeamFinance().getMarketSize());
+				team.getTeamFinance().getStructure().getMarketSize());
 		return financialProfil.accept(validateTradeVisitor);
 	}
 
 	private static boolean riskBudget(Team team) {
-		FinancialPolicy financialProfil = team.getTeamFinance().getFinancialProfil();
+		FinancialPolicy financialProfil = team.getTeamFinance().getBehavior().getFinancialProfil();
 		Budget budget = team.getTeamFinance().getBudget();
 		return financialProfil.accept(new RiskBudgetVisitor(budget));
 	}

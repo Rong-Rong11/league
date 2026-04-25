@@ -221,8 +221,8 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 		cityLabel.setText(TeamDisplayUtility.getCityName(team));
 		teamLabel.setText(TeamDisplayUtility.getShortName(team));
 		setButtonsEnabled(true);
-		selectedPolicy = team.getTeamFinance().getFinancialProfil();
-		selectedMarketSize = team.getTeamFinance().getMarketSize();
+		selectedPolicy = team.getTeamFinance().getBehavior().getFinancialProfil();
+		selectedMarketSize = team.getTeamFinance().getStructure().getMarketSize();
 		refreshPolicyButtons();
 		refreshMarketSizeButtons();
 	}

@@ -377,21 +377,21 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		if (team == null || team.getTeamFinance() == null) {
 			return null;
 		}
-		return team.getTeamFinance().getFinancialProfil();
+		return team.getTeamFinance().getBehavior().getFinancialProfil();
 	}
 
 	private Object getMarketSize(Team team) {
 		if (team == null || team.getTeamFinance() == null) {
 			return null;
 		}
-		return team.getTeamFinance().getMarketSize();
+		return team.getTeamFinance().getStructure().getMarketSize();
 	}
 
 	private Object getTransferStrategy(Team team) {
 		if (team == null || team.getTeamFinance() == null) {
 			return null;
 		}
-		return team.getTeamFinance().getTeamTransferStrategy();
+		return team.getTeamFinance().getBehavior().getTeamTransferStrategy();
 	}
 
 	private class TeamSelectionAction implements ActionListener {

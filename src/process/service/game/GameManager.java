@@ -50,10 +50,15 @@ public class GameManager {
 	public GameManager(League league, FinanceManager financeManager, CalendarBuilder calendarBuilder,
 			PlayoffBuilder playoffBuilder, FirstRoundCalendarBuilder firstRoundCalendarBuilder,
 			TeamPopularityUpdater teamPopularityUpdater) {
+		logger.debug("Initializing game manager");
+		if (league == null) {
+			logger.warn("Game manager initialized with null league");
+		}
 		this.league = league;
 		ArrayList<Team> eastTeams = new ArrayList<>();
 		ArrayList<Team> westTeams = new ArrayList<>();
 		LeagueUtility.getConferenceTeams(league, eastTeams, westTeams);
+		logger.debug("Loaded " + eastTeams.size() + " east teams and " + westTeams.size() + " west teams");
 		regularSeasonRankingManager = new RegularSeasonRankingManager(westTeams, eastTeams);
 		this.financeManager = financeManager;
 		this.firstRoundPlayoffManager = new FirstRoundPlayoffManager(league,
@@ -76,9 +81,18 @@ public class GameManager {
 				playoffBuilder,
 				financeManager,
 				teamPopularityUpdater);
+		logger.debug("Game manager initialized");
 	}
 
 	public boolean simulateRegularSeasonDay(LocalDate date, int month) {
+		if (league == null || league.getRegularSeason() == null || league.getRegularSeason().getNbaCalendar() == null) {
+			logger.warn("Skipping regular season day simulation because league, regular season or calendar is null");
+			return false;
+		}
+		if (date == null) {
+			logger.warn("Skipping regular season day simulation because date is null");
+			return false;
+		}
 		RegularSeason regularSeason = league.getRegularSeason();
 		TreeMap<LocalDate, GameDay> regularSeasonCalendar = regularSeason.getNbaCalendar().getCalendar();
 		GameDay gameDay = regularSeasonCalendar.get(date);
@@ -92,6 +106,7 @@ public class GameManager {
 					regularSeasonRankingManager);
 
 			processor.simulateGameDay(gameDay, date, month);
+			logger.debug("Regular season day simulated for " + date);
 			return true;
 		}
 		logger.debug("No regular season games simulated for " + date);
@@ -100,6 +115,10 @@ public class GameManager {
 	}
 
 	public void simulatePlayoffDay(LocalDate date, int month, PlayoffRound currentRound) {
+		if (date == null) {
+			logger.warn("Ignoring playoff day simulation because date is null");
+			return;
+		}
 		if (currentRound == null) {
 			logger.warn("Ignoring playoff day simulation because current round is null");
 			return;
@@ -120,62 +139,95 @@ public class GameManager {
 				simulateManagedPlayoffDay(date, month, nbaFinalPlayoffManager, currentRound);
 				break;
 			default:
+				logger.warn("Ignoring playoff day simulation because round is unsupported: " + currentRound);
 				break;
 		}
 	}
 
 	private void simulateManagedPlayoffDay(LocalDate date, int month, PlayoffManager playoffManager,
 			PlayoffRound round) {
+		if (league == null || league.getPlayoff() == null || league.getPlayoff().getNbaCalendar() == null) {
+			logger.warn("Skipping playoff day simulation because league, playoff or playoff calendar is null");
+			return;
+		}
+		if (playoffManager == null) {
+			logger.warn("Skipping playoff day simulation because playoff manager is null for round " + round);
+			return;
+		}
 		Playoff playoff = league.getPlayoff();
 		TreeMap<LocalDate, GameDay> playoffCalendar = playoff.getNbaCalendar().getCalendar();
 		GameDay gameDay = playoffCalendar.get(date);
 
 		if (gameDay != null && !gameDay.isSimulated()) {
+			logger.debug("Simulating managed playoff day " + date + " for round " + round + " month " + month);
 			GameDaySimulationProcessor processor = new PlayoffGameDaySimulationProcessor(
 					gameSimulator, financeManager, playoffManager, round);
 			processor.simulateGameDay(gameDay, date, month);
+			logger.debug("Playoff day simulated for " + date + " in round " + round);
 			return;
 		}
 		logger.debug("No playoff games simulated for " + date + " in round " + round);
 	}
 
 	public Team getRegularSeasonWestWinner() {
-		return league.getRegularSeason().getRanking().getWestRanking().get(1);
+		Team winner = league.getRegularSeason().getRanking().getWestRanking().get(1);
+		logger.debug("Regular season west winner is " + (winner == null ? "<none>" : winner.getName()));
+		return winner;
 	}
 
 	public Team getRegularSeasonEastWinner() {
-		return league.getRegularSeason().getRanking().getEastRanking().get(1);
+		Team winner = league.getRegularSeason().getRanking().getEastRanking().get(1);
+		logger.debug("Regular season east winner is " + (winner == null ? "<none>" : winner.getName()));
+		return winner;
 	}
 
 	public ArrayList<Team> getGlobalRanking() {
-		return regularSeasonRankingManager.getGlobalRanking(league);
+		ArrayList<Team> ranking = regularSeasonRankingManager.getGlobalRanking(league);
+		logger.trace("Returning global ranking with " + ranking.size() + " teams");
+		return ranking;
 	}
 
 	public ArrayList<Team> getEastRanking() {
-		return regularSeasonRankingManager.getEastRanking();
+		ArrayList<Team> ranking = regularSeasonRankingManager.getEastRanking();
+		logger.trace("Returning east ranking with " + ranking.size() + " teams");
+		return ranking;
 	}
 
 	public ArrayList<Team> getWestRanking() {
-		return regularSeasonRankingManager.getWestRanking();
+		ArrayList<Team> ranking = regularSeasonRankingManager.getWestRanking();
+		logger.trace("Returning west ranking with " + ranking.size() + " teams");
+		return ranking;
 	}
 
 	public void simulateFirstRoundDay(LocalDate date, int month) {
+		logger.debug("Simulating first round playoff day " + date);
 		simulateManagedPlayoffDay(date, month, firstRoundPlayoffManager);
 	}
 
 	public void simulateSemiRoundDay(LocalDate date, int month) {
+		logger.debug("Simulating conference semifinals playoff day " + date);
 		simulateManagedPlayoffDay(date, month, semiPlayoffManager);
 	}
 
 	public void simulateConferenceFinalRoundDay(LocalDate date, int month) {
+		logger.debug("Simulating conference finals playoff day " + date);
 		simulateManagedPlayoffDay(date, month, conferenceFinalPlayoffManager);
 	}
 
 	public void simulateNbaFinalRoundDay(LocalDate date, int month) {
+		logger.debug("Simulating NBA finals playoff day " + date);
 		simulateManagedPlayoffDay(date, month, nbaFinalPlayoffManager);
 	}
 
 	private void simulateManagedPlayoffDay(LocalDate date, int month, PlayoffManager playoffManager) {
+		if (league == null || league.getPlayoff() == null || league.getPlayoff().getNbaCalendar() == null) {
+			logger.warn("Skipping managed playoff day simulation because league, playoff or playoff calendar is null");
+			return;
+		}
+		if (date == null || playoffManager == null) {
+			logger.warn("Skipping managed playoff day simulation because date or playoff manager is null");
+			return;
+		}
 		Playoff playoff = league.getPlayoff();
 		TreeMap<LocalDate, GameDay> playoffCalendar = playoff.getNbaCalendar().getCalendar();
 		GameDay gameDay = playoffCalendar.get(date);
@@ -183,17 +235,31 @@ public class GameManager {
 			logger.debug("Simulating managed playoff day " + date + " for month " + month);
 			simulateGameDay(gameDay, date, month);
 			for (Game game : gameDay.getGames()) {
+				logger.trace("Handling played playoff game for " + date);
 				playoffManager.handlePlayedGame(game, date);
 			}
+			logger.debug("Managed playoff day simulated for " + date);
+			return;
 		}
+		logger.debug("No managed playoff games simulated for " + date);
 	}
 
 	private void simulateGameDay(GameDay gameDay, LocalDate date, int month) {
+		if (gameDay == null) {
+			logger.warn("Skipping playoff game day simulation because game day is null");
+			return;
+		}
+		logger.trace("Simulating playoff game day " + date + " with " + gameDay.getGames().size() + " games");
 		for (Game game : gameDay.getGames()) {
+			if (game == null) {
+				logger.warn("Skipping playoff game simulation because game is null");
+				continue;
+			}
 			gameSimulator.simulateGame(game);
 			financeManager.calculatePlayoffGame(game, date, month, league.getPlayoff().getCurrentRound());
 		}
 		gameDay.setSimulated(true);
+		logger.trace("Playoff game day marked simulated for " + date);
 
 	}
 }

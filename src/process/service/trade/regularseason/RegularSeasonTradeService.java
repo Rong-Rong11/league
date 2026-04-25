@@ -1,4 +1,4 @@
-package process.service.trade;
+package process.service.trade.regularseason;
 
 import java.time.LocalDate;
 import java.util.TreeMap;
@@ -7,6 +7,8 @@ import config.CalendarConfiguration;
 import data.finance.transfer.Trade;
 import data.player.Player;
 import data.team.Team;
+import process.service.trade.TradeService;
+import process.service.trade.evaluation.TradeSatisfactionEvaluator;
 
 public class RegularSeasonTradeService extends TradeService {
 
@@ -22,13 +24,13 @@ public class RegularSeasonTradeService extends TradeService {
 	}
 
 	@Override
-	protected boolean isSatisfied(EvaluateTradeSatisfaction evaluateTradeSatisfaction) {
-		return evaluateTradeSatisfaction.isSatisfied(true);
+	protected boolean isSatisfied(TradeSatisfactionEvaluator tradeSatisfactionEvaluator) {
+		return tradeSatisfactionEvaluator.isSatisfied(true);
 	}
 
 	@Override
-	protected boolean canTryTradeAtDate(EvaluateTradeSatisfaction evaluateTradeSatisfaction, LocalDate date) {
-		return evaluateTradeSatisfaction.shouldTryTrade(date, CalendarConfiguration.TRADE_DEADLINE);
+	protected boolean canTryTradeAtDate(TradeSatisfactionEvaluator tradeSatisfactionEvaluator, LocalDate date) {
+		return tradeSatisfactionEvaluator.shouldTryTrade(date, CalendarConfiguration.TRADE_DEADLINE);
 	}
 
 	@Override

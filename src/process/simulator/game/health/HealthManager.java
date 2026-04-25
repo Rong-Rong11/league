@@ -1,4 +1,4 @@
-package process.simulator.gametools;
+package process.simulator.game.health;
 
 import java.util.ArrayList;
 import java.util.HashMap;

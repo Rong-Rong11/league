@@ -1,4 +1,4 @@
-package process.simulator.gametools;
+package process.simulator.game.health;
 import config.GameConfiguration;
 import config.HealthConfiguration;
 

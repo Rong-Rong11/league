@@ -113,7 +113,7 @@ public class TestGameExpenseCalculators {
 
 		new RegularSeasonGameExpenseCalculator(gameStat).calculateGameExpenses(game);
 
-		double loyaltyFactor = 1 + awayTeam.getTeamFinance().getEconomicProfil().getFanLoyalty() * 0.32;
+		double loyaltyFactor = 1 + awayTeam.getTeamFinance().getStructure().getEconomicProfil().getFanLoyalty() * 0.32;
 		double expected = config.FinanceConfiguration.BASE_TRAVEL_INTER_CONFERENCE_COST * loyaltyFactor;
 		assertEquals(expected, gameStat.getAwayFinance().getTravelCosts(), 0.0001);
 	}

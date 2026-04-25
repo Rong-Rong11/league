@@ -1,38 +1,48 @@
 package process.service.finance.expense;
 
+import org.apache.log4j.Logger;
+
 import data.calendar.GameDay;
 import data.finance.GameStat;
 import data.league.League;
 import data.sport.setup.Game;
 import data.sport.setup.PlayoffSeries;
+import log.LoggerUtility;
 import process.service.finance.FinanceManager;
 import process.utility.CalendarUtility;
 
 public class LeagueExpenseGameAnalyzer {
+	private static final Logger logger = LoggerUtility.getLogger(LeagueExpenseGameAnalyzer.class, "text");
 
 	private League league;
 	private FinanceManager financeManager;
 
 	public LeagueExpenseGameAnalyzer(League league) {
 		this.league = league;
+		logger.debug("League expense game analyzer initialized");
 	}
 
 	public void setFinanceManager(FinanceManager financeManager) {
+		logger.debug("Setting finance manager for league expense game analyzer");
 		this.financeManager = financeManager;
 	}
 
 	public int countImportantGamesInMonth(int month) {
+		logger.debug("Counting important expense games for month " + month);
 		int count = 0;
 		count += countImportantGamesForSeasonMonth(month, false);
 		count += countImportantGamesForSeasonMonth(month, true);
+		logger.debug("Counted " + count + " important expense games for month " + month);
 		return count;
 	}
 
 	public int countPlayoffGamesInMonth(int month) {
 		if (league.getPlayoff() == null || league.getPlayoff().getNbaCalendar() == null) {
+			logger.warn("No playoff games counted because playoff or playoff calendar is null");
 			return 0;
 		}
 
+		logger.debug("Counting playoff expense games for month " + month);
 		int count = 0;
 		for (GameDay gameDay : league.getPlayoff().getNbaCalendar().getCalendar().values()) {
 			if (gameDay.getDate() == null || !matchesFinanceMonth(gameDay.getDate(), month)) {
@@ -40,11 +50,13 @@ public class LeagueExpenseGameAnalyzer {
 			}
 			count += gameDay.getGames().size();
 		}
+		logger.debug("Counted " + count + " playoff expense games for month " + month);
 		return count;
 	}
 
 	public int countActivePlayoffTeams() {
 		if (league.getPlayoff() == null || league.getPlayoff().getCurrentRound() == null) {
+			logger.warn("No active playoff teams counted because playoff or current round is null");
 			return 0;
 		}
 
@@ -55,13 +67,19 @@ public class LeagueExpenseGameAnalyzer {
 			}
 			count += 2;
 		}
+		logger.debug("Counted " + count + " active playoff teams for league expenses");
 		return count;
 	}
 
 	private int countImportantGamesForSeasonMonth(int month, boolean playoff) {
+		logger.trace("Counting important "
+				+ (playoff ? "playoff" : "regular season")
+				+ " expense games for month "
+				+ month);
 		int count = 0;
 		if (playoff) {
 			if (league.getPlayoff() == null || league.getPlayoff().getNbaCalendar() == null) {
+				logger.warn("No important playoff expense games counted because playoff or playoff calendar is null");
 				return 0;
 			}
 			for (GameDay gameDay : league.getPlayoff().getNbaCalendar().getCalendar().values()) {
@@ -77,10 +95,12 @@ public class LeagueExpenseGameAnalyzer {
 					}
 				}
 			}
+			logger.trace("Counted " + count + " important playoff expense games for month " + month);
 			return count;
 		}
 
 		if (league.getRegularSeason() == null || league.getRegularSeason().getNbaCalendar() == null) {
+			logger.warn("No important regular season expense games counted because regular season or calendar is null");
 			return 0;
 		}
 		for (GameDay gameDay : league.getRegularSeason().getNbaCalendar().getCalendar().values()) {
@@ -96,6 +116,7 @@ public class LeagueExpenseGameAnalyzer {
 				}
 			}
 		}
+		logger.trace("Counted " + count + " important regular season expense games for month " + month);
 		return count;
 	}
 
@@ -105,18 +126,32 @@ public class LeagueExpenseGameAnalyzer {
 		if (monthDelta < 0) {
 			monthDelta += 12;
 		}
-		return (monthDelta + 1) == month;
+		boolean matches = (monthDelta + 1) == month;
+		if (matches) {
+			logger.trace("Date " + date + " matches expense finance month " + month);
+		}
+		return matches;
 	}
 
 	private boolean isImportantGame(Game game, java.time.LocalDate date) {
-		return CalendarUtility.popularityScoreGame(game, date) >= 95 || game.getGameContext().isRivalry();
+		boolean importantGame = CalendarUtility.popularityScoreGame(game, date) >= 95
+				|| game.getGameContext().isRivalry();
+		if (importantGame) {
+			logger.trace("Game on " + date + " is important for league expenses");
+		}
+		return importantGame;
 	}
 
 	private boolean hasHighAttendance(Game game) {
 		if (financeManager == null) {
+			logger.warn("Unable to check high attendance for league expenses because finance manager is null");
 			return false;
 		}
 		GameStat gameStat = financeManager.getGameStat(game);
-		return gameStat != null && gameStat.getAttendanceRate() > 0.85;
+		boolean highAttendance = gameStat != null && gameStat.getAttendanceRate() > 0.85;
+		if (highAttendance) {
+			logger.trace("Game has high attendance for league expenses with rate " + gameStat.getAttendanceRate());
+		}
+		return highAttendance;
 	}
 }
