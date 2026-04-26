@@ -10,8 +10,7 @@ public class EconomicProfil {
 	private double ownerDeficitTolerance = 0.5;
 
 	public EconomicProfil() {
-		super();
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public EconomicProfil(double fanLoyalty, double priceElasticity, double commercialAggressiveness,
