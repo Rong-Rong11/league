@@ -4,7 +4,7 @@
 
 - `config` → constantes globales de simulation et de finance.
 - `data` → modèle métier de la ligue, des équipes, des joueurs et des matchs.
-- `process` → chargement des données, génération du calendrier et simulation.
+- `process` → chargement des données, orchestration, génération du calendrier et simulation.
 - `gui` → interface Swing, navigation et dashboards.
 
 Le projet suit une séparation simple :
@@ -13,11 +13,55 @@ Le projet suit une séparation simple :
 - les classes de `process` construisent et font évoluer cet état ;
 - les classes de `gui` affichent une maquette d’application autour de ces données.
 
+## Diagramme en blocs fonctionnel
+
+```mermaid
+flowchart TD
+    U[Utilisateur] --> IHM[Interface graphique<br/>gui]
+    IHM --> APP[Point d'entrée<br/>App + MainGui]
+    APP --> API[Interface d'orchestration<br/>GUIInterface]
+    API --> SM[SimulationManager<br/>Bloc central]
+
+    SM --> INIT[Initialisation de la ligue<br/>builder + factory]
+    SM --> CAL[Gestion du calendrier<br/>builder/calendar]
+    SM --> GAME[Simulation des matchs<br/>service/game + simulator]
+    SM --> LIVE[Live match<br/>service/live]
+    SM --> FIN[Gestion financière<br/>service/finance]
+    SM --> TRADE[Gestion des transferts<br/>service/trade]
+    SM --> PLAY[Gestion des playoffs<br/>service/playoff]
+    SM --> RANK[Classement / popularité<br/>service/ranking + service/league]
+
+    INIT --> DATA[Modèle métier partagé<br/>data]
+    CAL --> DATA
+    GAME --> DATA
+    LIVE --> DATA
+    FIN --> DATA
+    TRADE --> DATA
+    PLAY --> DATA
+    RANK --> DATA
+
+    CONF[Configurations<br/>config] --> SM
+    RES[Sources de données / ressources<br/>resources] --> INIT
+    REPO[Repositories + Utilities<br/>process/repository + process/utility] --> SM
+```
+
+## Lecture du schéma
+
+- L’utilisateur interagit avec l’application via l’IHM Swing.
+- `App` et `MainGui` mettent en place l’interface puis délèguent toutes les actions métier à `GUIInterface`.
+- `SimulationManager` est le centre fonctionnel du logiciel : il coordonne toute la logique applicative.
+- Autour de ce bloc central, on trouve les grands sous-systèmes métier : initialisation, calendrier, simulation, live, finance, transferts, playoffs et classement.
+- Tous ces blocs manipulent le même noyau métier dans `src/data`.
+- Les `config`, `resources`, `repository` et `utility` soutiennent le fonctionnement global sans porter l’interface.
+
 ## Vue simple des dossiers
 
 - `src/config`
+  - `CalendarConfiguration`
   - `FinanceConfiguration`
-  - `SimulationConfiguration`
+  - `GameConfiguration`
+  - `HealthConfiguration`
+  - `TeamConfiguration`
 
 - `src/data`
   - `league`, `team`, `player` : noyau métier
@@ -26,18 +70,18 @@ Le projet suit une séparation simple :
   - `finance` : budgets, revenus, dépenses, transferts
 
 - `src/process`
-  - `LeagueBuilder` : charge les données CSV
-  - `CalendarBuilder` : place les matchs dans le calendrier
-  - `GameGenerator` : crée les affiches
-  - `GameSimulator` : simule un match
-  - `LeagueManager` : enchaîne les grandes étapes
-  - `repositery/*` : registres partagés
+  - `orchestrator/manager/SimulationManager` : chef d’orchestre de l’application
+  - `builder/*` : construit ligue, calendrier et finance
+  - `service/*` : gère matchs, finance, playoffs, live, classement et trades
+  - `simulator/*` : simulation détaillée de match et de transferts
+  - `repository/*` : registres partagés
+  - `visitor/*` : stratégies et traitements spécialisés
 
 - `src/gui`
   - `frame` : fenêtre principale
   - `layout` : barre latérale
   - `dashboard` : vues principales
-  - `components` : briques graphiques réutilisables
+  - `panel` : briques graphiques réutilisables
 
 ## Rôle des grands blocs
 
@@ -56,7 +100,7 @@ Le projet suit une séparation simple :
 
 - Porte la logique métier réelle.
 - Lit le fichier CSV, instancie les objets, génère les rencontres puis simule les journées.
-- Utilise des registres (`PlayerRepositery`, `TeamRepositery`, etc.) pour retrouver rapidement les objets déjà créés.
+- Utilise des registres (`PlayerRepository`, `TeamRepository`, etc.) pour retrouver rapidement les objets déjà créés.
 
 ### GUI
 
@@ -66,25 +110,27 @@ Le projet suit une séparation simple :
 
 ## Classes centrales du système
 
-- `LeagueManager`
+- `SimulationManager`
   - Orchestrateur principal.
-  - Lance la construction de la ligue, du calendrier puis la simulation d’une journée.
+  - Lance la construction de la ligue, le démarrage de la saison puis la simulation des jours, semaines et phases de playoffs.
 
 - `LeagueBuilder`
-  - Lit `src/test/nba.csv`.
+  - Lit les données NBA depuis `src/resources/*.csv`.
   - Construit `League`, `Team`, `Player` et initialise les registres.
 
 - `League`
   - Objet racine du domaine.
   - Donne accès aux conférences, à la saison régulière, aux playoffs et à la finance de ligue.
 
-- `CalendarBuilder`
+- `RegularSeasonCalendarBuilder`
   - Prépare la saison régulière.
-  - Ajoute les événements spéciaux, génère les affiches et répartit les matchs par date.
+  - Génère les affiches et répartit les matchs par date.
 
-- `GameSimulator`
-  - Moteur de simulation.
-  - Produit score, actions de jeu, fatigue et mises à jour statistiques.
+- `GameManager`
+  - Coordonne la simulation des journées de saison régulière et de playoffs.
+
+- `LiveMatchService`
+  - Expose le suivi détaillé d’un match simulé.
 
 - `MainGui`
   - Fenêtre principale de l’interface.
@@ -94,45 +140,55 @@ Le projet suit une séparation simple :
 
 - `process` dépend fortement de `data` et de `config`.
 
+- `SimulationManager` dépend notamment de :
+  - `LeagueBuilder`
+  - `RegularSeasonCalendarBuilder`
+  - `FirstRoundCalendarBuilder`
+  - `GameManager`
+  - `FinanceManager`
+  - `PreSeasonTradeService`
+  - `RegularSeasonTradeService`
+  - `LiveMatchService`
+  - `TeamPopularityUpdater`
+
 - `LeagueBuilder` dépend de :
   - `PlayerFactory`
   - `TeamFactory`
-  - `DivisionRepositery`
-  - `PlayerRepositery`
-  - `TeamRepositery`
-  - `PreSeasonAssetRepositery`
-  - `CurrentSeasonAssetRepositery`
+  - `DivisionRepository`
+  - `PlayerRepository`
+  - `TeamRepository`
+  - `PreSeasonAssetRepository`
+  - `CurrentSeasonAssetRepository`
 
-- `CalendarBuilder` dépend de :
+- `RegularSeasonCalendarBuilder` dépend de :
   - `League`
-  - `RegularSeason`
   - `GameGenerator`
-  - `GameManager`
-  - `Schedule`
+  - `SpecialEventPlanner`
+  - `ScheduleNotifier`
 
-- `GameSimulator` dépend de :
+- `GameManager` et les simulateurs dépendent de :
   - `Player`, `Team`, `Game`, `GameResult`
   - les actions de `data/sport/play`
   - les statistiques de `Asset`
-  - `FinanceManager` pour certaines pondérations économiques
+  - `FinanceManager` pour les effets financiers liés aux rencontres
 
 - `gui` dépend surtout de :
-  - `gui/components`
   - `gui/dashboard`
   - `gui/layout`
+  - `gui/panel`
+  - `process/orchestrator/interf/GUIInterface`
 
 ## Points structurants à retenir
 
 - Le modèle métier est assez riche, mais beaucoup de classes `data` sont surtout des conteneurs.
 
 - La logique métier est concentrée dans peu de classes :
+  - `SimulationManager`
   - `LeagueBuilder`
-  - `CalendarBuilder`
-  - `GameGenerator`
   - `GameManager`
-  - `GameSimulator`
-  - `LeagueManager`
+  - `RegularSeasonCalendarBuilder`
+  - `FinanceManager`
+  - `LiveMatchService`
 
-- `FinanceBuilder` existe, mais reste peu exploité dans l’état actuel du code.
-
-- L’entrée exécutable repérée est dans `src/test/TestGui.java`, alors que la vraie classe centrale de l’IHM est `MainGui`.
+- L’entrée exécutable actuelle est `src/gui/app/App.java`.
+- Le point de couplage principal entre l’IHM et le métier est `GUIInterface`, implémentée par `SimulationManager`.

@@ -20,7 +20,7 @@ public class PlayoffBuilder {
 		this.league = league;
 	}
 
-	public Playoff buldFirstRoundPlayoffs() {
+	public Playoff buildFirstRoundPlayoffs() {
 		if (league == null || league.getRegularSeason() == null || league.getPlayoff() == null) {
 			logger.warn("Skipping first round playoff build because league, regular season or playoff is null");
 			return null;
@@ -87,7 +87,11 @@ public class PlayoffBuilder {
 		return playoff;
 	}
 
-	public Playoff buldSecondRoundPlayoffs() {
+	public Playoff buldFirstRoundPlayoffs() {
+	  return buildFirstRoundPlayoffs();
+	}
+
+	public Playoff buildSecondRoundPlayoffs() {
 		if (league == null || league.getPlayoff() == null) {
 			logger.warn("Skipping conference semifinals build because league or playoff is null");
 			return null;
@@ -124,6 +128,10 @@ public class PlayoffBuilder {
 				+ " western series");
 		logger.info("Conference semifinals playoffs built");
 		return playoff;
+	}
+
+	public Playoff buldSecondRoundPlayoffs() {
+	  return buildSecondRoundPlayoffs();
 	}
 
 	public Playoff buildConferenceFinalsPlayoffs() {
@@ -181,16 +189,13 @@ public class PlayoffBuilder {
 	}
 
 	private Team getSeriesWinner(PlayoffSeries series) {
-		if (series == null) {
-			logger.warn("Unable to determine series winner because series is null");
-			return null;
-		}
-		if (series.getHigherTeamWins() > series.getLowerTeamWins()) {
-			logger.trace("Series winner is higher seed " + series.getHigherTeam().getName());
-			return series.getHigherTeam();
-		}
-		logger.trace("Series winner is lower seed " + series.getLowerTeam().getName());
-		return series.getLowerTeam();
+	  if (series == null || !series.isFinished()) {
+		 throw new IllegalStateException("Impossible de construire le round suivant avant la fin de la serie.");
+	  }
+	  if (series.getHigherTeamWins() > series.getLowerTeamWins()) {
+		 return series.getHigherTeam();
+	  }
+	  return series.getLowerTeam();
 	}
 
 	private void addEastQualifiedTeam(TreeMap<Integer, Team> eastRanking, Playoff playoff) {

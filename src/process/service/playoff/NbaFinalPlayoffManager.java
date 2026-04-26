@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import data.league.League;
+import data.league.PlayoffRound;
 import data.sport.setup.PlayoffSeries;
+import data.team.Team;
 import log.LoggerUtility;
 import process.builder.calendar.NbaFinalCalendarBuilder;
 import process.builder.league.PlayoffBuilder;
@@ -40,6 +42,17 @@ public class NbaFinalPlayoffManager extends PlayoffManager {
 
 	@Override
 	public void advanceToNextRound(LocalDate roundEndDate) {
-		logger.info("NBA finals completed, no next playoff round to advance to");
+		League league = getLeague();
+		ArrayList<PlayoffSeries> finals = getManagedSeries();
+
+		if (finals.isEmpty()) {
+			logger.warn("Unable to complete playoffs because NBA finals series list is empty");
+			return;
+		}
+
+		Team champion = getSeriesWinner(finals.get(0));
+		league.getPlayoff().setChampion(champion);
+		league.getPlayoff().setCurrentRound(PlayoffRound.FINISHED);
+		logger.info("NBA finals completed, champion is " + champion.getName());
 	}
 }
