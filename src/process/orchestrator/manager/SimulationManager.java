@@ -115,8 +115,8 @@ public class SimulationManager implements GUIInterface {
 		Playoff playoff = getPlayoff();
 		return playoff != null
 				&& (!playoff.getEastFirstRound().isEmpty()
-				|| !playoff.getWestFirstRound().isEmpty()
-				|| !playoff.getNbaFinals().isEmpty());
+						|| !playoff.getWestFirstRound().isEmpty()
+						|| !playoff.getNbaFinals().isEmpty());
 	}
 
 	@Override
@@ -188,16 +188,16 @@ public class SimulationManager implements GUIInterface {
 			return "A venir";
 		}
 		switch (round) {
-		case FIRST_ROUND:
-			return "Premier tour";
-		case CONFERENCE_SEMIFINALS:
-			return "Demies";
-		case CONFERENCE_FINALS:
-			return "Finales conf.";
-		case NBA_FINALS:
-			return "Finales NBA";
-		default:
-			return round.name();
+			case FIRST_ROUND:
+				return "Premier tour";
+			case CONFERENCE_SEMIFINALS:
+				return "Demies";
+			case CONFERENCE_FINALS:
+				return "Finales conf.";
+			case NBA_FINALS:
+				return "Finales NBA";
+			default:
+				return round.name();
 		}
 	}
 
