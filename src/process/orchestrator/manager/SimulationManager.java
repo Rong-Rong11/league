@@ -80,8 +80,6 @@ public class SimulationManager implements GUIInterface {
 				leagueFinancialRules.getLuxuryTaxLine());
 		regularSeasonTradeService = new RegularSeasonTradeService(leagueFinancialRules.getSalaryCap(),
 				leagueFinancialRules.getLuxuryTaxLine());
-		playoffBuilder = new PlayoffBuilder(league);
-		firstRoundCalendarBuilder = new FirstRoundCalendarBuilder(league);
 	}
 
 	@Override
@@ -89,12 +87,10 @@ public class SimulationManager implements GUIInterface {
 		return league;
 	}
 
-	@Override
 	public Playoff getPlayoff() {
 		return league == null ? null : league.getPlayoff();
 	}
 
-	@Override
 	public PlayoffRound getCurrentPlayoffRound() {
 		Playoff playoff = getPlayoff();
 		return playoff == null ? null : playoff.getCurrentRound();
@@ -103,6 +99,20 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public boolean hasPlayoffsStarted() {
 		return getCurrentPlayoffRound() != null;
+	}
+
+	@Override
+	public boolean hasPlayoffData() {
+		Playoff playoff = getPlayoff();
+		return playoff != null
+				&& (!playoff.getEastFirstRound().isEmpty()
+				|| !playoff.getWestFirstRound().isEmpty()
+				|| !playoff.getNbaFinals().isEmpty());
+	}
+
+	@Override
+	public boolean arePlayoffsFinished() {
+		return getCurrentPlayoffRound() == PlayoffRound.FINISHED;
 	}
 
 	@Override
@@ -149,12 +159,55 @@ public class SimulationManager implements GUIInterface {
 	}
 
 	@Override
+	public int getPlayoffQualifiedTeamCount() {
+		Playoff playoff = getPlayoff();
+		if (playoff == null) {
+			return 0;
+		}
+		return playoff.getQualifiedEastTeams().size() + playoff.getQualifiedWestTeams().size();
+	}
+
+	@Override
+	public int getPlayoffSeriesCount() {
+		return getAllPlayoffSeries().size();
+	}
+
+	@Override
+	public String getCurrentPlayoffRoundLabel() {
+		PlayoffRound round = getCurrentPlayoffRound();
+		if (round == null) {
+			return "A venir";
+		}
+		switch (round) {
+		case FIRST_ROUND:
+			return "Premier tour";
+		case CONFERENCE_SEMIFINALS:
+			return "Demies";
+		case CONFERENCE_FINALS:
+			return "Finales conf.";
+		case NBA_FINALS:
+			return "Finales NBA";
+		default:
+			return round.name();
+		}
+	}
+
+	@Override
+	public String getPlayoffChampionName() {
+		Playoff playoff = getPlayoff();
+		if (playoff == null || playoff.getChampion() == null) {
+			return "";
+		}
+		return TeamDisplayUtility.getShortName(playoff.getChampion());
+	}
+
+	@Override
 	public String getPlayoffGameLabel(Game game) {
 		if (game == null || game.getPlayoffRound() == null || league == null || league.getPlayoff() == null) {
 			return "";
 		}
 		for (PlayoffSeries series : getAllPlayoffSeries()) {
-			if (containsGame(series, game)) {
+			if (PlayoffUtility.getGameNumber(series, game) > 0) {
 				return PlayoffUtility.getBestOfLabel(series, game);
 			}
 		}
@@ -164,6 +217,9 @@ public class SimulationManager implements GUIInterface {
 	private ArrayList<PlayoffSeries> getAllPlayoffSeries() {
 		ArrayList<PlayoffSeries> series = new ArrayList<PlayoffSeries>();
 		Playoff playoff = league.getPlayoff();
+		if (playoff == null) {
+			return series;
+		}
 		series.addAll(playoff.getEastFirstRound());
 		series.addAll(playoff.getWestFirstRound());
 		series.addAll(playoff.getEastConferenceSemis());
@@ -174,18 +230,6 @@ public class SimulationManager implements GUIInterface {
 		return series;
 	}
 
-	private boolean containsGame(PlayoffSeries series, Game game) {
-		if (series == null || game == null) {
-			return false;
-		}
-		for (Game expectedGame : series.getExpectedGames()) {
-			if (expectedGame == game) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	@Override
 	public void simulateNextPlayoffRound() {
 		PlayoffRound startRound = getCurrentPlayoffRound();
@@ -193,10 +237,10 @@ public class SimulationManager implements GUIInterface {
 			return;
 		}
 		int safety = 0;
-		while (startRound == getCurrentPlayoffRound() && getNextUnsimulatedPlayoffGameDay(startRound) != null
-				&& safety < 80) {
-			GameDay gameDay = getNextUnsimulatedPlayoffGameDay(startRound);
+		GameDay gameDay = getNextUnsimulatedPlayoffGameDay(startRound);
+		while (startRound == getCurrentPlayoffRound() && gameDay != null && safety < 80) {
 			simulateAndDisplayDay(gameDay.getDate());
+			gameDay = getNextUnsimulatedPlayoffGameDay(startRound);
 			safety++;
 		}
 	}

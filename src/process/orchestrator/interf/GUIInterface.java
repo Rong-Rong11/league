@@ -3,8 +3,6 @@ package process.orchestrator.interf;
 import java.util.Map;
 
 import data.league.League;
-import data.league.Playoff;
-import data.league.PlayoffRound;
 import data.sport.setup.Game;
 
 public interface GUIInterface
@@ -12,11 +10,11 @@ public interface GUIInterface
 			DisplayInterface, LiveMatchInterface {
 	  League getLeague();
 
-	  Playoff getPlayoff();
-
-	  PlayoffRound getCurrentPlayoffRound();
-
 	  boolean hasPlayoffsStarted();
+
+	  boolean hasPlayoffData();
+
+	  boolean arePlayoffsFinished();
 
 	  boolean isRegularSeasonFinished();
 
@@ -27,6 +25,14 @@ public interface GUIInterface
 	  void initializePlayoffs();
 
 	  Map<String, String> getPlayoffPositionMap();
+
+	  int getPlayoffQualifiedTeamCount();
+
+	  int getPlayoffSeriesCount();
+
+	  String getCurrentPlayoffRoundLabel();
+
+	  String getPlayoffChampionName();
 
 	  String getPlayoffGameLabel(Game game);
 

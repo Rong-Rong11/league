@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import data.league.PlayoffRound;
 import data.team.Team;
 import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
@@ -82,6 +81,7 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		modeFilterPanel.add(globalButton);
 		modeFilterPanel.add(eastButton);
 		modeFilterPanel.add(westButton);
+		modeFilterPanel.add(simulatePlayoffRoundButton);
 
 		JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
 		rightPanel.setOpaque(false);
@@ -195,7 +195,6 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		tableContentPanel.removeAll();
 
 		if (PLAYOFFS.equals(selectedSeason)) {
-			playoffsViewPanel.setSelectedMode(selectedMode);
 			playoffsViewPanel.refreshPlayoffs();
 			tableContentPanel.add(playoffsViewPanel, BorderLayout.CENTER);
 			revalidate();
@@ -307,27 +306,21 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		styleFilterButton(regularSeasonButton, REGULAR_SEASON.equals(selectedSeason));
 		styleFilterButton(playoffsButton, PLAYOFFS.equals(selectedSeason));
 		if (modeFilterPanel != null) {
-			modeFilterPanel.removeAll();
-			if (PLAYOFFS.equals(selectedSeason)) {
-				modeFilterPanel.add(simulatePlayoffRoundButton);
-				updatePlayoffRoundButton();
-			} else {
-				modeFilterPanel.add(globalButton);
-				modeFilterPanel.add(eastButton);
-				modeFilterPanel.add(westButton);
-				updateModeButtons();
-			}
-			modeFilterPanel.revalidate();
-			modeFilterPanel.repaint();
+			boolean playoffsSelected = PLAYOFFS.equals(selectedSeason);
+			globalButton.setVisible(!playoffsSelected);
+			eastButton.setVisible(!playoffsSelected);
+			westButton.setVisible(!playoffsSelected);
+			simulatePlayoffRoundButton.setVisible(playoffsSelected);
+			updateModeButtons();
+			updatePlayoffRoundButton();
 		}
 	}
 
 	private void updatePlayoffRoundButton() {
 		ButtonStyleUtil.styleActionButton(simulatePlayoffRoundButton, 190, 44, 15);
-		PlayoffRound round = guiInterface.getCurrentPlayoffRound();
-		boolean enabled = round != null && round != PlayoffRound.FINISHED;
+		boolean enabled = guiInterface.hasPlayoffsStarted() && !guiInterface.arePlayoffsFinished();
 		simulatePlayoffRoundButton.setEnabled(enabled);
-		if (round == PlayoffRound.FINISHED) {
+		if (guiInterface.arePlayoffsFinished()) {
 			simulatePlayoffRoundButton.setText("Playoffs termines");
 		} else {
 			simulatePlayoffRoundButton.setText("Simuler le tour");

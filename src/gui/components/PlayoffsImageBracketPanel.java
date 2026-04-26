@@ -125,14 +125,10 @@ public class PlayoffsImageBracketPanel extends JPanel implements ThemeAware {
 		label.setForeground(shortName == null || shortName.equals("") ? getEmptyLabelColor() : getFilledLabelColor());
 	}
 
-	public void clearPosition(String position) {
-		setTeamName(position, "");
-	}
-
 	public void refreshFromPlayoffsData(Map<String, String> positions) {
 		loadImage();
 		for (String key : labels.keySet()) {
-			clearPosition(key);
+			setTeamName(key, "");
 		}
 		if (positions == null) {
 			repaint();
@@ -187,7 +183,6 @@ public class PlayoffsImageBracketPanel extends JPanel implements ThemeAware {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		setBackground(getImageBackgroundColor());
 		super.paintComponent(g);
 		if (bracketImage != null) {
 			updateDrawBounds();
