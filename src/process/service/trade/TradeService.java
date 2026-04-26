@@ -115,7 +115,7 @@ public abstract class TradeService {
 			logger.trace("Team " + teamA.getName() + " reached maximum trade attempts");
 			return false;
 		}
-		if (teamA.getTeamFinance().getTransferMade() > FinanceConfiguration.MAX_TRADE_PER_TEAM) {
+		if (teamA.getTeamFinance().getTransferMade() >= FinanceConfiguration.MAX_TRADE_PER_TEAM) {
 			logger.trace("Team " + teamA.getName() + " reached maximum trades made");
 			return false;
 		}
