@@ -44,19 +44,19 @@ public class LaunchingDashboard extends JPanel implements ThemeAware {
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(60, 110, 55, 110));
 
-		badgeLabel = new JLabel("SAISON NBA • MANAGEMENT • FINANCES", JLabel.CENTER);
+		badgeLabel = new JLabel("SAISON NBA - MANAGEMENT - FINANCES", JLabel.CENTER);
 		badgeLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 
 		titleLabel = new JLabel("NBA League Simulator", JLabel.CENTER);
 		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 54));
 
 		subtitleLabel = new JLabel(
-				"Construis ta ligue, configure ton équipe et mène ta franchise au titre",
+				"Construis ta ligue, configure ton equipe et mene ta franchise au titre",
 				JLabel.CENTER);
 		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
 
 		footerLabel = new JLabel(
-				"Calendrier • Classements • Playoffs • Finances • Evolution des équipes",
+				"Calendrier - Classements - Playoffs - Finances - Evolution des equipes",
 				JLabel.CENTER);
 		footerLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
 
@@ -65,12 +65,12 @@ public class LaunchingDashboard extends JPanel implements ThemeAware {
 
 		featuresPanel = new JPanel(new GridLayout(1, 3, 22, 0));
 		featuresPanel.setOpaque(false);
-		featuresPanel.add(
-				createFeatureCard("Simulation", "Avance journée par journée et suis les résultats de toute la ligue."));
-		featuresPanel
-				.add(createFeatureCard("Analyse", "Observe le classement, les séries, les statistiques et les tendances."));
-		featuresPanel.add(
-				createFeatureCard("Finances", "Configure les profils économiques et mesure l’impact sur les franchises."));
+		featuresPanel.add(createFeatureCard("Simulation",
+				"Avance journee par journee et suis les resultats de toute la ligue."));
+		featuresPanel.add(createFeatureCard("Analyse",
+				"Observe le classement, les series, les statistiques et les tendances."));
+		featuresPanel.add(createFeatureCard("Finances",
+				"Configure les profils economiques et mesure l impact sur les franchises."));
 
 		continueButton = new RoundedButton("Continuer");
 		ButtonStyleUtil.styleActionButton(continueButton, 360, 78, 24);
@@ -182,16 +182,16 @@ public class LaunchingDashboard extends JPanel implements ThemeAware {
 		public void actionPerformed(ActionEvent e) {
 			JOptionPane.showMessageDialog(
 					LaunchingDashboard.this,
-					"Avant de lancer la simulation, vous pouvez sélectionner une équipe directement sur la carte "
-							+ "et configurer ses paramètres financiers, comme la taille du marché ou le profil économique.\n\n"
-							+ "Une fois la configuration terminée, vous pouvez lancer la simulation et suivre une saison complète de NBA.\n\n"
+					"Avant de lancer la simulation, vous pouvez selectionner une equipe directement sur la carte "
+							+ "et configurer ses parametres financiers, comme la taille du marche ou le profil economique.\n\n"
+							+ "Une fois la configuration terminee, vous pouvez lancer la simulation et suivre une saison complete de NBA.\n\n"
 							+ "Vous pourrez ensuite :\n\n"
-							+ "- simuler les journées de matchs\n"
-							+ "- suivre l’évolution du classement\n"
-							+ "- consulter les statistiques des équipes et des joueurs\n"
-							+ "- observer l’impact financier de la saison\n"
-							+ "- naviguer entre les différentes vues de l’application\n\n"
-							+ "Chaque action fait progresser la saison et met à jour les informations en temps réel.",
+							+ "- simuler les journees de matchs\n"
+							+ "- suivre l evolution du classement\n"
+							+ "- consulter les statistiques des equipes et des joueurs\n"
+							+ "- observer l impact financier de la saison\n"
+							+ "- naviguer entre les differentes vues de l application\n\n"
+							+ "Chaque action fait progresser la saison et met a jour les informations en temps reel.",
 					"Fonctionnement de la simulation",
 					JOptionPane.INFORMATION_MESSAGE);
 		}
