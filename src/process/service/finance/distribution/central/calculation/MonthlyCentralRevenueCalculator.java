@@ -29,7 +29,7 @@ public class MonthlyCentralRevenueCalculator {
 		this.league = league;
 		this.gameRevenueAnalyzer = new MonthlyGameRevenueAnalyzer(league);
 		this.rateCalculator = new MonthlyRevenueRateCalculator(gameRevenueAnalyzer, getSeasonDynamics());
-		this.bonusCalculator = new MonthlyRevenueBonusCalculator(gameRevenueAnalyzer);
+		this.bonusCalculator = new MonthlyRevenueBonusCalculator(gameRevenueAnalyzer, league);
 	}
 
 	public void setFinanceManager(FinanceManager financeManager) {
@@ -245,7 +245,8 @@ public class MonthlyCentralRevenueCalculator {
 	}
 
 	private CentralRevenueSeasonDynamics getSeasonDynamics() {
-		if (league == null || league.getLeagueFinance() == null || league.getLeagueFinance().getCentralRevenueSeasonDynamics() == null) {
+		if (league == null || league.getLeagueFinance() == null
+				|| league.getLeagueFinance().getCentralRevenueSeasonDynamics() == null) {
 			return new CentralRevenueSeasonDynamics(1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.08, 50.0, 1.0, 0.0);
 		}
 		return league.getLeagueFinance().getCentralRevenueSeasonDynamics();
