@@ -26,7 +26,7 @@ import process.service.finance.team.PlayoffMonthlyTeamFinanceCalculator;
 import process.service.finance.team.RegularSeasonMonthlyTeamFinanceCalculator;
 import process.utility.FinanceUtility;
 import process.utility.TeamUtility;
-import process.visitor.financialprofil.ChooseTransferStrategyVisitor;
+import process.visitor.financialpolicy.ChooseTransferStrategyVisitor;
 import log.LoggerUtility;
 
 public class FinanceManager {

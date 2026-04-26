@@ -1,4 +1,4 @@
-package process.visitor.financialprofil;
+package process.visitor.financialpolicy;
 
 import data.team.finance.financialpolicy.AmbitiousPolicy;
 import data.team.finance.financialpolicy.BalancedPolicy;
@@ -18,6 +18,6 @@ public class AdministrativeCostMultiplierVisitor implements FinancialProfilVisit
 
 	@Override
 	public Double visit(AmbitiousPolicy ambitiousPolicy) {
-		return 1.3;
+		return 1.40;
 	}
 }

@@ -8,12 +8,14 @@ import data.finance.budget.Budget;
 import data.finance.budget.income.Income;
 import data.finance.budget.income.IncomeType;
 import data.league.League;
+import data.league.finance.CentralRevenueSeasonDynamics;
 import data.league.finance.LeagueFinance;
 import log.LoggerUtility;
 import process.utility.FinanceUtility;
 
 public class LeagueFinanceBuilder {
 	private static final Logger logger = LoggerUtility.getLogger(LeagueFinanceBuilder.class, "text");
+	private static final CentralRevenueSeasonDynamicsFactory centralRevenueSeasonDynamicsFactory = new CentralRevenueSeasonDynamicsFactory();
 
 	public static void buildFinanceLeague(League league) {
 		if (league == null) {
@@ -55,9 +57,10 @@ public class LeagueFinanceBuilder {
 				+ luxuryTaxLine
 				+ " and minimum team salary "
 				+ minimumTeamSalary);
+		CentralRevenueSeasonDynamics centralRevenueSeasonDynamics = centralRevenueSeasonDynamicsFactory.create(league);
 
 		LeagueFinance leagueFinance = new LeagueFinance(budget, salaryCap, luxuryTaxLine, minimumTeamSalary,
-				FinanceConfiguration.INITIAL_LEAGUE_VALUE);
+				FinanceConfiguration.INITIAL_LEAGUE_VALUE, centralRevenueSeasonDynamics);
 		league.setLeagueFinance(leagueFinance);
 		logger.info("League finance built successfully");
 	}

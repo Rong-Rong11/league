@@ -11,7 +11,7 @@ import data.team.finance.marketsize.MarketSize;
 import data.team.finance.transfer.TeamTransferStrategy;
 import log.LoggerUtility;
 import process.utility.TeamUtility;
-import process.visitor.financialprofil.ChooseTransferStrategyVisitor;
+import process.visitor.financialpolicy.ChooseTransferStrategyVisitor;
 
 public class TeamFactory {
 	private static final Logger logger = LoggerUtility.getLogger(TeamFactory.class, "text");

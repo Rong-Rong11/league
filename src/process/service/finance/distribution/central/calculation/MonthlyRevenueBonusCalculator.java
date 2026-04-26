@@ -103,7 +103,7 @@ public class MonthlyRevenueBonusCalculator {
 
 	private double getPlayoffMonthlyBonus(int month) {
 		int playoffGames = gameRevenueAnalyzer.countPlayoffGamesInMonth(month);
-		double bonus = playoffGames * 0.16;
+		double bonus = playoffGames * 0.20;
 		logger.trace("Playoff monthly bonus is " + bonus + " for " + playoffGames + " playoff games");
 		return bonus;
 	}
@@ -147,9 +147,9 @@ public class MonthlyRevenueBonusCalculator {
 	}
 
 	private double getVolumeBonus(int importantGames, int premiumGames, int highAttendanceGames) {
-		double bonus = (importantGames * 0.10)
-				+ (premiumGames * 0.16)
-				+ (highAttendanceGames * 0.12);
+		double bonus = (importantGames * 0.09)
+				+ (premiumGames * 0.24)
+				+ (highAttendanceGames * 0.18);
 		logger.trace("Volume bonus is "
 				+ bonus
 				+ " for importantGames="
@@ -162,9 +162,9 @@ public class MonthlyRevenueBonusCalculator {
 	}
 
 	private double getStarRivalryBonus(int rivalryGames, int starGames, int starRivalryGames) {
-		double bonus = (rivalryGames * 0.04)
-				+ (starGames * 0.025)
-				+ (starRivalryGames * 0.09);
+		double bonus = (rivalryGames * 0.06)
+				+ (starGames * 0.04)
+				+ (starRivalryGames * 0.14);
 		logger.trace("Star rivalry bonus is "
 				+ bonus
 				+ " for rivalryGames="

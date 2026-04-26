@@ -2,18 +2,33 @@ package process.simulator.game.event;
 
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
+
 import config.GameConfiguration;
 import data.player.Asset;
 import data.player.Player;
 import data.sport.play.OffensiveTry;
+import log.LoggerUtility;
 import process.utility.PlayerUtility;
 
 public class OffensiveActionSelector {
+	private static final Logger logger = LoggerUtility.getLogger(OffensiveActionSelector.class, "text");
 
 	public OffensiveTry chooseOffensiveAction(Player attackingPlayer,
 			HashMap<Player, Asset> attackPlayersAssetsOfMatch) {
+		if (attackingPlayer == null || attackPlayersAssetsOfMatch == null) {
+			logger.warn("Unable to choose offensive action because attacking player or assets map is null");
+			return null;
+		}
+
 		Asset seasonAsset = attackPlayersAssetsOfMatch.get(attackingPlayer);
 		Asset referenceAsset = PlayerUtility.getReferenceOffensiveAsset(attackingPlayer);
+
+		if (seasonAsset == null || referenceAsset == null) {
+			logger.warn("Unable to choose offensive action because season asset or reference asset is null");
+			return null;
+		}
+
 		double scoringVolume = smoothRatio(referenceAsset.getPointPerMatch(), 28.0);
 		double creationVolume = smoothRatio(referenceAsset.getAssistPerMatch(), 8.0);
 		double reboundPresence = smoothRatio(referenceAsset.getReboundPerMatch(), 12.0);
@@ -62,9 +77,16 @@ public class OffensiveActionSelector {
 				foulDrawWeight *= 1.10;
 				break;
 		}
+
 		double total = threePointWeight + foulDrawWeight + twoPointWeight;
 
+		if (total <= 0) {
+			logger.warn("Unable to choose offensive action because total action weight is non-positive");
+			return null;
+		}
+
 		double random = Math.random() * total;
+
 		if (random < threePointWeight) {
 			return new OffensiveTry(GameConfiguration.THREEPOINT);
 		}
@@ -76,8 +98,10 @@ public class OffensiveActionSelector {
 
 	private double smoothRatio(double value, double scale) {
 		if (scale <= 0) {
+			logger.warn("Returning 0 smooth ratio because scale is non-positive");
 			return 0;
 		}
+
 		return value / (value + scale);
 	}
 }
