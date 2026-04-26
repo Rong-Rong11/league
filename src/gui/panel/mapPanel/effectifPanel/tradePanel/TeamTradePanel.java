@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import data.finance.transfer.Trade;
@@ -26,7 +28,7 @@ public class TeamTradePanel extends JPanel {
 
 		listPanel = new JPanel();
 		listPanel.setOpaque(false);
-		listPanel.setLayout(new GridLayout(1, 1, 8, 8));
+		listPanel.setLayout(new BorderLayout());
 	}
 
 	private void organize() {
@@ -42,8 +44,8 @@ public class TeamTradePanel extends JPanel {
 			return;
 		}
 		if (trades == null || trades.isEmpty()) {
-			listPanel.setLayout(new GridLayout(1, 1, 8, 8));
-			listPanel.add(new PlaceholderPanel("Aucun transfert n'a ete enregistre pour cette equipe."));
+			listPanel.add(new PlaceholderPanel("Aucun transfert n'a ete enregistre pour cette equipe."),
+					BorderLayout.NORTH);
 			revalidate();
 			repaint();
 			return;
@@ -62,26 +64,44 @@ public class TeamTradePanel extends JPanel {
 				return tradeB.getDateOfTransfer().compareTo(tradeA.getDateOfTransfer());
 			}
 		});
-		listPanel.setLayout(buildTradeGridLayout(sortedTrades.size()));
+		int columns = getTradeColumnCount(sortedTrades.size());
+		JPanel columnsPanel = new JPanel(new GridLayout(1, columns, 8, 0));
+		columnsPanel.setOpaque(false);
+		ArrayList<JPanel> columnPanels = buildColumnPanels(columnsPanel, columns);
 
-		for (Trade trade : sortedTrades) {
+		for (int i = 0; i < sortedTrades.size(); i++) {
+			Trade trade = sortedTrades.get(i);
 			TradeEntryPanel tradeEntryPanel = new TradeEntryPanel();
 			tradeEntryPanel.updateTrade(trade, team);
-			listPanel.add(tradeEntryPanel);
+			JPanel columnPanel = columnPanels.get(i % columns);
+			columnPanel.add(tradeEntryPanel);
+			columnPanel.add(Box.createVerticalStrut(8));
 		}
+		listPanel.add(columnsPanel, BorderLayout.NORTH);
 
 		revalidate();
 		repaint();
 	}
 
-	private GridLayout buildTradeGridLayout(int tradeCount) {
-		int columns = 1;
-		if (tradeCount >= 6) {
-			columns = 3;
-		} else if (tradeCount >= 2) {
-			columns = 2;
+	private ArrayList<JPanel> buildColumnPanels(JPanel columnsPanel, int columns) {
+		ArrayList<JPanel> columnPanels = new ArrayList<JPanel>();
+		for (int i = 0; i < columns; i++) {
+			JPanel columnPanel = new JPanel();
+			columnPanel.setOpaque(false);
+			columnPanel.setLayout(new BoxLayout(columnPanel, BoxLayout.Y_AXIS));
+			columnPanels.add(columnPanel);
+			columnsPanel.add(columnPanel);
 		}
-		int rows = (int) Math.ceil(tradeCount / (double) columns);
-		return new GridLayout(rows, columns, 8, 8);
+		return columnPanels;
+	}
+
+	private int getTradeColumnCount(int tradeCount) {
+		if (tradeCount >= 8) {
+			return 3;
+		}
+		if (tradeCount >= 5) {
+			return 2;
+		}
+		return 1;
 	}
 }
