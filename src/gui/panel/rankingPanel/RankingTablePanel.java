@@ -86,7 +86,7 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 
 		JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
 		rightPanel.setOpaque(false);
-		regularSeasonButton = createFilterButton("Saison reguliere", true);
+		regularSeasonButton = createFilterButton("S.R", true);
 		playoffsButton = createFilterButton("Playoffs", false);
 		regularSeasonButton.addActionListener(new SeasonAction(REGULAR_SEASON));
 		playoffsButton.addActionListener(new SeasonAction(PLAYOFFS));
