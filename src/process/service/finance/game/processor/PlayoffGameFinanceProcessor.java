@@ -4,10 +4,10 @@ import data.finance.GameStat;
 import data.finance.budget.FinanceSeasonMoment;
 import data.league.League;
 import data.league.PlayoffRound;
-import process.service.finance.game.GameExpenseCalculator;
-import process.service.finance.game.GameRevenueCalculator;
-import process.service.finance.game.PlayoffGameExpenseCalculator;
-import process.service.finance.game.PlayoffGameRevenueCalculator;
+import process.service.finance.game.expense.GameExpenseCalculator;
+import process.service.finance.game.expense.PlayoffGameExpenseCalculator;
+import process.service.finance.game.revenue.GameRevenueCalculator;
+import process.service.finance.game.revenue.PlayoffGameRevenueCalculator;
 
 public class PlayoffGameFinanceProcessor extends GameFinanceProcessor {
 

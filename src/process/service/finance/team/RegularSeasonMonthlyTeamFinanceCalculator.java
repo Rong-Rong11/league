@@ -10,17 +10,17 @@ public class RegularSeasonMonthlyTeamFinanceCalculator extends AbstractMonthlyTe
 	}
 
 	@Override
-	protected double getLocalSponsoringMultiplier() {
+	public double getLocalSponsoringMultiplier() {
 		return FinanceConfiguration.REGULAR_SEASON_LOCAL_SPONSORING_RATE;
 	}
 
 	@Override
-	protected double getLocalMerchandisingMultiplier() {
+	public double getLocalMerchandisingMultiplier() {
 		return FinanceConfiguration.REGULAR_SEASON_LOCAL_MERCH_RATE;
 	}
 
 	@Override
-	protected double getOtherRevenueMultiplier() {
+	public double getOtherRevenueMultiplier() {
 		return FinanceConfiguration.REGULAR_SEASON_OTHER_LOCAL_RATE;
 	}
 }

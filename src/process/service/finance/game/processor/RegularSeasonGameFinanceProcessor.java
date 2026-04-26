@@ -3,10 +3,10 @@ package process.service.finance.game.processor;
 import data.finance.GameStat;
 import data.finance.budget.FinanceSeasonMoment;
 import data.league.League;
-import process.service.finance.game.GameExpenseCalculator;
-import process.service.finance.game.GameRevenueCalculator;
-import process.service.finance.game.RegularSeasonGameExpenseCalculator;
-import process.service.finance.game.RegularSeasonGameRevenueCalculator;
+import process.service.finance.game.expense.GameExpenseCalculator;
+import process.service.finance.game.expense.RegularSeasonGameExpenseCalculator;
+import process.service.finance.game.revenue.GameRevenueCalculator;
+import process.service.finance.game.revenue.RegularSeasonGameRevenueCalculator;
 
 public class RegularSeasonGameFinanceProcessor extends GameFinanceProcessor {
 

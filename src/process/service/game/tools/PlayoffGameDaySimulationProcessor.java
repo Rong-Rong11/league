@@ -15,23 +15,23 @@ public class PlayoffGameDaySimulationProcessor extends GameDaySimulationProcesso
 	private PlayoffRound round;
 
 	public PlayoffGameDaySimulationProcessor(
-		 GameSimulator gameSimulator,
-		 FinanceManager financeManager,
-		 PlayoffManager playoffManager,
-		 PlayoffRound round) {
-	  super(gameSimulator, financeManager);
-	  this.playoffManager = playoffManager;
-	  this.round = round;
+			GameSimulator gameSimulator,
+			FinanceManager financeManager,
+			PlayoffManager playoffManager,
+			PlayoffRound round) {
+		super(gameSimulator, financeManager);
+		this.playoffManager = playoffManager;
+		this.round = round;
 	}
 
 	@Override
 	protected void applyFinance(Game game, LocalDate date, int month) {
-	  financeManager.calculatePlayoffGame(game, date, month, round);
+		financeManager.calculatePlayoffGame(game, date, month, round);
 	}
 
 	@Override
 	protected void afterGame(Game game, LocalDate date) {
-	  playoffManager.handlePlayedGame(game, date);
+		playoffManager.handlePlayedGame(game, date);
 	}
 
 	@Override

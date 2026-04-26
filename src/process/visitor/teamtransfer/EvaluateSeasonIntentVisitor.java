@@ -10,7 +10,7 @@ import data.team.finance.transfer.Rebuild;
 import data.team.finance.transfer.SalaryDump;
 import data.team.finance.transfer.SmallAdjust;
 import data.team.finance.transfer.SuperstarBuild;
-import process.visitor.financialprofil.ValidateTradeVisitor;
+import process.visitor.financialpolicy.ValidateTradeVisitor;
 
 public class EvaluateSeasonIntentVisitor
 		implements TeamTransferVisitor<String> {
@@ -78,8 +78,8 @@ public class EvaluateSeasonIntentVisitor
 		ValidateTradeVisitor validateTradeVisitor = new ValidateTradeVisitor(
 				this.team.getTeamFinance().getCurrentPayroll(),
 				this.salaryCap,
-				this.team.getTeamFinance().getMarketSize());
-		if (this.team.getTeamFinance().getFinancialProfil().accept(validateTradeVisitor).booleanValue()) {
+				this.team.getTeamFinance().getStructure().getMarketSize());
+		if (this.team.getTeamFinance().getBehavior().getFinancialProfil().accept(validateTradeVisitor).booleanValue()) {
 			return "seller";
 		}
 		if (this.teamPerformatingRate > 0.75) {

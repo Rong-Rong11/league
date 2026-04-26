@@ -19,6 +19,7 @@ import gui.panel.common.ThemeAware;
 
 public class FinanceHeaderPanel extends RoundedPanel implements ThemeAware {
 	private JButton leagueButton;
+	private JButton centralButton;
 	private JButton teamsButton;
 	private JLabel titleLabel;
 	private JLabel subtitleLabel;
@@ -29,9 +30,11 @@ public class FinanceHeaderPanel extends RoundedPanel implements ThemeAware {
 		setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
 
 		leagueButton = new RoundedButton("Ligue");
+		centralButton = new RoundedButton("Central");
 		teamsButton = new RoundedButton("Equipes");
 
 		ButtonStyleUtil.styleToggleButton(leagueButton);
+		ButtonStyleUtil.styleToggleButton(centralButton);
 		ButtonStyleUtil.styleToggleButton(teamsButton);
 
 		add(buildTitlePanel(), BorderLayout.WEST);
@@ -46,10 +49,16 @@ public class FinanceHeaderPanel extends RoundedPanel implements ThemeAware {
 		return teamsButton;
 	}
 
+	public JButton getCentralButton() {
+		return centralButton;
+	}
+
 	public void setSelectedView(String selectedView) {
 		boolean leagueSelected = "league".equals(selectedView);
+		boolean centralSelected = "central".equals(selectedView);
 		boolean teamSelected = "team".equals(selectedView);
 		ButtonStyleUtil.setToggleButtonSelected(leagueButton, leagueSelected);
+		ButtonStyleUtil.setToggleButtonSelected(centralButton, centralSelected);
 		ButtonStyleUtil.setToggleButtonSelected(teamsButton, teamSelected);
 	}
 
@@ -76,6 +85,7 @@ public class FinanceHeaderPanel extends RoundedPanel implements ThemeAware {
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
 		panel.setOpaque(false);
 		panel.add(leagueButton);
+		panel.add(centralButton);
 		panel.add(teamsButton);
 		return panel;
 	}
