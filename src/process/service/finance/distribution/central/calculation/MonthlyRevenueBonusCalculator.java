@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.apache.log4j.Logger;
 
 import data.calendar.GameDay;
+import data.league.League;
 import data.sport.setup.Game;
 import log.LoggerUtility;
 import process.utility.CalendarUtility;
@@ -12,10 +13,12 @@ import process.utility.CalendarUtility;
 public class MonthlyRevenueBonusCalculator {
 	private static final Logger logger = LoggerUtility.getLogger(MonthlyRevenueBonusCalculator.class, "text");
 
+	private League league;
 	private MonthlyGameRevenueAnalyzer gameRevenueAnalyzer;
 
-	public MonthlyRevenueBonusCalculator(MonthlyGameRevenueAnalyzer gameRevenueAnalyzer) {
+	public MonthlyRevenueBonusCalculator(MonthlyGameRevenueAnalyzer gameRevenueAnalyzer, League league) {
 		this.gameRevenueAnalyzer = gameRevenueAnalyzer;
+		this.league = league;
 	}
 
 	public double getLeagueMonthlyAdditiveBonus(int month) {

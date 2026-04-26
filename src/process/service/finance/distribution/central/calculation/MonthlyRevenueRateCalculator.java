@@ -2,6 +2,7 @@ package process.service.finance.distribution.central.calculation;
 
 import org.apache.log4j.Logger;
 
+import data.league.League;
 import data.league.finance.CentralRevenueSeasonDynamics;
 import log.LoggerUtility;
 import process.utility.CalendarUtility;
@@ -11,11 +12,32 @@ public class MonthlyRevenueRateCalculator {
 
 	private MonthlyGameRevenueAnalyzer gameRevenueAnalyzer;
 	private CentralRevenueSeasonDynamics seasonDynamics;
+	private League league;
 
 	public MonthlyRevenueRateCalculator(MonthlyGameRevenueAnalyzer gameRevenueAnalyzer,
-			CentralRevenueSeasonDynamics seasonDynamics) {
+			CentralRevenueSeasonDynamics seasonDynamics, League league) {
 		this.gameRevenueAnalyzer = gameRevenueAnalyzer;
 		this.seasonDynamics = seasonDynamics;
+		this.league = league;
+	}
+
+	public double getPlayoffCentralRevenueRate() {
+		if (league == null || league.getPlayoff() == null || league.getPlayoff().getCurrentRound() == null) {
+			return 1.0;
+		}
+
+		switch (league.getPlayoff().getCurrentRound()) {
+			case FIRST_ROUND:
+				return 4;
+			case CONFERENCE_SEMIFINALS:
+				return 5;
+			case CONFERENCE_FINALS:
+				return 5.6;
+			case NBA_FINALS:
+				return 7;
+			default:
+				return 1.0;
+		}
 	}
 
 	public double getLeagueMonthlyAttractivenessRate(int month) {

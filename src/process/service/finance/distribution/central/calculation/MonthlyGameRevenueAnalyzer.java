@@ -10,6 +10,7 @@ import data.calendar.GameDay;
 import data.finance.GameStat;
 import data.league.League;
 import data.sport.setup.Game;
+import data.sport.setup.PlayoffSeries;
 import data.team.Team;
 import log.LoggerUtility;
 import process.service.finance.FinanceManager;
@@ -57,6 +58,9 @@ public class MonthlyGameRevenueAnalyzer {
 				+ gameCount
 				+ " games for month "
 				+ month);
+		if (month >= 7) {
+			attractiveness += 30;
+		}
 		return attractiveness;
 	}
 
@@ -181,7 +185,7 @@ public class MonthlyGameRevenueAnalyzer {
 		}
 
 		ArrayList<Team> activeTeams = new ArrayList<Team>();
-		for (data.sport.setup.PlayoffSeries series : CalendarUtility.getCurrentRoundSeries(league.getPlayoff())) {
+		for (PlayoffSeries series : CalendarUtility.getCurrentRoundSeries(league.getPlayoff())) {
 			if (series == null || series.isFinished()) {
 				continue;
 			}
@@ -193,7 +197,8 @@ public class MonthlyGameRevenueAnalyzer {
 	}
 
 	public boolean isImportantGame(Game game, LocalDate date) {
-		boolean importantGame = CalendarUtility.popularityScoreGame(game, date) >= 72 || game.getGameContext().isRivalry();
+		boolean importantGame = CalendarUtility.popularityScoreGame(game, date) >= 72
+				|| game.getGameContext().isRivalry();
 		if (importantGame) {
 			logger.trace("Game on " + date + " is important");
 		}

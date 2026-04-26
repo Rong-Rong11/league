@@ -28,8 +28,8 @@ public class MonthlyCentralRevenueCalculator {
 	public MonthlyCentralRevenueCalculator(League league) {
 		this.league = league;
 		this.gameRevenueAnalyzer = new MonthlyGameRevenueAnalyzer(league);
-		this.rateCalculator = new MonthlyRevenueRateCalculator(gameRevenueAnalyzer, getSeasonDynamics());
-		this.bonusCalculator = new MonthlyRevenueBonusCalculator(gameRevenueAnalyzer);
+		this.rateCalculator = new MonthlyRevenueRateCalculator(gameRevenueAnalyzer, getSeasonDynamics(), league);
+		this.bonusCalculator = new MonthlyRevenueBonusCalculator(gameRevenueAnalyzer, league);
 	}
 
 	public void setFinanceManager(FinanceManager financeManager) {
@@ -99,6 +99,7 @@ public class MonthlyCentralRevenueCalculator {
 		revenue *= rateCalculator.getSeasonMomentumRate(month, 0.10);
 		revenue *= rateCalculator.getControlledEconomicNoise(month, 0.165);
 		revenue *= rateCalculator.getRevenueTypeMonthlyRate(month, 0.018, 0.010, 0.0);
+		revenue *= rateCalculator.getPlayoffCentralRevenueRate();
 		revenue += bonusCalculator.getLeagueMonthlyAdditiveBonus(month) * 0.15 * NATIONAL_TV_BASE_REVENUE_RATE;
 		logger.debug("Calculated national TV revenue " + revenue + " for month " + month);
 
@@ -156,7 +157,7 @@ public class MonthlyCentralRevenueCalculator {
 		revenue *= getPopularityGainRate(teams, seasonDynamics, 0.70);
 		revenue *= rateCalculator.getLeagueMonthlyAttractivenessRate(month);
 		revenue *= rateCalculator.getImportantGamesRevenueRate(month, 0.0030);
-		revenue *= rateCalculator.getPlayoffGamesRevenueRate(month, 0.0028);
+		revenue *= rateCalculator.getPlayoffGamesRevenueRate(month, 0.15);
 		revenue *= rateCalculator.getPremiumGamesRevenueRate(month, 0.0060);
 		revenue *= rateCalculator.getHighAttendanceRevenueRate(month, 0.0024);
 		revenue *= rateCalculator.getStarDrivenRevenueRate(month, 0.0018, 0.0016, 0.0035);
@@ -228,7 +229,7 @@ public class MonthlyCentralRevenueCalculator {
 		revenue *= getPopularityGainRate(teams, seasonDynamics, 0.82);
 		revenue *= rateCalculator.getLeagueMonthlyAttractivenessRate(month);
 		revenue *= rateCalculator.getImportantGamesRevenueRate(month, 0.0040);
-		revenue *= rateCalculator.getPlayoffGamesRevenueRate(month, 0.0036);
+		revenue *= rateCalculator.getPlayoffGamesRevenueRate(month, 0.12);
 		revenue *= rateCalculator.getPremiumGamesRevenueRate(month, 0.0072);
 		revenue *= rateCalculator.getHighAttendanceRevenueRate(month, 0.0048);
 		revenue *= rateCalculator.getStarDrivenRevenueRate(month, 0.0021, 0.0023, 0.0045);
@@ -245,7 +246,8 @@ public class MonthlyCentralRevenueCalculator {
 	}
 
 	private CentralRevenueSeasonDynamics getSeasonDynamics() {
-		if (league == null || league.getLeagueFinance() == null || league.getLeagueFinance().getCentralRevenueSeasonDynamics() == null) {
+		if (league == null || league.getLeagueFinance() == null
+				|| league.getLeagueFinance().getCentralRevenueSeasonDynamics() == null) {
 			return new CentralRevenueSeasonDynamics(1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.08, 50.0, 1.0, 0.0);
 		}
 		return league.getLeagueFinance().getCentralRevenueSeasonDynamics();
