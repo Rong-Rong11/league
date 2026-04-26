@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
+
 import config.GameConfiguration;
 import data.player.Asset;
 import data.player.Player;
@@ -15,12 +17,14 @@ import data.sport.play.action.MissedShot;
 import data.sport.play.action.PointScored;
 import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
+import log.LoggerUtility;
 import process.simulator.game.event.OffensiveActionSelector;
 import process.simulator.game.event.PossessionPlayerSelector;
 import process.simulator.game.event.ShotOutcomePlayerSelector;
 import process.simulator.game.health.InjuryManager;
 
 public class PossessionSimulator {
+	private static final Logger logger = LoggerUtility.getLogger(PossessionSimulator.class, "text");
 
 	private final PossessionPlayerSelector possessionPlayerSelector = new PossessionPlayerSelector();
 	private final OffensiveActionSelector offensiveActionSelector = new OffensiveActionSelector();
@@ -33,8 +37,17 @@ public class PossessionSimulator {
 			HashMap<Player, Asset> attackPlayersAssetsOfMatch, HashMap<Player, Asset> defensivePlayersAssetsOfMatch,
 			HashMap<Player, Asset> playersNewAssets) {
 
-		int actionTime = 10 + (int) (Math.random() * 10);
 		ArrayList<ActionResult> actionResults = new ArrayList<ActionResult>();
+
+		if (attackingPlayer == null || attackingPlayers == null || defensivePlayers == null
+				|| attackPlayersAssetsOfMatch == null || defensivePlayersAssetsOfMatch == null
+				|| playersNewAssets == null) {
+			logger.warn("Returning empty possession result because player, players map or assets map is null");
+			return actionResults;
+		}
+
+		int actionTime = 10 + (int) (Math.random() * 10);
+
 		if (quarterTimeRemaining <= actionTime) {
 			actionResults.add(new EndOfTime(GameConfiguration.END_OF_TIME_ACTION));
 		} else {
@@ -45,6 +58,7 @@ public class PossessionSimulator {
 		for (ActionResult actionResult : actionResults) {
 			actionResult.setActionTime(actionTime);
 		}
+
 		return actionResults;
 	}
 
@@ -52,7 +66,9 @@ public class PossessionSimulator {
 			TreeMap<Double, Player> defensivePlayers, HashMap<Player, Asset> attackPlayersAssetsOfMatch,
 			HashMap<Player, Asset> defensivePlayersAssetsOfMatch, HashMap<Player, Asset> playersNewAssets,
 			ArrayList<ActionResult> actionResults) {
+
 		Player defendingPlayer = possessionPlayerSelector.chooseDefendingPlayer(defensivePlayers);
+
 		if (actionResolutionCalculator.isTurnover(attackingPlayer, defendingPlayer)) {
 			actionResults.add(new Turnover(GameConfiguration.TURNOVER_ACTION, attackingPlayer, defendingPlayer));
 			return;
@@ -60,6 +76,12 @@ public class PossessionSimulator {
 
 		OffensiveTry offensiveTry = offensiveActionSelector.chooseOffensiveAction(attackingPlayer,
 				attackPlayersAssetsOfMatch);
+
+		if (offensiveTry == null) {
+			logger.warn("Stopping possession because offensive action is null");
+			return;
+		}
+
 		if (offensiveTry.getName().equals(GameConfiguration.FOULDRAW)) {
 			injuryManager.simulateInjury(playersNewAssets, attackingPlayer, GameConfiguration.FOULDRAW);
 		}
@@ -79,6 +101,7 @@ public class PossessionSimulator {
 	private PointScored createPointScored(Player attackingPlayer, OffensiveTry offensiveTry,
 			HashMap<Player, Asset> attackPlayersAssetsOfMatch) {
 		Player assistPlayer = null;
+
 		if ((offensiveTry.getName().equals(GameConfiguration.THREEPOINT)
 				|| offensiveTry.getName().equals(GameConfiguration.TWOPOINT)) && isAssist()) {
 			assistPlayer = shotOutcomePlayerSelector.chooseAssistPlayer(attackingPlayer, attackPlayersAssetsOfMatch);
@@ -97,6 +120,7 @@ public class PossessionSimulator {
 			HashMap<Player, Asset> attackPlayersAssetsOfMatch, HashMap<Player, Asset> defensivePlayersAssetsOfMatch,
 			HashMap<Player, Asset> playersNewAssets, ArrayList<ActionResult> actionResults) {
 		actionResults.add(new MissedShot("missed shot", attackingPlayer));
+
 		if (isBlock()) {
 			Player blockingPlayer = shotOutcomePlayerSelector.chooseBlockingPlayer(defensivePlayersAssetsOfMatch);
 			actionResults.add(new Block(GameConfiguration.BLOCK_ACTION, blockingPlayer));
@@ -105,6 +129,12 @@ public class PossessionSimulator {
 
 		Player reboundPlayer = shotOutcomePlayerSelector.chooseRebounder(attackPlayersAssetsOfMatch,
 				defensivePlayersAssetsOfMatch);
+
+		if (reboundPlayer == null) {
+			logger.warn("Skipping rebound consequence because rebound player is null");
+			return;
+		}
+
 		if (attackingPlayers.containsValue(reboundPlayer)) {
 			actionResults.add(new Rebound(GameConfiguration.OFFENSIVE_REBOUND_ACTION, reboundPlayer, attackingPlayer));
 			injuryManager.simulateInjury(playersNewAssets, reboundPlayer, GameConfiguration.OFFENSIVE_REBOUND_ACTION);

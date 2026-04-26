@@ -13,9 +13,9 @@ import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import log.LoggerUtility;
 import process.utility.FinanceUtility;
-import process.visitor.financialprofil.AdministrativeCostMultiplierVisitor;
-import process.visitor.financialprofil.MaintenanceCostMultiplierVisitor;
-import process.visitor.financialprofil.StaffCostMultiplierVisitor;
+import process.visitor.financialpolicy.AdministrativeCostMultiplierVisitor;
+import process.visitor.financialpolicy.MaintenanceCostMultiplierVisitor;
+import process.visitor.financialpolicy.StaffCostMultiplierVisitor;
 
 public class MonthlyTeamExpenseCalculator {
 	private static final Logger logger = LoggerUtility.getLogger(MonthlyTeamExpenseCalculator.class, "text");

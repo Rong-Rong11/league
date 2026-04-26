@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import config.GameConfiguration;
 import data.player.Player;
+import data.sport.live.LiveMatchStatistics;
 import data.sport.play.action.Block;
 import data.sport.play.action.EndOfTime;
 import data.sport.play.action.MissedShot;
@@ -11,7 +12,6 @@ import data.sport.play.action.PointScored;
 import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
 import data.sport.setup.Game;
-import process.service.live.LiveMatchStatistics;
 
 public class StatsVisitor implements ActionResultVisitor<Void> {
 	private LiveMatchStatistics liveMatchStatistics;

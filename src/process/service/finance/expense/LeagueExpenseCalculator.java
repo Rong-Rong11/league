@@ -25,7 +25,7 @@ public class LeagueExpenseCalculator {
 		LeagueExpenseRateCalculator rateCalculator = new LeagueExpenseRateCalculator(gameAnalyzer,
 				popularityTracker,
 				getSeasonDynamics());
-		this.costCalculator = new LeagueExpenseCostCalculator(rateCalculator);
+		this.costCalculator = new LeagueExpenseCostCalculator(rateCalculator, league.getAllTeam());
 	}
 
 	public void setFinanceManager(FinanceManager financeManager) {

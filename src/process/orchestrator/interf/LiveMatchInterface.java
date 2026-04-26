@@ -1,7 +1,7 @@
 package process.orchestrator.interf;
 
+import data.sport.live.LiveMatchState;
 import data.sport.setup.Game;
-import process.service.live.LiveMatchState;
 
 public interface LiveMatchInterface {
 

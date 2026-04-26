@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import data.sport.live.LiveMatchState;
 import data.sport.setup.Game;
 import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
@@ -18,7 +19,6 @@ import gui.panel.matchPanel.liveMatchPanel.LiveActionsPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveMatchHeaderPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveTeamStatsPanel;
 import process.orchestrator.interf.GUIInterface;
-import process.service.live.LiveMatchState;
 
 public class LiveMatchDashboard extends JPanel implements Runnable, ThemeAware {
 	private static final int DASHBOARD_SPACING = 16;
