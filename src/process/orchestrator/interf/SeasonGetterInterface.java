@@ -41,6 +41,8 @@ public interface SeasonGetterInterface {
 
 	GameDay getGameDay(LocalDate date);
 
+	TreeMap<LocalDate, GameDay> getRegularSeasonCalendar();
+
 	TreeMap<LocalDate, GameDay> getSeasonCalendar();
 
 	boolean isSeasonInitialized();

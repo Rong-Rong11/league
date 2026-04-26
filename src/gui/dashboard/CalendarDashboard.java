@@ -165,10 +165,10 @@ public class CalendarDashboard extends JPanel implements ThemeAware, Refreshable
 			return;
 		}
 
-		TreeMap<LocalDate, GameDay> seasonCalendar = guiInterface.getSeasonCalendar();
-		int totalGameDays = seasonCalendar.size();
+		TreeMap<LocalDate, GameDay> regularSeasonCalendar = guiInterface.getRegularSeasonCalendar();
+		int totalGameDays = regularSeasonCalendar.size();
 		int displayedGameDays = 0;
-		for (GameDay gameDay : seasonCalendar.values()) {
+		for (GameDay gameDay : regularSeasonCalendar.values()) {
 			if (gameDay.isDisplayed()) {
 				displayedGameDays++;
 			}

@@ -271,7 +271,7 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (matchDashboard != null) {
-				matchDashboard.showGameDay(gameDay, date);
+				matchDashboard.loadGamesOfDay(date);
 			}
 			if (showMatchDashboardAction != null) {
 				showMatchDashboardAction.run();
