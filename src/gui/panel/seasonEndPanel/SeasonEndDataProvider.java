@@ -129,22 +129,6 @@ public class SeasonEndDataProvider {
 		return guiInterface.getPlayoffSeriesCount();
 	}
 
-	public int countTotalGames() {
-		int regularSeasonGames = 0;
-		for (Team team : guiInterface.getTeams()) {
-			regularSeasonGames += guiInterface.getTeamNumberPlayedGames(team);
-		}
-		return regularSeasonGames / 2 + countPlayoffGames();
-	}
-
-	public int countPlayoffGames() {
-		int count = 0;
-		for (PlayoffSeries series : getAllPlayoffSeries()) {
-			count += series.getNumberPlayedGames();
-		}
-		return count;
-	}
-
 	public String buildRecordText(Team team) {
 		if (team == null) {
 			return "-";
@@ -180,17 +164,19 @@ public class SeasonEndDataProvider {
 	}
 
 	public double getTotalTeamNet(Team team) {
-		return getTotalNet(getTeamBudget(team));
+		return team == null ? 0.0 : guiInterface.getTeamTotalNet(team);
 	}
 
-	public double getTotalNet(Budget budget) {
-		double total = 0.0;
-		if (budget != null) {
-			for (int month = 1; month <= lastFinanceMonth(); month++) {
-				total += getNetForMonth(budget, month);
-			}
-		}
-		return total;
+	public double getTotalLeagueNet() {
+		return guiInterface.getLeagueTotalNet();
+	}
+
+	public double getTotalTvRevenue() {
+		return guiInterface.getTotalTvRevenue();
+	}
+
+	public double getTotalMerchandisingRevenue() {
+		return guiInterface.getTotalMerchandisingRevenue();
 	}
 
 	public double getTotalIncome(Budget budget) {
@@ -276,9 +262,9 @@ public class SeasonEndDataProvider {
 		Budget budget = getLeagueBudget();
 		for (int month = 1; month <= lastFinanceMonth(); month++) {
 			String label = "M" + month;
-			dataset.addValue(toMillions(getIncomeForMonth(budget, month)), "Revenus", label);
-			dataset.addValue(toMillions(getExpenseForMonth(budget, month)), "Depenses", label);
-			dataset.addValue(toMillions(getNetForMonth(budget, month)), "Net", label);
+			dataset.addValue(toChartAmount(getIncomeForMonth(budget, month)), "Revenus", label);
+			dataset.addValue(toChartAmount(getExpenseForMonth(budget, month)), "Depenses", label);
+			dataset.addValue(toChartAmount(guiInterface.getLeagueNetForMonth(month)), "Net", label);
 		}
 		return dataset;
 	}
@@ -292,18 +278,9 @@ public class SeasonEndDataProvider {
 		int limit = Math.min(SeasonEndPanelFactory.LIST_LIMIT, teams.size());
 		for (int i = 0; i < limit; i++) {
 			Team team = teams.get(i);
-			dataset.addValue(toMillions(getTotalTeamNet(team)), top ? "Top nets" : "Bottom nets",
+			dataset.addValue(toChartAmount(getTotalTeamNet(team)), top ? "Top nets" : "Bottom nets",
 					TeamDisplayUtility.getShortName(team));
 		}
-		return dataset;
-	}
-
-	public DefaultCategoryDataset buildLeagueTotalDataset() {
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-		Budget budget = getLeagueBudget();
-		dataset.addValue(toMillions(getTotalIncome(budget)), "Revenus", "Revenus");
-		dataset.addValue(toMillions(getTotalExpense(budget)), "Depenses", "Depenses");
-		dataset.addValue(toMillions(getTotalNet(budget)), "Net", "Net");
 		return dataset;
 	}
 
@@ -345,22 +322,6 @@ public class SeasonEndDataProvider {
 		return playoff.getNbaFinals().get(0);
 	}
 
-	private ArrayList<PlayoffSeries> getAllPlayoffSeries() {
-		ArrayList<PlayoffSeries> series = new ArrayList<PlayoffSeries>();
-		Playoff playoff = getPlayoff();
-		if (playoff == null) {
-			return series;
-		}
-		series.addAll(playoff.getEastFirstRound());
-		series.addAll(playoff.getWestFirstRound());
-		series.addAll(playoff.getEastConferenceSemis());
-		series.addAll(playoff.getWestConferenceSemis());
-		series.addAll(playoff.getEastConferenceFinals());
-		series.addAll(playoff.getWestConferenceFinals());
-		series.addAll(playoff.getNbaFinals());
-		return series;
-	}
-
 	private Playoff getPlayoff() {
 		League league = guiInterface.getLeague();
 		return league == null ? null : league.getPlayoff();
@@ -393,16 +354,12 @@ public class SeasonEndDataProvider {
 		return total;
 	}
 
-	private double getNetForMonth(Budget budget, int month) {
-		return budget == null ? 0.0 : budget.getNetForMonth(month);
-	}
-
 	private int lastFinanceMonth() {
 		return Math.max(1, FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS - 1);
 	}
 
-	private double toMillions(double value) {
-		return value / 1000000.0;
+	private double toChartAmount(double value) {
+		return value;
 	}
 
 	private void increment(Map<String, Integer> counts, String key) {

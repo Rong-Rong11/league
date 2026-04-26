@@ -2,6 +2,7 @@ package gui.panel.seasonEndPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
@@ -10,14 +11,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import data.team.Team;
+import gui.panel.common.DashboardCard;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedPanel;
 import gui.utility.TeamDisplayUtility;
 
 public final class SeasonEndPanelFactory {
 	public static final int GAP = 12;
 	public static final int LIST_LIMIT = 5;
-	public static final int PROFILE_LIST_LIMIT = 3;
+	public static final int PROFILE_LIST_LIMIT = 5;
 
 	private SeasonEndPanelFactory() {
 	}
@@ -50,6 +53,33 @@ public final class SeasonEndPanelFactory {
 		return card;
 	}
 
+	public static DashboardCard buildInfoBox(String title, String subtitle, JPanel content, final String infoTitle,
+			final String infoMessage) {
+		DashboardCard card = new DashboardCard();
+		card.setLayout(new BorderLayout());
+
+		JPanel header = new JPanel(new BorderLayout(10, 0));
+		header.setOpaque(false);
+		header.setBorder(BorderFactory.createEmptyBorder(14, 16, 10, 16));
+
+		JPanel titlePanel = new JPanel();
+		titlePanel.setOpaque(false);
+		titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+
+		JLabel titleLabel = new JLabel(title);
+		LabelStyleUtil.styleTitleLabel(titleLabel, 16);
+		JLabel subtitleLabel = new JLabel(subtitle);
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 13);
+
+		titlePanel.add(titleLabel);
+		titlePanel.add(subtitleLabel);
+
+		header.add(titlePanel, BorderLayout.CENTER);
+		card.add(header, BorderLayout.NORTH);
+		card.add(content, BorderLayout.CENTER);
+		return card;
+	}
+
 	public static JPanel buildListPanel() {
 		JPanel panel = new JPanel();
 		panel.setOpaque(false);
@@ -77,6 +107,7 @@ public final class SeasonEndPanelFactory {
 		valueLabel.setForeground(valueColor);
 		row.add(titleLabel, BorderLayout.CENTER);
 		row.add(valueLabel, BorderLayout.EAST);
+		row.setMaximumSize(new Dimension(Integer.MAX_VALUE, row.getPreferredSize().height));
 		return row;
 	}
 
@@ -110,6 +141,7 @@ public final class SeasonEndPanelFactory {
 		row.add(titleLabel);
 		row.add(profileLabel);
 		row.add(moneyLabel);
+		row.setMaximumSize(new Dimension(Integer.MAX_VALUE, row.getPreferredSize().height));
 		return row;
 	}
 }

@@ -151,8 +151,8 @@ public final class FinanceViewFactory {
 	}
 
 	public static JPanel financeLineChart(DefaultCategoryDataset dataset, Color mainColor) {
-		JFreeChart chart = ChartFactory.createLineChart(null, "", "Montant (M$)", dataset, PlotOrientation.VERTICAL,
-				false, false, false);
+		JFreeChart chart = ChartFactory.createLineChart(null, "", "Montant (M$)", dataset, PlotOrientation.VERTICAL, true,
+				false, false);
 
 		LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, true);
 		CategoryPlot chartArea = chart.getCategoryPlot();
@@ -163,7 +163,15 @@ public final class FinanceViewFactory {
 	}
 
 	public static JPanel financeBarChart(DefaultCategoryDataset dataset, Color color) {
-		JFreeChart chart = ChartFactory.createBarChart(null, "Categorie", "Montant (M$)", dataset,
+		return barChart(dataset, color, "Montant (M$)");
+	}
+
+	public static JPanel countBarChart(DefaultCategoryDataset dataset, Color color) {
+		return barChart(dataset, color, "Equipes");
+	}
+
+	private static JPanel barChart(DefaultCategoryDataset dataset, Color color, String rangeAxisLabel) {
+		JFreeChart chart = ChartFactory.createBarChart(null, "Categorie", rangeAxisLabel, dataset,
 				PlotOrientation.VERTICAL, false, false, false);
 
 		CategoryPlot chartArea = chart.getCategoryPlot();
@@ -220,6 +228,9 @@ public final class FinanceViewFactory {
 			renderer.setSeriesPaint(0, mainColor);
 			if (chartArea.getDataset() != null && chartArea.getDataset().getRowCount() > 1) {
 				renderer.setSeriesPaint(1, DashboardPanelUtil.EXPENSE_COLOR);
+			}
+			if (chartArea.getDataset() != null && chartArea.getDataset().getRowCount() > 2) {
+				renderer.setSeriesPaint(2, DashboardPanelUtil.STRATEGY_REBUILD_COLOR);
 			}
 		}
 

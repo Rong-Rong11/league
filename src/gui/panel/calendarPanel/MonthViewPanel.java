@@ -18,6 +18,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.sport.setup.Game;
 import gui.dashboard.MatchDashboard;
@@ -104,7 +105,7 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 		topPanel.setOpaque(false);
 		topPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 0, 8));
 
-		JLabel dayNumberLabel = new JLabel(String.valueOf(date.getDayOfMonth()), JLabel.CENTER);
+		JLabel dayNumberLabel = new JLabel(buildDayNumberText(date, sameMonth), JLabel.CENTER);
 		LabelStyleUtil.styleValueLabel(dayNumberLabel, 16);
 		if (!sameMonth) {
 			dayNumberLabel.setForeground(getOutsideMonthTextColor());
@@ -115,9 +116,10 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 			RoundedPanel currentDayBadge = new RoundedPanel(18);
 			currentDayBadge.setLayout(new BorderLayout());
 			currentDayBadge.setBackground(DashboardPanelUtil.ACCENT_RED_COLOR);
-			currentDayBadge.setPreferredSize(new Dimension(34, 28));
-			currentDayBadge.setMinimumSize(new Dimension(34, 28));
-			currentDayBadge.setMaximumSize(new Dimension(34, 28));
+			int badgeWidth = isSpecialEventDay(date) && sameMonth ? 44 : 34;
+			currentDayBadge.setPreferredSize(new Dimension(badgeWidth, 28));
+			currentDayBadge.setMinimumSize(new Dimension(badgeWidth, 28));
+			currentDayBadge.setMaximumSize(new Dimension(badgeWidth, 28));
 			dayNumberLabel.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 			currentDayBadge.add(dayNumberLabel, BorderLayout.CENTER);
 			topPanel.add(currentDayBadge, BorderLayout.WEST);
@@ -171,6 +173,26 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 	private boolean isSameMonth(LocalDate date, YearMonth displayedMonth) {
 		return date.getYear() == displayedMonth.getYear()
 				&& date.getMonthValue() == displayedMonth.getMonthValue();
+	}
+
+	private String buildDayNumberText(LocalDate date, boolean sameMonth) {
+		String text = String.valueOf(date.getDayOfMonth());
+		if (sameMonth && isSpecialEventDay(date)) {
+			text += " +";
+		}
+		return text;
+	}
+
+	private boolean isSpecialEventDay(LocalDate date) {
+		return date.equals(CalendarConfiguration.CHRISTMAS_DAY)
+				|| date.equals(CalendarUtility.getMLKDay())
+				|| isRegularSeasonBoundary(date);
+	}
+
+	private boolean isRegularSeasonBoundary(LocalDate date) {
+		return guiInterface != null
+				&& (date.equals(guiInterface.getRegularSeasonStartDate())
+						|| date.equals(guiInterface.getRegularSeasonEndDate()));
 	}
 
 	public static String buildMonthText(YearMonth yearMonth) {
