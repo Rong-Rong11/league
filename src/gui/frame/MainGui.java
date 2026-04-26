@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -11,20 +13,18 @@ import javax.swing.JPanel;
 
 import gui.dashboard.CalendarDashboard;
 import gui.dashboard.FinanceDashboard;
+import gui.dashboard.LaunchingDashboard;
 import gui.dashboard.LiveMatchDashboard;
 import gui.dashboard.MapDashboard;
 import gui.dashboard.MatchDashboard;
 import gui.dashboard.OpeningDashboard;
-import gui.dashboard.RefreshableDashboard;
 import gui.dashboard.RankingDashboard;
+import gui.dashboard.RefreshableDashboard;
 import gui.dashboard.RegularSeasonEndDashboard;
 import gui.dashboard.RosterDashboard;
 import gui.layout.SidebarPanel;
 import gui.panel.common.DashboardPanelUtil;
 import process.orchestrator.interf.GUIInterface;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainGui extends JFrame {
 
@@ -32,6 +32,7 @@ public class MainGui extends JFrame {
 	private JPanel rootPanel;
 	private CardLayout dashboardLayout;
 	private JPanel dashboardPanel;
+	private LaunchingDashboard launchingDashboard;
 	private OpeningDashboard openingPanel;
 	private RegularSeasonEndDashboard regularSeasonEndDashboard;
 	private JPanel mainPanel;
@@ -69,12 +70,14 @@ public class MainGui extends JFrame {
 		dashboardLayout = new CardLayout();
 		dashboardPanel = new JPanel(dashboardLayout);
 		refreshableDashboards = new HashMap<String, RefreshableDashboard>();
+		launchingDashboard = new LaunchingDashboard();
 		openingPanel = new OpeningDashboard(guiInterface);
 		regularSeasonEndDashboard = new RegularSeasonEndDashboard(guiInterface);
 		mainPanel = buildApplicationPanel();
 	}
 
 	private void organize(boolean visible) {
+		rootPanel.add(launchingDashboard, "launching");
 		rootPanel.add(openingPanel, "opening");
 		rootPanel.add(mainPanel, "main");
 		rootPanel.add(regularSeasonEndDashboard, "regularSeasonEnd");
@@ -83,7 +86,7 @@ public class MainGui extends JFrame {
 		add(rootPanel, BorderLayout.CENTER);
 
 		showDashboardCard("match");
-		showRootCard("opening");
+		showRootCard("launching");
 
 		pack();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -141,6 +144,8 @@ public class MainGui extends JFrame {
 	}
 
 	private void registerOpeningActions() {
+		launchingDashboard.getContinueButton().addActionListener(new ShowOpeningDashboardAction());
+		launchingDashboard.getThemeButton().addActionListener(new ToggleThemeAction());
 		openingPanel.getContinueButton().addActionListener(new OpenApplicationAction(openingPanel));
 		openingPanel.getThemeButton().addActionListener(new ToggleThemeAction());
 		regularSeasonEndDashboard.getReviewRankingButton().addActionListener(new ReviewRankingAction());
@@ -181,6 +186,13 @@ public class MainGui extends JFrame {
 	private void showDashboardCard(String cardName) {
 		currentDashboardCard = cardName;
 		dashboardLayout.show(dashboardPanel, cardName);
+	}
+
+	private class ShowOpeningDashboardAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			showRootCard("opening");
+		}
 	}
 
 	private class SwitchDashboardAction implements ActionListener {
@@ -349,6 +361,9 @@ public class MainGui extends JFrame {
 		}
 		if (financeDashboard != null) {
 			financeDashboard.applyTheme();
+		}
+		if (launchingDashboard != null) {
+			launchingDashboard.applyTheme();
 		}
 	}
 
