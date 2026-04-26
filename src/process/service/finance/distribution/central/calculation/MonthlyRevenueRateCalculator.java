@@ -28,13 +28,13 @@ public class MonthlyRevenueRateCalculator {
 
 		switch (league.getPlayoff().getCurrentRound()) {
 			case FIRST_ROUND:
-				return 2;
+				return 4;
 			case CONFERENCE_SEMIFINALS:
-				return 3.1;
+				return 5;
 			case CONFERENCE_FINALS:
-				return 4.2;
+				return 5.6;
 			case NBA_FINALS:
-				return 6;
+				return 7;
 			default:
 				return 1.0;
 		}
