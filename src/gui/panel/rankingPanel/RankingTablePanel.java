@@ -45,6 +45,7 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 	private JButton nextPageButton;
 	private JLabel pageLabel;
 	private final RankingPlayoffsViewPanel playoffsViewPanel;
+	private Runnable seasonEndAction;
 	private String selectedMode;
 	private String selectedSeason;
 	private int globalPageIndex;
@@ -295,6 +296,10 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		setSelectedSeason(PLAYOFFS);
 	}
 
+	public void setSeasonEndAction(Runnable seasonEndAction) {
+		this.seasonEndAction = seasonEndAction;
+	}
+
 	private void updateModeButtons() {
 		styleFilterButton(globalButton, GLOBAL_MODE.equals(selectedMode));
 		styleFilterButton(eastButton, EAST_MODE.equals(selectedMode));
@@ -444,7 +449,9 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 			guiInterface.simulateNextPlayoffRound();
 			refreshRanking();
 			updatePlayoffRoundButton();
-			System.out.println("round playoff simulé");
+			if (guiInterface.arePlayoffsFinished() && seasonEndAction != null) {
+				seasonEndAction.run();
+			}
 		}
 	}
 

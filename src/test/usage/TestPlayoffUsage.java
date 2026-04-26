@@ -44,5 +44,8 @@ public class TestPlayoffUsage {
 		assertFalse(simulationManager.getLeague().getPlayoff().getNbaFinals().isEmpty());
 		PlayoffSeries finals = simulationManager.getLeague().getPlayoff().getNbaFinals().get(0);
 		assertTrue(finals.isFinished());
+		assertTrue(simulationManager.arePlayoffsFinished());
+		assertNotNull(simulationManager.getLeague().getPlayoff().getChampion());
+		assertFalse(simulationManager.getPlayoffChampionName().equals(""));
 	}
 }
