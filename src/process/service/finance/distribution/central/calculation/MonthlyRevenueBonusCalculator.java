@@ -99,29 +99,9 @@ public class MonthlyRevenueBonusCalculator {
 		bonus += getVolumeBonus(importantGames, premiumGames, highAttendanceGames);
 		bonus += getStarRivalryBonus(rivalryGames, starGames, starRivalryGames);
 		bonus += getPlayoffMonthlyBonus(month);
-		bonus += getPlayoffCentralRevenueMultiplier();
 		logger.debug("Calculated league monthly additive bonus " + bonus + " for month " + month);
 
 		return bonus;
-	}
-
-	private double getPlayoffCentralRevenueMultiplier() {
-		if (league == null || league.getPlayoff() == null || league.getPlayoff().getCurrentRound() == null) {
-			return 1.0;
-		}
-
-		switch (league.getPlayoff().getCurrentRound()) {
-			case FIRST_ROUND:
-				return 1.20;
-			case CONFERENCE_SEMIFINALS:
-				return 1.40;
-			case CONFERENCE_FINALS:
-				return 1.70;
-			case NBA_FINALS:
-				return 2.50;
-			default:
-				return 1.0;
-		}
 	}
 
 	private double getPlayoffMonthlyBonus(int month) {

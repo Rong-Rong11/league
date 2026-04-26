@@ -57,6 +57,9 @@ public class MonthlyGameRevenueAnalyzer {
 				+ gameCount
 				+ " games for month "
 				+ month);
+		if (month >= 7) {
+			attractiveness += 15;
+		}
 		return attractiveness;
 	}
 
@@ -193,7 +196,8 @@ public class MonthlyGameRevenueAnalyzer {
 	}
 
 	public boolean isImportantGame(Game game, LocalDate date) {
-		boolean importantGame = CalendarUtility.popularityScoreGame(game, date) >= 72 || game.getGameContext().isRivalry();
+		boolean importantGame = CalendarUtility.popularityScoreGame(game, date) >= 72
+				|| game.getGameContext().isRivalry();
 		if (importantGame) {
 			logger.trace("Game on " + date + " is important");
 		}
