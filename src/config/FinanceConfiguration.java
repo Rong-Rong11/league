@@ -25,9 +25,9 @@ public class FinanceConfiguration {
 	public static final double BASE_STADIUM_COSTS = 0.2;
 	public static final double BASE_TICKET_PRICE = 45; // pas en millions
 	public static final double ATTENDANCE_RATE_BASE = 0.5;
-	public static final double BASE_TRAVEL_INTRA_DIVISION_COST = 0.02;
-	public static final double BASE_TRAVEL_INTRA_CONFERENCE_COST = 0.05;
-	public static final double BASE_TRAVEL_INTER_CONFERENCE_COST = 0.09;
+	public static final double BASE_TRAVEL_INTRA_DIVISION_COST = 0.03;
+	public static final double BASE_TRAVEL_INTRA_CONFERENCE_COST = 0.06;
+	public static final double BASE_TRAVEL_INTER_CONFERENCE_COST = 0.10;
 
 	public static final int MAX_PRESEASON_BIG_TRADE = 3;
 	public static final int MAX_TRADE_PER_TEAM = 5;

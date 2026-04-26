@@ -15,28 +15,28 @@ import process.service.league.TeamPopularityUpdater;
 public class SemiPlayoffManager extends PlayoffManager {
 
 	public SemiPlayoffManager(League league,
-		 SemiCalendarBuilder semiCalendarBuilder,
-		 PlayoffBuilder playoffBuilder,
-		 FinanceManager financeManager,
-		 TeamPopularityUpdater teamPopularityUpdater) {
-	  super(league, semiCalendarBuilder, playoffBuilder, financeManager, teamPopularityUpdater);
+			SemiCalendarBuilder semiCalendarBuilder,
+			PlayoffBuilder playoffBuilder,
+			FinanceManager financeManager,
+			TeamPopularityUpdater teamPopularityUpdater) {
+		super(league, semiCalendarBuilder, playoffBuilder, financeManager, teamPopularityUpdater);
 	}
 
 	@Override
 	public ArrayList<PlayoffSeries> getManagedSeries() {
-	  ArrayList<PlayoffSeries> managedSeries = new ArrayList<PlayoffSeries>();
-	  managedSeries.addAll(getLeague().getPlayoff().getEastConferenceSemis());
-	  managedSeries.addAll(getLeague().getPlayoff().getWestConferenceSemis());
-	  return managedSeries;
+		ArrayList<PlayoffSeries> managedSeries = new ArrayList<PlayoffSeries>();
+		managedSeries.addAll(getLeague().getPlayoff().getEastConferenceSemis());
+		managedSeries.addAll(getLeague().getPlayoff().getWestConferenceSemis());
+		return managedSeries;
 	}
 
 	@Override
 	public void advanceToNextRound(LocalDate roundEndDate) {
-	  League league = getLeague();
-	  league.setPlayoff(getPlayoffBuilder().buildConferenceFinalsPlayoffs());
-	  league.getPlayoff().setCurrentRound(PlayoffRound.CONFERENCE_FINALS);
-	  ConferenceFinalCalendarBuilder conferenceFinalCalendarBuilder = new ConferenceFinalCalendarBuilder(league,
-			roundEndDate);
-	  mergePlayoffCalendar(conferenceFinalCalendarBuilder.buildCalendar());
+		League league = getLeague();
+		league.setPlayoff(getPlayoffBuilder().buildConferenceFinalsPlayoffs());
+		league.getPlayoff().setCurrentRound(PlayoffRound.CONFERENCE_FINALS);
+		ConferenceFinalCalendarBuilder conferenceFinalCalendarBuilder = new ConferenceFinalCalendarBuilder(league,
+				roundEndDate);
+		mergePlayoffCalendar(conferenceFinalCalendarBuilder.buildCalendar());
 	}
 }

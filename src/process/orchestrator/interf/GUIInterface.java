@@ -7,7 +7,7 @@ import data.sport.setup.Game;
 
 public interface GUIInterface
 			extends SimulationInterface, SeasonGetterInterface, TeamGetterInterface, MatchGetterInterface,
-			DisplayInterface, LiveMatchInterface {
+			DisplayInterface, LiveMatchInterface, FinanceNetGetterInterface {
 	  League getLeague();
 
 	  boolean hasPlayoffsStarted();

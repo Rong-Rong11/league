@@ -15,18 +15,18 @@ import process.service.league.TeamPopularityUpdater;
 public class NbaFinalPlayoffManager extends PlayoffManager {
 
 	public NbaFinalPlayoffManager(League league,
-		 NbaFinalCalendarBuilder nbaFinalCalendarBuilder,
-		 PlayoffBuilder playoffBuilder,
-		 FinanceManager financeManager,
-		 TeamPopularityUpdater teamPopularityUpdater) {
-	  super(league, nbaFinalCalendarBuilder, playoffBuilder, financeManager, teamPopularityUpdater);
+			NbaFinalCalendarBuilder nbaFinalCalendarBuilder,
+			PlayoffBuilder playoffBuilder,
+			FinanceManager financeManager,
+			TeamPopularityUpdater teamPopularityUpdater) {
+		super(league, nbaFinalCalendarBuilder, playoffBuilder, financeManager, teamPopularityUpdater);
 	}
 
 	@Override
 	public ArrayList<PlayoffSeries> getManagedSeries() {
-	  ArrayList<PlayoffSeries> managedSeries = new ArrayList<PlayoffSeries>();
-	  managedSeries.addAll(getLeague().getPlayoff().getNbaFinals());
-	  return managedSeries;
+		ArrayList<PlayoffSeries> managedSeries = new ArrayList<PlayoffSeries>();
+		managedSeries.addAll(getLeague().getPlayoff().getNbaFinals());
+		return managedSeries;
 	}
 
 	@Override

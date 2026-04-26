@@ -31,6 +31,9 @@ public class FinanceUtility {
 		for (int i = 0; i < FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS; i++) {
 			monthlyExpenses.put(i, new HashMap<String, Expense>());
 		}
+		for (int i = 0; i < FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS; i++) {
+			budget.getMonthlyNetHistory().put(i, 0.0);
+		}
 	}
 
 	public static void updateFormerLeaguePayroll() {
@@ -68,16 +71,36 @@ public class FinanceUtility {
 
 	public static void updateBudget(Budget budget) {
 		double amount = budget.getInitialAmount();
-		for (HashMap<String, Income> incomes : budget.getMonthlyIncomes().values()) {
-			for (Income income : incomes.values())
-				amount += income.getAmount();
-		}
-		for (HashMap<String, Expense> expenses : budget.getMonthlyExpenses().values()) {
-			for (Expense expense : expenses.values()) {
-				amount -= expense.getAmount();
-			}
+		for (int month = 0; month < FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS; month++) {
+			HashMap<String, Income> incomes = budget.getMonthlyIncomes().get(month);
+			HashMap<String, Expense> expenses = budget.getMonthlyExpenses().get(month);
+			double monthNet = totalIncome(incomes) - totalExpense(expenses);
+			budget.getMonthlyNetHistory().put(month, monthNet);
+			amount += monthNet;
 		}
 		budget.setRemainingAmount(amount);
+	}
+
+	private static double totalIncome(HashMap<String, Income> incomes) {
+		if (incomes == null) {
+			return 0.0;
+		}
+		double total = 0.0;
+		for (Income income : incomes.values()) {
+			total += income.getAmount();
+		}
+		return total;
+	}
+
+	private static double totalExpense(HashMap<String, Expense> expenses) {
+		if (expenses == null) {
+			return 0.0;
+		}
+		double total = 0.0;
+		for (Expense expense : expenses.values()) {
+			total += expense.getAmount();
+		}
+		return total;
 	}
 
 	public static double calculatePayroll(ArrayList<Player> players) {
@@ -292,14 +315,17 @@ public class FinanceUtility {
 		double popularity = team.getCurrentPopularity() / 100.0;
 
 		double historicalPrestige = team.getTeamFinance()
+				.getStructure()
 				.getEconomicProfil()
 				.getHistoricalPrestige();
 
 		double fanLoyalty = team.getTeamFinance()
+				.getStructure()
 				.getEconomicProfil()
 				.getFanLoyalty();
 
 		double mediaPrestige = team.getTeamFinance()
+				.getStructure()
 				.getMediaMarket()
 				.getPrestigeModifier();
 

@@ -10,17 +10,17 @@ public class PlayoffMonthlyTeamFinanceCalculator extends AbstractMonthlyTeamFina
 	}
 
 	@Override
-	protected double getLocalSponsoringMultiplier() {
+	public double getLocalSponsoringMultiplier() {
 		return FinanceConfiguration.PLAYOFF_LOCAL_SPONSORING_RATE;
 	}
 
 	@Override
-	protected double getLocalMerchandisingMultiplier() {
+	public double getLocalMerchandisingMultiplier() {
 		return FinanceConfiguration.PLAYOFF_LOCAL_MERCH_RATE;
 	}
 
 	@Override
-	protected double getOtherRevenueMultiplier() {
+	public double getOtherRevenueMultiplier() {
 		return FinanceConfiguration.PLAYOFF_OTHER_LOCAL_RATE;
 	}
 }

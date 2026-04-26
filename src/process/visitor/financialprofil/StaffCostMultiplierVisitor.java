@@ -8,20 +8,17 @@ public class StaffCostMultiplierVisitor implements FinancialProfilVisitor<Double
 
 	@Override
 	public Double visit(ThriftyPolicy thriftyPolicy) {
-	  // TODO Auto-generated method stub
-	  return 0.9;
+		return 0.88;
 	}
 
 	@Override
 	public Double visit(BalancedPolicy balancedPolicy) {
-	  // TODO Auto-generated method stub
-	  return 1.05;
+		return 1.00;
 	}
 
 	@Override
 	public Double visit(AmbitiousPolicy ambitiousPolicy) {
-	  // TODO Auto-generated method stub
-	  return 1.2;
+		return 1.35;
 	}
 
 }

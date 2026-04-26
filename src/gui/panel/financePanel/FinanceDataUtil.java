@@ -135,7 +135,21 @@ public final class FinanceDataUtil {
 		if (budget == null) {
 			return 0.0;
 		}
-		return totalIncome(budget.getIncomesForMonth(month)) - totalExpense(budget.getExpensesForMonth(month));
+		return budget.getNetForMonth(month);
+	}
+
+	public static double leagueMonthNet(GUIInterface guiInterface, int month) {
+		if (guiInterface == null) {
+			return 0.0;
+		}
+		return guiInterface.getLeagueNetForMonth(month);
+	}
+
+	public static double teamMonthNet(GUIInterface guiInterface, Team team, int month) {
+		if (guiInterface == null || team == null) {
+			return 0.0;
+		}
+		return guiInterface.getTeamNetForMonth(team, month);
 	}
 
 	public static String monthLabel(int month) {
