@@ -21,8 +21,8 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.interf.GUIInterface;
 import gui.utility.TeamDisplayUtility;
+import process.orchestrator.interf.GUIInterface;
 
 public class RankingTablePanel extends JPanel implements ThemeAware {
 	private static final int GLOBAL_PAGE_SIZE = 15;
@@ -189,7 +189,6 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 		LabelStyleUtil.styleSubtitleLabel(label, 11);
 		return label;
 	}
-
 
 	public void refreshRanking() {
 		tableContentPanel.removeAll();
@@ -445,6 +444,7 @@ public class RankingTablePanel extends JPanel implements ThemeAware {
 			guiInterface.simulateNextPlayoffRound();
 			refreshRanking();
 			updatePlayoffRoundButton();
+			System.out.println("round playoff simulé");
 		}
 	}
 

@@ -115,8 +115,8 @@ public class SimulationManager implements GUIInterface {
 		Playoff playoff = getPlayoff();
 		return playoff != null
 				&& (!playoff.getEastFirstRound().isEmpty()
-				|| !playoff.getWestFirstRound().isEmpty()
-				|| !playoff.getNbaFinals().isEmpty());
+						|| !playoff.getWestFirstRound().isEmpty()
+						|| !playoff.getNbaFinals().isEmpty());
 	}
 
 	@Override
@@ -188,16 +188,16 @@ public class SimulationManager implements GUIInterface {
 			return "A venir";
 		}
 		switch (round) {
-		case FIRST_ROUND:
-			return "Premier tour";
-		case CONFERENCE_SEMIFINALS:
-			return "Demies";
-		case CONFERENCE_FINALS:
-			return "Finales conf.";
-		case NBA_FINALS:
-			return "Finales NBA";
-		default:
-			return round.name();
+			case FIRST_ROUND:
+				return "Premier tour";
+			case CONFERENCE_SEMIFINALS:
+				return "Demies";
+			case CONFERENCE_FINALS:
+				return "Finales conf.";
+			case NBA_FINALS:
+				return "Finales NBA";
+			default:
+				return round.name();
 		}
 	}
 
@@ -649,11 +649,13 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public void simulateRegularSeason() {
 		logger.info("Simulating full regular season");
-		while (!clock.getCurrentDate().equals(CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
-			simulateDay(clock.getCurrentDate());
+		while (!clock.getCurrentDate().isAfter(CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
+			simulateAndDisplayDay(clock.getCurrentDate());
+			if (clock.getCurrentDate().equals(CalendarConfiguration.REGULAR_SEASON_END_DATE)) {
+				break;
+			}
 			nextDay();
 		}
-		endRegularSeason();
 		logger.info("Regular season simulation completed");
 	}
 
@@ -882,6 +884,14 @@ public class SimulationManager implements GUIInterface {
 			return new TreeMap<LocalDate, GameDay>();
 		}
 		return getCombinedSeasonCalendar();
+	}
+
+	@Override
+	public TreeMap<LocalDate, GameDay> getRegularSeasonCalendar() {
+		if (!isSeasonInitialized()) {
+			return new TreeMap<LocalDate, GameDay>();
+		}
+		return new TreeMap<LocalDate, GameDay>(league.getRegularSeason().getNbaCalendar().getCalendar());
 	}
 
 	@Override
