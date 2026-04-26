@@ -49678,3 +49678,1087 @@
 2026-04-26 13:47:06,756 INFO  [process.builder.calendar.CalendarBuilder] - Calendar built successfully with FirstRoundCalendarBuilder
 2026-04-26 13:47:06,756 INFO  [process.orchestrator.manager.SimulationManager] - Playoffs initialized
 2026-04-26 13:47:06,756 INFO  [process.orchestrator.manager.SimulationManager] - Regular season simulation completed
+2026-04-26 14:06:47,838 INFO  [gui.app.App] - Starting League application
+2026-04-26 14:06:47,848 INFO  [process.builder.league.LeagueBuilder] - Building league
+2026-04-26 14:06:47,851 INFO  [process.builder.league.LeagueRosterBuilder] - Building league roster from CSV
+2026-04-26 14:06:47,893 INFO  [process.builder.league.LeagueRosterBuilder] - League roster built successfully
+2026-04-26 14:06:47,894 INFO  [process.builder.league.LeagueFinanceBuilder] - Building league finance
+2026-04-26 14:06:47,898 INFO  [process.builder.league.LeagueFinanceBuilder] - League finance built successfully
+2026-04-26 14:06:47,898 INFO  [process.builder.league.LeagueBuilder] - League built successfully
+2026-04-26 14:06:47,934 INFO  [gui.app.App] - Simulation manager initialized
+2026-04-26 14:06:48,764 INFO  [gui.app.App] - Main GUI initialized
+2026-04-26 14:06:50,319 INFO  [process.orchestrator.manager.SimulationManager] - Starting season initialization
+2026-04-26 14:06:50,319 INFO  [process.service.finance.FinanceManager] - Initializing finance data
+2026-04-26 14:06:50,319 INFO  [process.service.finance.initialization.FinanceInitializer] - Initializing team finance data
+2026-04-26 14:06:50,320 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Memphis Grizzlies
+2026-04-26 14:06:50,322 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,322 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,322 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,323 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Memphis Grizzlies
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Los Angeles Clippers
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Los Angeles Clippers
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team San Antonio Spurs
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for San Antonio Spurs
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Boston Celtics
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Boston Celtics
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Utah Jazz
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Utah Jazz
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Milwaukee Bucks
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Milwaukee Bucks
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Los Angeles Lakers
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Los Angeles Lakers
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Sacramento Kings
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Sacramento Kings
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Charlotte Hornets
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Charlotte Hornets
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Indiana Pacers
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Indiana Pacers
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Oklahoma City Thunder
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Oklahoma City Thunder
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Philadelphia 76ers
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,325 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Philadelphia 76ers
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Portland Trail Blazers
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Portland Trail Blazers
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Miami Heat
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Miami Heat
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Brooklyn Nets
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Brooklyn Nets
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team New York Knicks
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for New York Knicks
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Golden State Warriors
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Golden State Warriors
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Minnesota Timberwolves
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Minnesota Timberwolves
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Toronto Raptors
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Toronto Raptors
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Atlanta Hawks
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Atlanta Hawks
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Houston Rockets
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Houston Rockets
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Dallas Mavericks
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Dallas Mavericks
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Detroit Pistons
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Detroit Pistons
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Denver Nuggets
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Denver Nuggets
+2026-04-26 14:06:50,326 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team New Orleans Pelicans
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for New Orleans Pelicans
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Cleveland Cavaliers
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Cleveland Cavaliers
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Chicago Bulls
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Chicago Bulls
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Washington Wizards
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Washington Wizards
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Phoenix Suns
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Phoenix Suns
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Orlando Magic
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:06:50,327 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Orlando Magic
+2026-04-26 14:06:50,327 INFO  [process.service.finance.initialization.FinanceInitializer] - Team finance data initialized for 30 teams
+2026-04-26 14:06:50,327 INFO  [process.service.finance.FinanceManager] - Finance data initialized
+2026-04-26 14:06:50,327 INFO  [process.orchestrator.manager.SimulationManager] - Simulating preseason trades
+2026-04-26 14:06:50,327 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-08-01 month 0
+2026-04-26 14:06:50,331 INFO  [process.service.trade.TradeService] - Trade validated between Memphis Grizzlies and Utah Jazz
+2026-04-26 14:06:50,333 INFO  [process.service.trade.TradeService] - Trade validated between Utah Jazz and Los Angeles Clippers
+2026-04-26 14:06:50,334 INFO  [process.service.trade.TradeService] - Trade validated between Charlotte Hornets and Milwaukee Bucks
+2026-04-26 14:06:50,334 INFO  [process.service.trade.TradeService] - Trade validated between Charlotte Hornets and Los Angeles Clippers
+2026-04-26 14:06:50,334 INFO  [process.service.trade.TradeService] - Trade validated between Indiana Pacers and Los Angeles Clippers
+2026-04-26 14:06:50,334 INFO  [process.service.trade.TradeService] - Trade validated between Oklahoma City Thunder and Los Angeles Clippers
+2026-04-26 14:06:50,334 INFO  [process.service.trade.TradeService] - Trade validated between Brooklyn Nets and Los Angeles Clippers
+2026-04-26 14:06:50,334 INFO  [process.service.trade.TradeService] - Trade validated between New York Knicks and Los Angeles Clippers
+2026-04-26 14:06:50,334 INFO  [process.service.trade.TradeService] - Trade validated between New York Knicks and Los Angeles Clippers
+2026-04-26 14:06:50,335 INFO  [process.service.trade.TradeService] - Trade validated between Toronto Raptors and Los Angeles Clippers
+2026-04-26 14:06:50,335 INFO  [process.service.trade.TradeService] - Trade validated between Houston Rockets and Los Angeles Clippers
+2026-04-26 14:06:50,335 INFO  [process.service.trade.TradeService] - Trade validated between Denver Nuggets and Los Angeles Lakers
+2026-04-26 14:06:50,335 INFO  [process.service.trade.TradeService] - Trade validated between Denver Nuggets and Los Angeles Clippers
+2026-04-26 14:06:50,335 INFO  [process.service.trade.TradeService] - Trade validated between Cleveland Cavaliers and Los Angeles Clippers
+2026-04-26 14:06:50,335 INFO  [process.service.trade.TradeService] - Trade validated between Chicago Bulls and Los Angeles Clippers
+2026-04-26 14:06:50,335 INFO  [process.service.trade.TradeService] - Trade validated between Chicago Bulls and Milwaukee Bucks
+2026-04-26 14:06:50,336 INFO  [process.service.trade.TradeService] - Trade validated between Phoenix Suns and Memphis Grizzlies
+2026-04-26 14:06:50,336 INFO  [process.service.trade.TradeService] - Trade validated between Orlando Magic and Memphis Grizzlies
+2026-04-26 14:06:50,336 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:50,336 INFO  [process.builder.calendar.CalendarBuilder] - Building calendar with RegularSeasonCalendarBuilder
+2026-04-26 14:06:50,336 INFO  [process.builder.calendar.schedule.ScheduleReset] - Resetting schedules for all teams
+2026-04-26 14:06:50,336 INFO  [process.builder.calendar.schedule.ScheduleReset] - All team schedules reset successfully
+2026-04-26 14:06:50,338 INFO  [process.builder.calendar.RegularSeasonCalendarBuilder] - Building regular season calendar
+2026-04-26 14:06:50,339 INFO  [process.builder.calendar.schedule.SpecialEventPlanner] - Placing regular season special events
+2026-04-26 14:06:50,339 INFO  [process.builder.calendar.schedule.SpecialEventPlanner] - Regular season special events placed successfully
+2026-04-26 14:06:52,921 INFO  [process.builder.calendar.RegularSeasonCalendarBuilder] - Regular season calendar built with 174 game days
+2026-04-26 14:06:52,921 INFO  [process.builder.calendar.CalendarBuilder] - Calendar built successfully with RegularSeasonCalendarBuilder
+2026-04-26 14:06:52,921 INFO  [process.orchestrator.manager.SimulationManager] - Season initialized successfully
+2026-04-26 14:06:58,021 INFO  [process.orchestrator.manager.SimulationManager] - Simulating week from 2025-10-25
+2026-04-26 14:06:58,029 INFO  [process.orchestrator.manager.SimulationManager] - Week simulation completed from 2025-10-20 to 2025-10-26 with 6 simulated game days
+2026-04-26 14:06:58,471 INFO  [process.orchestrator.manager.SimulationManager] - Simulating week from 2025-10-27
+2026-04-26 14:06:58,478 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-10-28 month 2
+2026-04-26 14:06:58,480 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:58,510 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Distributing monthly central revenue for month 2
+2026-04-26 14:06:58,513 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:58,518 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:58,519 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:58,521 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Monthly central revenue distribution completed for month 2
+2026-04-26 14:06:58,521 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Applying monthly league expenses for month 2
+2026-04-26 14:06:58,522 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:58,523 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:58,524 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:58,524 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Monthly league expenses applied for month 2
+2026-04-26 14:06:58,524 INFO  [process.service.finance.RevenueSharingManager] - Applying revenue sharing for month 2
+2026-04-26 14:06:58,525 INFO  [process.service.finance.RevenueSharingManager] - Revenue sharing applied for month 2
+2026-04-26 14:06:58,530 INFO  [process.orchestrator.manager.SimulationManager] - Week simulation completed from 2025-10-27 to 2025-11-02 with 7 simulated game days
+2026-04-26 14:06:58,720 INFO  [process.orchestrator.manager.SimulationManager] - Simulating week from 2025-11-03
+2026-04-26 14:06:58,726 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-11-04 month 3
+2026-04-26 14:06:58,726 INFO  [process.service.trade.TradeService] - Trade validated between Utah Jazz and New York Knicks
+2026-04-26 14:06:58,727 INFO  [process.service.trade.TradeService] - Trade validated between Indiana Pacers and Sacramento Kings
+2026-04-26 14:06:58,727 INFO  [process.service.trade.TradeService] - Trade validated between Brooklyn Nets and Sacramento Kings
+2026-04-26 14:06:58,727 INFO  [process.service.trade.TradeService] - Trade validated between Brooklyn Nets and Sacramento Kings
+2026-04-26 14:06:58,727 INFO  [process.service.trade.TradeService] - Trade validated between New York Knicks and Oklahoma City Thunder
+2026-04-26 14:06:58,727 INFO  [process.service.trade.TradeService] - Trade validated between New York Knicks and Milwaukee Bucks
+2026-04-26 14:06:58,727 INFO  [process.service.trade.TradeService] - Trade validated between Toronto Raptors and Utah Jazz
+2026-04-26 14:06:58,727 INFO  [process.service.trade.TradeService] - Trade validated between Detroit Pistons and Sacramento Kings
+2026-04-26 14:06:58,728 INFO  [process.service.trade.TradeService] - Trade validated between Detroit Pistons and Dallas Mavericks
+2026-04-26 14:06:58,728 INFO  [process.service.trade.TradeService] - Trade validated between Detroit Pistons and Charlotte Hornets
+2026-04-26 14:06:58,728 INFO  [process.service.trade.TradeService] - Trade validated between Orlando Magic and Chicago Bulls
+2026-04-26 14:06:58,728 INFO  [process.service.trade.TradeService] - Trade validated between Orlando Magic and Los Angeles Lakers
+2026-04-26 14:06:58,728 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:58,744 INFO  [process.orchestrator.manager.SimulationManager] - Week simulation completed from 2025-11-03 to 2025-11-09 with 7 simulated game days
+2026-04-26 14:06:59,738 INFO  [process.orchestrator.manager.SimulationManager] - Simulating full regular season
+2026-04-26 14:06:59,743 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-11-11 month 4
+2026-04-26 14:06:59,744 INFO  [process.service.trade.TradeService] - Trade validated between Utah Jazz and Chicago Bulls
+2026-04-26 14:06:59,744 INFO  [process.service.trade.TradeService] - Trade validated between Utah Jazz and Charlotte Hornets
+2026-04-26 14:06:59,744 INFO  [process.service.trade.TradeService] - Trade validated between Sacramento Kings and Indiana Pacers
+2026-04-26 14:06:59,744 INFO  [process.service.trade.TradeService] - Trade validated between Charlotte Hornets and Los Angeles Lakers
+2026-04-26 14:06:59,744 INFO  [process.service.trade.TradeService] - Trade validated between Toronto Raptors and Minnesota Timberwolves
+2026-04-26 14:06:59,744 INFO  [process.service.trade.TradeService] - Trade validated between Toronto Raptors and Milwaukee Bucks
+2026-04-26 14:06:59,744 INFO  [process.service.trade.TradeService] - Trade validated between Toronto Raptors and Oklahoma City Thunder
+2026-04-26 14:06:59,745 INFO  [process.service.trade.TradeService] - Trade validated between Chicago Bulls and San Antonio Spurs
+2026-04-26 14:06:59,745 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,767 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-11-18 month 5
+2026-04-26 14:06:59,767 INFO  [process.service.trade.TradeService] - Trade validated between Minnesota Timberwolves and Dallas Mavericks
+2026-04-26 14:06:59,768 INFO  [process.service.trade.TradeService] - Trade validated between Phoenix Suns and Los Angeles Lakers
+2026-04-26 14:06:59,768 INFO  [process.service.trade.TradeService] - Trade validated between Phoenix Suns and Denver Nuggets
+2026-04-26 14:06:59,768 INFO  [process.service.trade.TradeService] - Trade validated between Phoenix Suns and Detroit Pistons
+2026-04-26 14:06:59,768 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,786 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-11-25 month 6
+2026-04-26 14:06:59,787 INFO  [process.service.trade.TradeService] - Trade validated between Los Angeles Lakers and San Antonio Spurs
+2026-04-26 14:06:59,787 INFO  [process.service.trade.TradeService] - Trade validated between Detroit Pistons and Phoenix Suns
+2026-04-26 14:06:59,788 INFO  [process.service.trade.TradeService] - Trade validated between Denver Nuggets and Brooklyn Nets
+2026-04-26 14:06:59,788 INFO  [process.service.trade.TradeService] - Trade validated between Chicago Bulls and Atlanta Hawks
+2026-04-26 14:06:59,788 INFO  [process.service.trade.TradeService] - Trade validated between Washington Wizards and Denver Nuggets
+2026-04-26 14:06:59,788 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,809 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Distributing monthly central revenue for month 3
+2026-04-26 14:06:59,810 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:59,811 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:59,812 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:59,812 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Monthly central revenue distribution completed for month 3
+2026-04-26 14:06:59,812 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Applying monthly league expenses for month 3
+2026-04-26 14:06:59,812 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:59,813 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:59,813 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:59,813 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Monthly league expenses applied for month 3
+2026-04-26 14:06:59,813 INFO  [process.service.finance.RevenueSharingManager] - Applying revenue sharing for month 3
+2026-04-26 14:06:59,814 INFO  [process.service.finance.RevenueSharingManager] - Revenue sharing applied for month 3
+2026-04-26 14:06:59,817 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-12-02 month 7
+2026-04-26 14:06:59,817 INFO  [process.service.trade.TradeService] - Trade validated between Charlotte Hornets and Memphis Grizzlies
+2026-04-26 14:06:59,817 INFO  [process.service.trade.TradeService] - Trade validated between Indiana Pacers and Oklahoma City Thunder
+2026-04-26 14:06:59,817 INFO  [process.service.trade.TradeService] - Trade validated between New York Knicks and Milwaukee Bucks
+2026-04-26 14:06:59,818 INFO  [process.service.trade.TradeService] - Trade validated between Denver Nuggets and Atlanta Hawks
+2026-04-26 14:06:59,818 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,831 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-12-09 month 8
+2026-04-26 14:06:59,831 INFO  [process.service.trade.TradeService] - Trade validated between Minnesota Timberwolves and Oklahoma City Thunder
+2026-04-26 14:06:59,831 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,844 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-12-16 month 9
+2026-04-26 14:06:59,844 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,856 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-12-23 month 10
+2026-04-26 14:06:59,856 INFO  [process.service.trade.TradeService] - Trade validated between San Antonio Spurs and Brooklyn Nets
+2026-04-26 14:06:59,856 INFO  [process.service.trade.TradeService] - Trade validated between Indiana Pacers and Memphis Grizzlies
+2026-04-26 14:06:59,856 INFO  [process.service.trade.TradeService] - Trade validated between Portland Trail Blazers and Minnesota Timberwolves
+2026-04-26 14:06:59,856 INFO  [process.service.trade.TradeService] - Trade validated between Portland Trail Blazers and San Antonio Spurs
+2026-04-26 14:06:59,856 INFO  [process.service.trade.TradeService] - Trade validated between Dallas Mavericks and Minnesota Timberwolves
+2026-04-26 14:06:59,856 INFO  [process.service.trade.TradeService] - Trade validated between Dallas Mavericks and San Antonio Spurs
+2026-04-26 14:06:59,856 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,866 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-12-30 month 11
+2026-04-26 14:06:59,866 INFO  [process.service.trade.TradeService] - Trade validated between Dallas Mavericks and Portland Trail Blazers
+2026-04-26 14:06:59,866 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,870 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Distributing monthly central revenue for month 4
+2026-04-26 14:06:59,870 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:59,871 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:59,871 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:59,872 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Monthly central revenue distribution completed for month 4
+2026-04-26 14:06:59,872 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Applying monthly league expenses for month 4
+2026-04-26 14:06:59,872 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:59,872 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:59,873 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:59,873 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Monthly league expenses applied for month 4
+2026-04-26 14:06:59,873 INFO  [process.service.finance.RevenueSharingManager] - Applying revenue sharing for month 4
+2026-04-26 14:06:59,873 INFO  [process.service.finance.RevenueSharingManager] - Revenue sharing applied for month 4
+2026-04-26 14:06:59,882 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-01-06 month 12
+2026-04-26 14:06:59,883 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,896 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-01-13 month 13
+2026-04-26 14:06:59,896 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,914 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-01-20 month 14
+2026-04-26 14:06:59,914 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,927 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-01-27 month 15
+2026-04-26 14:06:59,928 INFO  [process.service.trade.TradeService] - Trade validated between Washington Wizards and Orlando Magic
+2026-04-26 14:06:59,928 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,938 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Distributing monthly central revenue for month 5
+2026-04-26 14:06:59,938 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:59,939 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:59,939 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:59,940 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Monthly central revenue distribution completed for month 5
+2026-04-26 14:06:59,940 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Applying monthly league expenses for month 5
+2026-04-26 14:06:59,940 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:59,940 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:59,941 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:59,941 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Monthly league expenses applied for month 5
+2026-04-26 14:06:59,941 INFO  [process.service.finance.RevenueSharingManager] - Applying revenue sharing for month 5
+2026-04-26 14:06:59,941 INFO  [process.service.finance.RevenueSharingManager] - Revenue sharing applied for month 5
+2026-04-26 14:06:59,944 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-02-03 month 16
+2026-04-26 14:06:59,945 INFO  [process.service.trade.TradeService] - Trade validated between Atlanta Hawks and Portland Trail Blazers
+2026-04-26 14:06:59,945 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,956 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-02-10 month 17
+2026-04-26 14:06:59,956 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,967 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-02-17 month 18
+2026-04-26 14:06:59,968 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,978 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-02-24 month 19
+2026-04-26 14:06:59,978 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:06:59,987 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Distributing monthly central revenue for month 6
+2026-04-26 14:06:59,988 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:59,989 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:59,990 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:06:59,990 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Monthly central revenue distribution completed for month 6
+2026-04-26 14:06:59,990 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Applying monthly league expenses for month 6
+2026-04-26 14:06:59,990 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:59,991 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:59,991 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:06:59,991 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Monthly league expenses applied for month 6
+2026-04-26 14:06:59,991 INFO  [process.service.finance.RevenueSharingManager] - Applying revenue sharing for month 6
+2026-04-26 14:06:59,991 INFO  [process.service.finance.RevenueSharingManager] - Revenue sharing applied for month 6
+2026-04-26 14:06:59,994 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-03-03 month 20
+2026-04-26 14:06:59,994 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:07:00,008 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-03-10 month 21
+2026-04-26 14:07:00,008 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:07:00,025 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-03-17 month 22
+2026-04-26 14:07:00,025 INFO  [process.service.trade.TradeService] - Trade validated between Portland Trail Blazers and Orlando Magic
+2026-04-26 14:07:00,025 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:07:00,036 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-03-24 month 23
+2026-04-26 14:07:00,036 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:07:00,046 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-03-31 month 24
+2026-04-26 14:07:00,046 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:07:00,048 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Distributing monthly central revenue for month 7
+2026-04-26 14:07:00,048 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:07:00,049 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:07:00,049 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:07:00,050 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Monthly central revenue distribution completed for month 7
+2026-04-26 14:07:00,050 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Applying monthly league expenses for month 7
+2026-04-26 14:07:00,050 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:07:00,050 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:07:00,050 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:07:00,050 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Monthly league expenses applied for month 7
+2026-04-26 14:07:00,050 INFO  [process.service.finance.RevenueSharingManager] - Applying revenue sharing for month 7
+2026-04-26 14:07:00,051 INFO  [process.service.finance.RevenueSharingManager] - Revenue sharing applied for month 7
+2026-04-26 14:07:00,060 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-04-07 month 25
+2026-04-26 14:07:00,061 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:07:00,072 INFO  [process.orchestrator.manager.SimulationManager] - Ending regular season and initializing playoffs
+2026-04-26 14:07:00,072 INFO  [process.builder.league.PlayoffBuilder] - Building first round playoffs
+2026-04-26 14:07:00,072 INFO  [process.builder.league.PlayoffBuilder] - First round playoffs built
+2026-04-26 14:07:00,072 INFO  [process.builder.calendar.CalendarBuilder] - Building calendar with FirstRoundCalendarBuilder
+2026-04-26 14:07:00,073 INFO  [process.builder.calendar.schedule.ScheduleReset] - Resetting schedules for all teams
+2026-04-26 14:07:00,073 INFO  [process.builder.calendar.schedule.ScheduleReset] - All team schedules reset successfully
+2026-04-26 14:07:00,073 INFO  [process.builder.calendar.FirstRoundCalendarBuilder] - Building first round playoff calendar
+2026-04-26 14:07:00,074 INFO  [process.builder.calendar.FirstRoundCalendarBuilder] - First round playoff calendar built with 8 game days
+2026-04-26 14:07:00,074 INFO  [process.builder.calendar.CalendarBuilder] - Calendar built successfully with FirstRoundCalendarBuilder
+2026-04-26 14:07:00,074 INFO  [process.orchestrator.manager.SimulationManager] - Playoffs initialized
+2026-04-26 14:07:00,074 INFO  [process.orchestrator.manager.SimulationManager] - Regular season simulation completed
+2026-04-26 14:08:27,682 INFO  [process.builder.league.LeagueBuilder] - Building league
+2026-04-26 14:08:27,687 INFO  [process.builder.league.LeagueRosterBuilder] - Building league roster from CSV
+2026-04-26 14:08:27,744 INFO  [process.builder.league.LeagueRosterBuilder] - League roster built successfully
+2026-04-26 14:08:27,745 INFO  [process.builder.league.LeagueFinanceBuilder] - Building league finance
+2026-04-26 14:08:27,751 INFO  [process.builder.league.LeagueFinanceBuilder] - League finance built successfully
+2026-04-26 14:08:27,751 INFO  [process.builder.league.LeagueBuilder] - League built successfully
+2026-04-26 14:08:27,824 INFO  [process.builder.league.LeagueBuilder] - Building league
+2026-04-26 14:08:27,824 INFO  [process.builder.league.LeagueRosterBuilder] - Building league roster from CSV
+2026-04-26 14:08:27,837 INFO  [process.builder.league.LeagueRosterBuilder] - League roster built successfully
+2026-04-26 14:08:27,837 INFO  [process.builder.league.LeagueFinanceBuilder] - Building league finance
+2026-04-26 14:08:27,837 INFO  [process.builder.league.LeagueFinanceBuilder] - League finance built successfully
+2026-04-26 14:08:27,837 INFO  [process.builder.league.LeagueBuilder] - League built successfully
+2026-04-26 14:08:27,838 INFO  [process.orchestrator.manager.SimulationManager] - Starting season initialization
+2026-04-26 14:08:27,838 INFO  [process.service.finance.FinanceManager] - Initializing finance data
+2026-04-26 14:08:27,838 INFO  [process.service.finance.initialization.FinanceInitializer] - Initializing team finance data
+2026-04-26 14:08:27,839 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Memphis Grizzlies
+2026-04-26 14:08:27,843 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,845 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,846 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,848 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,857 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Memphis Grizzlies
+2026-04-26 14:08:27,857 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Los Angeles Clippers
+2026-04-26 14:08:27,857 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,857 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,857 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,857 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,857 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Los Angeles Clippers
+2026-04-26 14:08:27,857 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team San Antonio Spurs
+2026-04-26 14:08:27,858 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,858 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,858 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,858 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,858 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for San Antonio Spurs
+2026-04-26 14:08:27,858 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Boston Celtics
+2026-04-26 14:08:27,858 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,858 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,858 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Boston Celtics
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Utah Jazz
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Utah Jazz
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Milwaukee Bucks
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Milwaukee Bucks
+2026-04-26 14:08:27,859 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Los Angeles Lakers
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Los Angeles Lakers
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Sacramento Kings
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Sacramento Kings
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Charlotte Hornets
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Charlotte Hornets
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Indiana Pacers
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,860 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Indiana Pacers
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Oklahoma City Thunder
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Oklahoma City Thunder
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Philadelphia 76ers
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Philadelphia 76ers
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Portland Trail Blazers
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Portland Trail Blazers
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Miami Heat
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,861 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Miami Heat
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Brooklyn Nets
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Brooklyn Nets
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team New York Knicks
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for New York Knicks
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Golden State Warriors
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,862 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Golden State Warriors
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Minnesota Timberwolves
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Minnesota Timberwolves
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Toronto Raptors
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Toronto Raptors
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Atlanta Hawks
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Atlanta Hawks
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Houston Rockets
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Houston Rockets
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Dallas Mavericks
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Dallas Mavericks
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Detroit Pistons
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Detroit Pistons
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Denver Nuggets
+2026-04-26 14:08:27,863 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Denver Nuggets
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team New Orleans Pelicans
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for New Orleans Pelicans
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Cleveland Cavaliers
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Cleveland Cavaliers
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Chicago Bulls
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Chicago Bulls
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Washington Wizards
+2026-04-26 14:08:27,864 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Washington Wizards
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Phoenix Suns
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Phoenix Suns
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Orlando Magic
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:08:27,865 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Orlando Magic
+2026-04-26 14:08:27,865 INFO  [process.service.finance.initialization.FinanceInitializer] - Team finance data initialized for 30 teams
+2026-04-26 14:08:27,865 INFO  [process.service.finance.FinanceManager] - Finance data initialized
+2026-04-26 14:08:27,865 INFO  [process.orchestrator.manager.SimulationManager] - Simulating preseason trades
+2026-04-26 14:08:27,866 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-08-01 month 0
+2026-04-26 14:08:27,884 INFO  [process.service.trade.TradeService] - Trade validated between Boston Celtics and Indiana Pacers
+2026-04-26 14:08:27,885 INFO  [process.service.trade.TradeService] - Trade validated between Utah Jazz and Memphis Grizzlies
+2026-04-26 14:08:27,887 INFO  [process.service.trade.TradeService] - Trade validated between Charlotte Hornets and Los Angeles Clippers
+2026-04-26 14:08:27,887 INFO  [process.service.trade.TradeService] - Trade validated between Charlotte Hornets and Los Angeles Clippers
+2026-04-26 14:08:27,888 INFO  [process.service.trade.TradeService] - Trade validated between Brooklyn Nets and Los Angeles Clippers
+2026-04-26 14:08:27,888 INFO  [process.service.trade.TradeService] - Trade validated between Golden State Warriors and Memphis Grizzlies
+2026-04-26 14:08:27,889 INFO  [process.service.trade.TradeService] - Trade validated between Atlanta Hawks and Memphis Grizzlies
+2026-04-26 14:08:27,890 INFO  [process.service.trade.TradeService] - Trade validated between Detroit Pistons and Memphis Grizzlies
+2026-04-26 14:08:27,890 INFO  [process.service.trade.TradeService] - Trade validated between Denver Nuggets and Memphis Grizzlies
+2026-04-26 14:08:27,890 INFO  [process.service.trade.TradeService] - Trade validated between New Orleans Pelicans and Memphis Grizzlies
+2026-04-26 14:08:27,890 INFO  [process.service.trade.TradeService] - Trade validated between New Orleans Pelicans and Memphis Grizzlies
+2026-04-26 14:08:27,890 INFO  [process.service.trade.TradeService] - Trade validated between Cleveland Cavaliers and Memphis Grizzlies
+2026-04-26 14:08:27,890 INFO  [process.service.trade.TradeService] - Trade validated between Chicago Bulls and Memphis Grizzlies
+2026-04-26 14:08:27,891 INFO  [process.service.trade.TradeService] - Trade validated between Washington Wizards and Utah Jazz
+2026-04-26 14:08:27,891 INFO  [process.service.trade.TradeService] - Trade validated between Phoenix Suns and Memphis Grizzlies
+2026-04-26 14:08:27,891 INFO  [process.service.trade.TradeService] - Trade validated between Orlando Magic and Memphis Grizzlies
+2026-04-26 14:08:27,891 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:08:27,894 INFO  [process.builder.calendar.CalendarBuilder] - Building calendar with RegularSeasonCalendarBuilder
+2026-04-26 14:08:27,894 INFO  [process.builder.calendar.schedule.ScheduleReset] - Resetting schedules for all teams
+2026-04-26 14:08:27,895 INFO  [process.builder.calendar.schedule.ScheduleReset] - All team schedules reset successfully
+2026-04-26 14:08:27,901 INFO  [process.builder.calendar.RegularSeasonCalendarBuilder] - Building regular season calendar
+2026-04-26 14:08:27,902 INFO  [process.builder.calendar.schedule.SpecialEventPlanner] - Placing regular season special events
+2026-04-26 14:08:27,904 INFO  [process.builder.calendar.schedule.SpecialEventPlanner] - Regular season special events placed successfully
+2026-04-26 14:08:33,517 INFO  [process.builder.calendar.RegularSeasonCalendarBuilder] - Regular season calendar built with 174 game days
+2026-04-26 14:08:33,517 INFO  [process.builder.calendar.CalendarBuilder] - Calendar built successfully with RegularSeasonCalendarBuilder
+2026-04-26 14:08:33,517 INFO  [process.orchestrator.manager.SimulationManager] - Season initialized successfully
+2026-04-26 14:08:33,518 INFO  [process.builder.league.LeagueBuilder] - Building league
+2026-04-26 14:08:33,518 INFO  [process.builder.league.LeagueRosterBuilder] - Building league roster from CSV
+2026-04-26 14:08:33,523 INFO  [process.builder.league.LeagueRosterBuilder] - League roster built successfully
+2026-04-26 14:08:33,523 INFO  [process.builder.league.LeagueFinanceBuilder] - Building league finance
+2026-04-26 14:08:33,523 INFO  [process.builder.league.LeagueFinanceBuilder] - League finance built successfully
+2026-04-26 14:08:33,523 INFO  [process.builder.league.LeagueBuilder] - League built successfully
+2026-04-26 14:08:33,525 INFO  [process.builder.league.LeagueBuilder] - Building league
+2026-04-26 14:08:33,526 INFO  [process.builder.league.LeagueRosterBuilder] - Building league roster from CSV
+2026-04-26 14:08:33,530 INFO  [process.builder.league.LeagueRosterBuilder] - League roster built successfully
+2026-04-26 14:08:33,530 INFO  [process.builder.league.LeagueFinanceBuilder] - Building league finance
+2026-04-26 14:08:33,531 INFO  [process.builder.league.LeagueFinanceBuilder] - League finance built successfully
+2026-04-26 14:08:33,531 INFO  [process.builder.league.LeagueBuilder] - League built successfully
+2026-04-26 14:08:33,534 INFO  [process.builder.league.LeagueBuilder] - Building league
+2026-04-26 14:08:33,534 INFO  [process.builder.league.LeagueRosterBuilder] - Building league roster from CSV
+2026-04-26 14:08:33,539 INFO  [process.builder.league.LeagueRosterBuilder] - League roster built successfully
+2026-04-26 14:08:33,539 INFO  [process.builder.league.LeagueFinanceBuilder] - Building league finance
+2026-04-26 14:08:33,539 INFO  [process.builder.league.LeagueFinanceBuilder] - League finance built successfully
+2026-04-26 14:08:33,539 INFO  [process.builder.league.LeagueBuilder] - League built successfully
+2026-04-26 14:08:33,540 WARN  [process.orchestrator.manager.SimulationManager] - Unable to make live match available because game or date is null
+2026-04-26 14:08:33,540 WARN  [process.orchestrator.manager.SimulationManager] - Unable to make live match available because game or date is null
+2026-04-26 14:08:33,540 INFO  [process.builder.league.LeagueBuilder] - Building league
+2026-04-26 14:08:33,540 INFO  [process.builder.league.LeagueRosterBuilder] - Building league roster from CSV
+2026-04-26 14:08:33,545 INFO  [process.builder.league.LeagueRosterBuilder] - League roster built successfully
+2026-04-26 14:08:33,545 INFO  [process.builder.league.LeagueFinanceBuilder] - Building league finance
+2026-04-26 14:08:33,546 INFO  [process.builder.league.LeagueFinanceBuilder] - League finance built successfully
+2026-04-26 14:08:33,546 INFO  [process.builder.league.LeagueBuilder] - League built successfully
+2026-04-26 14:08:33,546 INFO  [process.builder.league.LeagueBuilder] - Building league
+2026-04-26 14:08:33,546 INFO  [process.builder.league.LeagueRosterBuilder] - Building league roster from CSV
+2026-04-26 14:08:33,550 INFO  [process.builder.league.LeagueRosterBuilder] - League roster built successfully
+2026-04-26 14:08:33,550 INFO  [process.builder.league.LeagueFinanceBuilder] - Building league finance
+2026-04-26 14:08:33,551 INFO  [process.builder.league.LeagueFinanceBuilder] - League finance built successfully
+2026-04-26 14:08:33,551 INFO  [process.builder.league.LeagueBuilder] - League built successfully
+2026-04-26 14:14:07,790 INFO  [gui.app.App] - Starting League application
+2026-04-26 14:14:07,800 INFO  [process.builder.league.LeagueBuilder] - Building league
+2026-04-26 14:14:07,804 INFO  [process.builder.league.LeagueRosterBuilder] - Building league roster from CSV
+2026-04-26 14:14:07,854 INFO  [process.builder.league.LeagueRosterBuilder] - League roster built successfully
+2026-04-26 14:14:07,856 INFO  [process.builder.league.LeagueFinanceBuilder] - Building league finance
+2026-04-26 14:14:07,860 INFO  [process.builder.league.LeagueFinanceBuilder] - League finance built successfully
+2026-04-26 14:14:07,860 INFO  [process.builder.league.LeagueBuilder] - League built successfully
+2026-04-26 14:14:07,909 INFO  [gui.app.App] - Simulation manager initialized
+2026-04-26 14:14:08,999 INFO  [gui.app.App] - Main GUI initialized
+2026-04-26 14:14:11,018 INFO  [process.orchestrator.manager.SimulationManager] - Starting season initialization
+2026-04-26 14:14:11,018 INFO  [process.service.finance.FinanceManager] - Initializing finance data
+2026-04-26 14:14:11,018 INFO  [process.service.finance.initialization.FinanceInitializer] - Initializing team finance data
+2026-04-26 14:14:11,019 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Memphis Grizzlies
+2026-04-26 14:14:11,021 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,021 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,022 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,023 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,025 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Memphis Grizzlies
+2026-04-26 14:14:11,025 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Los Angeles Clippers
+2026-04-26 14:14:11,025 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,025 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,025 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,025 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,025 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Los Angeles Clippers
+2026-04-26 14:14:11,025 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team San Antonio Spurs
+2026-04-26 14:14:11,025 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,025 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,025 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,025 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,025 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for San Antonio Spurs
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Boston Celtics
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Boston Celtics
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Utah Jazz
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Utah Jazz
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Milwaukee Bucks
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Milwaukee Bucks
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Los Angeles Lakers
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Los Angeles Lakers
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Sacramento Kings
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Sacramento Kings
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Charlotte Hornets
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Charlotte Hornets
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Indiana Pacers
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Indiana Pacers
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Oklahoma City Thunder
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Oklahoma City Thunder
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Philadelphia 76ers
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Philadelphia 76ers
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Portland Trail Blazers
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Portland Trail Blazers
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Miami Heat
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,026 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Miami Heat
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Brooklyn Nets
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Brooklyn Nets
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team New York Knicks
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for New York Knicks
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Golden State Warriors
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Golden State Warriors
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Minnesota Timberwolves
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Minnesota Timberwolves
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Toronto Raptors
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Toronto Raptors
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Atlanta Hawks
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Atlanta Hawks
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Houston Rockets
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Houston Rockets
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Dallas Mavericks
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Dallas Mavericks
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Detroit Pistons
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Detroit Pistons
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Denver Nuggets
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Denver Nuggets
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team New Orleans Pelicans
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for New Orleans Pelicans
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Cleveland Cavaliers
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Cleveland Cavaliers
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Chicago Bulls
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Chicago Bulls
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Washington Wizards
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Washington Wizards
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Phoenix Suns
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Phoenix Suns
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.FinanceBuilder] - Building finance data for team Orlando Magic
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Building economic profile
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.EconomicProfileBuilder] - Economic profile build completed
+2026-04-26 14:14:11,027 INFO  [process.builder.finance.BudgetBuilder] - Calculating initial team budget
+2026-04-26 14:14:11,028 INFO  [process.builder.finance.BudgetBuilder] - Initial team budget calculation completed
+2026-04-26 14:14:11,028 INFO  [process.builder.finance.FinanceBuilder] - Team finance build completed for Orlando Magic
+2026-04-26 14:14:11,028 INFO  [process.service.finance.initialization.FinanceInitializer] - Team finance data initialized for 30 teams
+2026-04-26 14:14:11,028 INFO  [process.service.finance.FinanceManager] - Finance data initialized
+2026-04-26 14:14:11,028 INFO  [process.orchestrator.manager.SimulationManager] - Simulating preseason trades
+2026-04-26 14:14:11,028 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-08-01 month 0
+2026-04-26 14:14:11,033 INFO  [process.service.trade.TradeService] - Trade validated between Memphis Grizzlies and San Antonio Spurs
+2026-04-26 14:14:11,033 INFO  [process.service.trade.TradeService] - Trade validated between Memphis Grizzlies and Los Angeles Clippers
+2026-04-26 14:14:11,035 INFO  [process.service.trade.TradeService] - Trade validated between Charlotte Hornets and Memphis Grizzlies
+2026-04-26 14:14:11,035 INFO  [process.service.trade.TradeService] - Trade validated between Indiana Pacers and Charlotte Hornets
+2026-04-26 14:14:11,035 INFO  [process.service.trade.TradeService] - Trade validated between Oklahoma City Thunder and Memphis Grizzlies
+2026-04-26 14:14:11,035 INFO  [process.service.trade.TradeService] - Trade validated between Portland Trail Blazers and Memphis Grizzlies
+2026-04-26 14:14:11,036 INFO  [process.service.trade.TradeService] - Trade validated between Brooklyn Nets and Memphis Grizzlies
+2026-04-26 14:14:11,036 INFO  [process.service.trade.TradeService] - Trade validated between Golden State Warriors and Memphis Grizzlies
+2026-04-26 14:14:11,036 INFO  [process.service.trade.TradeService] - Trade validated between Golden State Warriors and Memphis Grizzlies
+2026-04-26 14:14:11,036 INFO  [process.service.trade.TradeService] - Trade validated between Minnesota Timberwolves and Memphis Grizzlies
+2026-04-26 14:14:11,036 INFO  [process.service.trade.TradeService] - Trade validated between Toronto Raptors and Memphis Grizzlies
+2026-04-26 14:14:11,036 INFO  [process.service.trade.TradeService] - Trade validated between Detroit Pistons and Memphis Grizzlies
+2026-04-26 14:14:11,037 INFO  [process.service.trade.TradeService] - Trade validated between Chicago Bulls and San Antonio Spurs
+2026-04-26 14:14:11,037 INFO  [process.service.trade.TradeService] - Trade validated between Phoenix Suns and Memphis Grizzlies
+2026-04-26 14:14:11,037 INFO  [process.service.trade.TradeService] - Trade validated between Orlando Magic and Memphis Grizzlies
+2026-04-26 14:14:11,037 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:11,038 INFO  [process.builder.calendar.CalendarBuilder] - Building calendar with RegularSeasonCalendarBuilder
+2026-04-26 14:14:11,038 INFO  [process.builder.calendar.schedule.ScheduleReset] - Resetting schedules for all teams
+2026-04-26 14:14:11,038 INFO  [process.builder.calendar.schedule.ScheduleReset] - All team schedules reset successfully
+2026-04-26 14:14:11,040 INFO  [process.builder.calendar.RegularSeasonCalendarBuilder] - Building regular season calendar
+2026-04-26 14:14:11,041 INFO  [process.builder.calendar.schedule.SpecialEventPlanner] - Placing regular season special events
+2026-04-26 14:14:11,041 INFO  [process.builder.calendar.schedule.SpecialEventPlanner] - Regular season special events placed successfully
+2026-04-26 14:14:13,778 INFO  [process.builder.calendar.RegularSeasonCalendarBuilder] - Regular season calendar built with 174 game days
+2026-04-26 14:14:13,778 INFO  [process.builder.calendar.CalendarBuilder] - Calendar built successfully with RegularSeasonCalendarBuilder
+2026-04-26 14:14:13,778 INFO  [process.orchestrator.manager.SimulationManager] - Season initialized successfully
+2026-04-26 14:14:20,919 INFO  [process.orchestrator.manager.SimulationManager] - Simulating week from 2025-10-21
+2026-04-26 14:14:21,003 INFO  [process.orchestrator.manager.SimulationManager] - Week simulation completed from 2025-10-20 to 2025-10-26 with 6 simulated game days
+2026-04-26 14:14:21,068 INFO  [process.orchestrator.manager.SimulationManager] - Simulating week from 2025-10-27
+2026-04-26 14:14:21,078 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-10-28 month 2
+2026-04-26 14:14:21,080 INFO  [process.service.trade.TradeService] - Trade validated between Golden State Warriors and Utah Jazz
+2026-04-26 14:14:21,081 INFO  [process.service.trade.TradeService] - Trade validated between Detroit Pistons and Houston Rockets
+2026-04-26 14:14:21,081 INFO  [process.service.trade.TradeService] - Trade validated between Detroit Pistons and Utah Jazz
+2026-04-26 14:14:21,081 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:21,101 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Distributing monthly central revenue for month 2
+2026-04-26 14:14:21,104 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:21,109 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:21,110 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:21,112 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Monthly central revenue distribution completed for month 2
+2026-04-26 14:14:21,112 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Applying monthly league expenses for month 2
+2026-04-26 14:14:21,114 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:21,115 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:21,116 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:21,116 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Monthly league expenses applied for month 2
+2026-04-26 14:14:21,116 INFO  [process.service.finance.RevenueSharingManager] - Applying revenue sharing for month 2
+2026-04-26 14:14:21,117 INFO  [process.service.finance.RevenueSharingManager] - Revenue sharing applied for month 2
+2026-04-26 14:14:21,121 INFO  [process.orchestrator.manager.SimulationManager] - Week simulation completed from 2025-10-27 to 2025-11-02 with 7 simulated game days
+2026-04-26 14:14:21,218 INFO  [process.orchestrator.manager.SimulationManager] - Simulating week from 2025-11-03
+2026-04-26 14:14:21,226 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-11-04 month 3
+2026-04-26 14:14:21,227 INFO  [process.service.trade.TradeService] - Trade validated between Boston Celtics and Denver Nuggets
+2026-04-26 14:14:21,227 INFO  [process.service.trade.TradeService] - Trade validated between Boston Celtics and Utah Jazz
+2026-04-26 14:14:21,227 INFO  [process.service.trade.TradeService] - Trade validated between Oklahoma City Thunder and Phoenix Suns
+2026-04-26 14:14:21,228 INFO  [process.service.trade.TradeService] - Trade validated between Miami Heat and Detroit Pistons
+2026-04-26 14:14:21,228 INFO  [process.service.trade.TradeService] - Trade validated between Golden State Warriors and Miami Heat
+2026-04-26 14:14:21,228 INFO  [process.service.trade.TradeService] - Trade validated between Golden State Warriors and Detroit Pistons
+2026-04-26 14:14:21,228 INFO  [process.service.trade.TradeService] - Trade validated between Atlanta Hawks and Miami Heat
+2026-04-26 14:14:21,228 INFO  [process.service.trade.TradeService] - Trade validated between Denver Nuggets and Washington Wizards
+2026-04-26 14:14:21,228 INFO  [process.service.trade.TradeService] - Trade validated between Denver Nuggets and Brooklyn Nets
+2026-04-26 14:14:21,229 INFO  [process.service.trade.TradeService] - Trade validated between New Orleans Pelicans and Brooklyn Nets
+2026-04-26 14:14:21,229 INFO  [process.service.trade.TradeService] - Trade validated between Chicago Bulls and Orlando Magic
+2026-04-26 14:14:21,229 INFO  [process.service.trade.TradeService] - Trade validated between Chicago Bulls and Utah Jazz
+2026-04-26 14:14:21,229 INFO  [process.service.trade.TradeService] - Trade validated between Phoenix Suns and Atlanta Hawks
+2026-04-26 14:14:21,229 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:21,246 INFO  [process.orchestrator.manager.SimulationManager] - Week simulation completed from 2025-11-03 to 2025-11-09 with 7 simulated game days
+2026-04-26 14:14:21,368 INFO  [process.orchestrator.manager.SimulationManager] - Simulating week from 2025-11-10
+2026-04-26 14:14:21,376 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-11-11 month 4
+2026-04-26 14:14:21,377 INFO  [process.service.trade.TradeService] - Trade validated between Utah Jazz and Milwaukee Bucks
+2026-04-26 14:14:21,377 INFO  [process.service.trade.TradeService] - Trade validated between Indiana Pacers and Miami Heat
+2026-04-26 14:14:21,378 INFO  [process.service.trade.TradeService] - Trade validated between Golden State Warriors and Washington Wizards
+2026-04-26 14:14:21,378 INFO  [process.service.trade.TradeService] - Trade validated between New Orleans Pelicans and Boston Celtics
+2026-04-26 14:14:21,378 INFO  [process.service.trade.TradeService] - Trade validated between New Orleans Pelicans and Boston Celtics
+2026-04-26 14:14:21,378 INFO  [process.service.trade.TradeService] - Trade validated between Washington Wizards and Oklahoma City Thunder
+2026-04-26 14:14:21,378 INFO  [process.service.trade.TradeService] - Trade validated between Orlando Magic and Oklahoma City Thunder
+2026-04-26 14:14:21,378 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:21,397 INFO  [process.orchestrator.manager.SimulationManager] - Week simulation completed from 2025-11-10 to 2025-11-16 with 7 simulated game days
+2026-04-26 14:14:21,518 INFO  [process.orchestrator.manager.SimulationManager] - Simulating week from 2025-11-17
+2026-04-26 14:14:21,524 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-11-18 month 5
+2026-04-26 14:14:21,525 INFO  [process.service.trade.TradeService] - Trade validated between Miami Heat and Denver Nuggets
+2026-04-26 14:14:21,525 INFO  [process.service.trade.TradeService] - Trade validated between New Orleans Pelicans and Boston Celtics
+2026-04-26 14:14:21,525 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:21,540 INFO  [process.orchestrator.manager.SimulationManager] - Week simulation completed from 2025-11-17 to 2025-11-23 with 7 simulated game days
+2026-04-26 14:14:21,668 INFO  [process.orchestrator.manager.SimulationManager] - Simulating week from 2025-11-24
+2026-04-26 14:14:21,673 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-11-25 month 6
+2026-04-26 14:14:21,674 INFO  [process.service.trade.TradeService] - Trade validated between Atlanta Hawks and New Orleans Pelicans
+2026-04-26 14:14:21,674 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:21,685 INFO  [process.orchestrator.manager.SimulationManager] - Week simulation completed from 2025-11-24 to 2025-11-30 with 7 simulated game days
+2026-04-26 14:14:22,168 INFO  [process.orchestrator.manager.SimulationManager] - Simulating full regular season
+2026-04-26 14:14:22,176 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Distributing monthly central revenue for month 3
+2026-04-26 14:14:22,177 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,179 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,180 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,181 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Monthly central revenue distribution completed for month 3
+2026-04-26 14:14:22,181 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Applying monthly league expenses for month 3
+2026-04-26 14:14:22,181 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,182 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,183 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,183 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Monthly league expenses applied for month 3
+2026-04-26 14:14:22,183 INFO  [process.service.finance.RevenueSharingManager] - Applying revenue sharing for month 3
+2026-04-26 14:14:22,184 INFO  [process.service.finance.RevenueSharingManager] - Revenue sharing applied for month 3
+2026-04-26 14:14:22,187 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-12-02 month 7
+2026-04-26 14:14:22,188 INFO  [process.service.trade.TradeService] - Trade validated between Denver Nuggets and Oklahoma City Thunder
+2026-04-26 14:14:22,188 INFO  [process.service.trade.TradeService] - Trade validated between Chicago Bulls and Indiana Pacers
+2026-04-26 14:14:22,188 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,201 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-12-09 month 8
+2026-04-26 14:14:22,201 INFO  [process.service.trade.TradeService] - Trade validated between Los Angeles Lakers and Atlanta Hawks
+2026-04-26 14:14:22,201 INFO  [process.service.trade.TradeService] - Trade validated between Los Angeles Lakers and Brooklyn Nets
+2026-04-26 14:14:22,201 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,214 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-12-16 month 9
+2026-04-26 14:14:22,214 INFO  [process.service.trade.TradeService] - Trade validated between Los Angeles Lakers and Orlando Magic
+2026-04-26 14:14:22,214 INFO  [process.service.trade.TradeService] - Trade validated between Chicago Bulls and Phoenix Suns
+2026-04-26 14:14:22,214 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,227 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-12-23 month 10
+2026-04-26 14:14:22,227 INFO  [process.service.trade.TradeService] - Trade validated between Atlanta Hawks and Indiana Pacers
+2026-04-26 14:14:22,227 INFO  [process.service.trade.TradeService] - Trade validated between Houston Rockets and Orlando Magic
+2026-04-26 14:14:22,227 INFO  [process.service.trade.TradeService] - Trade validated between New Orleans Pelicans and Indiana Pacers
+2026-04-26 14:14:22,227 INFO  [process.service.trade.TradeService] - Trade validated between Washington Wizards and Houston Rockets
+2026-04-26 14:14:22,227 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,238 INFO  [process.service.trade.TradeService] - Simulating trades for 2025-12-30 month 11
+2026-04-26 14:14:22,238 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,243 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Distributing monthly central revenue for month 4
+2026-04-26 14:14:22,243 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,244 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,244 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,245 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Monthly central revenue distribution completed for month 4
+2026-04-26 14:14:22,245 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Applying monthly league expenses for month 4
+2026-04-26 14:14:22,245 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,245 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,246 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,246 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Monthly league expenses applied for month 4
+2026-04-26 14:14:22,246 INFO  [process.service.finance.RevenueSharingManager] - Applying revenue sharing for month 4
+2026-04-26 14:14:22,246 INFO  [process.service.finance.RevenueSharingManager] - Revenue sharing applied for month 4
+2026-04-26 14:14:22,255 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-01-06 month 12
+2026-04-26 14:14:22,255 INFO  [process.service.trade.TradeService] - Trade validated between Houston Rockets and Los Angeles Lakers
+2026-04-26 14:14:22,255 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,266 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-01-13 month 13
+2026-04-26 14:14:22,266 INFO  [process.service.trade.TradeService] - Trade validated between Houston Rockets and Washington Wizards
+2026-04-26 14:14:22,267 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,276 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-01-20 month 14
+2026-04-26 14:14:22,276 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,293 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-01-27 month 15
+2026-04-26 14:14:22,293 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,300 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Distributing monthly central revenue for month 5
+2026-04-26 14:14:22,301 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,302 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,302 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,303 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Monthly central revenue distribution completed for month 5
+2026-04-26 14:14:22,303 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Applying monthly league expenses for month 5
+2026-04-26 14:14:22,303 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,303 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,303 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,303 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Monthly league expenses applied for month 5
+2026-04-26 14:14:22,303 INFO  [process.service.finance.RevenueSharingManager] - Applying revenue sharing for month 5
+2026-04-26 14:14:22,304 INFO  [process.service.finance.RevenueSharingManager] - Revenue sharing applied for month 5
+2026-04-26 14:14:22,308 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-02-03 month 16
+2026-04-26 14:14:22,308 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,323 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-02-10 month 17
+2026-04-26 14:14:22,324 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,337 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-02-17 month 18
+2026-04-26 14:14:22,337 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,348 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-02-24 month 19
+2026-04-26 14:14:22,348 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,360 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Distributing monthly central revenue for month 6
+2026-04-26 14:14:22,360 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,361 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,361 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,362 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Monthly central revenue distribution completed for month 6
+2026-04-26 14:14:22,362 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Applying monthly league expenses for month 6
+2026-04-26 14:14:22,362 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,363 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,363 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,363 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Monthly league expenses applied for month 6
+2026-04-26 14:14:22,363 INFO  [process.service.finance.RevenueSharingManager] - Applying revenue sharing for month 6
+2026-04-26 14:14:22,364 INFO  [process.service.finance.RevenueSharingManager] - Revenue sharing applied for month 6
+2026-04-26 14:14:22,369 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-03-03 month 20
+2026-04-26 14:14:22,369 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,381 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-03-10 month 21
+2026-04-26 14:14:22,381 INFO  [process.service.trade.TradeService] - Trade validated between Atlanta Hawks and Brooklyn Nets
+2026-04-26 14:14:22,381 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,402 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-03-17 month 22
+2026-04-26 14:14:22,403 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,414 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-03-24 month 23
+2026-04-26 14:14:22,415 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,425 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-03-31 month 24
+2026-04-26 14:14:22,425 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,427 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Distributing monthly central revenue for month 7
+2026-04-26 14:14:22,428 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,428 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,429 WARN  [process.service.finance.distribution.central.calculation.MonthlyGameRevenueAnalyzer] - No active playoff teams because playoff or current round is null
+2026-04-26 14:14:22,429 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Monthly central revenue distribution completed for month 7
+2026-04-26 14:14:22,429 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Applying monthly league expenses for month 7
+2026-04-26 14:14:22,430 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,430 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,430 WARN  [process.service.finance.expense.LeagueExpenseGameAnalyzer] - No active playoff teams counted because playoff or current round is null
+2026-04-26 14:14:22,430 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Monthly league expenses applied for month 7
+2026-04-26 14:14:22,430 INFO  [process.service.finance.RevenueSharingManager] - Applying revenue sharing for month 7
+2026-04-26 14:14:22,431 INFO  [process.service.finance.RevenueSharingManager] - Revenue sharing applied for month 7
+2026-04-26 14:14:22,443 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-04-07 month 25
+2026-04-26 14:14:22,444 INFO  [process.service.trade.TradeService] - Trade validated between Cleveland Cavaliers and Phoenix Suns
+2026-04-26 14:14:22,444 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:22,453 INFO  [process.orchestrator.manager.SimulationManager] - Ending regular season and initializing playoffs
+2026-04-26 14:14:22,453 INFO  [process.builder.league.PlayoffBuilder] - Building first round playoffs
+2026-04-26 14:14:22,454 INFO  [process.builder.league.PlayoffBuilder] - First round playoffs built
+2026-04-26 14:14:22,454 INFO  [process.builder.calendar.CalendarBuilder] - Building calendar with FirstRoundCalendarBuilder
+2026-04-26 14:14:22,454 INFO  [process.builder.calendar.schedule.ScheduleReset] - Resetting schedules for all teams
+2026-04-26 14:14:22,454 INFO  [process.builder.calendar.schedule.ScheduleReset] - All team schedules reset successfully
+2026-04-26 14:14:22,454 INFO  [process.builder.calendar.FirstRoundCalendarBuilder] - Building first round playoff calendar
+2026-04-26 14:14:22,455 INFO  [process.builder.calendar.FirstRoundCalendarBuilder] - First round playoff calendar built with 8 game days
+2026-04-26 14:14:22,455 INFO  [process.builder.calendar.CalendarBuilder] - Calendar built successfully with FirstRoundCalendarBuilder
+2026-04-26 14:14:22,455 INFO  [process.orchestrator.manager.SimulationManager] - Playoffs initialized
+2026-04-26 14:14:22,455 INFO  [process.orchestrator.manager.SimulationManager] - Regular season simulation completed
+2026-04-26 14:14:24,526 INFO  [process.service.trade.TradeService] - Simulating trades for 2026-04-18 month 26
+2026-04-26 14:14:24,527 INFO  [process.service.trade.TradeService] - Trade simulation completed for 30 teams
+2026-04-26 14:14:24,543 WARN  [process.service.playoff.PlayoffManager] - Resolving tied playoff game by giving one extra point to home team
+2026-04-26 14:14:24,566 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Distributing monthly central revenue for month 8
+2026-04-26 14:14:24,568 INFO  [process.service.finance.distribution.central.CentralRevenueDistributor] - Monthly central revenue distribution completed for month 8
+2026-04-26 14:14:24,568 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Applying monthly league expenses for month 8
+2026-04-26 14:14:24,569 INFO  [process.service.finance.expense.LeagueExpenseCalculator] - Monthly league expenses applied for month 8
+2026-04-26 14:14:24,572 WARN  [process.service.playoff.PlayoffManager] - Resolving tied playoff game by giving one extra point to home team
+2026-04-26 14:14:24,572 INFO  [process.builder.league.PlayoffBuilder] - Building conference semifinals playoffs
+2026-04-26 14:14:24,572 INFO  [process.builder.league.PlayoffBuilder] - Conference semifinals playoffs built
+2026-04-26 14:14:24,572 INFO  [process.builder.calendar.CalendarBuilder] - Building calendar with SemiCalendarBuilder
+2026-04-26 14:14:24,572 INFO  [process.builder.calendar.schedule.ScheduleReset] - Resetting schedules for all teams
+2026-04-26 14:14:24,572 INFO  [process.builder.calendar.schedule.ScheduleReset] - All team schedules reset successfully
+2026-04-26 14:14:24,572 INFO  [process.builder.calendar.SemiCalendarBuilder] - Building conference semifinals calendar
+2026-04-26 14:14:24,572 INFO  [process.builder.calendar.SemiCalendarBuilder] - Conference semifinals calendar built with 4 game days
+2026-04-26 14:14:24,572 INFO  [process.builder.calendar.CalendarBuilder] - Calendar built successfully with SemiCalendarBuilder

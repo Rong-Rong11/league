@@ -50,11 +50,11 @@ public class FirstRoundPlayoffManager extends PlayoffManager {
 		logger.debug("Advancing from first round to conference semifinals");
 
 		League league = getLeague();
-		league.setPlayoff(getPlayoffBuilder().buldSecondRoundPlayoffs());
+		league.setPlayoff(getPlayoffBuilder().buildSecondRoundPlayoffs());
 		league.getPlayoff().setCurrentRound(PlayoffRound.CONFERENCE_SEMIFINALS);
 
 		SemiCalendarBuilder semiCalendarBuilder = new SemiCalendarBuilder(league, roundEndDate);
-		league.getPlayoff().setNbaCalendar(semiCalendarBuilder.buildCalendar());
+		mergePlayoffCalendar(semiCalendarBuilder.buildCalendar());
 
 		logger.debug("Conference semifinals playoffs and calendar created");
 	}
