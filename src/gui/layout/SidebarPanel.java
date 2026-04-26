@@ -32,6 +32,7 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 	private JButton rankingButton = new RoundedButton("Classement");
 	private JButton financeButton = new RoundedButton("Finance");
 	private JButton mapButton = new RoundedButton("Carte");
+	private JButton finalResultsButton = new RoundedButton("Resultats finaux");
 	private JButton themeButton = new RoundedButton("Mode sombre");
 	private JButton exitButton = new RoundedButton("Quitter");
 	private JLabel titleLabel;
@@ -49,7 +50,8 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 	}
 
 	private void create() {
-		menuButtons = new JButton[] { matchButton, calendarButton, rankingButton, financeButton, mapButton };
+		menuButtons = new JButton[] { matchButton, calendarButton, rankingButton, financeButton, mapButton,
+				finalResultsButton };
 		applySidebarIcons();
 		initializeHighlightStrategies();
 		applyTheme();
@@ -102,12 +104,15 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 		configureMenuButton(rankingButton);
 		configureMenuButton(financeButton);
 		configureMenuButton(mapButton);
+		configureMenuButton(finalResultsButton);
 
 		matchButton.addActionListener(new HighlightAction(matchButton));
 		calendarButton.addActionListener(new HighlightAction(calendarButton));
 		rankingButton.addActionListener(new HighlightAction(rankingButton));
 		financeButton.addActionListener(new HighlightAction(financeButton));
 		mapButton.addActionListener(new HighlightAction(mapButton));
+		finalResultsButton.addActionListener(new HighlightAction(finalResultsButton));
+		finalResultsButton.setVisible(false);
 
 		highlightActiveButton(matchButton);
 
@@ -116,6 +121,7 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 		panel.add(rankingButton);
 		panel.add(financeButton);
 		panel.add(mapButton);
+		panel.add(finalResultsButton);
 
 		panel.add(Box.createVerticalGlue());
 
@@ -211,6 +217,10 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 		highlightStrategies.put("map", new ButtonHighlightStrategy(
 				mapButton, menuButtons, DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR, DashboardPanelUtil.getNavigationButtonColor(),
 				DashboardPanelUtil.SIDEBAR_TEXT_COLOR, DashboardPanelUtil.getPrimaryActionTextColor()));
+		highlightStrategies.put("seasonEnd", new ButtonHighlightStrategy(
+				finalResultsButton, menuButtons, DashboardPanelUtil.SIDEBAR_BACKGROUND_COLOR,
+				DashboardPanelUtil.getNavigationButtonColor(), DashboardPanelUtil.SIDEBAR_TEXT_COLOR,
+				DashboardPanelUtil.getPrimaryActionTextColor()));
 	}
 
 	private void highlightActiveButton(JButton activeButton) {
@@ -219,7 +229,8 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 				calendarButton,
 				rankingButton,
 				financeButton,
-				mapButton
+				mapButton,
+				finalResultsButton
 		};
 
 		for (int i = 0; i < buttons.length; i++) {
@@ -263,8 +274,24 @@ public class SidebarPanel extends JPanel implements ThemeAware {
 		return mapButton;
 	}
 
+	public JButton getFinalResultsButton() {
+		return finalResultsButton;
+	}
+
 	public JButton getExitButton() {
 		return exitButton;
+	}
+
+	public void setFinalResultsVisible(boolean visible) {
+		finalResultsButton.setVisible(visible);
+		if (!visible && "seasonEnd".equals(activeSection)) {
+			activeSection = "match";
+			highlightActiveButton(matchButton);
+		}
+		if (menuSectionPanel != null) {
+			menuSectionPanel.revalidate();
+			menuSectionPanel.repaint();
+		}
 	}
 
 	public String getActiveSection() {

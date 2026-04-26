@@ -19,6 +19,7 @@ import gui.dashboard.RefreshableDashboard;
 import gui.dashboard.RankingDashboard;
 import gui.dashboard.RegularSeasonEndDashboard;
 import gui.dashboard.RosterDashboard;
+import gui.dashboard.SeasonEndDashboard;
 import gui.layout.SidebarPanel;
 import gui.panel.common.DashboardPanelUtil;
 import process.orchestrator.interf.GUIInterface;
@@ -34,6 +35,7 @@ public class MainGui extends JFrame {
 	private JPanel dashboardPanel;
 	private OpeningDashboard openingPanel;
 	private RegularSeasonEndDashboard regularSeasonEndDashboard;
+	private SeasonEndDashboard seasonEndDashboard;
 	private JPanel mainPanel;
 	private CalendarDashboard calendarDashboard;
 	private MatchDashboard matchDashboard;
@@ -71,6 +73,7 @@ public class MainGui extends JFrame {
 		refreshableDashboards = new HashMap<String, RefreshableDashboard>();
 		openingPanel = new OpeningDashboard(guiInterface);
 		regularSeasonEndDashboard = new RegularSeasonEndDashboard(guiInterface);
+		seasonEndDashboard = new SeasonEndDashboard(guiInterface);
 		mainPanel = buildApplicationPanel();
 	}
 
@@ -78,12 +81,14 @@ public class MainGui extends JFrame {
 		rootPanel.add(openingPanel, "opening");
 		rootPanel.add(mainPanel, "main");
 		rootPanel.add(regularSeasonEndDashboard, "regularSeasonEnd");
+		rootPanel.add(seasonEndDashboard, "seasonEnd");
 
 		setLayout(new BorderLayout());
 		add(rootPanel, BorderLayout.CENTER);
 
 		showDashboardCard("match");
 		showRootCard("opening");
+		syncSidebarSeasonEndVisibility();
 
 		pack();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -138,6 +143,7 @@ public class MainGui extends JFrame {
 		mapDashboard.setOpenRosterAction(new ShowRosterDashboardAction());
 		rosterDashboard.setBackToMapAction(new ShowMapDashboardAction());
 		calendarDashboard.setRegularSeasonEndAction(new ShowRegularSeasonEndAction());
+		rankingDashboard.setSeasonEndAction(new ShowSeasonEndAction());
 	}
 
 	private void registerOpeningActions() {
@@ -145,6 +151,8 @@ public class MainGui extends JFrame {
 		openingPanel.getThemeButton().addActionListener(new ToggleThemeAction());
 		regularSeasonEndDashboard.getReviewRankingButton().addActionListener(new ReviewRankingAction());
 		regularSeasonEndDashboard.getStartPlayoffsButton().addActionListener(new StartPlayoffsAction());
+		seasonEndDashboard.getReviewRankingButton().addActionListener(new ReviewRankingAction());
+		seasonEndDashboard.getOpenFinanceButton().addActionListener(new OpenFinanceAction());
 	}
 
 	private void registerSidebarActions() {
@@ -153,6 +161,7 @@ public class MainGui extends JFrame {
 		sidebar.getRankingButton().addActionListener(new SwitchDashboardAction("ranking"));
 		sidebar.getFinanceButton().addActionListener(new SwitchDashboardAction("finance"));
 		sidebar.getMapButton().addActionListener(new SwitchDashboardAction("map"));
+		sidebar.getFinalResultsButton().addActionListener(new ShowSeasonEndSidebarAction());
 		sidebar.getThemeButton().addActionListener(new ToggleThemeAction());
 		sidebar.getExitButton().addActionListener(new QuitAction());
 	}
@@ -209,6 +218,19 @@ public class MainGui extends JFrame {
 		showRootCard("regularSeasonEnd");
 	}
 
+	private void showSeasonEndDashboard() {
+		seasonEndDashboard.refresh();
+		syncSidebarSeasonEndVisibility();
+		sidebar.setActiveSection("seasonEnd");
+		showRootCard("seasonEnd");
+	}
+
+	private void syncSidebarSeasonEndVisibility() {
+		if (sidebar != null) {
+			sidebar.setFinalResultsVisible(guiInterface.arePlayoffsFinished());
+		}
+	}
+
 	private class ShowRegularSeasonEndAction implements Runnable {
 		@Override
 		public void run() {
@@ -216,12 +238,38 @@ public class MainGui extends JFrame {
 		}
 	}
 
+	private class ShowSeasonEndAction implements Runnable {
+		@Override
+		public void run() {
+			showSeasonEndDashboard();
+		}
+	}
+
+	private class ShowSeasonEndSidebarAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			showSeasonEndDashboard();
+		}
+	}
+
 	private class ReviewRankingAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			syncSidebarSeasonEndVisibility();
 			rankingDashboard.refresh();
 			sidebar.setActiveSection("ranking");
 			showDashboardCard("ranking");
+			showRootCard("main");
+		}
+	}
+
+	private class OpenFinanceAction implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			syncSidebarSeasonEndVisibility();
+			financeDashboard.refresh();
+			sidebar.setActiveSection("finance");
+			showDashboardCard("finance");
 			showRootCard("main");
 		}
 	}
@@ -231,6 +279,7 @@ public class MainGui extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			guiInterface.initializePlayoffs();
 			guiInterface.setUserConfirmedPlayoffs(true);
+			syncSidebarSeasonEndVisibility();
 			rankingDashboard.showPlayoffs();
 			sidebar.setActiveSection("ranking");
 			showDashboardCard("ranking");
@@ -253,6 +302,7 @@ public class MainGui extends JFrame {
 			}
 
 			calendarDashboard.startSeason();
+			syncSidebarSeasonEndVisibility();
 			matchDashboard.loadGamesOfDay(guiInterface.getMatchDisplayDate());
 			sidebar.setActiveSection("match");
 			showDashboardCard("match");
@@ -277,6 +327,7 @@ public class MainGui extends JFrame {
 	private class ShowMatchDashboardAction implements Runnable {
 		@Override
 		public void run() {
+			syncSidebarSeasonEndVisibility();
 			calendarDashboard.refreshSeasonState();
 			sidebar.setActiveSection("match");
 			showDashboardCard("match");
@@ -294,6 +345,7 @@ public class MainGui extends JFrame {
 	private class ShowRosterDashboardAction implements Runnable {
 		@Override
 		public void run() {
+			syncSidebarSeasonEndVisibility();
 			rosterDashboard.setSelectedTeam(mapDashboard.getSelectedTeam());
 			sidebar.setActiveSection("map");
 			showDashboardCard("roster");
@@ -303,6 +355,7 @@ public class MainGui extends JFrame {
 	private class ShowMapDashboardAction implements Runnable {
 		@Override
 		public void run() {
+			syncSidebarSeasonEndVisibility();
 			sidebar.setActiveSection("map");
 			showDashboardCard("map");
 		}
@@ -325,6 +378,7 @@ public class MainGui extends JFrame {
 		openingPanel.applyTheme();
 		if (sidebar != null) {
 			sidebar.applyTheme();
+			syncSidebarSeasonEndVisibility();
 		}
 		if (matchDashboard != null) {
 			matchDashboard.applyTheme();
@@ -337,6 +391,9 @@ public class MainGui extends JFrame {
 		}
 		if (regularSeasonEndDashboard != null) {
 			regularSeasonEndDashboard.refresh();
+		}
+		if (seasonEndDashboard != null) {
+			seasonEndDashboard.refresh();
 		}
 		if (mapDashboard != null) {
 			mapDashboard.applyTheme();
