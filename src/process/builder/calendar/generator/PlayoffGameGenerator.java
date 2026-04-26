@@ -15,78 +15,103 @@ public class PlayoffGameGenerator {
 	private static final Logger logger = LoggerUtility.getLogger(PlayoffGameGenerator.class, "text");
 
 	public static void generateFirstRoundPlayoffGames(Playoff playoff) {
-		logger.info("Generating first round playoff games");
+		if (playoff == null) {
+			logger.warn("Skipping first round playoff games generation because playoff is null");
+			return;
+		}
+
 		ArrayList<PlayoffSeries> eastFirstRound = playoff.getEastFirstRound();
 		ArrayList<PlayoffSeries> westFirstRound = playoff.getWestFirstRound();
-		logger.debug("First round contains "
+
+		logger.debug("Generating first round playoff games for "
 				+ eastFirstRound.size()
 				+ " eastern series and "
 				+ westFirstRound.size()
 				+ " western series");
-		for (PlayoffSeries playoffSeries : eastFirstRound) {
-			createGameForSeries(playoffSeries);
-		}
-		for (PlayoffSeries playoffSeries : westFirstRound) {
-			createGameForSeries(playoffSeries);
-		}
-		logger.info("First round playoff games generated");
+
+		generateGamesForSeries(eastFirstRound);
+		generateGamesForSeries(westFirstRound);
 	}
 
 	public static void generateSecondRoundPlayoffGames(Playoff playoff) {
-		logger.info("Generating second round playoff games");
+		if (playoff == null) {
+			logger.warn("Skipping second round playoff games generation because playoff is null");
+			return;
+		}
+
 		ArrayList<PlayoffSeries> eastSemis = playoff.getEastConferenceSemis();
 		ArrayList<PlayoffSeries> westSemis = playoff.getWestConferenceSemis();
-		logger.debug("Second round contains "
+
+		logger.debug("Generating second round playoff games for "
 				+ eastSemis.size()
 				+ " eastern series and "
 				+ westSemis.size()
 				+ " western series");
-		for (PlayoffSeries playoffSeries : eastSemis) {
-			createGameForSeries(playoffSeries);
-		}
-		for (PlayoffSeries playoffSeries : westSemis) {
-			createGameForSeries(playoffSeries);
-		}
-		logger.info("Second round playoff games generated");
+
+		generateGamesForSeries(eastSemis);
+		generateGamesForSeries(westSemis);
 	}
 
 	public static void generateConferenceFinalsPlayoffGames(Playoff playoff) {
-		logger.info("Generating conference finals playoff games");
+		if (playoff == null) {
+			logger.warn("Skipping conference finals playoff games generation because playoff is null");
+			return;
+		}
+
 		ArrayList<PlayoffSeries> eastConferenceFinals = playoff.getEastConferenceFinals();
 		ArrayList<PlayoffSeries> westConferenceFinals = playoff.getWestConferenceFinals();
-		logger.debug("Conference finals contain "
+
+		logger.debug("Generating conference finals playoff games for "
 				+ eastConferenceFinals.size()
 				+ " eastern series and "
 				+ westConferenceFinals.size()
 				+ " western series");
-		for (PlayoffSeries playoffSeries : eastConferenceFinals) {
-			createGameForSeries(playoffSeries);
-		}
-		for (PlayoffSeries playoffSeries : westConferenceFinals) {
-			createGameForSeries(playoffSeries);
-		}
-		logger.info("Conference finals playoff games generated");
+
+		generateGamesForSeries(eastConferenceFinals);
+		generateGamesForSeries(westConferenceFinals);
 	}
 
 	public static void generateNbaFinalsPlayoffGames(Playoff playoff) {
-		logger.info("Generating NBA finals playoff games");
+		if (playoff == null) {
+			logger.warn("Skipping NBA finals playoff games generation because playoff is null");
+			return;
+		}
+
 		ArrayList<PlayoffSeries> nbaFinals = playoff.getNbaFinals();
-		logger.debug("NBA finals contain " + nbaFinals.size() + " series");
-		for (PlayoffSeries playoffSeries : nbaFinals) {
+
+		logger.debug("Generating NBA finals playoff games for " + nbaFinals.size() + " series");
+
+		generateGamesForSeries(nbaFinals);
+	}
+
+	private static void generateGamesForSeries(ArrayList<PlayoffSeries> playoffSeriesList) {
+		if (playoffSeriesList == null) {
+			logger.warn("Skipping playoff games generation because series list is null");
+			return;
+		}
+
+		for (PlayoffSeries playoffSeries : playoffSeriesList) {
 			createGameForSeries(playoffSeries);
 		}
-		logger.info("NBA finals playoff games generated");
 	}
 
 	private static void createGameForSeries(PlayoffSeries playoffSeries) {
+		if (playoffSeries == null) {
+			logger.warn("Skipping playoff game creation because playoff series is null");
+			return;
+		}
+
 		Team higherTeam = playoffSeries.getHigherTeam();
 		Team lowerTeam = playoffSeries.getLowerTeam();
-		logger.debug("Creating expected playoff games for series "
-				+ higherTeam.getName()
-				+ " vs "
-				+ lowerTeam.getName());
+
+		if (higherTeam == null || lowerTeam == null) {
+			logger.warn("Skipping playoff game creation because higher team or lower team is null");
+			return;
+		}
+
 		for (int i = 1; i <= 7; i++) {
 			Game game;
+
 			if (i == 1 || i == 2 || i == 5 || i == 7) {
 				game = GameScheduleHelper.createGame(
 						higherTeam,
@@ -98,17 +123,10 @@ public class PlayoffGameGenerator {
 						higherTeam,
 						GameConfiguration.GAME_INTRA_CONFERENCE);
 			}
-			logger.trace("Creating expected playoff game "
-					+ i
-					+ " with home team "
-					+ game.getGameContext().getHomeTeam().getName());
+
 			GameScheduleHelper.addGameToTeam(game, lowerTeam);
 			GameScheduleHelper.addGameToTeam(game, higherTeam);
 			playoffSeries.addExpectedGame(game, i);
 		}
-		logger.debug("Created 7 expected playoff games for series "
-				+ higherTeam.getName()
-				+ " vs "
-				+ lowerTeam.getName());
 	}
 }

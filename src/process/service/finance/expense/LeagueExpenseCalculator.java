@@ -6,6 +6,7 @@ import data.finance.budget.Budget;
 import data.finance.budget.expense.Expense;
 import data.finance.budget.expense.ExpenseType;
 import data.league.League;
+import data.league.finance.CentralRevenueSeasonDynamics;
 import log.LoggerUtility;
 import process.service.finance.FinanceManager;
 import process.utility.FinanceUtility;
@@ -21,8 +22,10 @@ public class LeagueExpenseCalculator {
 		this.league = league;
 		this.gameAnalyzer = new LeagueExpenseGameAnalyzer(league);
 		LeaguePopularityExpenseTracker popularityTracker = new LeaguePopularityExpenseTracker();
-		LeagueExpenseRateCalculator rateCalculator = new LeagueExpenseRateCalculator(gameAnalyzer, popularityTracker);
-		this.costCalculator = new LeagueExpenseCostCalculator(rateCalculator);
+		LeagueExpenseRateCalculator rateCalculator = new LeagueExpenseRateCalculator(gameAnalyzer,
+				popularityTracker,
+				getSeasonDynamics());
+		this.costCalculator = new LeagueExpenseCostCalculator(rateCalculator, league.getAllTeam());
 	}
 
 	public void setFinanceManager(FinanceManager financeManager) {
@@ -77,6 +80,13 @@ public class LeagueExpenseCalculator {
 
 		FinanceUtility.updateBudget(budget);
 		logger.info("Monthly league expenses applied for month " + month);
+	}
+
+	private CentralRevenueSeasonDynamics getSeasonDynamics() {
+		if (league == null || league.getLeagueFinance() == null || league.getLeagueFinance().getCentralRevenueSeasonDynamics() == null) {
+			return new CentralRevenueSeasonDynamics(1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.08, 50.0, 1.0, 0.0);
+		}
+		return league.getLeagueFinance().getCentralRevenueSeasonDynamics();
 	}
 
 }

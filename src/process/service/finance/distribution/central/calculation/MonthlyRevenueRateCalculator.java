@@ -2,6 +2,7 @@ package process.service.finance.distribution.central.calculation;
 
 import org.apache.log4j.Logger;
 
+import data.league.finance.CentralRevenueSeasonDynamics;
 import log.LoggerUtility;
 import process.utility.CalendarUtility;
 
@@ -9,9 +10,12 @@ public class MonthlyRevenueRateCalculator {
 	private static final Logger logger = LoggerUtility.getLogger(MonthlyRevenueRateCalculator.class, "text");
 
 	private MonthlyGameRevenueAnalyzer gameRevenueAnalyzer;
+	private CentralRevenueSeasonDynamics seasonDynamics;
 
-	public MonthlyRevenueRateCalculator(MonthlyGameRevenueAnalyzer gameRevenueAnalyzer) {
+	public MonthlyRevenueRateCalculator(MonthlyGameRevenueAnalyzer gameRevenueAnalyzer,
+			CentralRevenueSeasonDynamics seasonDynamics) {
 		this.gameRevenueAnalyzer = gameRevenueAnalyzer;
+		this.seasonDynamics = seasonDynamics;
 	}
 
 	public double getLeagueMonthlyAttractivenessRate(int month) {
@@ -63,6 +67,54 @@ public class MonthlyRevenueRateCalculator {
 		return rate;
 	}
 
+	public double getPremiumGamesRevenueRate(int month, double ratePerGame) {
+		int premiumGames = gameRevenueAnalyzer.countPremiumGamesInMonth(month);
+		double rate = 1 + (premiumGames * ratePerGame);
+		logger.trace("Premium games revenue rate is "
+				+ rate
+				+ " for month "
+				+ month
+				+ " with "
+				+ premiumGames
+				+ " premium games");
+		return rate;
+	}
+
+	public double getHighAttendanceRevenueRate(int month, double ratePerGame) {
+		int highAttendanceGames = gameRevenueAnalyzer.countHighAttendanceGamesInMonth(month);
+		double rate = 1 + (highAttendanceGames * ratePerGame);
+		logger.trace("High attendance revenue rate is "
+				+ rate
+				+ " for month "
+				+ month
+				+ " with "
+				+ highAttendanceGames
+				+ " high attendance games");
+		return rate;
+	}
+
+	public double getStarDrivenRevenueRate(int month, double rivalryRatePerGame, double starRatePerGame,
+			double starRivalryRatePerGame) {
+		int rivalryGames = gameRevenueAnalyzer.countRivalryGamesInMonth(month);
+		int starGames = gameRevenueAnalyzer.countStarGamesInMonth(month);
+		int starRivalryGames = gameRevenueAnalyzer.countStarRivalryGamesInMonth(month);
+		double rate = 1
+				+ (rivalryGames * rivalryRatePerGame)
+				+ (starGames * starRatePerGame)
+				+ (starRivalryGames * starRivalryRatePerGame);
+		logger.trace("Star driven revenue rate is "
+				+ rate
+				+ " for month "
+				+ month
+				+ " with rivalryGames="
+				+ rivalryGames
+				+ ", starGames="
+				+ starGames
+				+ ", starRivalryGames="
+				+ starRivalryGames);
+		return rate;
+	}
+
 	public double getActivePlayoffTeamsRate(int month, double ratePerTeam) {
 		if (!isPlayoffMonth(month)) {
 			logger.trace("Active playoff teams rate is 1.0 because month " + month + " is not a playoff month");
@@ -82,13 +134,15 @@ public class MonthlyRevenueRateCalculator {
 
 	public double getSeasonMomentumRate(int month, double playoffBonusRate) {
 		if (isPlayoffMonth(month)) {
-			double rate = 1 + playoffBonusRate;
+			int activePlayoffTeams = gameRevenueAnalyzer.countActivePlayoffTeams();
+			double rate = 1 + (playoffBonusRate * 0.68) + (activePlayoffTeams * 0.0045);
 			logger.trace("Season momentum rate is " + rate + " for playoff month " + month);
 			return rate;
 		}
 		if (CalendarUtility.isImportantMonth(month)) {
-			logger.trace("Season momentum rate is 1.28 for important month " + month);
-			return 1.28;
+			double rate = seasonDynamics == null ? 1.08 : seasonDynamics.getImportantMonthRate();
+			logger.trace("Season momentum rate is " + rate + " for important month " + month);
+			return rate;
 		}
 		logger.trace("Season momentum rate is 1.0 for month " + month);
 		return 1.0;
@@ -96,9 +150,18 @@ public class MonthlyRevenueRateCalculator {
 
 	public double getControlledEconomicNoise(int month, double maxAmplitude) {
 		int importantGames = gameRevenueAnalyzer.countImportantGamesInMonth(month);
+		int premiumGames = gameRevenueAnalyzer.countPremiumGamesInMonth(month);
+		int highAttendanceGames = gameRevenueAnalyzer.countHighAttendanceGamesInMonth(month);
 		int playoffGames = gameRevenueAnalyzer.countPlayoffGamesInMonth(month);
 		int activeTeams = gameRevenueAnalyzer.countActivePlayoffTeams();
-		double wave = Math.sin((month * 1.73) + (importantGames * 0.11) + (playoffGames * 0.23) + (activeTeams * 0.19));
+		double phaseShift = seasonDynamics == null ? 0.0 : seasonDynamics.getEconomicNoisePhaseShift();
+		double wave = Math.sin((month * 1.37)
+				+ phaseShift
+				+ (importantGames * 0.07)
+				+ (premiumGames * 0.11)
+				+ (highAttendanceGames * 0.09)
+				+ (playoffGames * 0.17)
+				+ (activeTeams * 0.14));
 		double rate = 1 + (wave * maxAmplitude);
 		logger.trace("Controlled economic noise wave is "
 				+ wave
@@ -106,6 +169,10 @@ public class MonthlyRevenueRateCalculator {
 				+ month
 				+ ", importantGames="
 				+ importantGames
+				+ ", premiumGames="
+				+ premiumGames
+				+ ", highAttendanceGames="
+				+ highAttendanceGames
 				+ ", playoffGames="
 				+ playoffGames
 				+ ", activeTeams="
@@ -116,8 +183,12 @@ public class MonthlyRevenueRateCalculator {
 
 	public double getRevenueTypeMonthlyRate(int month, double primaryAmplitude, double secondaryAmplitude,
 			double phaseShift) {
-		double primaryWave = Math.sin((month * 1.11) + phaseShift);
-		double secondaryWave = Math.cos((month * 0.67) + (phaseShift * 0.6));
+		int premiumGames = gameRevenueAnalyzer.countPremiumGamesInMonth(month);
+		int starRivalryGames = gameRevenueAnalyzer.countStarRivalryGamesInMonth(month);
+		double dynamicPhaseShift = seasonDynamics == null ? 0.0 : seasonDynamics.getRevenueTypePhaseShift();
+		double primaryWave = Math.sin((month * 0.93) + phaseShift + dynamicPhaseShift + (premiumGames * 0.08));
+		double secondaryWave = Math.cos((month * 0.58) + (phaseShift * 0.6) + (dynamicPhaseShift * 0.7)
+				+ (starRivalryGames * 0.10));
 
 		double rate = 1 + (primaryWave * primaryAmplitude) + (secondaryWave * secondaryAmplitude);
 		logger.trace("Revenue type monthly waves are primary="

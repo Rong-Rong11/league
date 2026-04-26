@@ -1,4 +1,4 @@
-package process.visitor.financialprofil;
+package process.visitor.financialpolicy;
 
 import data.finance.budget.Budget;
 import data.team.finance.financialpolicy.AmbitiousPolicy;

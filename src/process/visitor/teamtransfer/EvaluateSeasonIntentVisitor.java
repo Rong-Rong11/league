@@ -10,7 +10,7 @@ import data.team.finance.transfer.Rebuild;
 import data.team.finance.transfer.SalaryDump;
 import data.team.finance.transfer.SmallAdjust;
 import data.team.finance.transfer.SuperstarBuild;
-import process.visitor.financialprofil.ValidateTradeVisitor;
+import process.visitor.financialpolicy.ValidateTradeVisitor;
 
 public class EvaluateSeasonIntentVisitor
 		implements TeamTransferVisitor<String> {

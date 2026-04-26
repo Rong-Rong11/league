@@ -70,6 +70,85 @@ public class LeagueExpenseGameAnalyzer {
 		return count;
 	}
 
+	public int countPremiumGamesInMonth(int month) {
+		int count = 0;
+		if (league.getRegularSeason() != null && league.getRegularSeason().getNbaCalendar() != null) {
+			for (GameDay gameDay : league.getRegularSeason().getNbaCalendar().getCalendar().values()) {
+				if (gameDay.getDate() == null || !matchesFinanceMonth(gameDay.getDate(), month)) {
+					continue;
+				}
+				for (Game game : gameDay.getGames()) {
+					if (CalendarUtility.popularityScoreGame(game, gameDay.getDate()) >= 110) {
+						count++;
+					}
+				}
+			}
+		}
+		if (league.getPlayoff() != null && league.getPlayoff().getNbaCalendar() != null) {
+			for (GameDay gameDay : league.getPlayoff().getNbaCalendar().getCalendar().values()) {
+				if (gameDay.getDate() == null || !matchesFinanceMonth(gameDay.getDate(), month)) {
+					continue;
+				}
+				for (Game game : gameDay.getGames()) {
+					if (CalendarUtility.popularityScoreGame(game, gameDay.getDate()) >= 110) {
+						count++;
+					}
+				}
+			}
+		}
+		return count;
+	}
+
+	public int countHighAttendanceGamesInMonth(int month) {
+		int count = 0;
+		if (league.getRegularSeason() != null && league.getRegularSeason().getNbaCalendar() != null) {
+			for (GameDay gameDay : league.getRegularSeason().getNbaCalendar().getCalendar().values()) {
+				if (gameDay.getDate() == null || !matchesFinanceMonth(gameDay.getDate(), month)) {
+					continue;
+				}
+				for (Game game : gameDay.getGames()) {
+					if (hasHighAttendance(game)) {
+						count++;
+					}
+				}
+			}
+		}
+		if (league.getPlayoff() != null && league.getPlayoff().getNbaCalendar() != null) {
+			for (GameDay gameDay : league.getPlayoff().getNbaCalendar().getCalendar().values()) {
+				if (gameDay.getDate() == null || !matchesFinanceMonth(gameDay.getDate(), month)) {
+					continue;
+				}
+				for (Game game : gameDay.getGames()) {
+					if (hasHighAttendance(game)) {
+						count++;
+					}
+				}
+			}
+		}
+		return count;
+	}
+
+	public int countStarRivalryGamesInMonth(int month) {
+		int count = 0;
+		if (league.getRegularSeason() != null && league.getRegularSeason().getNbaCalendar() != null) {
+			for (GameDay gameDay : league.getRegularSeason().getNbaCalendar().getCalendar().values()) {
+				if (gameDay.getDate() == null || !matchesFinanceMonth(gameDay.getDate(), month)) {
+					continue;
+				}
+				count += countStarRivalryGames(gameDay);
+			}
+		}
+		if (league.getPlayoff() != null && league.getPlayoff().getNbaCalendar() != null) {
+			for (GameDay gameDay : league.getPlayoff().getNbaCalendar().getCalendar().values()) {
+				if (gameDay.getDate() == null || !matchesFinanceMonth(gameDay.getDate(), month)) {
+					continue;
+				}
+				count += countStarRivalryGames(gameDay);
+			}
+		}
+		return count;
+	}
+
 	private int countImportantGamesForSeasonMonth(int month, boolean playoff) {
 		logger.trace("Counting important "
 				+ (playoff ? "playoff" : "regular season")
@@ -152,5 +231,18 @@ public class LeagueExpenseGameAnalyzer {
 			logger.trace("Game has high attendance for league expenses with rate " + gameStat.getAttendanceRate());
 		}
 		return highAttendance;
+	}
+
+	private int countStarRivalryGames(GameDay gameDay) {
+		int count = 0;
+		for (Game game : gameDay.getGames()) {
+			boolean rivalry = game.getGameContext().isRivalry();
+			boolean starGame = game.getGameContext().getHomeTeam().hasStarPlayer()
+					|| game.getGameContext().getAwayTeam().hasStarPlayer();
+			if (rivalry && starGame) {
+				count++;
+			}
+		}
+		return count;
 	}
 }

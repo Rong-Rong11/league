@@ -6,12 +6,19 @@ import org.apache.log4j.Logger;
 
 import data.team.Team;
 import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.marketsize.LargeSize;
+import data.team.finance.marketsize.MarketSize;
+import data.team.finance.marketsize.MediumSize;
+import data.team.finance.marketsize.SmallSize;
 import data.team.finance.mediamarket.MediaMarket;
 import log.LoggerUtility;
 import process.utility.FinanceUtility;
+import process.visitor.marketsize.CalculateLeagueMarketCoefficientVisitor;
 
 public class LeagueFinanceMetricsCalculator {
 	private static final Logger logger = LoggerUtility.getLogger(LeagueFinanceMetricsCalculator.class, "text");
+	private final CalculateLeagueMarketCoefficientVisitor marketCoefficientVisitor =
+			new CalculateLeagueMarketCoefficientVisitor();
 
 	public double calculateAveragePopularity(List<Team> teams) {
 		logMetricCalculation("average popularity", teams);
@@ -98,6 +105,54 @@ public class LeagueFinanceMetricsCalculator {
 		return average;
 	}
 
+	public double calculateAverageMediaFanBase(List<Team> teams) {
+		logMetricCalculation("average media fan base", teams);
+		double total = 0.0;
+		for (Team team : teams) {
+			MediaMarket mediaMarket = team.getTeamFinance().getStructure().getMediaMarket();
+			logger.trace("Adding media fan base modifier "
+					+ mediaMarket.getFanBaseModifier()
+					+ " for "
+					+ team.getName());
+			total += mediaMarket.getFanBaseModifier();
+		}
+		double average = total / teams.size();
+		logger.debug("Calculated average media fan base " + average + " for " + teams.size() + " teams");
+		return average;
+	}
+
+	public double calculateAverageMediaPrestige(List<Team> teams) {
+		logMetricCalculation("average media prestige", teams);
+		double total = 0.0;
+		for (Team team : teams) {
+			MediaMarket mediaMarket = team.getTeamFinance().getStructure().getMediaMarket();
+			logger.trace("Adding media prestige modifier "
+					+ mediaMarket.getPrestigeModifier()
+					+ " for "
+					+ team.getName());
+			total += mediaMarket.getPrestigeModifier();
+		}
+		double average = total / teams.size();
+		logger.debug("Calculated average media prestige " + average + " for " + teams.size() + " teams");
+		return average;
+	}
+
+	public double calculateAveragePricingPower(List<Team> teams) {
+		logMetricCalculation("average pricing power", teams);
+		double total = 0.0;
+		for (Team team : teams) {
+			MediaMarket mediaMarket = team.getTeamFinance().getStructure().getMediaMarket();
+			logger.trace("Adding pricing power modifier "
+					+ mediaMarket.getPricingPowerModifier()
+					+ " for "
+					+ team.getName());
+			total += mediaMarket.getPricingPowerModifier();
+		}
+		double average = total / teams.size();
+		logger.debug("Calculated average pricing power " + average + " for " + teams.size() + " teams");
+		return average;
+	}
+
 	public double calculateAverageTeamValue(List<Team> teams) {
 		logMetricCalculation("average team value", teams);
 		double total = 0.0;
@@ -111,6 +166,32 @@ public class LeagueFinanceMetricsCalculator {
 		return average;
 	}
 
+	public double calculateMarketPowerIndex(List<Team> teams) {
+		logMetricCalculation("market power index", teams);
+		double total = 0.0;
+		for (Team team : teams) {
+			MarketSize marketSize = team.getTeamFinance().getStructure().getMarketSize();
+			double coefficient = getMarketCoefficient(marketSize);
+			logger.trace("Adding market coefficient " + coefficient + " for " + team.getName());
+			total += coefficient;
+		}
+		double average = total / teams.size();
+		logger.debug("Calculated market power index " + average + " for " + teams.size() + " teams");
+		return average;
+	}
+
+	public int countSmallMarketTeams(List<Team> teams) {
+		return countTeamsByMarketSize(teams, SmallSize.class, "small market teams");
+	}
+
+	public int countMediumMarketTeams(List<Team> teams) {
+		return countTeamsByMarketSize(teams, MediumSize.class, "medium market teams");
+	}
+
+	public int countLargeMarketTeams(List<Team> teams) {
+		return countTeamsByMarketSize(teams, LargeSize.class, "large market teams");
+	}
+
 	public int countTeamsWithStarPlayer(List<Team> teams) {
 		logMetricCalculation("teams with star player", teams);
 		int count = 0;
@@ -121,6 +202,28 @@ public class LeagueFinanceMetricsCalculator {
 			}
 		}
 		logger.debug("Counted " + count + " teams with a star player out of " + teams.size());
+		return count;
+	}
+
+	private double getMarketCoefficient(MarketSize marketSize) {
+		if (marketSize == null) {
+			logger.warn("Using neutral market coefficient because market size is null");
+			return 1.0;
+		}
+		return marketSize.accept(marketCoefficientVisitor);
+	}
+
+	private int countTeamsByMarketSize(List<Team> teams, Class<? extends MarketSize> marketSizeClass,
+			String metricName) {
+		logMetricCalculation(metricName, teams);
+		int count = 0;
+		for (Team team : teams) {
+			MarketSize marketSize = team.getTeamFinance().getStructure().getMarketSize();
+			if (marketSizeClass.isInstance(marketSize)) {
+				count++;
+			}
+		}
+		logger.debug("Counted " + count + " " + metricName + " out of " + teams.size());
 		return count;
 	}
 

@@ -8,10 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import data.league.League;
+import data.sport.live.LiveMatchState;
 import data.sport.setup.Game;
 import data.team.Team;
 import process.service.live.LiveMatchService;
-import process.service.live.LiveMatchState;
 import test.support.TestSupport;
 
 public class TestLiveMatchService {
