@@ -10,8 +10,12 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 import config.CalendarConfiguration;
+import config.FinanceConfiguration;
 import data.calendar.GameDay;
 import data.finance.GameStat;
+import data.finance.budget.Budget;
+import data.finance.budget.income.Income;
+import data.finance.budget.income.IncomeCategory;
 import data.league.League;
 import data.league.Playoff;
 import data.league.PlayoffRound;
@@ -384,6 +388,78 @@ public class SimulationManager implements GUIInterface {
 			return 0.0;
 		}
 		return team.getTeamFinance().getBudget().getNetForMonth(month);
+	}
+
+	@Override
+	public double getLeagueTotalNet() {
+		double total = 0.0;
+		for (int month = 1; month <= lastFinanceMonth(); month++) {
+			total += getLeagueNetForMonth(month);
+		}
+		return total;
+	}
+
+	@Override
+	public double getTeamTotalNet(Team team) {
+		double total = 0.0;
+		for (int month = 1; month <= lastFinanceMonth(); month++) {
+			total += getTeamNetForMonth(team, month);
+		}
+		return total;
+	}
+
+	private int lastFinanceMonth() {
+		return Math.max(1, FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS - 1);
+	}
+
+	@Override
+	public double getTotalTvRevenue() {
+		return getTotalRevenueByCategory(IncomeCategory.MEDIA);
+	}
+
+	@Override
+	public double getTotalMerchandisingRevenue() {
+		return getTotalRevenueByCategory(IncomeCategory.MERCHANDISING);
+	}
+
+	private double getTotalRevenueByCategory(IncomeCategory category) {
+		double total = getBudgetRevenueByCategory(getLeagueBudget(), category);
+		for (Team team : getTeams()) {
+			total += getBudgetRevenueByCategory(getTeamBudget(team), category);
+		}
+		return total;
+	}
+
+	private double getBudgetRevenueByCategory(Budget budget, IncomeCategory category) {
+		double total = 0.0;
+		if (budget == null || category == null) {
+			return total;
+		}
+		for (Map<String, Income> incomes : budget.getMonthlyIncomes().values()) {
+			if (incomes != null) {
+				for (Income income : incomes.values()) {
+					if (income != null && income.getIncomeType() != null
+							&& income.getIncomeType().getCategory() == category) {
+						total += income.getAmount();
+					}
+				}
+			}
+		}
+		return total;
+	}
+
+	private Budget getLeagueBudget() {
+		if (league == null || league.getLeagueFinance() == null) {
+			return null;
+		}
+		return league.getLeagueFinance().getBudget();
+	}
+
+	private Budget getTeamBudget(Team team) {
+		if (team == null || team.getTeamFinance() == null) {
+			return null;
+		}
+		return team.getTeamFinance().getBudget();
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import javax.swing.Box;
 import javax.swing.JPanel;
 
 import data.team.Team;
-import gui.panel.common.BuildBox;
 import gui.panel.common.DashboardPanelUtil;
 import gui.utility.TeamDisplayUtility;
 
@@ -25,10 +24,13 @@ public class SeasonEndOverviewPanel extends JPanel {
 		setOpaque(false);
 		add(buildKeyStatsPanel(), BorderLayout.NORTH);
 
-		JPanel center = new JPanel(new GridLayout(1, 2, SeasonEndPanelFactory.GAP, 0));
+		JPanel center = new JPanel(new GridLayout(1, 3, SeasonEndPanelFactory.GAP, 0));
 		center.setOpaque(false);
-		center.add(new BuildBox("BILAN SPORTIF", "Classement et playoffs", buildSportPanel()));
-		center.add(new BuildBox("SYNTHESE SAISON", "Resultats finaux", buildSeasonSummaryPanel()));
+		center.add(SeasonEndPanelFactory.buildInfoBox("TOP CLASSEMENT", "Saison reguliere", buildTopRankingPanel(),
+				"", ""));
+		center.add(SeasonEndPanelFactory.buildInfoBox("PLAYOFFS", "Resume final", buildPlayoffSummaryPanel(), "", ""));
+		center.add(SeasonEndPanelFactory.buildInfoBox("FINANCES", "Reperes de fin de saison", buildSeasonSummaryPanel(),
+				"", ""));
 		add(center, BorderLayout.CENTER);
 	}
 
@@ -59,22 +61,14 @@ public class SeasonEndOverviewPanel extends JPanel {
 		return panel;
 	}
 
-	private JPanel buildSportPanel() {
-		JPanel panel = new JPanel(new GridLayout(1, 2, SeasonEndPanelFactory.GAP, 0));
-		panel.setOpaque(false);
-		panel.add(buildTopRankingPanel());
-		panel.add(buildPlayoffSummaryPanel());
-		return panel;
-	}
-
 	private JPanel buildTopRankingPanel() {
 		JPanel panel = SeasonEndPanelFactory.buildListPanel();
 		ArrayList<Team> ranking = dataProvider.getGlobalRanking();
-		for (int index = 0; index < 8 && index < ranking.size(); index++) {
+		for (int index = 0; index < 10 && index < ranking.size(); index++) {
 			Team team = ranking.get(index);
 			panel.add(SeasonEndPanelFactory.buildInfoRow((index + 1) + ". " + TeamDisplayUtility.getShortName(team),
 					dataProvider.buildRecordText(team), dataProvider.getRankColor(index + 1)));
-			if (index < 7) {
+			if (index < 9 && index < ranking.size() - 1) {
 				panel.add(Box.createVerticalStrut(8));
 			}
 		}
@@ -94,31 +88,39 @@ public class SeasonEndOverviewPanel extends JPanel {
 		panel.add(Box.createVerticalStrut(10));
 		panel.add(SeasonEndPanelFactory.buildInfoRow("Series jouees", String.valueOf(dataProvider.getPlayoffSeriesCount()),
 				DashboardPanelUtil.REVENUE_COLOR));
-		panel.add(Box.createVerticalStrut(10));
-		panel.add(SeasonEndPanelFactory.buildInfoRow("Matchs playoffs", String.valueOf(dataProvider.countPlayoffGames()),
-				DashboardPanelUtil.POSITIVE_VALUE_COLOR));
 		return panel;
 	}
 
 	private JPanel buildSeasonSummaryPanel() {
 		JPanel panel = SeasonEndPanelFactory.buildListPanel();
-		panel.add(SeasonEndPanelFactory.buildInfoRow("Champion", dataProvider.getChampionName(),
-				DashboardPanelUtil.NEUTRAL_ACCENT_COLOR));
-		panel.add(Box.createVerticalStrut(10));
-		panel.add(SeasonEndPanelFactory.buildInfoRow("Finaliste", TeamDisplayUtility.getShortName(dataProvider.getFinalist()),
-				DashboardPanelUtil.POLICY_BALANCED_COLOR));
-		panel.add(Box.createVerticalStrut(10));
-		panel.add(SeasonEndPanelFactory.buildInfoRow("Series jouees", String.valueOf(dataProvider.getPlayoffSeriesCount()),
-				DashboardPanelUtil.REVENUE_COLOR));
-		panel.add(Box.createVerticalStrut(10));
-		panel.add(SeasonEndPanelFactory.buildInfoRow("Matchs playoffs", String.valueOf(dataProvider.countPlayoffGames()),
+		Team bestNetTeam = dataProvider.getBestNetTeam();
+		Team worstNetTeam = dataProvider.getWorstNetTeam();
+		Team richestTeam = dataProvider.getRichestTeam();
+		panel.add(SeasonEndPanelFactory.buildInfoRow("Meilleur net", TeamDisplayUtility.getShortName(bestNetTeam)
+				+ " " + dataProvider.formatMoney(dataProvider.getTotalTeamNet(bestNetTeam)),
 				DashboardPanelUtil.POSITIVE_VALUE_COLOR));
 		panel.add(Box.createVerticalStrut(10));
-		panel.add(SeasonEndPanelFactory.buildInfoRow("Finale NBA", dataProvider.buildFinalsScoreText(),
-				DashboardPanelUtil.TITLE_TEXT_COLOR));
+		panel.add(SeasonEndPanelFactory.buildInfoRow("Pire net", TeamDisplayUtility.getShortName(worstNetTeam)
+				+ " " + dataProvider.formatMoney(dataProvider.getTotalTeamNet(worstNetTeam)),
+				DashboardPanelUtil.EXPENSE_COLOR));
 		panel.add(Box.createVerticalStrut(10));
-		panel.add(SeasonEndPanelFactory.buildInfoRow("Matchs totaux", String.valueOf(dataProvider.countTotalGames()),
+		panel.add(SeasonEndPanelFactory.buildInfoRow("Plus gros budget", TeamDisplayUtility.getShortName(richestTeam)
+				+ " " + dataProvider.formatMoney(dataProvider.getRemainingBudget(richestTeam)),
+				DashboardPanelUtil.POLICY_BALANCED_COLOR));
+		panel.add(Box.createVerticalStrut(10));
+		panel.add(SeasonEndPanelFactory.buildInfoRow("Revenus TV", dataProvider.formatMoney(dataProvider.getTotalTvRevenue()),
+				DashboardPanelUtil.REVENUE_COLOR));
+		panel.add(Box.createVerticalStrut(10));
+		panel.add(SeasonEndPanelFactory.buildInfoRow("Revenus merch",
+				dataProvider.formatMoney(dataProvider.getTotalMerchandisingRevenue()),
 				DashboardPanelUtil.STRATEGY_REBUILD_COLOR));
+		panel.add(Box.createVerticalStrut(10));
+		panel.add(SeasonEndPanelFactory.buildInfoRow("Valeur ligue", dataProvider.formatMoney(dataProvider.getLeagueValue()),
+				DashboardPanelUtil.NEUTRAL_ACCENT_COLOR));
+		panel.add(Box.createVerticalStrut(10));
+		double leagueNet = dataProvider.getTotalLeagueNet();
+		panel.add(SeasonEndPanelFactory.buildInfoRow("Net ligue", dataProvider.formatMoney(leagueNet),
+				DashboardPanelUtil.getValueColorForAmount(leagueNet)));
 		return panel;
 	}
 }
