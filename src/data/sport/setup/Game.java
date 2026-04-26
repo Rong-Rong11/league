@@ -3,6 +3,7 @@
 	*/
 package data.sport.setup;
 
+import data.league.PlayoffRound;
 import data.team.Team;
 
 public class Game {
@@ -14,6 +15,7 @@ public class Game {
 	private int homeFinalScore;
 	private int awayFinalScore;
 	private boolean displayed;
+	private PlayoffRound playoffRound;
 
 	public Game(GameContext gameContext) {
 		this.gameContext = gameContext;
@@ -61,6 +63,14 @@ public class Game {
 
 	public void setDisplayed(boolean bl) {
 		this.displayed = bl;
+	}
+
+	public PlayoffRound getPlayoffRound() {
+		return playoffRound;
+	}
+
+	public void setPlayoffRound(PlayoffRound playoffRound) {
+		this.playoffRound = playoffRound;
 	}
 
 	public Team getWinner() {

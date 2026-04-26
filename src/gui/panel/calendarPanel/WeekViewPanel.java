@@ -90,7 +90,11 @@ public class WeekViewPanel extends JPanel implements ThemeAware {
 		if (!canDisplayWeek()) {
 			return;
 		}
-		guiInterface.simulateSeasonFrom(displayedDate);
+		if (displayedDate != null && displayedDate.isAfter(guiInterface.getRegularSeasonEndDate())) {
+			updateDisplay();
+			return;
+		}
+		guiInterface.simulateRegularSeason();
 		lastSimulatedDate = guiInterface.getCurrentDate();
 		displayedDate = guiInterface.getDisplayedDateAfterSeasonSimulation(displayedDate);
 		updateDisplay();

@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 import data.calendar.GameDay;
+import data.calendar.NBACalendar;
 import data.league.League;
 import data.sport.setup.Game;
 import data.sport.setup.PlayoffSeries;
@@ -96,9 +97,13 @@ public abstract class PlayoffManager {
 		}
 
 		if (winner.equals(series.getHigherTeam())) {
+			game.setWinner(series.getHigherTeam());
+			game.setLoser(series.getLowerTeam());
 			series.setHigherTeamWins(series.getHigherTeamWins() + 1);
 			logger.debug("Higher seed playoff win registered for " + winner.getName());
 		} else if (winner.equals(series.getLowerTeam())) {
+			game.setWinner(series.getLowerTeam());
+			game.setLoser(series.getHigherTeam());
 			series.setLowerTeamWins(series.getLowerTeamWins() + 1);
 			logger.debug("Lower seed playoff win registered for " + winner.getName());
 		} else {
@@ -156,14 +161,18 @@ public abstract class PlayoffManager {
 
 	private Team getWinner(Game game) {
 		if (game.getHomeFinalScore() == game.getAwayFinalScore()) {
-			logger.warn("Unable to determine playoff game winner because scores are tied");
-			return null;
+			logger.warn("Resolving tied playoff game by giving one extra point to home team");
+			game.setHomeFinalScore(game.getHomeFinalScore() + 1);
 		}
 		if (game.getHomeFinalScore() > game.getAwayFinalScore()) {
 			logger.trace("Playoff game winner is home team " + game.getGameContext().getHomeTeam().getName());
+			game.setWinner(game.getGameContext().getHomeTeam());
+			game.setLoser(game.getGameContext().getAwayTeam());
 			return game.getGameContext().getHomeTeam();
 		}
 		logger.trace("Playoff game winner is away team " + game.getGameContext().getAwayTeam().getName());
+		game.setWinner(game.getGameContext().getAwayTeam());
+		game.setLoser(game.getGameContext().getHomeTeam());
 		return game.getGameContext().getAwayTeam();
 	}
 
@@ -190,5 +199,13 @@ public abstract class PlayoffManager {
 
 	public PlayoffCalendarBuilder getCurrentRoundCalendarBuilder() {
 		return currentRoundCalendarBuilder;
+	}
+
+	protected void mergePlayoffCalendar(NBACalendar newRoundCalendar) {
+	  if (newRoundCalendar == null || newRoundCalendar.getCalendar() == null) {
+		 return;
+	  }
+	  TreeMap<LocalDate, GameDay> playoffCalendar = league.getPlayoff().getNbaCalendar().getCalendar();
+	  playoffCalendar.putAll(newRoundCalendar.getCalendar());
 	}
 }
