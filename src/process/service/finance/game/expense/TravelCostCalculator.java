@@ -7,7 +7,7 @@ import config.GameConfiguration;
 import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import log.LoggerUtility;
 
 public class TravelCostCalculator {
@@ -36,7 +36,7 @@ public class TravelCostCalculator {
 		}
 		double travelCost;
 		int typeGame = game.getGameContext().getTypeGame();
-		EconomicProfil economicProfil = awayTeam.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = awayTeam.getTeamFinance().getStructure().getEconomicProfile();
 		logger.trace("Calculating away travel cost for " + awayTeam.getName() + " with game type " + typeGame);
 
 		if (typeGame == GameConfiguration.GAME_INTRA_DIVISION) {
@@ -53,8 +53,8 @@ public class TravelCostCalculator {
 		double bonusRate = bonusProvider.getTravelBonusRate(game);
 		travelCost = travelCost * (1 + bonusRate);
 		logger.trace("Applied travel bonus rate " + bonusRate);
-		travelCost *= (1 + economicProfil.getFanLoyalty() * 0.32);
-		logger.trace("Applied away fan loyalty travel modifier with loyalty " + economicProfil.getFanLoyalty());
+		travelCost *= (1 + economicProfile.getFanLoyalty() * 0.32);
+		logger.trace("Applied away fan loyalty travel modifier with loyalty " + economicProfile.getFanLoyalty());
 
 		gameStat.getAwayFinance().setTravelCosts(travelCost);
 		logger.debug("Calculated away travel cost " + travelCost + " for " + awayTeam.getName());

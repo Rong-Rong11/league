@@ -22,7 +22,7 @@ import data.team.finance.TeamFinance;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.financePanel.FinanceDataUtil;
 import gui.utility.TeamDisplayUtility;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class SeasonEndDataProvider {
 	private final GUIInterface guiInterface;
@@ -246,7 +246,7 @@ public class SeasonEndDataProvider {
 		if (finance == null || finance.getBehavior() == null) {
 			return "-";
 		}
-		return FinanceDataUtil.formatPolicy(finance.getBehavior().getFinancialProfil());
+		return FinanceDataUtil.formatPolicy(finance.getBehavior().getFinancialPolicy());
 	}
 
 	public String getStrategyLabel(Team team) {

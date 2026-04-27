@@ -38,8 +38,8 @@ import process.builder.calendar.FirstRoundCalendarBuilder;
 import process.builder.calendar.RegularSeasonCalendarBuilder;
 import process.builder.league.LeagueBuilder;
 import process.builder.league.PlayoffBuilder;
-import process.orchestrator.interf.GUIInterface;
-import process.orchestrator.interf.SimulationClock;
+import process.orchestrator.interfaces.GUIInterface;
+import process.orchestrator.interfaces.SimulationClock;
 import process.repository.TeamRepository;
 import process.service.finance.FinanceManager;
 import process.service.game.GameManager;
@@ -1088,10 +1088,10 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public String getTeamFinancialPolicyLabel(Team team) {
 		if (team == null || team.getTeamFinance() == null
-				|| team.getTeamFinance().getBehavior().getFinancialProfil() == null) {
+				|| team.getTeamFinance().getBehavior().getFinancialPolicy() == null) {
 			return "-";
 		}
-		String className = team.getTeamFinance().getBehavior().getFinancialProfil().getClass().getSimpleName();
+		String className = team.getTeamFinance().getBehavior().getFinancialPolicy().getClass().getSimpleName();
 		if ("AmbitiousPolicy".equals(className)) {
 			return "Ambitieuse";
 		}

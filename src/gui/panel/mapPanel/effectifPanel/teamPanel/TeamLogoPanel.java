@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.interf.TeamGetterInterface;
+import process.orchestrator.interfaces.TeamGetterInterface;
 
 public class TeamLogoPanel extends JPanel implements ThemeAware {
 	private static final String LOGO_FOLDER_PATH = "src/resources/nba_logos/";

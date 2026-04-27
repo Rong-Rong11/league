@@ -21,7 +21,7 @@ import gui.panel.seasonEndPanel.SeasonEndFinancePanel;
 import gui.panel.seasonEndPanel.SeasonEndHeaderPanel;
 import gui.panel.seasonEndPanel.SeasonEndOverviewPanel;
 import gui.panel.seasonEndPanel.SeasonEndProfilePanel;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class SeasonEndDashboard extends JPanel implements RefreshableDashboard, ThemeAware {
 	private static final String OVERVIEW_PAGE = "overview";

@@ -3,7 +3,7 @@ package process.service.league;
 import org.apache.log4j.Logger;
 
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.mediamarket.MediaMarket;
 import data.team.finance.transfer.TeamTransferStrategy;
 import log.LoggerUtility;
@@ -44,16 +44,16 @@ public class TeamPopularityVariationCalculator {
 	private double calculateCommonPopularityBase(Team team) {
 		double variation = 0.0;
 
-		EconomicProfil economicProfil = team.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = team.getTeamFinance().getStructure().getEconomicProfile();
 		MediaMarket mediaMarket = team.getTeamFinance().getStructure().getMediaMarket();
 
 		if (team.hasStarPlayer()) {
 			variation += 1.4;
 		}
 
-		variation += economicProfil.getFanLoyalty() - 0.5 * 1.5;
-		variation += economicProfil.getHistoricalPrestige() - 0.5 * 1.2;
-		variation += economicProfil.getCommercialAggressiveness() - 0.5 * 0.8;
+		variation += economicProfile.getFanLoyalty() - 0.5 * 1.5;
+		variation += economicProfile.getHistoricalPrestige() - 0.5 * 1.2;
+		variation += economicProfile.getCommercialAggressiveness() - 0.5 * 0.8;
 
 		variation += mediaMarket.getFanBaseModifier() * 1.5;
 		variation += mediaMarket.getPrestigeModifier() * 1.2;

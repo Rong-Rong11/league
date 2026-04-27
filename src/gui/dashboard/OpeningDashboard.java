@@ -23,9 +23,9 @@ import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.TeamMapPanel;
 import gui.panel.common.ThemeAware;
-import gui.panel.openningPanel.OpeningPolicyDetailPanel;
-import gui.panel.openningPanel.OpeningTeamSelectionPanel;
-import process.orchestrator.interf.GUIInterface;
+import gui.panel.openingPanel.OpeningPolicyDetailPanel;
+import gui.panel.openingPanel.OpeningTeamSelectionPanel;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class OpeningDashboard extends JPanel implements ThemeAware {
 
@@ -188,7 +188,7 @@ public class OpeningDashboard extends JPanel implements ThemeAware {
 	private void refreshSelectedTeamPanels() {
 		teamSelectionPanel.updateTeam(selectedTeam);
 		if (selectedTeam != null) {
-			teamSelectionPanel.setSelectedPolicy(selectedTeam.getTeamFinance().getBehavior().getFinancialProfil());
+			teamSelectionPanel.setSelectedPolicy(selectedTeam.getTeamFinance().getBehavior().getFinancialPolicy());
 			teamSelectionPanel.setSelectedMarketSize(selectedTeam.getTeamFinance().getStructure().getMarketSize());
 		}
 		policyDetailPanel.updateTeam(selectedTeam);

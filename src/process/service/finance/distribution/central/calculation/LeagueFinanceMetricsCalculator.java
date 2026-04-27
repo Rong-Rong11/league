@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.marketsize.MediumSize;
@@ -51,7 +51,7 @@ public class LeagueFinanceMetricsCalculator {
 		logMetricCalculation("average historical prestige", teams);
 		double total = 0.0;
 		for (Team team : teams) {
-			EconomicProfil profil = team.getTeamFinance().getStructure().getEconomicProfil();
+			EconomicProfile profil = team.getTeamFinance().getStructure().getEconomicProfile();
 			logger.trace("Adding historical prestige " + profil.getHistoricalPrestige() + " for " + team.getName());
 			total += profil.getHistoricalPrestige();
 		}
@@ -64,7 +64,7 @@ public class LeagueFinanceMetricsCalculator {
 		logMetricCalculation("average fan loyalty", teams);
 		double total = 0.0;
 		for (Team team : teams) {
-			EconomicProfil profil = team.getTeamFinance().getStructure().getEconomicProfil();
+			EconomicProfile profil = team.getTeamFinance().getStructure().getEconomicProfile();
 			logger.trace("Adding fan loyalty " + profil.getFanLoyalty() + " for " + team.getName());
 			total += profil.getFanLoyalty();
 		}
@@ -77,7 +77,7 @@ public class LeagueFinanceMetricsCalculator {
 		logMetricCalculation("average commercial aggressiveness", teams);
 		double total = 0.0;
 		for (Team team : teams) {
-			EconomicProfil profil = team.getTeamFinance().getStructure().getEconomicProfil();
+			EconomicProfile profil = team.getTeamFinance().getStructure().getEconomicProfile();
 			logger.trace("Adding commercial aggressiveness "
 					+ profil.getCommercialAggressiveness()
 					+ " for "

@@ -35,7 +35,7 @@ public class LineupSelector {
 		double averageSalary = FinanceUtility.getAverageSalary(team);
 		TreeMap<Double, Player> scoredPlayers = new TreeMap<Double, Player>(Collections.reverseOrder());
 
-		FinancialPolicy teamFinancialPolicy = team.getTeamFinance().getBehavior().getFinancialProfil();
+		FinancialPolicy teamFinancialPolicy = team.getTeamFinance().getBehavior().getFinancialPolicy();
 		double ecoWeight, matchProfileWeight;
 
 		ecoWeight = teamFinancialPolicy.accept(new GameEcoWeightVisitor());

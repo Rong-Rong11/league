@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import log.LoggerUtility;
@@ -33,7 +33,7 @@ public class StadiumCostCalculator {
 		}
 		MarketSize marketSize = homeTeam.getTeamFinance().getStructure().getMarketSize();
 		MediaMarket mediaMarket = homeTeam.getTeamFinance().getStructure().getMediaMarket();
-		EconomicProfil economicProfil = homeTeam.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = homeTeam.getTeamFinance().getStructure().getEconomicProfile();
 		logger.trace("Calculating stadium costs for " + homeTeam.getName());
 
 		double baseCosts = marketSize.accept(new CalculateStadiumCostVisitor());
@@ -46,8 +46,8 @@ public class StadiumCostCalculator {
 		modifier += attendanceFactor * 0.25;
 		modifier += gamePopularity * 0.15;
 		modifier += mediaMarket.getBusinessOpportunityModifier() * 0.10;
-		modifier += economicProfil.getFanLoyalty() * 0.05;
-		modifier += economicProfil.getHistoricalPrestige() * 0.05;
+		modifier += economicProfile.getFanLoyalty() * 0.05;
+		modifier += economicProfile.getHistoricalPrestige() * 0.05;
 		logger.trace("Stadium modifier after attendance, popularity and market factors is " + modifier);
 
 		double bonusRate = bonusProvider.getStadiumBonusRate(game, homeTeam, attendees, gamePopularity);

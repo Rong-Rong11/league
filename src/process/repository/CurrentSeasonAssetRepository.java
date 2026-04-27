@@ -29,4 +29,8 @@ public class CurrentSeasonAssetRepository {
 		}
 		return null;
 	}
+
+	public void clear() {
+		this.currentSeasonAssets.clear();
+	}
 }

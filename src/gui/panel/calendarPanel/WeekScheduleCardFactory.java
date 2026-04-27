@@ -15,7 +15,7 @@ import data.sport.setup.Game;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedPanel;
 import gui.utility.TeamDisplayUtility;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 import process.visitor.gamemoment.GameMomentSlotKeyVisitor;
 
 public class WeekScheduleCardFactory {

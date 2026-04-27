@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 
 import gui.frame.MainGui;
 import log.LoggerUtility;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 import process.orchestrator.manager.SimulationManager;
 
 public class App {

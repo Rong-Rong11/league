@@ -3,7 +3,7 @@
 	*/
 package process.visitor.marketsize;
 
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MediumSize;
 import data.team.finance.marketsize.SmallSize;
@@ -12,12 +12,12 @@ public class CalculateInitialTeamBudgetVisitor
 		implements MarketSizeVisitor<Double> {
 	private double baseBudget;
 	private double popularity;
-	private EconomicProfil economicProfil;
+	private EconomicProfile economicProfile;
 
-	public CalculateInitialTeamBudgetVisitor(double baseBudget, double popularity, EconomicProfil economicProfil) {
+	public CalculateInitialTeamBudgetVisitor(double baseBudget, double popularity, EconomicProfile economicProfile) {
 		this.baseBudget = baseBudget;
 		this.popularity = popularity;
-		this.economicProfil = economicProfil;
+		this.economicProfile = economicProfile;
 	}
 
 	@Override
@@ -40,13 +40,13 @@ public class CalculateInitialTeamBudgetVisitor
 		budget *= marketMultiplier;
 		double popularityFactor = 0.85 + popularity / 100.0 * 0.3;
 		budget *= popularityFactor;
-		double prestigeFactor = 0.85 + economicProfil.getHistoricalPrestige() * 0.3;
+		double prestigeFactor = 0.85 + economicProfile.getHistoricalPrestige() * 0.3;
 		budget *= prestigeFactor;
 		double mediaFactor = 1.25;
 		budget *= mediaFactor;
-		double commercialFactor = 0.9 + economicProfil.getCommercialAggressiveness() * 0.2;
+		double commercialFactor = 0.9 + economicProfile.getCommercialAggressiveness() * 0.2;
 		budget *= commercialFactor;
-		double ownerFactor = 0.7 + economicProfil.getOwnerDeficitTolerance() * 0.6;
+		double ownerFactor = 0.7 + economicProfile.getOwnerDeficitTolerance() * 0.6;
 		return budget *= ownerFactor;
 	}
 }

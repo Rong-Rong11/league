@@ -221,7 +221,7 @@ public class FinanceManager {
 	public void randomFinancialPolicy() {
 		logger.debug("Randomizing financial policy for all teams");
 		for (Team team : teamRepository.getAllTeams()) {
-			FinancialPolicy financialPolicy = TeamUtility.randomFinancialProfil();
+			FinancialPolicy financialPolicy = TeamUtility.randomFinancialPolicy();
 			chooseFinancialPolicy(team, financialPolicy);
 		}
 		logger.debug("Financial policy randomized for all teams");
@@ -236,7 +236,7 @@ public class FinanceManager {
 				+ financialPolicy.getClass().getSimpleName()
 				+ " for "
 				+ team.getName());
-		team.getTeamFinance().getBehavior().setFinancialProfil(financialPolicy);
+		team.getTeamFinance().getBehavior().setFinancialPolicy(financialPolicy);
 		team.getTeamFinance().getBehavior()
 				.setTeamTransferStrategy(financialPolicy.accept(new ChooseTransferStrategyVisitor(team.getRival())));
 	}
@@ -291,7 +291,7 @@ public class FinanceManager {
 		double performance = team.getTeamPerformance().getPerformanceRating();
 		double popularity = team.getCurrentPopularity() / 100.0;
 		double marketExposure = team.getTeamFinance().getStructure().getMediaMarket().getBusinessOpportunityModifier();
-		double prestige = team.getTeamFinance().getStructure().getEconomicProfil().getHistoricalPrestige();
+		double prestige = team.getTeamFinance().getStructure().getEconomicProfile().getHistoricalPrestige();
 
 		bonus += performance * 0.9;
 		bonus += popularity * 0.8;

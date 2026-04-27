@@ -10,7 +10,7 @@ import data.team.finance.marketsize.MarketSize;
 import process.visitor.marketsize.MarketSizePayrollTargetVisitor;
 
 public class ValidateTradeVisitor
-		implements FinancialProfilVisitor<Boolean> {
+		implements FinancialPolicyVisitor<Boolean> {
 	private double payroll;
 	private double salaryCap;
 	private double marketSizeFactor;

@@ -3,7 +3,7 @@
 	*/
 package data.team.finance.financialpolicy;
 
-import process.visitor.financialpolicy.FinancialProfilVisitor;
+import process.visitor.financialpolicy.FinancialPolicyVisitor;
 
 public class BalancedPolicy
 		extends FinancialPolicy {
@@ -12,7 +12,7 @@ public class BalancedPolicy
 	}
 
 	@Override
-	public <F> F accept(FinancialProfilVisitor<F> financialProfilVisitor) {
-		return financialProfilVisitor.visit(this);
+	public <F> F accept(FinancialPolicyVisitor<F> financialPolicyVisitor) {
+		return financialPolicyVisitor.visit(this);
 	}
 }

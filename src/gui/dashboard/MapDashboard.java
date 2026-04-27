@@ -16,7 +16,7 @@ import gui.panel.common.DashboardTitleBanner;
 import gui.panel.common.TeamMapPanel;
 import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.MapTeamSummaryPanel;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 /**
 	* Dashboard dedie a la page Carte.

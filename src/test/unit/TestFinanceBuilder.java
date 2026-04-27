@@ -37,10 +37,10 @@ public void shouldSetFinanceForAllTeams() {
 		TeamFinance teamFinance = team.getTeamFinance();
 		assertNotNull(teamFinance);
 		assertNotNull(teamFinance.getBudget());
-		assertNotNull(teamFinance.getStructure().getEconomicProfil());
+		assertNotNull(teamFinance.getStructure().getEconomicProfile());
 		assertNotNull(teamFinance.getStructure().getMediaMarket());
 		assertNotNull(teamFinance.getStructure().getMarketSize());
-		assertNotNull(teamFinance.getBehavior().getFinancialProfil());
+		assertNotNull(teamFinance.getBehavior().getFinancialPolicy());
 	}
 }
 
@@ -133,23 +133,23 @@ public void shouldInitMediaMarketAndEconomicProfile() {
 	for (Team team : league.getAllTeam()) {
 		TeamFinance teamFinance = team.getTeamFinance();
 		assertNotNull(teamFinance.getStructure().getMediaMarket());
-		assertNotNull(teamFinance.getStructure().getEconomicProfil());
+		assertNotNull(teamFinance.getStructure().getEconomicProfile());
 
 		assertTrue(teamFinance.getStructure().getMediaMarket().getFanBaseModifier() > 0);
 		assertTrue(teamFinance.getStructure().getMediaMarket().getBusinessOpportunityModifier() > 0);
 		assertTrue(teamFinance.getStructure().getMediaMarket().getPrestigeModifier() > 0);
 		assertTrue(teamFinance.getStructure().getMediaMarket().getPricingPowerModifier() > 0);
 
-		assertTrue(teamFinance.getStructure().getEconomicProfil().getFanLoyalty() > 0);
-		assertTrue(teamFinance.getStructure().getEconomicProfil().getFanLoyalty() <= 1);
-		assertTrue(teamFinance.getStructure().getEconomicProfil().getPriceElasticity() > 0);
-		assertTrue(teamFinance.getStructure().getEconomicProfil().getPriceElasticity() <= 1);
-		assertTrue(teamFinance.getStructure().getEconomicProfil().getCommercialAggressiveness() > 0);
-		assertTrue(teamFinance.getStructure().getEconomicProfil().getCommercialAggressiveness() <= 1);
-		assertTrue(teamFinance.getStructure().getEconomicProfil().getHistoricalPrestige() > 0);
-		assertTrue(teamFinance.getStructure().getEconomicProfil().getHistoricalPrestige() <= 1);
-		assertTrue(teamFinance.getStructure().getEconomicProfil().getOwnerDeficitTolerance() > 0);
-		assertTrue(teamFinance.getStructure().getEconomicProfil().getOwnerDeficitTolerance() <= 1);
+		assertTrue(teamFinance.getStructure().getEconomicProfile().getFanLoyalty() > 0);
+		assertTrue(teamFinance.getStructure().getEconomicProfile().getFanLoyalty() <= 1);
+		assertTrue(teamFinance.getStructure().getEconomicProfile().getPriceElasticity() > 0);
+		assertTrue(teamFinance.getStructure().getEconomicProfile().getPriceElasticity() <= 1);
+		assertTrue(teamFinance.getStructure().getEconomicProfile().getCommercialAggressiveness() > 0);
+		assertTrue(teamFinance.getStructure().getEconomicProfile().getCommercialAggressiveness() <= 1);
+		assertTrue(teamFinance.getStructure().getEconomicProfile().getHistoricalPrestige() > 0);
+		assertTrue(teamFinance.getStructure().getEconomicProfile().getHistoricalPrestige() <= 1);
+		assertTrue(teamFinance.getStructure().getEconomicProfile().getOwnerDeficitTolerance() > 0);
+		assertTrue(teamFinance.getStructure().getEconomicProfile().getOwnerDeficitTolerance() <= 1);
 	}
 }
 
@@ -188,22 +188,22 @@ public void shouldKeepEconomicProfileValuesInRange() {
 
 		double expectedOwnerDeficitToleranceMin = 0.6;
 
-		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil().getHistoricalPrestige() >= expectedHistoricalPrestigeMin);
-		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil().getHistoricalPrestige() <= expectedHistoricalPrestigeMax);
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfile().getHistoricalPrestige() >= expectedHistoricalPrestigeMin);
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfile().getHistoricalPrestige() <= expectedHistoricalPrestigeMax);
 
-		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil().getFanLoyalty() >= expectedFanLoyaltyMin);
-		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil().getFanLoyalty() <= expectedFanLoyaltyMax);
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfile().getFanLoyalty() >= expectedFanLoyaltyMin);
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfile().getFanLoyalty() <= expectedFanLoyaltyMax);
 
-		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil().getPriceElasticity() >= expectedPriceElasticityMin);
-		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil().getPriceElasticity() <= expectedPriceElasticityMax);
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfile().getPriceElasticity() >= expectedPriceElasticityMin);
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfile().getPriceElasticity() <= expectedPriceElasticityMax);
 
-		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil()
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfile()
 			.getCommercialAggressiveness() >= expectedCommercialAggressivenessMin);
-		assertTrue(team.getTeamFinance().getStructure().getEconomicProfil()
+		assertTrue(team.getTeamFinance().getStructure().getEconomicProfile()
 			.getCommercialAggressiveness() <= expectedCommercialAggressivenessMax);
 
 		assertEquals(expectedOwnerDeficitToleranceMin,
-			team.getTeamFinance().getStructure().getEconomicProfil().getOwnerDeficitTolerance(), 0.0001);
+			team.getTeamFinance().getStructure().getEconomicProfile().getOwnerDeficitTolerance(), 0.0001);
 	}
 }
 
@@ -215,9 +215,9 @@ public void shouldKeepBudgetInExpectedRange() {
 		double baseBudget = getExpectedBaseBudget(popularity);
 		double marketMultiplier = getExpectedBudgetMarketMultiplier(team);
 		double popularityFactor = 0.85 + popularity / 100.0 * 0.3;
-		double prestigeFactorMin = 0.85 + team.getTeamFinance().getStructure().getEconomicProfil().getHistoricalPrestige() * 0.3;
+		double prestigeFactorMin = 0.85 + team.getTeamFinance().getStructure().getEconomicProfile().getHistoricalPrestige() * 0.3;
 		double prestigeFactorMax = prestigeFactorMin;
-		double ownerFactor = 0.7 + team.getTeamFinance().getStructure().getEconomicProfil().getOwnerDeficitTolerance() * 0.6;
+		double ownerFactor = 0.7 + team.getTeamFinance().getStructure().getEconomicProfile().getOwnerDeficitTolerance() * 0.6;
 		double mediaFactor = 1.25;
 
 		double commercialFactorMin = 0.9 + getExpectedCommercialAggressivenessMin(team) * 0.2;

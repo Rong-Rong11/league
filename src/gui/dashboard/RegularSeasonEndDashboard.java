@@ -22,7 +22,7 @@ import gui.panel.common.RoundedButton;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
 import gui.utility.TeamDisplayUtility;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class RegularSeasonEndDashboard extends JPanel implements RefreshableDashboard, ThemeAware {
 	private static final Color EAST_ACCENT = new Color(0xA6, 0x4D, 0x5A);

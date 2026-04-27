@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import data.team.Team;
 import data.team.finance.MonthlyTeamRevenue;
 import data.team.finance.TeamFinance;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import log.LoggerUtility;
@@ -33,7 +33,7 @@ public class MonthlyTeamRevenueCalculator {
 		TeamFinance teamFinance = team.getTeamFinance();
 		MarketSize marketSize = teamFinance.getStructure().getMarketSize();
 		MediaMarket mediaMarket = teamFinance.getStructure().getMediaMarket();
-		EconomicProfil economicProfil = teamFinance.getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = teamFinance.getStructure().getEconomicProfile();
 		double teamValueFactor = FinanceUtility.getNormalizedTeamValue(team);
 
 		double marketMultiplier = rateCalculator.getMarketMultiplier(marketSize);
@@ -72,21 +72,21 @@ public class MonthlyTeamRevenueCalculator {
 		localMerchandising *= (1 + mediaMarket.getPrestigeModifier() * 0.16);
 		otherRevenue *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.10);
 
-		localSponsoring *= (1 + economicProfil.getCommercialAggressiveness() * 0.22);
-		localSponsoring *= (1 + economicProfil.getHistoricalPrestige() * 0.10);
+		localSponsoring *= (1 + economicProfile.getCommercialAggressiveness() * 0.22);
+		localSponsoring *= (1 + economicProfile.getHistoricalPrestige() * 0.10);
 		localSponsoring *= (1 + teamValueFactor * 0.15);
 		localSponsoring *= rateCalculator.getSmallMarketRevenueBoost(marketSize, 1.15);
 		localSponsoring *= multiplierProvider.getLocalSponsoringMultiplier();
 		localSponsoring *= rateCalculator.getMonthlyLocalRevenueRate(team, month, 0.070, 0.040);
 
-		localMerchandising *= (1 + economicProfil.getFanLoyalty() * 0.24);
-		localMerchandising *= (1 + economicProfil.getHistoricalPrestige() * 0.12);
+		localMerchandising *= (1 + economicProfile.getFanLoyalty() * 0.24);
+		localMerchandising *= (1 + economicProfile.getHistoricalPrestige() * 0.12);
 		localMerchandising *= (1 + teamValueFactor * 0.14);
 		localMerchandising *= rateCalculator.getSmallMarketRevenueBoost(marketSize, 1.16);
 		localMerchandising *= multiplierProvider.getLocalMerchandisingMultiplier();
 		localMerchandising *= rateCalculator.getMonthlyLocalRevenueRate(team, month, 0.105, 0.055);
 
-		otherRevenue *= (1 + economicProfil.getOwnerDeficitTolerance() * 0.05);
+		otherRevenue *= (1 + economicProfile.getOwnerDeficitTolerance() * 0.05);
 		otherRevenue *= (1 + teamValueFactor * 0.08);
 		otherRevenue *= rateCalculator.getSmallMarketRevenueBoost(marketSize, 1.10);
 		otherRevenue *= multiplierProvider.getOtherRevenueMultiplier();
