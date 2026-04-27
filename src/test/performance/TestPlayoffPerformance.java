@@ -121,6 +121,11 @@ public class TestPlayoffPerformance {
 		TeamPopularityUpdater popularityUpdater = new TeamPopularityUpdater();
 
 		TestSupport.prepareFirstRoundPlayoffs(league);
+		TestSupport.markHigherSeedAsWinner(league.getPlayoff().getEastFirstRound());
+		TestSupport.markHigherSeedAsWinner(league.getPlayoff().getWestFirstRound());
+		TestSupport.assertSeriesFinished(league.getPlayoff().getEastFirstRound());
+		TestSupport.assertSeriesFinished(league.getPlayoff().getWestFirstRound());
+
 		FirstRoundPlayoffManager firstRoundManager = new FirstRoundPlayoffManager(
 				league,
 				new FirstRoundCalendarBuilder(league),
@@ -129,9 +134,13 @@ public class TestPlayoffPerformance {
 				popularityUpdater);
 
 		long start = System.nanoTime();
+
 		firstRoundManager.advanceToNextRound(CalendarConfiguration.PLAYOFF_DEBUT_DATE);
+
 		TestSupport.markHigherSeedAsWinner(league.getPlayoff().getEastConferenceSemis());
 		TestSupport.markHigherSeedAsWinner(league.getPlayoff().getWestConferenceSemis());
+		TestSupport.assertSeriesFinished(league.getPlayoff().getEastConferenceSemis());
+		TestSupport.assertSeriesFinished(league.getPlayoff().getWestConferenceSemis());
 
 		SemiPlayoffManager semiManager = new SemiPlayoffManager(
 				league,
@@ -139,9 +148,13 @@ public class TestPlayoffPerformance {
 				playoffBuilder,
 				financeManager,
 				popularityUpdater);
+
 		semiManager.advanceToNextRound(CalendarConfiguration.PLAYOFF_DEBUT_DATE.plusDays(10));
+
 		TestSupport.markHigherSeedAsWinner(league.getPlayoff().getEastConferenceFinals());
 		TestSupport.markHigherSeedAsWinner(league.getPlayoff().getWestConferenceFinals());
+		TestSupport.assertSeriesFinished(league.getPlayoff().getEastConferenceFinals());
+		TestSupport.assertSeriesFinished(league.getPlayoff().getWestConferenceFinals());
 
 		ConferenceFinalPlayoffManager conferenceFinalManager = new ConferenceFinalPlayoffManager(
 				league,
@@ -149,7 +162,9 @@ public class TestPlayoffPerformance {
 				playoffBuilder,
 				financeManager,
 				popularityUpdater);
+
 		conferenceFinalManager.advanceToNextRound(CalendarConfiguration.PLAYOFF_DEBUT_DATE.plusDays(20));
+
 		double elapsedMs = (System.nanoTime() - start) / 1000000.0;
 
 		assertEquals(1, league.getPlayoff().getNbaFinals().size());

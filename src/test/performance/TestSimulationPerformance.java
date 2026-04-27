@@ -2,9 +2,6 @@ package test.performance;
 
 import static org.junit.Assert.*;
 
-import java.time.LocalDate;
-
-import config.CalendarConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -133,17 +130,23 @@ public class TestSimulationPerformance {
 		simulationManager.startSeason();
 
 		long start = System.nanoTime();
+
 		simulationManager.simulateRegularSeason();
-		for (LocalDate date = CalendarConfiguration.PLAYOFF_DEBUT_DATE;
-				!date.isAfter(CalendarConfiguration.PLAYOFF_END_DATE);
-				date = date.plusDays(1)) {
-			simulationManager.simulateDay(date);
+
+		int safety = 0;
+		while (!simulationManager.arePlayoffsFinished() && safety < 10) {
+			simulationManager.simulateNextPlayoffRound();
+			safety++;
 		}
+
 		double elapsedMs = (System.nanoTime() - start) / 1000000.0;
 
+		assertTrue(simulationManager.hasPlayoffsStarted());
 		assertFalse(simulationManager.getLeague().getPlayoff().getNbaFinals().isEmpty());
+
 		PlayoffSeries finals = simulationManager.getLeague().getPlayoff().getNbaFinals().get(0);
 		assertTrue(finals.isFinished());
+		assertTrue(simulationManager.arePlayoffsFinished());
 
 		TestSupport.assertBelow("fullSeasonAndPlayoffs", elapsedMs, FULL_SEASON_MAX_MS);
 	}
