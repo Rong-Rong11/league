@@ -27,8 +27,10 @@ import data.sport.setup.PlayoffSeries;
 import data.team.Team;
 import process.builder.league.LeagueBuilder;
 import process.builder.league.PlayoffBuilder;
+import process.repository.CurrentSeasonAssetRepository;
 import process.repository.DivisionRepository;
 import process.repository.PlayerRepository;
+import process.repository.PreSeasonAssetRepository;
 import process.repository.TeamRepository;
 import process.service.finance.initialization.FinanceInitializer;
 import process.utility.FinanceUtility;
@@ -40,6 +42,8 @@ public class TestSupport {
 		PlayerRepository.getInstance().clear();
 		TeamRepository.getInstance().clear();
 		DivisionRepository.getInstance().clear();
+		PreSeasonAssetRepository.getInstance().clear();
+		CurrentSeasonAssetRepository.getInstance().clear();
 	}
 
 	public static League buildLeagueWithFinance() {

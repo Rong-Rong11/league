@@ -29,4 +29,8 @@ public class PreSeasonAssetRepository {
 		}
 		return null;
 	}
+
+	public void clear() {
+		this.preSeasonAssets.clear();
+	}
 }

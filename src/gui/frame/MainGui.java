@@ -29,6 +29,19 @@ import gui.panel.common.DashboardPanelUtil;
 import process.orchestrator.interfaces.GUIInterface;
 
 public class MainGui extends JFrame {
+	private static final String ROOT_WELCOME = "welcome";
+	private static final String ROOT_LOADING = "loading";
+	private static final String ROOT_OPENING = "opening";
+	private static final String ROOT_MAIN = "main";
+	private static final String ROOT_REGULAR_SEASON_END = "regularSeasonEnd";
+	private static final String ROOT_SEASON_END = "seasonEnd";
+	private static final String DASHBOARD_MATCH = "match";
+	private static final String DASHBOARD_LIVE_MATCH = "liveMatch";
+	private static final String DASHBOARD_CALENDAR = "calendar";
+	private static final String DASHBOARD_RANKING = "ranking";
+	private static final String DASHBOARD_FINANCE = "finance";
+	private static final String DASHBOARD_MAP = "map";
+	private static final String DASHBOARD_ROSTER = "roster";
 
 	private CardLayout rootLayout;
 	private JPanel rootPanel;
@@ -83,18 +96,18 @@ public class MainGui extends JFrame {
 	}
 
 	private void organize(boolean visible) {
-		rootPanel.add(welcomeDashboard, "welcome");
-		rootPanel.add(loadingDashboard, "loading");
-		rootPanel.add(openingPanel, "opening");
-		rootPanel.add(mainPanel, "main");
-		rootPanel.add(regularSeasonEndDashboard, "regularSeasonEnd");
-		rootPanel.add(seasonEndDashboard, "seasonEnd");
+		rootPanel.add(welcomeDashboard, ROOT_WELCOME);
+		rootPanel.add(loadingDashboard, ROOT_LOADING);
+		rootPanel.add(openingPanel, ROOT_OPENING);
+		rootPanel.add(mainPanel, ROOT_MAIN);
+		rootPanel.add(regularSeasonEndDashboard, ROOT_REGULAR_SEASON_END);
+		rootPanel.add(seasonEndDashboard, ROOT_SEASON_END);
 
 		setLayout(new BorderLayout());
 		add(rootPanel, BorderLayout.CENTER);
 
-		showDashboardCard("match");
-		showRootCard("welcome");
+		showDashboardCard(DASHBOARD_MATCH);
+		showRootCard(ROOT_WELCOME);
 
 		pack();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -134,13 +147,13 @@ public class MainGui extends JFrame {
 	}
 
 	private void registerDashboardCards() {
-		dashboardPanel.add(matchDashboard, "match");
-		dashboardPanel.add(liveMatchDashboard, "liveMatch");
-		dashboardPanel.add(calendarDashboard, "calendar");
-		dashboardPanel.add(rankingDashboard, "ranking");
-		dashboardPanel.add(financeDashboard, "finance");
-		dashboardPanel.add(mapDashboard, "map");
-		dashboardPanel.add(rosterDashboard, "roster");
+		dashboardPanel.add(matchDashboard, DASHBOARD_MATCH);
+		dashboardPanel.add(liveMatchDashboard, DASHBOARD_LIVE_MATCH);
+		dashboardPanel.add(calendarDashboard, DASHBOARD_CALENDAR);
+		dashboardPanel.add(rankingDashboard, DASHBOARD_RANKING);
+		dashboardPanel.add(financeDashboard, DASHBOARD_FINANCE);
+		dashboardPanel.add(mapDashboard, DASHBOARD_MAP);
+		dashboardPanel.add(rosterDashboard, DASHBOARD_ROSTER);
 	}
 
 	private void registerDashboardLinks() {
@@ -164,23 +177,23 @@ public class MainGui extends JFrame {
 	}
 
 	private void registerSidebarActions() {
-		sidebar.getMatchButton().addActionListener(new SwitchDashboardAction("match"));
-		sidebar.getCalendarButton().addActionListener(new SwitchDashboardAction("calendar"));
-		sidebar.getRankingButton().addActionListener(new SwitchDashboardAction("ranking"));
-		sidebar.getFinanceButton().addActionListener(new SwitchDashboardAction("finance"));
-		sidebar.getMapButton().addActionListener(new SwitchDashboardAction("map"));
+		sidebar.getMatchButton().addActionListener(new SwitchDashboardAction(DASHBOARD_MATCH));
+		sidebar.getCalendarButton().addActionListener(new SwitchDashboardAction(DASHBOARD_CALENDAR));
+		sidebar.getRankingButton().addActionListener(new SwitchDashboardAction(DASHBOARD_RANKING));
+		sidebar.getFinanceButton().addActionListener(new SwitchDashboardAction(DASHBOARD_FINANCE));
+		sidebar.getMapButton().addActionListener(new SwitchDashboardAction(DASHBOARD_MAP));
 		sidebar.getFinalResultsButton().addActionListener(new ShowSeasonEndSidebarAction());
 		sidebar.getThemeButton().addActionListener(new ToggleThemeAction());
 		sidebar.getExitButton().addActionListener(new QuitAction());
 	}
 
 	private void registerRefreshableDashboards() {
-		refreshableDashboards.put("match", matchDashboard);
-		refreshableDashboards.put("calendar", calendarDashboard);
-		refreshableDashboards.put("ranking", rankingDashboard);
-		refreshableDashboards.put("finance", financeDashboard);
-		refreshableDashboards.put("map", mapDashboard);
-		refreshableDashboards.put("roster", rosterDashboard);
+		refreshableDashboards.put(DASHBOARD_MATCH, matchDashboard);
+		refreshableDashboards.put(DASHBOARD_CALENDAR, calendarDashboard);
+		refreshableDashboards.put(DASHBOARD_RANKING, rankingDashboard);
+		refreshableDashboards.put(DASHBOARD_FINANCE, financeDashboard);
+		refreshableDashboards.put(DASHBOARD_MAP, mapDashboard);
+		refreshableDashboards.put(DASHBOARD_ROSTER, rosterDashboard);
 	}
 
 	private void refreshDashboard(String cardName) {
@@ -203,7 +216,7 @@ public class MainGui extends JFrame {
 	private class ShowOpeningDashboardAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			showRootCard("opening");
+			showRootCard(ROOT_OPENING);
 		}
 	}
 
@@ -216,28 +229,26 @@ public class MainGui extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if ("calendar".equals(cardName) && guiInterface.isRegularSeasonFinished()) {
+			if (DASHBOARD_CALENDAR.equals(cardName) && guiInterface.isRegularSeasonFinished()) {
 				if (!guiInterface.hasUserConfirmedPlayoffs()) {
 					showRegularSeasonEndDashboard();
 					return;
 				}
 			}
-			refreshDashboard(cardName);
-			sidebar.setActiveSection(cardName);
-			showDashboardCard(cardName);
+			openMainDashboard(cardName, cardName, true);
 		}
 	}
 
 	private void showRegularSeasonEndDashboard() {
 		regularSeasonEndDashboard.refresh();
-		showRootCard("regularSeasonEnd");
+		showRootCard(ROOT_REGULAR_SEASON_END);
 	}
 
 	private void showSeasonEndDashboard() {
 		seasonEndDashboard.refresh();
 		syncSidebarSeasonEndVisibility();
-		sidebar.setActiveSection("seasonEnd");
-		showRootCard("seasonEnd");
+		sidebar.setActiveSection(ROOT_SEASON_END);
+		showRootCard(ROOT_SEASON_END);
 	}
 
 	private void syncSidebarSeasonEndVisibility() {
@@ -270,22 +281,14 @@ public class MainGui extends JFrame {
 	private class ReviewRankingAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			syncSidebarSeasonEndVisibility();
-			rankingDashboard.refresh();
-			sidebar.setActiveSection("ranking");
-			showDashboardCard("ranking");
-			showRootCard("main");
+			openMainDashboard(DASHBOARD_RANKING, DASHBOARD_RANKING, true);
 		}
 	}
 
 	private class OpenFinanceAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			syncSidebarSeasonEndVisibility();
-			financeDashboard.refresh();
-			sidebar.setActiveSection("finance");
-			showDashboardCard("finance");
-			showRootCard("main");
+			openMainDashboard(DASHBOARD_FINANCE, DASHBOARD_FINANCE, true);
 		}
 	}
 
@@ -296,9 +299,7 @@ public class MainGui extends JFrame {
 			guiInterface.setUserConfirmedPlayoffs(true);
 			syncSidebarSeasonEndVisibility();
 			rankingDashboard.showPlayoffs();
-			sidebar.setActiveSection("ranking");
-			showDashboardCard("ranking");
-			showRootCard("main");
+			openMainDashboard(DASHBOARD_RANKING, DASHBOARD_RANKING, false);
 		}
 	}
 
@@ -320,7 +321,7 @@ public class MainGui extends JFrame {
 	}
 
 	private void startApplicationWithLoading() {
-		showRootCard("loading");
+		showRootCard(ROOT_LOADING);
 		loadingDashboard.startLoadingSequence(new ApplicationLoadingHandler());
 	}
 
@@ -343,9 +344,7 @@ public class MainGui extends JFrame {
 	}
 
 	private void openMainApplication() {
-		sidebar.setActiveSection("match");
-		showDashboardCard("match");
-		showRootCard("main");
+		openMainDashboard(DASHBOARD_MATCH, DASHBOARD_MATCH, false);
 	}
 
 	private class QuitAction implements ActionListener {
@@ -365,10 +364,8 @@ public class MainGui extends JFrame {
 	private class ShowMatchDashboardAction implements Runnable {
 		@Override
 		public void run() {
-			syncSidebarSeasonEndVisibility();
 			calendarDashboard.refreshSeasonState();
-			sidebar.setActiveSection("match");
-			showDashboardCard("match");
+			openMainDashboard(DASHBOARD_MATCH, DASHBOARD_MATCH, false);
 		}
 	}
 
@@ -376,27 +373,33 @@ public class MainGui extends JFrame {
 		@Override
 		public void run() {
 			liveMatchDashboard.setGame(matchDashboard.getSelectedGame());
-			showDashboardCard("liveMatch");
+			showDashboardCard(DASHBOARD_LIVE_MATCH);
 		}
 	}
 
 	private class ShowRosterDashboardAction implements Runnable {
 		@Override
 		public void run() {
-			syncSidebarSeasonEndVisibility();
 			rosterDashboard.setSelectedTeam(mapDashboard.getSelectedTeam());
-			sidebar.setActiveSection("map");
-			showDashboardCard("roster");
+			openMainDashboard(DASHBOARD_MAP, DASHBOARD_ROSTER, false);
 		}
 	}
 
 	private class ShowMapDashboardAction implements Runnable {
 		@Override
 		public void run() {
-			syncSidebarSeasonEndVisibility();
-			sidebar.setActiveSection("map");
-			showDashboardCard("map");
+			openMainDashboard(DASHBOARD_MAP, DASHBOARD_MAP, false);
 		}
+	}
+
+	private void openMainDashboard(String sidebarSection, String dashboardCard, boolean refresh) {
+		syncSidebarSeasonEndVisibility();
+		if (refresh) {
+			refreshDashboard(dashboardCard);
+		}
+		sidebar.setActiveSection(sidebarSection);
+		showDashboardCard(dashboardCard);
+		showRootCard(ROOT_MAIN);
 	}
 
 	private class ToggleThemeAction implements ActionListener {
