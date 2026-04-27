@@ -61,4 +61,11 @@ public class PreSeasonTradeService extends TradeService {
 	protected boolean isSeasonTrade() {
 		return false;
 	}
+
+	@Override
+	public ArrayList<Trade> getTrades() {
+		// TODO Auto-generated method stub
+		return preSeasonTrades;
+	}
+
 }

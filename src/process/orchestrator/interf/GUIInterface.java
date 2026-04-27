@@ -1,42 +1,49 @@
 package process.orchestrator.interf;
 
+import java.util.ArrayList;
 import java.util.Map;
 
+import data.finance.transfer.Trade;
 import data.league.League;
 import data.sport.setup.Game;
+import data.team.Team;
 
 public interface GUIInterface
-			extends SimulationInterface, SeasonGetterInterface, TeamGetterInterface, MatchGetterInterface,
-			DisplayInterface, LiveMatchInterface, FinanceNetGetterInterface, FinanceRevenueGetterInterface {
-	  League getLeague();
+		extends SimulationInterface, SeasonGetterInterface, TeamGetterInterface, MatchGetterInterface,
+		DisplayInterface, LiveMatchInterface, FinanceNetGetterInterface, FinanceRevenueGetterInterface,
+		TradeGetterInterface {
+	League getLeague();
 
-	  boolean hasPlayoffsStarted();
+	boolean hasPlayoffsStarted();
 
-	  boolean hasPlayoffData();
+	boolean hasPlayoffData();
 
-	  boolean arePlayoffsFinished();
+	boolean arePlayoffsFinished();
 
-	  boolean isRegularSeasonFinished();
+	boolean isRegularSeasonFinished();
 
-	  boolean hasUserConfirmedPlayoffs();
+	boolean hasUserConfirmedPlayoffs();
 
-	  void setUserConfirmedPlayoffs(boolean confirmed);
+	void setUserConfirmedPlayoffs(boolean confirmed);
 
-	  void initializePlayoffs();
+	void initializePlayoffs();
 
-	  Map<String, String> getPlayoffPositionMap();
+	Map<String, String> getPlayoffPositionMap();
 
-	  int getPlayoffQualifiedTeamCount();
+	int getPlayoffQualifiedTeamCount();
 
-	  int getPlayoffSeriesCount();
+	int getPlayoffSeriesCount();
 
-	  String getCurrentPlayoffRoundLabel();
+	String getCurrentPlayoffRoundLabel();
 
-	  String getPlayoffChampionName();
+	String getPlayoffChampionName();
 
-	  String getPlayoffGameLabel(Game game);
+	String getPlayoffGameLabel(Game game);
 
-	  void simulateNextPlayoffRound();
+	void simulateNextPlayoffRound();
 
-	  int getCurrentFinanceMonth();
+	int getCurrentFinanceMonth();
+
+	public ArrayList<Trade> getTradesForTeam(Team team);
+
 }
