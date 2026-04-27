@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.sport.play.action;
 
 import data.player.Player;
@@ -12,11 +9,11 @@ extends ActionResult {
 	Player scorerPlayer;
 	Player assistPlayer;
 
-	public PointScored(String string, int n, Player player, Player player2) {
-		super(string);
-		this.pointsScored = n;
-		this.scorerPlayer = player;
-		this.assistPlayer = player2;
+	public PointScored(String name, int pointsScored, Player scorerPlayer, Player assistPlayer) {
+		super(name);
+		this.pointsScored = pointsScored;
+		this.scorerPlayer = scorerPlayer;
+		this.assistPlayer = assistPlayer;
 	}
 
 	public int getPointsScored() {
@@ -39,8 +36,8 @@ extends ActionResult {
 		this.assistPlayer = player;
 	}
 
-	public void setPointsScored(int n) {
-		this.pointsScored = n;
+	public void setPointsScored(int pointsScored) {
+		this.pointsScored = pointsScored;
 	}
 
 	@Override

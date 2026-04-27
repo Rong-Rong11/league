@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.sport.play.action;
 
 import data.player.Player;
@@ -10,9 +7,9 @@ public class MissedShot
 extends ActionResult {
 	private Player shooter;
 
-	public MissedShot(String string, Player player) {
-		super(string);
-		this.shooter = player;
+	public MissedShot(String name, Player shooter) {
+		super(name);
+		this.shooter = shooter;
 	}
 
 	public Player getShooter() {

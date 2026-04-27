@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.league;
 
 import java.util.ArrayList;
@@ -55,12 +52,12 @@ public class League {
 		this.playoff = playoff;
 	}
 
-	public void addTeamWesternConference(Team team, String string) {
-		this.westernConference.addTeam(team, string);
+	public void addTeamWesternConference(Team team, String divisionName) {
+		this.westernConference.addTeam(team, divisionName);
 	}
 
-	public void addTeamEasternConference(Team team, String string) {
-		this.easternConference.addTeam(team, string);
+	public void addTeamEasternConference(Team team, String divisionName) {
+		this.easternConference.addTeam(team, divisionName);
 	}
 
 	public void addDivisionWesternConference(Division division) {
@@ -71,12 +68,12 @@ public class League {
 		this.easternConference.addDivision(division);
 	}
 
-	public void addPlayerWesternConference(Player player, String string, String string2) {
-		this.westernConference.getDivisions().get(string).getTeams().get(string2).addFirstPlayer(player);
+	public void addPlayerWesternConference(Player player, String divisionName, String teamName) {
+		this.westernConference.getDivisions().get(divisionName).getTeams().get(teamName).addFirstPlayer(player);
 	}
 
-	public void addPlayerEasternConference(Player player, String string, String string2) {
-		this.easternConference.getDivisions().get(string).getTeams().get(string2).addFirstPlayer(player);
+	public void addPlayerEasternConference(Player player, String divisionName, String teamName) {
+		this.easternConference.getDivisions().get(divisionName).getTeams().get(teamName).addFirstPlayer(player);
 	}
 
 	public ArrayList<Team> getAllTeam() {

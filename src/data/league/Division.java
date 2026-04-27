@@ -8,8 +8,8 @@ public class Division {
 	private String name;
 	private HashMap<String, Team> teams;
 
-	public Division(String string) {
-		this.name = string;
+	public Division(String name) {
+		this.name = name;
 		this.teams = new HashMap<String, Team>();
 	}
 
@@ -29,15 +29,15 @@ public class Division {
 		return this.name;
 	}
 
-	public void setName(String string) {
-		this.name = string;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String toString() {
-		String string = this.name;
+		String text = this.name;
 		for (Team team : this.teams.values()) {
-			string = string + "\n" + team.toString();
+			text = text + "\n" + team.toString();
 		}
-		return string;
+		return text;
 	}
 }

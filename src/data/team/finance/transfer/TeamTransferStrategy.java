@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.team.finance.transfer;
 
 import process.visitor.teamtransfer.TeamTransferVisitor;
@@ -16,8 +13,8 @@ public abstract class TeamTransferStrategy {
 		return this.seasonIntent;
 	}
 
-	public void setSeasonIntent(String string) {
-		this.seasonIntent = string;
+	public void setSeasonIntent(String seasonIntent) {
+		this.seasonIntent = seasonIntent;
 	}
 
 	public abstract boolean isAllIn();
@@ -32,5 +29,5 @@ public abstract class TeamTransferStrategy {
 
 	public abstract boolean isSuperstarBuild();
 
-	public abstract <T> T accept(TeamTransferVisitor<T> var1);
+	public abstract <T> T accept(TeamTransferVisitor<T> visitor);
 }

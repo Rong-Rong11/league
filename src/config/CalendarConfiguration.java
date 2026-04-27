@@ -11,6 +11,6 @@ public class CalendarConfiguration {
 	public static final LocalDate PLAYOFF_END_DATE = LocalDate.of(2026, 6, 15);
 	public static final LocalDate CHRISTMAS_DAY = LocalDate.of(2025, 12, 25);
 	public static final int MAX_GAMES_PER_DAY = 7;
-	public static final LocalDate TRADE_DEADLINE = LocalDate.of(2026, 04, 20);
+	public static final LocalDate TRADE_DEADLINE = LocalDate.of(2026, 2, 19);
 
 }

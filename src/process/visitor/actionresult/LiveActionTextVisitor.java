@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package process.visitor.actionresult;
 
 import data.player.Player;
@@ -18,56 +15,56 @@ public class LiveActionTextVisitor
 	private String homeTeamName;
 	private String awayTeamName;
 
-	public LiveActionTextVisitor(Game game, String string, String string2) {
+	public LiveActionTextVisitor(Game game, String homeTeamName, String awayTeamName) {
 		this.game = game;
-		this.homeTeamName = string;
-		this.awayTeamName = string2;
+		this.homeTeamName = homeTeamName;
+		this.awayTeamName = awayTeamName;
 	}
 
 	@Override
 	public String visit(PointScored pointScored) {
 		Player player = pointScored.getScorerPlayer();
-		String string = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
-		return string + " - " + player.getName() + " +" + this.computeDisplayedPoints(pointScored);
+		String teamName = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
+		return teamName + " - " + player.getName() + " +" + this.computeDisplayedPoints(pointScored);
 	}
 
 	@Override
 	public String visit(MissedShot missedShot) {
 		Player player = missedShot.getShooter();
-		String string = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
-		String string2 = "tir";
+		String teamName = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
+		String shotLabel = "tir";
 		if (missedShot.getOffensiveAction() != null) {
-			String string3 = missedShot.getOffensiveAction().getName();
-			if ("threepoint".equals(string3)) {
-				string2 = "3 points";
-			} else if ("twopoint".equals(string3)) {
-				string2 = "2 points";
-			} else if ("fouldraw".equals(string3)) {
-				string2 = "lancer franc";
+			String actionName = missedShot.getOffensiveAction().getName();
+			if ("threepoint".equals(actionName)) {
+				shotLabel = "3 points";
+			} else if ("twopoint".equals(actionName)) {
+				shotLabel = "2 points";
+			} else if ("fouldraw".equals(actionName)) {
+				shotLabel = "lancer franc";
 			}
 		}
-		return string + " - " + player.getName() + " rate un " + string2;
+		return teamName + " - " + player.getName() + " rate un " + shotLabel;
 	}
 
 	@Override
 	public String visit(Turnover turnover) {
 		Player player = turnover.getInterceptedPlayer();
-		String string = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
-		return string + " - Ballon perdu " + player.getName();
+		String teamName = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
+		return teamName + " - Ballon perdu " + player.getName();
 	}
 
 	@Override
 	public String visit(Block block) {
 		Player player = block.getBlockingPlayer();
-		String string = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
-		return string + " - Contre " + player.getName();
+		String teamName = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
+		return teamName + " - Contre " + player.getName();
 	}
 
 	@Override
 	public String visit(Rebound rebound) {
 		Player player = rebound.getReboundPlayer();
-		String string = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
-		return string + " - Rebond " + player.getName();
+		String teamName = this.isHomePlayer(player) ? this.homeTeamName : this.awayTeamName;
+		return teamName + " - Rebond " + player.getName();
 	}
 
 	@Override
@@ -83,11 +80,11 @@ public class LiveActionTextVisitor
 		if (pointScored.getOffensiveAction() == null) {
 			return pointScored.getPointsScored();
 		}
-		String string = pointScored.getOffensiveAction().getName();
-		if ("threepoint".equals(string)) {
+		String actionName = pointScored.getOffensiveAction().getName();
+		if ("threepoint".equals(actionName)) {
 			return 3;
 		}
-		if ("twopoint".equals(string)) {
+		if ("twopoint".equals(actionName)) {
 			return 2;
 		}
 		return 1;

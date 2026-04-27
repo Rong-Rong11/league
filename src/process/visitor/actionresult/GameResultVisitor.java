@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package process.visitor.actionresult;
 
 import data.player.Player;
@@ -20,18 +17,18 @@ implements ActionResultVisitor<Void> {
 	private ArrayList<Player> homeTeamPlayers;
 
 
-	public GameResultVisitor(GameResult gameResult, ArrayList<Player> arrayList, ArrayList<Player> arrayList2) {
+	public GameResultVisitor(GameResult gameResult, ArrayList<Player> homePlayers, ArrayList<Player> awayPlayers) {
 		this.gameResult = gameResult;
-		this.homeTeamPlayers = arrayList;
+		this.homeTeamPlayers = homePlayers;
 
 	}
 
 	@Override
 	public Void visit(PointScored pointScored) {
 		Player player = pointScored.getScorerPlayer();
-		boolean bl = this.homeTeamPlayers.contains(player);
+		boolean isHomePlayer = this.homeTeamPlayers.contains(player);
 		if (pointScored.getOffensiveAction().getName().equals("threepoint")) {
-			if (bl) {
+			if (isHomePlayer) {
 				this.gameResult.setThreePointsHomeTeam(this.gameResult.getThreePointsHomeTeam() + 1);
 				this.gameResult.setScorehomeTeam(this.gameResult.getScorehomeTeam() + 3);
 			} else {
@@ -39,14 +36,14 @@ implements ActionResultVisitor<Void> {
 				this.gameResult.setScoreAwayTeam(this.gameResult.getScoreAwayTeam() + 3);
 			}
 		} else if (pointScored.getOffensiveAction().getName().equals("twopoint")) {
-			if (bl) {
+			if (isHomePlayer) {
 				this.gameResult.setTwoPointsHomeTeam(this.gameResult.getTwoPointsHomeTeam() + 1);
 				this.gameResult.setScorehomeTeam(this.gameResult.getScorehomeTeam() + 2);
 			} else {
 				this.gameResult.setTwoPointsAwayTeam(this.gameResult.getTwoPointsAwayTeam() + 1);
 				this.gameResult.setScoreAwayTeam(this.gameResult.getScoreAwayTeam() + 2);
 			}
-		} else if (bl) {
+		} else if (isHomePlayer) {
 			this.gameResult.setFreeThrowHomeTeam(this.gameResult.getFreeThrowHomeTeam() + 1);
 			this.gameResult.setScorehomeTeam(this.gameResult.getScorehomeTeam() + 1);
 		} else {

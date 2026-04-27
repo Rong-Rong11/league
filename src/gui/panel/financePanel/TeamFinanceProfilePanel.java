@@ -22,7 +22,7 @@ public class TeamFinanceProfilePanel extends JPanel {
 
 	public TeamFinanceProfilePanel() {
 		super();
-		setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
+		setLayout(new java.awt.GridLayout(2, 1, 0, TeamFinanceViewPanel.RIGHT_COLUMN_SECTION_SPACING));
 		setOpaque(false);
 
 		profileValueLabel = FinanceViewFactory.infoLabel();
@@ -58,7 +58,6 @@ public class TeamFinanceProfilePanel extends JPanel {
 		addProfileRow(infrastructurePanel, "Capacite", capacityValueLabel);
 		addProfileRow(infrastructurePanel, "Prix billet", ticketPriceValueLabel);
 
-		setLayout(new java.awt.GridLayout(2, 1, 0, TeamFinanceViewPanel.RIGHT_COLUMN_SECTION_SPACING));
 		add(profilePanel);
 		add(infrastructurePanel);
 	}

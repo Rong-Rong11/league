@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package process.visitor.actionresult;
 
 import data.player.Asset;
@@ -68,13 +65,13 @@ implements ActionResultVisitor<Void> {
 		return null;
 	}
 
-	private void incrementShootingAttempt(Player player, String string) {
+	private void incrementShootingAttempt(Player player, String actionName) {
 		Asset asset = this.playersNewAssets.get(player);
-		if ("threepoint".equals(string)) {
+		if ("threepoint".equals(actionName)) {
 			asset.setThreePointAttemptPerMatch(asset.getThreePointAttemptPerMatch() + 1.0);
-		} else if ("twopoint".equals(string)) {
+		} else if ("twopoint".equals(actionName)) {
 			asset.setTwoPointAttemptPerMatch(asset.getTwoPointAttemptPerMatch() + 1.0);
-		} else if ("fouldraw".equals(string)) {
+		} else if ("fouldraw".equals(actionName)) {
 			asset.setFreeThrowAttemptPerMatch(asset.getFreeThrowAttemptPerMatch() + 1.0);
 		}
 	}

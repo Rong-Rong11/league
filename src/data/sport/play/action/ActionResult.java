@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.sport.play.action;
 
 import data.sport.play.OffensiveTry;
@@ -11,8 +8,8 @@ public abstract class ActionResult {
 	private int actionTime;
 	private OffensiveTry offensiveTry;
 
-	public ActionResult(String string) {
-		this.name = string;
+	public ActionResult(String name) {
+		this.name = name;
 		this.actionTime = 0;
 		this.offensiveTry = null;
 	}
@@ -21,8 +18,8 @@ public abstract class ActionResult {
 		return this.name;
 	}
 
-	public void setName(String string) {
-		this.name = string;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public void setActionTime(int n) {
@@ -41,5 +38,5 @@ public abstract class ActionResult {
 		this.offensiveTry = offensiveTry;
 	}
 
-	public abstract <A> A accept(ActionResultVisitor<A> var1);
+	public abstract <A> A accept(ActionResultVisitor<A> visitor);
 }

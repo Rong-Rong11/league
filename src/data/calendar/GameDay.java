@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.calendar;
 
 import java.time.LocalDate;
@@ -14,8 +11,8 @@ public class GameDay {
 	private boolean isSimulated;
 	private boolean isDisplayed;
 
-	public GameDay(LocalDate localDate) {
-		this.date = localDate;
+	public GameDay(LocalDate date) {
+		this.date = date;
 		this.isSimulated = false;
 		this.isDisplayed = false;
 	}
@@ -32,24 +29,24 @@ public class GameDay {
 		return this.games;
 	}
 
-	public void setGames(ArrayList<Game> arrayList) {
-		this.games = arrayList;
+	public void setGames(ArrayList<Game> games) {
+		this.games = games;
 	}
 
 	public boolean isSimulated() {
 		return this.isSimulated;
 	}
 
-	public void setSimulated(boolean bl) {
-		this.isSimulated = bl;
+	public void setSimulated(boolean simulated) {
+		this.isSimulated = simulated;
 	}
 
 	public boolean isDisplayed() {
 		return this.isDisplayed;
 	}
 
-	public void setDisplayed(boolean bl) {
-		this.isDisplayed = bl;
+	public void setDisplayed(boolean displayed) {
+		this.isDisplayed = displayed;
 	}
 
 	public void addGame(Game game) {

@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 
 import data.team.Team;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
@@ -77,15 +78,13 @@ public class RegularSeasonEndDashboard extends JPanel implements RefreshableDash
 		iconLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		JLabel titleLabel = new JLabel("Saison reguliere terminee", SwingConstants.CENTER);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 40));
-		titleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleTitleLabel(titleLabel, 40);
 		titleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		JLabel subtitleLabel = new JLabel(
 				"Les classements sont finalises. Vous pouvez maintenant preparer les playoffs.",
 				SwingConstants.CENTER);
-		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 22));
-		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 22);
 		subtitleLabel.setAlignmentX(CENTER_ALIGNMENT);
 
 		panel.add(iconLabel);
@@ -114,24 +113,18 @@ public class RegularSeasonEndDashboard extends JPanel implements RefreshableDash
 
 	private JPanel buildStatCard(String title, String value, String subtitle) {
 		RoundedPanel card = new RoundedPanel(new BorderLayout(), 18);
-		card.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
-		card.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(DashboardPanelUtil.BORDER_COLOR, 1),
-				BorderFactory.createEmptyBorder(22, 22, 22, 22)));
+		DashboardPanelUtil.applySurfaceCard(card, 22);
 		card.setPreferredSize(new Dimension(260, 120));
 
 		JPanel textPanel = new JPanel();
 		textPanel.setOpaque(false);
 		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 		JLabel titleLabel = new JLabel(title);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 22));
-		titleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(titleLabel, 22);
 		JLabel valueLabel = new JLabel(value);
-		valueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 26));
-		valueLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleValueLabel(valueLabel, 26);
 		JLabel subtitleLabel = new JLabel(subtitle);
-		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
-		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 18);
 		textPanel.add(titleLabel);
 		textPanel.add(Box.createVerticalStrut(12));
 		textPanel.add(valueLabel);
@@ -151,14 +144,10 @@ public class RegularSeasonEndDashboard extends JPanel implements RefreshableDash
 
 	private JPanel buildConferenceCard(String title, ArrayList<Team> ranking, Color accentColor) {
 		RoundedPanel card = new RoundedPanel(new BorderLayout(), 20);
-		card.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
-		card.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(DashboardPanelUtil.BORDER_COLOR, 1),
-				BorderFactory.createEmptyBorder(22, 26, 22, 26)));
+		DashboardPanelUtil.applySurfaceCard(card, 22, 26);
 
 		JLabel titleLabel = new JLabel(title);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
-		titleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleTitleLabel(titleLabel, 24);
 		card.add(titleLabel, BorderLayout.NORTH);
 
 		JPanel teamsPanel = new JPanel(new GridLayout(4, 2, 12, 12));
@@ -175,9 +164,7 @@ public class RegularSeasonEndDashboard extends JPanel implements RefreshableDash
 	private JPanel buildTeamLine(int rank, Team team, Color accentColor) {
 		RoundedPanel line = new RoundedPanel(new BorderLayout(12, 0), 10);
 		line.setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
-		line.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(DashboardPanelUtil.BORDER_COLOR, 1),
-				BorderFactory.createEmptyBorder(10, 14, 10, 14)));
+		line.setBorder(DashboardPanelUtil.createSurfaceBorder(10, 14));
 
 		JLabel rankLabel = new JLabel(String.valueOf(rank), SwingConstants.CENTER);
 		rankLabel.setOpaque(true);
@@ -187,12 +174,10 @@ public class RegularSeasonEndDashboard extends JPanel implements RefreshableDash
 		rankLabel.setPreferredSize(new Dimension(34, 34));
 
 		JLabel teamLabel = new JLabel(TeamDisplayUtility.getShortName(team));
-		teamLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-		teamLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleValueLabel(teamLabel, 20);
 
 		JLabel recordLabel = new JLabel(buildRecordText(team));
-		recordLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-		recordLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleValueLabel(recordLabel, 18);
 
 		line.add(rankLabel, BorderLayout.WEST);
 		line.add(teamLabel, BorderLayout.CENTER);

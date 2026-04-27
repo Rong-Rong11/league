@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.player;
 
 
@@ -20,21 +17,22 @@ public class Player {
 		return this.isStar;
 	}
 
-	public Player(String string, String string2, double d, String string3, Asset asset, double d2, boolean bl) {
-		this.id = string;
-		this.name = string2;
-		this.position = string3;
-		this.preSeasonAssets = asset;
+	public Player(String id, String name, double ignoredNote, String position, Asset preSeasonAssets, double salary,
+			boolean starPlayer) {
+		this.id = id;
+		this.name = name;
+		this.position = position;
+		this.preSeasonAssets = preSeasonAssets;
 		this.currentSeasonAssets = new Asset();
-		this.salary = d2;
+		this.salary = salary;
 		this.healthStatus = new HealthStatus();
 		this.preSeasonTransfer = false;
-		this.isStar = bl;
+		this.isStar = starPlayer;
 		this.transfered = false;
 	}
 
-	public void setStar(boolean bl) {
-		this.isStar = bl;
+	public void setStar(boolean starPlayer) {
+		this.isStar = starPlayer;
 	}
 
 	public String getId() {
@@ -65,8 +63,8 @@ public class Player {
 		return this.salary;
 	}
 
-	public void setSalary(double d) {
-		this.salary = d;
+	public void setSalary(double salary) {
+		this.salary = salary;
 	}
 
 	public String getPosition() {
@@ -85,8 +83,8 @@ public class Player {
 		return this.transfered;
 	}
 
-	public void setTransfered(boolean bl) {
-		this.transfered = bl;
+	public void setTransfered(boolean transfered) {
+		this.transfered = transfered;
 	}
 
 	public String toString() {

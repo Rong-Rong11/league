@@ -3,7 +3,6 @@ package gui.panel.seasonEndPanel;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +11,6 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import config.FinanceConfiguration;
 import data.finance.budget.Budget;
-import data.finance.budget.expense.Expense;
-import data.finance.budget.income.Income;
 import data.league.League;
 import data.league.Playoff;
 import data.sport.setup.PlayoffSeries;
@@ -23,6 +20,9 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.financePanel.FinanceDataUtil;
 import gui.utility.TeamDisplayUtility;
 import process.orchestrator.interfaces.GUIInterface;
+import process.utility.FinanceSummaryUtility;
+import process.utility.SeasonEndSummaryUtility;
+import process.utility.TeamMetricsUtility;
 
 public class SeasonEndDataProvider {
 	private final GUIInterface guiInterface;
@@ -36,34 +36,15 @@ public class SeasonEndDataProvider {
 	}
 
 	public Team getBestRegularSeasonTeam() {
-		ArrayList<Team> ranking = guiInterface.getGlobalRanking();
-		return ranking.isEmpty() ? null : ranking.get(0);
+		return SeasonEndSummaryUtility.getBestRegularSeasonTeam(guiInterface.getGlobalRanking());
 	}
 
 	public Team getBestAttackTeam() {
-		Team bestTeam = null;
-		double bestScore = -1.0;
-		for (Team team : guiInterface.getGlobalRanking()) {
-			double score = guiInterface.getAveragePoints(team, true);
-			if (score > bestScore) {
-				bestScore = score;
-				bestTeam = team;
-			}
-		}
-		return bestTeam;
+		return SeasonEndSummaryUtility.getBestAttackTeam(guiInterface.getGlobalRanking());
 	}
 
 	public Team getRichestTeam() {
-		Team bestTeam = null;
-		double bestBudget = Double.NEGATIVE_INFINITY;
-		for (Team team : guiInterface.getTeams()) {
-			double budget = getRemainingBudget(team);
-			if (budget > bestBudget) {
-				bestBudget = budget;
-				bestTeam = team;
-			}
-		}
-		return bestTeam;
+		return SeasonEndSummaryUtility.getRichestTeam(guiInterface.getTeams());
 	}
 
 	public Team getBestNetTeam() {
@@ -77,14 +58,7 @@ public class SeasonEndDataProvider {
 	}
 
 	public List<Team> getTeamsSortedByNet() {
-		ArrayList<Team> teams = new ArrayList<Team>(guiInterface.getTeams());
-		Collections.sort(teams, new Comparator<Team>() {
-			@Override
-			public int compare(Team first, Team second) {
-				return Double.compare(getTotalTeamNet(second), getTotalTeamNet(first));
-			}
-		});
-		return teams;
+		return SeasonEndSummaryUtility.getTeamsSortedByNet(guiInterface.getTeams(), lastFinanceMonth());
 	}
 
 	public String getChampionName() {
@@ -144,7 +118,7 @@ public class SeasonEndDataProvider {
 	}
 
 	public double getAveragePoints(Team team) {
-		return guiInterface.getAveragePoints(team, true);
+		return TeamMetricsUtility.getAveragePoints(team, true);
 	}
 
 	public Budget getLeagueBudget() {
@@ -164,11 +138,11 @@ public class SeasonEndDataProvider {
 	}
 
 	public double getTotalTeamNet(Team team) {
-		return team == null ? 0.0 : guiInterface.getTeamTotalNet(team);
+		return SeasonEndSummaryUtility.getTotalTeamNet(team, lastFinanceMonth());
 	}
 
 	public double getTotalLeagueNet() {
-		return guiInterface.getLeagueTotalNet();
+		return FinanceSummaryUtility.getTotalNet(getLeagueBudget(), lastFinanceMonth());
 	}
 
 	public double getTotalTvRevenue() {
@@ -180,27 +154,15 @@ public class SeasonEndDataProvider {
 	}
 
 	public double getTotalIncome(Budget budget) {
-		double total = 0.0;
-		if (budget != null) {
-			for (int month = 1; month <= lastFinanceMonth(); month++) {
-				total += getIncomeForMonth(budget, month);
-			}
-		}
-		return total;
+		return FinanceSummaryUtility.getTotalIncome(budget, lastFinanceMonth());
 	}
 
 	public double getTotalExpense(Budget budget) {
-		double total = 0.0;
-		if (budget != null) {
-			for (int month = 1; month <= lastFinanceMonth(); month++) {
-				total += getExpenseForMonth(budget, month);
-			}
-		}
-		return total;
+		return FinanceSummaryUtility.getTotalExpense(budget, lastFinanceMonth());
 	}
 
 	public double getRemainingBudget(Team team) {
-		return getRemainingBudget(getTeamBudget(team));
+		return SeasonEndSummaryUtility.getRemainingBudget(team);
 	}
 
 	public double getRemainingBudget(Budget budget) {
@@ -212,41 +174,19 @@ public class SeasonEndDataProvider {
 	}
 
 	public Map<String, Integer> countByMarket() {
-		Map<String, Integer> counts = new LinkedHashMap<String, Integer>();
-		counts.put("Petit marche", 0);
-		counts.put("Marche moyen", 0);
-		counts.put("Grand marche", 0);
-		for (Team team : guiInterface.getTeams()) {
-			increment(counts, getMarketLabel(team));
-		}
-		return counts;
+		return new LinkedHashMap<String, Integer>(SeasonEndSummaryUtility.countByMarket(guiInterface.getTeams()));
 	}
 
 	public Map<String, Integer> countByPolicy() {
-		Map<String, Integer> counts = new LinkedHashMap<String, Integer>();
-		counts.put("Politique econome", 0);
-		counts.put("Politique equilibree", 0);
-		counts.put("Politique ambitieuse", 0);
-		for (Team team : guiInterface.getTeams()) {
-			increment(counts, getPolicyLabel(team));
-		}
-		return counts;
+		return new LinkedHashMap<String, Integer>(SeasonEndSummaryUtility.countByPolicy(guiInterface.getTeams()));
 	}
 
 	public String getMarketLabel(Team team) {
-		TeamFinance finance = team == null ? null : team.getTeamFinance();
-		if (finance == null || finance.getStructure() == null) {
-			return "-";
-		}
-		return FinanceDataUtil.formatMarket(finance.getStructure().getMarketSize());
+		return SeasonEndSummaryUtility.getMarketLabel(team);
 	}
 
 	public String getPolicyLabel(Team team) {
-		TeamFinance finance = team == null ? null : team.getTeamFinance();
-		if (finance == null || finance.getBehavior() == null) {
-			return "-";
-		}
-		return FinanceDataUtil.formatPolicy(finance.getBehavior().getFinancialPolicy());
+		return SeasonEndSummaryUtility.getPolicyLabel(team);
 	}
 
 	public String getStrategyLabel(Team team) {
@@ -262,9 +202,9 @@ public class SeasonEndDataProvider {
 		Budget budget = getLeagueBudget();
 		for (int month = 1; month <= lastFinanceMonth(); month++) {
 			String label = "M" + month;
-			dataset.addValue(toChartAmount(getIncomeForMonth(budget, month)), "Revenus", label);
-			dataset.addValue(toChartAmount(getExpenseForMonth(budget, month)), "Depenses", label);
-			dataset.addValue(toChartAmount(guiInterface.getLeagueNetForMonth(month)), "Net", label);
+			dataset.addValue(toChartAmount(FinanceSummaryUtility.getIncomeForMonth(budget, month)), "Revenus", label);
+			dataset.addValue(toChartAmount(FinanceSummaryUtility.getExpenseForMonth(budget, month)), "Depenses", label);
+			dataset.addValue(toChartAmount(budget == null ? 0.0 : budget.getNetForMonth(month)), "Net", label);
 		}
 		return dataset;
 	}
@@ -327,33 +267,6 @@ public class SeasonEndDataProvider {
 		return league == null ? null : league.getPlayoff();
 	}
 
-	private Budget getTeamBudget(Team team) {
-		if (team == null || team.getTeamFinance() == null) {
-			return null;
-		}
-		return team.getTeamFinance().getBudget();
-	}
-
-	private double getIncomeForMonth(Budget budget, int month) {
-		double total = 0.0;
-		if (budget != null && budget.getIncomesForMonth(month) != null) {
-			for (Income income : budget.getIncomesForMonth(month).values()) {
-				total += income.getAmount();
-			}
-		}
-		return total;
-	}
-
-	private double getExpenseForMonth(Budget budget, int month) {
-		double total = 0.0;
-		if (budget != null && budget.getExpensesForMonth(month) != null) {
-			for (Expense expense : budget.getExpensesForMonth(month).values()) {
-				total += expense.getAmount();
-			}
-		}
-		return total;
-	}
-
 	private int lastFinanceMonth() {
 		return Math.max(1, FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS - 1);
 	}
@@ -362,11 +275,4 @@ public class SeasonEndDataProvider {
 		return value;
 	}
 
-	private void increment(Map<String, Integer> counts, String key) {
-		String safeKey = key == null || key.equals("-") ? "Inconnu" : key;
-		if (!counts.containsKey(safeKey)) {
-			counts.put(safeKey, 0);
-		}
-		counts.put(safeKey, counts.get(safeKey) + 1);
-	}
 }

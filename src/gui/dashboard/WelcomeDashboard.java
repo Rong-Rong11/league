@@ -2,7 +2,6 @@ package gui.dashboard;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,20 +44,20 @@ public class WelcomeDashboard extends JPanel implements ThemeAware {
 		setBorder(BorderFactory.createEmptyBorder(60, 110, 55, 110));
 
 		badgeLabel = new JLabel("SAISON NBA - MANAGEMENT - FINANCES", JLabel.CENTER);
-		badgeLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
+		LabelStyleUtil.styleAccentLabel(badgeLabel, 12, DashboardPanelUtil.NEUTRAL_ACCENT_COLOR);
 
 		titleLabel = new JLabel("NBA League Simulator", JLabel.CENTER);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 54));
+		LabelStyleUtil.styleTitleLabel(titleLabel, 54);
 
 		subtitleLabel = new JLabel(
 				"Construis ta ligue, configure ton equipe et mene ta franchise au titre",
 				JLabel.CENTER);
-		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 18);
 
 		footerLabel = new JLabel(
 				"Calendrier - Classements - Playoffs - Finances - Evolution des equipes",
 				JLabel.CENTER);
-		footerLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
+		LabelStyleUtil.styleSubtitleLabel(footerLabel, 13);
 
 		heroPanel = new JPanel(new BorderLayout(0, 22));
 		heroPanel.setPreferredSize(new Dimension(900, 620));
@@ -144,22 +143,17 @@ public class WelcomeDashboard extends JPanel implements ThemeAware {
 	public void applyTheme() {
 		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
 
-		heroPanel.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
-		heroPanel.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(DashboardPanelUtil.BORDER_COLOR),
-				BorderFactory.createEmptyBorder(30, 40, 30, 40)));
+		DashboardPanelUtil.applySurfaceCard(heroPanel, 30, 40);
 
-		badgeLabel.setForeground(DashboardPanelUtil.NEUTRAL_ACCENT_COLOR);
-		titleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
-		footerLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleAccentLabel(badgeLabel, 12, DashboardPanelUtil.NEUTRAL_ACCENT_COLOR);
+		LabelStyleUtil.styleTitleLabel(titleLabel, 54);
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 18);
+		LabelStyleUtil.styleSubtitleLabel(footerLabel, 13);
 
 		for (int i = 0; i < featuresPanel.getComponentCount(); i++) {
 			JPanel card = (JPanel) featuresPanel.getComponent(i);
 			card.setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
-			card.setBorder(BorderFactory.createCompoundBorder(
-					BorderFactory.createLineBorder(DashboardPanelUtil.BORDER_COLOR),
-					BorderFactory.createEmptyBorder(24, 22, 24, 22)));
+			card.setBorder(DashboardPanelUtil.createSurfaceBorder(24, 22));
 		}
 
 		ButtonStyleUtil.styleActionButton(continueButton, 360, 78, 24);

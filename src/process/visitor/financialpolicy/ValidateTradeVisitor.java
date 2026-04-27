@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package process.visitor.financialpolicy;
 
 import data.team.finance.financialpolicy.AmbitiousPolicy;

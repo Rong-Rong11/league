@@ -12,12 +12,12 @@ public class GameMatchProfilWeightVisitor implements FinancialPolicyVisitor<Doub
    }
 
    @Override
-   public Double visit(BalancedPolicy var1) {
+   public Double visit(BalancedPolicy policy) {
       return 0.6;
    }
 
    @Override
-   public Double visit(AmbitiousPolicy var1) {
+   public Double visit(AmbitiousPolicy policy) {
       return 0.4;
    }
 

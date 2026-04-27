@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package process.repository;
 
 import java.util.ArrayList;
@@ -19,13 +16,13 @@ public class PlayerRepository {
 		return instance;
 	}
 
-	public void register(String string, Player player) {
-		this.players.put(string, player);
+	public void register(String playerName, Player player) {
+		this.players.put(playerName, player);
 	}
 
-	public Player getPlayer(String string) {
-		if (this.players.containsKey(string)) {
-			return this.players.get(string);
+	public Player getPlayer(String playerName) {
+		if (this.players.containsKey(playerName)) {
+			return this.players.get(playerName);
 		}
 		return null;
 	}

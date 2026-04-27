@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.finance.transfer;
 
 import data.player.Player;
@@ -14,12 +11,12 @@ public class Trade {
 	private Team teamPlayerB;
 	private LocalDate dateOfTransfer;
 
-	public Trade(Player player, Team team, Player player2, Team team2, LocalDate localDate) {
-		this.playerA = player;
-		this.teamPlayerA = team;
-		this.playerB = player2;
-		this.teamPlayerB = team2;
-		this.dateOfTransfer = localDate;
+	public Trade(Player playerA, Team teamPlayerA, Player playerB, Team teamPlayerB, LocalDate dateOfTransfer) {
+		this.playerA = playerA;
+		this.teamPlayerA = teamPlayerA;
+		this.playerB = playerB;
+		this.teamPlayerB = teamPlayerB;
+		this.dateOfTransfer = dateOfTransfer;
 	}
 
 	public Player getPlayerA() {
@@ -58,7 +55,7 @@ public class Trade {
 		return this.dateOfTransfer;
 	}
 
-	public void setDateOfTransfer(LocalDate localDate) {
-		this.dateOfTransfer = localDate;
+	public void setDateOfTransfer(LocalDate dateOfTransfer) {
+		this.dateOfTransfer = dateOfTransfer;
 	}
 }
