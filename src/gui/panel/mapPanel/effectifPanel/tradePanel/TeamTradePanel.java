@@ -3,8 +3,6 @@ package gui.panel.mapPanel.effectifPanel.tradePanel;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -51,20 +49,8 @@ public class TeamTradePanel extends JPanel {
 			return;
 		}
 
-		ArrayList<Trade> sortedTrades = new ArrayList<Trade>(trades);
-		Collections.sort(sortedTrades, new Comparator<Trade>() {
-			@Override
-			public int compare(Trade tradeA, Trade tradeB) {
-				if (tradeA == null || tradeA.getDateOfTransfer() == null) {
-					return 1;
-				}
-				if (tradeB == null || tradeB.getDateOfTransfer() == null) {
-					return -1;
-				}
-				return tradeB.getDateOfTransfer().compareTo(tradeA.getDateOfTransfer());
-			}
-		});
-		int columns = getTradeColumnCount(sortedTrades.size());
+		ArrayList<Trade> sortedTrades = TradeDataUtil.sortTradesByDate(trades);
+		int columns = TradeDataUtil.getTradeColumnCount(sortedTrades.size());
 		JPanel columnsPanel = new JPanel(new GridLayout(1, columns, 8, 0));
 		columnsPanel.setOpaque(false);
 		ArrayList<JPanel> columnPanels = buildColumnPanels(columnsPanel, columns);
@@ -93,15 +79,5 @@ public class TeamTradePanel extends JPanel {
 			columnsPanel.add(columnPanel);
 		}
 		return columnPanels;
-	}
-
-	private int getTradeColumnCount(int tradeCount) {
-		if (tradeCount >= 8) {
-			return 3;
-		}
-		if (tradeCount >= 5) {
-			return 2;
-		}
-		return 1;
 	}
 }

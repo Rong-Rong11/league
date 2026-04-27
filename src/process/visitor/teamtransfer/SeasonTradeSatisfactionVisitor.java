@@ -22,21 +22,12 @@ implements TeamTransferVisitor<Boolean> {
 
 	@Override
 	public Boolean visit(AllIn allIn) {
-		if (this.seasonIntent.equals("seller") && this.transfersMade < 7) {
-			return false;
-		}
-		return true;
+		return isSatisfiedForThresholds(3, 4, 5);
 	}
 
 	@Override
 	public Boolean visit(SuperstarBuild superstarBuild) {
-		if (this.seasonIntent.equals("seller") && this.transfersMade < 3) {
-			return false;
-		}
-		if (this.seasonIntent.equals("buyer") && this.transfersMade < 2) {
-			return false;
-		}
-		return true;
+		return isSatisfiedForThresholds(2, 3, 4);
 	}
 
 	@Override
@@ -46,13 +37,7 @@ implements TeamTransferVisitor<Boolean> {
 
 	@Override
 	public Boolean visit(Balanced balanced) {
-		if (this.transfersMade >= 4) {
-			return true;
-		}
-		if (this.seasonIntent.equals("seller") && this.transfersMade < 3) {
-			return false;
-		}
-		return true;
+		return isSatisfiedForThresholds(2, 3, 4);
 	}
 
 	@Override
@@ -62,6 +47,16 @@ implements TeamTransferVisitor<Boolean> {
 
 	@Override
 	public Boolean visit(SalaryDump salaryDump) {
-		return this.transfersMade >= 5;
+		return isSatisfiedForThresholds(2, 4, 4);
+	}
+
+	private Boolean isSatisfiedForThresholds(int stableThreshold, int buyerThreshold, int sellerThreshold) {
+		if (this.seasonIntent.equals("seller")) {
+			return this.transfersMade >= sellerThreshold;
+		}
+		if (this.seasonIntent.equals("buyer")) {
+			return this.transfersMade >= buyerThreshold;
+		}
+		return this.transfersMade >= stableThreshold;
 	}
 }

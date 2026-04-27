@@ -3,27 +3,19 @@ package gui.panel.mapPanel.effectifPanel.tradePanel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import config.CalendarConfiguration;
-import config.FinanceConfiguration;
 import data.finance.transfer.Trade;
-import data.player.Player;
 import data.team.Team;
 import gui.panel.common.DashboardCard;
 import gui.panel.common.DashboardPanelUtil;
-import gui.panel.common.PlayerDisplayUtil;
 import gui.panel.mapPanel.effectifPanel.playerPanel.PlayerPortraitPanel;
 
 public class TradeEntryPanel extends DashboardCard {
-	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.FRENCH);
 	private static final int PORTRAIT_WIDTH = 42;
 	private static final int PORTRAIT_HEIGHT = 30;
 	private static final int TRADE_LINE_GAP = 8;
@@ -69,117 +61,28 @@ public class TradeEntryPanel extends DashboardCard {
 		JPanel contentPanel = new JPanel();
 		contentPanel.setOpaque(false);
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-		contentPanel.add(buildTradeHeaderPanel());
+		contentPanel.add(TradeEntryPanelFactory.buildHeaderPanel(
+				dateLabel, partnerLabel, PORTRAIT_WIDTH, PORTRAIT_HEIGHT, TRADE_LINE_GAP));
 		contentPanel.add(Box.createVerticalStrut(5));
-		contentPanel.add(buildTradePlayerLine(departurePortraitPanel, departureLabel, departureDetailLabel));
+		contentPanel.add(TradeEntryPanelFactory.buildTradePlayerLine(
+				departurePortraitPanel, departureLabel, departureDetailLabel, TRADE_LINE_GAP));
 		contentPanel.add(Box.createVerticalStrut(4));
-		contentPanel.add(buildTradePlayerLine(arrivalPortraitPanel, arrivalLabel, arrivalDetailLabel));
+		contentPanel.add(TradeEntryPanelFactory.buildTradePlayerLine(
+				arrivalPortraitPanel, arrivalLabel, arrivalDetailLabel, TRADE_LINE_GAP));
 
 		add(contentPanel, BorderLayout.CENTER);
 	}
 
 	public void updateTrade(Trade trade, Team selectedTeam) {
-		if (trade == null || selectedTeam == null) {
-			departurePortraitPanel.setPlayer(null);
-			arrivalPortraitPanel.setPlayer(null);
-			dateLabel.setText("-");
-			partnerLabel.setText("-");
-			departureLabel.setText("-");
-			departureDetailLabel.setText("-");
-			arrivalLabel.setText("-");
-			arrivalDetailLabel.setText("-");
-			return;
-		}
-
-		boolean selectedTeamIsTeamA = selectedTeam.equals(trade.getTeamPlayerA());
-		Team partnerTeam = selectedTeamIsTeamA ? trade.getTeamPlayerB() : trade.getTeamPlayerA();
-		Player departurePlayer = selectedTeamIsTeamA ? trade.getPlayerA() : trade.getPlayerB();
-		Player arrivalPlayer = selectedTeamIsTeamA ? trade.getPlayerB() : trade.getPlayerA();
-
-		departurePortraitPanel.setPlayer(departurePlayer);
-		arrivalPortraitPanel.setPlayer(arrivalPlayer);
-		dateLabel.setText(formatTradeDate(trade.getDateOfTransfer()));
-		partnerLabel.setText("Avec " + buildTeamName(partnerTeam));
-		departureLabel.setText("Depart : " + buildPlayerName(departurePlayer));
-		departureDetailLabel.setText(buildPlayerDetail(departurePlayer));
-		arrivalLabel.setText("Arrivee : " + buildPlayerName(arrivalPlayer));
-		arrivalDetailLabel.setText(buildPlayerDetail(arrivalPlayer));
-	}
-
-	private JPanel buildTradeHeaderPanel() {
-		JPanel headerPanel = new JPanel(new BorderLayout(TRADE_LINE_GAP, 0));
-		headerPanel.setOpaque(false);
-
-		JPanel textPanel = new JPanel();
-		textPanel.setOpaque(false);
-		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
-		textPanel.add(dateLabel);
-		textPanel.add(Box.createVerticalStrut(2));
-		textPanel.add(partnerLabel);
-
-		headerPanel.add(buildPortraitSpacer(), BorderLayout.WEST);
-		headerPanel.add(textPanel, BorderLayout.CENTER);
-		return headerPanel;
-	}
-
-	private JPanel buildPortraitSpacer() {
-		JPanel spacer = new JPanel();
-		spacer.setOpaque(false);
-		spacer.setPreferredSize(new Dimension(PORTRAIT_WIDTH, PORTRAIT_HEIGHT));
-		return spacer;
-	}
-
-	private JPanel buildTradePlayerLine(PlayerPortraitPanel portraitPanel, JLabel titleLabel, JLabel detailLabel) {
-		JPanel linePanel = new JPanel(new BorderLayout(TRADE_LINE_GAP, 0));
-		linePanel.setOpaque(false);
-
-		JPanel portraitPanelContainer = new JPanel(new BorderLayout());
-		portraitPanelContainer.setOpaque(false);
-		portraitPanelContainer.add(portraitPanel, BorderLayout.NORTH);
-
-		JPanel textPanel = new JPanel();
-		textPanel.setOpaque(false);
-		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
-		textPanel.add(titleLabel);
-		textPanel.add(Box.createVerticalStrut(1));
-		textPanel.add(detailLabel);
-
-		linePanel.add(portraitPanelContainer, BorderLayout.WEST);
-		linePanel.add(textPanel, BorderLayout.CENTER);
-		return linePanel;
-	}
-
-	private String formatTradeDate(LocalDate tradeDate) {
-		if (tradeDate == null
-				|| tradeDate.equals(FinanceConfiguration.PRESEASON_TRADE)
-				|| tradeDate.isBefore(CalendarConfiguration.REGULAR_SEASON_DEBUT_DATE)) {
-			return "Pré-saison";
-		}
-		return DATE_FORMATTER.format(tradeDate);
-	}
-
-	private String buildTeamName(Team team) {
-		if (team == null) {
-			return "-";
-		}
-		return team.getName();
-	}
-
-	private String buildPlayerName(Player player) {
-		if (player == null) {
-			return "-";
-		}
-		return player.getName();
-	}
-
-	private String buildPlayerDetail(Player player) {
-		if (player == null) {
-			return "-";
-		}
-		return "Poste : "
-				+ player.getPosition()
-				+ "  Salaire : "
-				+ PlayerDisplayUtil.formatSalary(player.getSalary());
+		TradeEntryData tradeEntryData = TradeEntryData.fromTrade(trade, selectedTeam);
+		departurePortraitPanel.setPlayer(tradeEntryData.getDeparturePlayer());
+		arrivalPortraitPanel.setPlayer(tradeEntryData.getArrivalPlayer());
+		dateLabel.setText(tradeEntryData.getDateText());
+		partnerLabel.setText(tradeEntryData.getPartnerText());
+		departureLabel.setText(tradeEntryData.getDepartureText());
+		departureDetailLabel.setText(tradeEntryData.getDepartureDetailText());
+		arrivalLabel.setText(tradeEntryData.getArrivalText());
+		arrivalDetailLabel.setText(tradeEntryData.getArrivalDetailText());
 	}
 
 	@Override
