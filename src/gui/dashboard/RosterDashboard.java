@@ -1,6 +1,7 @@
 package gui.dashboard;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -25,6 +26,7 @@ import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamRosterPanel;
+import gui.panel.mapPanel.effectifPanel.tradePanel.TeamTradePanel;
 import process.orchestrator.interf.GUIInterface;
 
 public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDashboard {
@@ -33,10 +35,12 @@ public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDa
 	private GUIInterface guiInterface;
 	private Runnable backToMapAction;
 	private boolean currentSeasonSelected;
+	private boolean tradeViewSelected;
 
 	private JButton backButton;
 	private JButton currentSeasonButton;
 	private JButton previousSeasonButton;
+	private JButton tradeButton;
 	private JLabel teamNameLabel;
 	private JLabel subtitleLabel;
 	private JPanel headerPanel;
@@ -46,6 +50,9 @@ public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDa
 	private JLabel averageNoteValueLabel;
 	private JLabel averagePointsValueLabel;
 	private TeamRosterPanel rosterPanel;
+	private TeamTradePanel tradePanel;
+	private JPanel contentCardsPanel;
+	private CardLayout contentCardsLayout;
 
 	public RosterDashboard(GUIInterface guiInterface) {
 		this.guiInterface = guiInterface;
@@ -57,9 +64,11 @@ public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDa
 
 	private void create() {
 		currentSeasonSelected = true;
+		tradeViewSelected = false;
 		backButton = new RoundedButton("Retour a la carte");
 		currentSeasonButton = new RoundedButton("Saison actuelle");
 		previousSeasonButton = new RoundedButton("Saison precedente");
+		tradeButton = new RoundedButton("Transferts");
 		teamNameLabel = new JLabel("Effectif");
 		subtitleLabel = new JLabel("Selectionnez une franchise pour afficher l'effectif.");
 		teamLogoPanel = new TeamLogoPanel("", 56);
@@ -69,10 +78,12 @@ public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDa
 		averageNoteValueLabel = new JLabel("La note moyenne sera affichee apres la selection.");
 		averagePointsValueLabel = new JLabel("Le score moyen sera affiche apres la selection.");
 		rosterPanel = new TeamRosterPanel();
+		tradePanel = new TeamTradePanel();
 
 		ButtonStyleUtil.styleActionButton(backButton, 170, 44, 14);
 		ButtonStyleUtil.styleActionButton(currentSeasonButton, 170, 44, 14);
 		ButtonStyleUtil.styleActionButton(previousSeasonButton, 170, 44, 14);
+		ButtonStyleUtil.styleActionButton(tradeButton, 150, 44, 14);
 		backButton.setAlignmentX(LEFT_ALIGNMENT);
 		LabelStyleUtil.styleTitleLabel(teamNameLabel, 24);
 		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 13);
@@ -129,12 +140,12 @@ public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDa
 	}
 
 	private JPanel buildCenterContentPanel() {
-		JPanel centerContentPanel = new JPanel(new BorderLayout(0, DASHBOARD_SPACING));
-		centerContentPanel.setOpaque(false);
-		centerContentPanel.add(buildSummaryPanel(), BorderLayout.NORTH);
-		centerContentPanel.add(new BuildBox("LISTE DES JOUEURS", "Effectif complet", buildRosterContentPanel()),
-				BorderLayout.CENTER);
-		return centerContentPanel;
+		contentCardsLayout = new CardLayout();
+		contentCardsPanel = new JPanel(contentCardsLayout);
+		contentCardsPanel.setOpaque(false);
+		contentCardsPanel.add(buildRosterViewPanel(), "ROSTER");
+		contentCardsPanel.add(buildTradeViewPanel(), "TRADES");
+		return contentCardsPanel;
 	}
 
 	private JPanel buildSeasonButtonsPanel() {
@@ -144,8 +155,27 @@ public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDa
 		buttonsPanel.add(currentSeasonButton);
 		buttonsPanel.add(Box.createHorizontalStrut(8));
 		buttonsPanel.add(previousSeasonButton);
+		buttonsPanel.add(Box.createHorizontalStrut(8));
+		buttonsPanel.add(tradeButton);
 		updateSeasonButtonsStyle();
 		return buttonsPanel;
+	}
+
+	private JPanel buildRosterViewPanel() {
+		JPanel rosterViewPanel = new JPanel(new BorderLayout(0, DASHBOARD_SPACING));
+		rosterViewPanel.setOpaque(false);
+		rosterViewPanel.add(buildSummaryPanel(), BorderLayout.NORTH);
+		rosterViewPanel.add(new BuildBox("LISTE DES JOUEURS", "Effectif complet", buildRosterContentPanel()),
+				BorderLayout.CENTER);
+		return rosterViewPanel;
+	}
+
+	private JPanel buildTradeViewPanel() {
+		JPanel tradeViewPanel = new JPanel(new BorderLayout());
+		tradeViewPanel.setOpaque(false);
+		tradeViewPanel.add(new BuildBox("TRANSFERTS", "Historique de la franchise", buildTradeContentPanel()),
+				BorderLayout.CENTER);
+		return tradeViewPanel;
 	}
 
 	private JPanel buildSummaryPanel() {
@@ -180,10 +210,18 @@ public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDa
 		return container;
 	}
 
+	private JPanel buildTradeContentPanel() {
+		JPanel container = new JPanel(new BorderLayout());
+		container.setOpaque(false);
+		container.add(tradePanel, BorderLayout.CENTER);
+		return container;
+	}
+
 	private void actions() {
 		backButton.addActionListener(new BackToMapListener());
 		currentSeasonButton.addActionListener(new CurrentSeasonListener());
 		previousSeasonButton.addActionListener(new PreviousSeasonListener());
+		tradeButton.addActionListener(new TradeViewListener());
 	}
 
 	public void setSelectedTeam(Team team) {
@@ -213,11 +251,22 @@ public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDa
 		averageNoteValueLabel.setText("La note moyenne n'est pas disponible.");
 		averagePointsValueLabel.setText("Le score moyen n'est pas disponible.");
 		rosterPanel.updateTeam(null, currentSeasonSelected);
+		tradePanel.updateTeam(null, null);
+		showRosterContent();
 	}
 
 	private void showTeamState() {
 		teamLogoPanel.setTeamName(selectedTeam.getName());
 		teamNameLabel.setText(selectedTeam.getName());
+
+		if (tradeViewSelected) {
+			showTradeState();
+			return;
+		}
+		showRosterState();
+	}
+
+	private void showRosterState() {
 		subtitleLabel.setText("Effectif complet");
 
 		if (currentSeasonSelected) {
@@ -239,6 +288,21 @@ public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDa
 						guiInterface.getAveragePoints(selectedTeam, currentSeasonSelected)));
 
 		rosterPanel.updateTeam(selectedTeam, currentSeasonSelected);
+		showRosterContent();
+	}
+
+	private void showTradeState() {
+		subtitleLabel.setText("Historique des transferts");
+		tradePanel.updateTeam(selectedTeam, guiInterface.getTradesForTeam(selectedTeam));
+		showTradeContent();
+	}
+
+	private void showRosterContent() {
+		contentCardsLayout.show(contentCardsPanel, "ROSTER");
+	}
+
+	private void showTradeContent() {
+		contentCardsLayout.show(contentCardsPanel, "TRADES");
 	}
 
 	private void updateSeasonButtonsStyle() {
@@ -249,21 +313,35 @@ public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDa
 
 		currentSeasonButton.setOpaque(false);
 		previousSeasonButton.setOpaque(false);
+		tradeButton.setOpaque(false);
 		currentSeasonButton.setContentAreaFilled(false);
 		previousSeasonButton.setContentAreaFilled(false);
+		tradeButton.setContentAreaFilled(false);
 		currentSeasonButton.setBorderPainted(false);
 		previousSeasonButton.setBorderPainted(false);
+		tradeButton.setBorderPainted(false);
 
-		if (currentSeasonSelected) {
+		if (!tradeViewSelected && currentSeasonSelected) {
 			currentSeasonButton.setBackground(activeBackground);
 			currentSeasonButton.setForeground(activeForeground);
 			previousSeasonButton.setBackground(inactiveBackground);
 			previousSeasonButton.setForeground(inactiveForeground);
-		} else {
+			tradeButton.setBackground(inactiveBackground);
+			tradeButton.setForeground(inactiveForeground);
+		} else if (!tradeViewSelected) {
 			currentSeasonButton.setBackground(inactiveBackground);
 			currentSeasonButton.setForeground(inactiveForeground);
 			previousSeasonButton.setBackground(activeBackground);
 			previousSeasonButton.setForeground(activeForeground);
+			tradeButton.setBackground(inactiveBackground);
+			tradeButton.setForeground(inactiveForeground);
+		} else {
+			currentSeasonButton.setBackground(inactiveBackground);
+			currentSeasonButton.setForeground(inactiveForeground);
+			previousSeasonButton.setBackground(inactiveBackground);
+			previousSeasonButton.setForeground(inactiveForeground);
+			tradeButton.setBackground(activeBackground);
+			tradeButton.setForeground(activeForeground);
 		}
 	}
 
@@ -279,6 +357,7 @@ public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDa
 	private class CurrentSeasonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			tradeViewSelected = false;
 			currentSeasonSelected = true;
 			updateDashboard();
 		}
@@ -287,7 +366,16 @@ public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDa
 	private class PreviousSeasonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			tradeViewSelected = false;
 			currentSeasonSelected = false;
+			updateDashboard();
+		}
+	}
+
+	private class TradeViewListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			tradeViewSelected = true;
 			updateDashboard();
 		}
 	}

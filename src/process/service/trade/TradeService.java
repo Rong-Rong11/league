@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import config.FinanceConfiguration;
+import data.finance.transfer.Trade;
 import data.player.Player;
 import data.team.Team;
 import log.LoggerUtility;
@@ -59,6 +60,25 @@ public abstract class TradeService {
 			LocalDate date);
 
 	protected abstract boolean isSeasonTrade();
+
+	public abstract ArrayList<Trade> getTrades();
+
+	public final ArrayList<Trade> getTradesForTeam(Team team) {
+		ArrayList<Trade> teamTrades = new ArrayList<Trade>();
+		if (team == null) {
+			return teamTrades;
+		}
+
+		for (Trade trade : getTrades()) {
+			if (trade == null) {
+				continue;
+			}
+			if (team.equals(trade.getTeamPlayerA()) || team.equals(trade.getTeamPlayerB())) {
+				teamTrades.add(trade);
+			}
+		}
+		return teamTrades;
+	}
 
 	private void simulateTradesForTeam(Team teamA, LocalDate date, int month) {
 		if (teamA == null) {
