@@ -14,7 +14,7 @@ import gui.panel.common.ThemeAware;
 
 public class LoadingDashboard extends JPanel implements ThemeAware {
 	private static final String DEFAULT_SUBTITLE = "Preparation du calendrier, des matchs et des finances...";
-	private static final int STEP_DELAY_MS = 100;
+	private static final int STEP_DELAY_MS = 80;
 	private static final int FINAL_DELAY_MS = 120;
 
 	private JLabel titleLabel;
@@ -104,17 +104,19 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 		public void run() {
 			try {
 				runUiStep(0, DEFAULT_SUBTITLE);
-				runUiStep(10, "Preparation de la saison...");
-				pause(STEP_DELAY_MS);
+				advanceStep(8, "Preparation de la saison...");
+				advanceStep(18, "Verification des donnees...");
+				advanceStep(30, "Organisation de la saison...");
 
-				runUiStep(40, "Initialisation du calendrier et des finances...");
+				runUiStep(42, "Initialisation du calendrier et des finances...");
 				runUiAction(new SeasonInitializationAction(handler));
-				pause(STEP_DELAY_MS);
+				advanceStep(58, "Calendrier pret...");
+				advanceStep(70, "Preparation des tableaux de bord...");
 
-				runUiStep(75, "Chargement des matchs et des tableaux de bord...");
+				runUiStep(82, "Chargement des matchs et des tableaux de bord...");
 				runUiAction(new MatchLoadingAction(handler));
-				pause(STEP_DELAY_MS);
-
+				advanceStep(90, "Chargement du premier jour...");
+				advanceStep(96, "Finalisation de l ouverture...");
 				runUiStep(100, "Ouverture de la simulation...");
 				pause(FINAL_DELAY_MS);
 				runUiAction(new FinishLoadingAction(handler));
@@ -122,6 +124,11 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 				Thread.currentThread().interrupt();
 			}
 		}
+	}
+
+	private void advanceStep(int progress, String text) throws InterruptedException {
+		runUiStep(progress, text);
+		pause(STEP_DELAY_MS);
 	}
 
 	private void runUiStep(int progress, String text) {

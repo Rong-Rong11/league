@@ -1,12 +1,9 @@
 package process.orchestrator.interf;
 
-import java.util.ArrayList;
 import java.util.Map;
 
-import data.finance.transfer.Trade;
 import data.league.League;
 import data.sport.setup.Game;
-import data.team.Team;
 
 public interface GUIInterface
 		extends SimulationInterface, SeasonGetterInterface, TeamGetterInterface, MatchGetterInterface,
@@ -43,7 +40,5 @@ public interface GUIInterface
 	void simulateNextPlayoffRound();
 
 	int getCurrentFinanceMonth();
-
-	public ArrayList<Trade> getTradesForTeam(Team team);
 
 }
