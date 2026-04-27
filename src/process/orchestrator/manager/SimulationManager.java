@@ -13,7 +13,6 @@ import config.CalendarConfiguration;
 import config.FinanceConfiguration;
 import data.calendar.GameDay;
 import data.finance.GameStat;
-import data.finance.transfer.Trade;
 import data.finance.budget.Budget;
 import data.finance.budget.income.Income;
 import data.finance.budget.income.IncomeCategory;
@@ -1266,22 +1265,5 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public LiveMatchState getCurrentLiveState() {
 		return liveMatchService.getCurrentState();
-	}
-
-	@Override
-	public ArrayList<Trade> getTradesForTeam(Team team) {
-		// TODO Auto-generated method stub
-		ArrayList<Trade> trades = new ArrayList<>();
-
-		trades.addAll(preSeasonTradeService.getTrades());
-		trades.addAll(regularSeasonTradeService.getTrades());
-		ArrayList<Trade> result = new ArrayList<>();
-
-		for (Trade trade : trades) {
-			if (trade.getTeamPlayerA().equals(team) || trade.getTeamPlayerB().equals(team)) {
-				result.add(trade);
-			}
-		}
-		return result;
 	}
 }
