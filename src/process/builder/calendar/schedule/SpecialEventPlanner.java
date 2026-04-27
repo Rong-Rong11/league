@@ -35,6 +35,6 @@ public class SpecialEventPlanner {
 		logger.trace("Adding special event mlk day on " + CalendarUtility.getMLKDay());
 		regularSeason.addSpecialEvents(mlkDay);
 
-		logger.info("Regular season special events placed successfully");
+		logger.debug("Regular season special events placed successfully");
 	}
 }

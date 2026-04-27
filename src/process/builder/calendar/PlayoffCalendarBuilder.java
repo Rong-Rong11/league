@@ -126,14 +126,14 @@ public abstract class PlayoffCalendarBuilder extends CalendarBuilder {
 	}
 
 	private boolean isGameAlreadyScheduled(TreeMap<LocalDate, GameDay> playoffCalendar, Game game) {
-	  for (GameDay gameDay : playoffCalendar.values()) {
-		 for (Game scheduledGame : gameDay.getGames()) {
-			if (scheduledGame == game) {
-			   return true;
+		for (GameDay gameDay : playoffCalendar.values()) {
+			for (Game scheduledGame : gameDay.getGames()) {
+				if (scheduledGame == game) {
+					return true;
+				}
 			}
-		 }
-	  }
-	  return false;
+		}
+		return false;
 	}
 
 	protected void addGameToCalendar(TreeMap<LocalDate, GameDay> playoffCalendar, Game game, LocalDate gameDate) {
