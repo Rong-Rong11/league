@@ -16,9 +16,9 @@ import gui.panel.common.ThemeAware;
 
 public class LoadingDashboard extends JPanel implements ThemeAware {
 	private static final String DEFAULT_SUBTITLE = "Preparation du calendrier, des matchs et des finances...";
-	private static final int STEP_DELAY_MS = 16;
-	private static final double MIN_PROGRESS_STEP = 0.35;
-	private static final double PROGRESS_CATCHUP_FACTOR = 0.18;
+	private static final int STEP_DELAY_MS = 12;
+	private static final double MIN_PROGRESS_STEP = 0.75;
+	private static final double PROGRESS_CATCHUP_FACTOR = 0.28;
 
 	private JLabel titleLabel;
 	private JLabel subtitleLabel;
@@ -107,15 +107,14 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 
 	private LoadingPhase[] createSteps(LoadingSequenceHandler handler) {
 		return new LoadingPhase[] {
-				new LoadingPhase(8, "Preparation de la saison...", null),
-				new LoadingPhase(18, "Verification des donnees...", null),
-				new LoadingPhase(30, "Organisation de la saison...", null),
-				new LoadingPhase(42, "Initialisation du calendrier et des finances...", new InitializeSeasonTask(handler)),
-				new LoadingPhase(58, "Calendrier pret...", null),
-				new LoadingPhase(70, "Preparation des tableaux de bord...", null),
-				new LoadingPhase(82, "Chargement des matchs et des tableaux de bord...", new LoadMatchesTask(handler)),
-				new LoadingPhase(90, "Chargement du premier jour...", null),
-				new LoadingPhase(96, "Finalisation de l ouverture...", null),
+				new LoadingPhase(12, "Preparation de la saison...", null),
+				new LoadingPhase(26, "Verification des donnees...", null),
+				new LoadingPhase(40, "Organisation de la saison...", null),
+				new LoadingPhase(55, "Initialisation du calendrier et des finances...", new InitializeSeasonTask(handler)),
+				new LoadingPhase(68, "Calendrier pret...", null),
+				new LoadingPhase(80, "Preparation des tableaux de bord...", null),
+				new LoadingPhase(92, "Chargement des matchs et des tableaux de bord...", new LoadMatchesTask(handler)),
+				new LoadingPhase(97, "Chargement du premier jour...", null),
 				new LoadingPhase(100, "Ouverture de la simulation...", new FinishLoadingTask(handler))
 		};
 	}
