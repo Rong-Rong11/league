@@ -86,10 +86,21 @@ public class RegularSeasonTradeService extends TradeService {
 
 	@Override
 	public ArrayList<Trade> getTrades() {
+<<<<<<< HEAD
 		ArrayList<Trade> regularSeasonTrades = new ArrayList<Trade>();
 		for (ArrayList<Trade> tradesAtDate : seasonTrades.values()) {
 			regularSeasonTrades.addAll(tradesAtDate);
 		}
 		return regularSeasonTrades;
 	}
+=======
+		// TODO Auto-generated method stub
+		ArrayList<Trade> allTrades = new ArrayList<>();
+		for (ArrayList<Trade> trade : seasonTrades.values()) {
+			allTrades.addAll(trade);
+		}
+		return allTrades;
+	}
+
+>>>>>>> 1a53c982b130332ac2b35bb2a4d5c56e761b4b07
 }

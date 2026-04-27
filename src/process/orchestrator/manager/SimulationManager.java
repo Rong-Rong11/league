@@ -17,6 +17,7 @@ import data.finance.transfer.Trade;
 import data.finance.budget.Budget;
 import data.finance.budget.income.Income;
 import data.finance.budget.income.IncomeCategory;
+import data.finance.transfer.Trade;
 import data.league.League;
 import data.league.Playoff;
 import data.league.PlayoffRound;
@@ -1267,4 +1268,20 @@ public class SimulationManager implements GUIInterface {
 		return liveMatchService.getCurrentState();
 	}
 
+	@Override
+	public ArrayList<Trade> getTradesForTeam(Team team) {
+		// TODO Auto-generated method stub
+		ArrayList<Trade> trades = new ArrayList<>();
+
+		trades.addAll(preSeasonTradeService.getTrades());
+		trades.addAll(regularSeasonTradeService.getTrades());
+		ArrayList<Trade> result = new ArrayList<>();
+
+		for (Trade trade : trades) {
+			if (trade.getTeamPlayerA().equals(team) || trade.getTeamPlayerB().equals(team)) {
+				result.add(trade);
+			}
+		}
+		return result;
+	}
 }
