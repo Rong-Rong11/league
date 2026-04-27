@@ -22,6 +22,7 @@ import process.orchestrator.interf.GUIInterface;
 	* Dashboard dedie a la page Carte.
 	*/
 public class MapDashboard extends JPanel implements ThemeAware, RefreshableDashboard {
+	private static final String DEFAULT_TEAM_NAME = "Los Angeles Lakers";
 	private static final int IDEAL_DASHBOARD_SPACING = 16;
 	private static final int IDEAL_DASHBOARD_HEADER_HEIGHT = 64;
 	private static final int IDEAL_DASHBOARD_LEFT_COLUMN_WIDTH = 270;
@@ -94,6 +95,11 @@ public class MapDashboard extends JPanel implements ThemeAware, RefreshableDashb
 	}
 
 	private void selectDefaultTeam() {
+		Team defaultTeam = guiInterface.getTeamByName(DEFAULT_TEAM_NAME);
+		if (defaultTeam != null) {
+			setSelectedTeam(defaultTeam);
+			return;
+		}
 		if (teams.isEmpty()) {
 			setSelectedTeam(null);
 			return;
