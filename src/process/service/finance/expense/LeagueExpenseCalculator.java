@@ -1,275 +1,92 @@
 package process.service.finance.expense;
 
-import config.FinanceConfiguration;
-import data.calendar.GameDay;
-import data.finance.GameStat;
+import org.apache.log4j.Logger;
+
 import data.finance.budget.Budget;
 import data.finance.budget.expense.Expense;
 import data.finance.budget.expense.ExpenseType;
 import data.league.League;
-import data.sport.setup.Game;
-import data.sport.setup.PlayoffSeries;
-import data.team.Team;
-import process.repository.TeamRepository;
+import data.league.finance.CentralRevenueSeasonDynamics;
+import log.LoggerUtility;
 import process.service.finance.FinanceManager;
-import process.utility.CalendarUtility;
 import process.utility.FinanceUtility;
 
 public class LeagueExpenseCalculator {
+	private static final Logger logger = LoggerUtility.getLogger(LeagueExpenseCalculator.class, "text");
 
 	private League league;
-	private FinanceManager financeManager;
-	private final TeamRepository teamRepository = TeamRepository.getInstance();
-	private final double initialAveragePopularity;
+	private LeagueExpenseGameAnalyzer gameAnalyzer;
+	private LeagueExpenseCostCalculator costCalculator;
 
 	public LeagueExpenseCalculator(League league) {
 		this.league = league;
-		this.initialAveragePopularity = calculateAverageTeamPopularity();
+		this.gameAnalyzer = new LeagueExpenseGameAnalyzer(league);
+		LeaguePopularityExpenseTracker popularityTracker = new LeaguePopularityExpenseTracker();
+		LeagueExpenseRateCalculator rateCalculator = new LeagueExpenseRateCalculator(gameAnalyzer,
+				popularityTracker,
+				getSeasonDynamics());
+		this.costCalculator = new LeagueExpenseCostCalculator(rateCalculator, league.getAllTeam());
 	}
 
 	public void setFinanceManager(FinanceManager financeManager) {
-		this.financeManager = financeManager;
+		logger.debug("Setting finance manager for league expense calculator");
+		gameAnalyzer.setFinanceManager(financeManager);
 	}
 
 	public void applyMonthlyExpenses(int month) {
+		if (league == null || league.getLeagueFinance() == null) {
+			logger.warn("Skipping monthly league expenses because league or league finance is null");
+			return;
+		}
+		logger.info("Applying monthly league expenses for month " + month);
 		Budget budget = league.getLeagueFinance().getBudget();
 
-		double administrativeCost = calculateAdministrativeCost();
-		double mediaCost = calculateMediaCost(month);
-		double marketingCost = calculateMarketingCost(month);
-		double officiatingCost = calculateOfficiatingCost(month);
+		double administrativeCost = costCalculator.calculateAdministrativeCost();
+		double mediaCost = costCalculator.calculateMediaCost(month);
+		double marketingCost = costCalculator.calculateMarketingCost(month);
+		double officiatingCost = costCalculator.calculateOfficiatingCost(month);
+		logger.debug("Calculated monthly league expenses: administrative="
+				+ administrativeCost
+				+ ", media="
+				+ mediaCost
+				+ ", marketing="
+				+ marketingCost
+				+ ", officiating="
+				+ officiatingCost);
 
+		logger.trace("Adding administrative league expense for month " + month);
 		FinanceUtility.addExpense(
 				budget,
 				new Expense(ExpenseType.ADMINISTRATIVE_COST, administrativeCost),
 				month);
 
+		logger.trace("Adding media league expense for month " + month);
 		FinanceUtility.addExpense(
 				budget,
 				new Expense(ExpenseType.MEDIA_COST, mediaCost),
 				month);
 
+		logger.trace("Adding marketing league expense for month " + month);
 		FinanceUtility.addExpense(
 				budget,
 				new Expense(ExpenseType.MARKETING_COST, marketingCost),
 				month);
 
+		logger.trace("Adding officiating league expense for month " + month);
 		FinanceUtility.addExpense(
 				budget,
 				new Expense(ExpenseType.OFFICIATING_COST, officiatingCost),
 				month);
 
 		FinanceUtility.updateBudget(budget);
+		logger.info("Monthly league expenses applied for month " + month);
 	}
 
-	// complexifier
-	private double calculateAdministrativeCost() {
-		return FinanceConfiguration.LEAGUE_ADMINISTRATIVE_COST * 1.6;
-	}
-
-	private double calculateMediaCost(int month) {
-		double cost = FinanceConfiguration.LEAGUE_MEDIA_COST * 1.2;
-		if (CalendarUtility.isImportantMonth(month)) {
-			cost *= 1.22;
+	private CentralRevenueSeasonDynamics getSeasonDynamics() {
+		if (league == null || league.getLeagueFinance() == null || league.getLeagueFinance().getCentralRevenueSeasonDynamics() == null) {
+			return new CentralRevenueSeasonDynamics(1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.08, 50.0, 1.0, 0.0);
 		}
-		cost *= getImportantGamesExpenseRate(month, 0.035);
-		cost *= getPlayoffGamesExpenseRate(month, 0.060);
-		cost *= getActivePlayoffTeamsExpenseRate(month, 0.022);
-		cost *= getSeasonExpenseRate(month, 0.15);
-		cost *= getPopularitySeasonExpenseRate();
-		cost *= getControlledEconomicNoise(month, 0.075);
-		return cost;
-	}
-
-	private double calculateMarketingCost(int month) {
-		double cost = FinanceConfiguration.LEAGUE_MARKETING_COST * 1.8;
-		if (CalendarUtility.isImportantMonth(month)) {
-			cost *= 1.28;
-		}
-		cost *= getImportantGamesExpenseRate(month, 0.042);
-		cost *= getPlayoffGamesExpenseRate(month, 0.070);
-		cost *= getActivePlayoffTeamsExpenseRate(month, 0.028);
-		cost *= getSeasonExpenseRate(month, 0.22);
-		cost *= getPopularitySeasonExpenseRate();
-		cost *= getControlledEconomicNoise(month, 0.085);
-		return cost;
-	}
-
-	private double calculateOfficiatingCost(int month) {
-		double cost = FinanceConfiguration.LEAGUE_OFFICIATING_COST * 1.7;
-		if (CalendarUtility.isImportantMonth(month)) {
-			cost *= 1.18;
-		}
-		cost *= getImportantGamesExpenseRate(month, 0.014);
-		cost *= getPlayoffGamesExpenseRate(month, 0.016);
-		cost *= getActivePlayoffTeamsExpenseRate(month, 0.0080);
-		cost *= getSeasonExpenseRate(month, 0.18);
-		cost *= getControlledEconomicNoise(month, 0.12);
-		return cost;
-	}
-
-	private double getImportantGamesExpenseRate(int month, double ratePerGame) {
-		return 1 + (countImportantGamesInMonth(month) * ratePerGame);
-	}
-
-	private double getPlayoffGamesExpenseRate(int month, double ratePerGame) {
-		return 1 + (countPlayoffGamesInMonth(month) * ratePerGame);
-	}
-
-	private double getActivePlayoffTeamsExpenseRate(int month, double ratePerTeam) {
-		if (!isPlayoffMonth(month)) {
-			return 1.0;
-		}
-		return 1 + (countActivePlayoffTeams() * ratePerTeam);
-	}
-
-	private double getSeasonExpenseRate(int month, double playoffBonusRate) {
-		if (isPlayoffMonth(month)) {
-			return 1 + playoffBonusRate;
-		}
-		if (CalendarUtility.isImportantMonth(month)) {
-			return 1.06;
-		}
-		return 1.0;
-	}
-
-	private double getControlledEconomicNoise(int month, double maxAmplitude) {
-		int importantGames = countImportantGamesInMonth(month);
-		int playoffGames = countPlayoffGamesInMonth(month);
-		int activeTeams = countActivePlayoffTeams();
-		double wave = Math.cos((month * 1.41) + (importantGames * 0.13) + (playoffGames * 0.21) + (activeTeams * 0.17));
-		return 1 + (wave * maxAmplitude);
-	}
-
-	private double calculateAverageTeamPopularity() {
-		double total = 0.0;
-		int teamCount = 0;
-
-		for (Team team : teamRepository.getAllTeams()) {
-			total += team.getCurrentPopularity();
-			teamCount++;
-		}
-
-		return teamCount == 0 ? 0.0 : total / teamCount;
-	}
-
-	private double getPopularitySeasonExpenseRate() {
-		double currentAveragePopularity = calculateAverageTeamPopularity();
-		double growth = currentAveragePopularity - initialAveragePopularity;
-
-		if (growth <= 0) {
-			return 1.0;
-		}
-		if (growth < 3) {
-			return 1.04;
-		}
-		if (growth < 6) {
-			return 1.08;
-		}
-		return 1.14;
-	}
-
-	private int countImportantGamesInMonth(int month) {
-		int count = 0;
-		count += countImportantGamesForSeasonMonth(month, false);
-		count += countImportantGamesForSeasonMonth(month, true);
-		return count;
-	}
-
-	private int countPlayoffGamesInMonth(int month) {
-		if (league.getPlayoff() == null || league.getPlayoff().getNbaCalendar() == null) {
-			return 0;
-		}
-
-		int count = 0;
-		for (GameDay gameDay : league.getPlayoff().getNbaCalendar().getCalendar().values()) {
-			if (gameDay.getDate() == null || !matchesFinanceMonth(gameDay.getDate(), month)) {
-				continue;
-			}
-			count += gameDay.getGames().size();
-		}
-		return count;
-	}
-
-	private int countImportantGamesForSeasonMonth(int month, boolean playoff) {
-		int count = 0;
-		if (playoff) {
-			if (league.getPlayoff() == null || league.getPlayoff().getNbaCalendar() == null) {
-				return 0;
-			}
-			for (GameDay gameDay : league.getPlayoff().getNbaCalendar().getCalendar().values()) {
-				if (gameDay.getDate() == null || !matchesFinanceMonth(gameDay.getDate(), month)) {
-					continue;
-				}
-				for (Game game : gameDay.getGames()) {
-					if (isImportantGame(game, gameDay.getDate())) {
-						count++;
-						if (hasHighAttendance(game)) {
-							count++;
-						}
-					}
-				}
-			}
-			return count;
-		}
-
-		if (league.getRegularSeason() == null || league.getRegularSeason().getNbaCalendar() == null) {
-			return 0;
-		}
-		for (GameDay gameDay : league.getRegularSeason().getNbaCalendar().getCalendar().values()) {
-			if (gameDay.getDate() == null || !matchesFinanceMonth(gameDay.getDate(), month)) {
-				continue;
-			}
-			for (Game game : gameDay.getGames()) {
-				if (isImportantGame(game, gameDay.getDate())) {
-					count++;
-					if (hasHighAttendance(game)) {
-						count++;
-					}
-				}
-			}
-		}
-		return count;
-	}
-
-	private int countActivePlayoffTeams() {
-		if (league.getPlayoff() == null || league.getPlayoff().getCurrentRound() == null) {
-			return 0;
-		}
-
-		int count = 0;
-		for (PlayoffSeries series : CalendarUtility.getCurrentRoundSeries(league.getPlayoff())) {
-			if (series == null || series.isFinished()) {
-				continue;
-			}
-			count += 2;
-		}
-		return count;
-	}
-
-	private boolean isPlayoffMonth(int month) {
-		return month >= 8;
-	}
-
-	private boolean matchesFinanceMonth(java.time.LocalDate date, int month) {
-		int startMonth = league.getRegularSeason().getDebutDate().getMonthValue();
-		int monthDelta = date.getMonthValue() - startMonth;
-		if (monthDelta < 0) {
-			monthDelta += 12;
-		}
-		return (monthDelta + 1) == month;
-	}
-
-	private boolean isImportantGame(Game game, java.time.LocalDate date) {
-		return CalendarUtility.popularityScoreGame(game, date) >= 95 || game.getGameContext().isRivalry();
-	}
-
-	private boolean hasHighAttendance(Game game) {
-		if (financeManager == null) {
-			return false;
-		}
-		GameStat gameStat = financeManager.getGameStat(game);
-		return gameStat != null && gameStat.getAttendanceRate() > 0.85;
+		return league.getLeagueFinance().getCentralRevenueSeasonDynamics();
 	}
 
 }

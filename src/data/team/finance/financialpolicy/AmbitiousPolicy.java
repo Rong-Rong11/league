@@ -1,6 +1,6 @@
 package data.team.finance.financialpolicy;
 
-import process.visitor.financialprofil.FinancialProfilVisitor;
+import process.visitor.financialpolicy.FinancialProfilVisitor;
 
 public class AmbitiousPolicy
 		extends FinancialPolicy {

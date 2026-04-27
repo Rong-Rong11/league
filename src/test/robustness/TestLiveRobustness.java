@@ -7,9 +7,9 @@ import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
+import data.sport.live.LiveMatchState;
 import data.sport.setup.Game;
 import process.orchestrator.manager.SimulationManager;
-import process.service.live.LiveMatchState;
 import test.support.TestSupport;
 
 public class TestLiveRobustness {

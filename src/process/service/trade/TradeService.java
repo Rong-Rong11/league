@@ -9,6 +9,7 @@ import config.FinanceConfiguration;
 import data.finance.transfer.Trade;
 import data.player.Player;
 import data.team.Team;
+import log.LoggerUtility;
 import process.repository.TeamRepository;
 import process.service.trade.evaluation.TradeSatisfactionEvaluator;
 import process.service.trade.execution.TradeProcessor;
@@ -16,7 +17,7 @@ import process.service.trade.selection.TradePartnerFinder;
 import process.service.trade.selection.TradePlayerSelector;
 
 public abstract class TradeService {
-	private static final Logger logger = Logger.getLogger(TradeService.class);
+	private static final Logger logger = LoggerUtility.getLogger(TradeService.class, "text");
 
 	private final TeamRepository teamRepository = TeamRepository.getInstance();
 	private final double salaryCap;

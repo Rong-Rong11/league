@@ -24,11 +24,14 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.Plot;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 import gui.panel.common.DashboardCard;
 import gui.panel.common.DashboardPanelUtil;
@@ -148,8 +151,8 @@ public final class FinanceViewFactory {
 	}
 
 	public static JPanel financeLineChart(DefaultCategoryDataset dataset, Color mainColor) {
-		JFreeChart chart = ChartFactory.createLineChart(null, "", "Montant (M$)", dataset, PlotOrientation.VERTICAL,
-				false, false, false);
+		JFreeChart chart = ChartFactory.createLineChart(null, "", "Montant (M$)", dataset, PlotOrientation.VERTICAL, true,
+				false, false);
 
 		LineAndShapeRenderer renderer = new LineAndShapeRenderer(true, true);
 		CategoryPlot chartArea = chart.getCategoryPlot();
@@ -160,7 +163,15 @@ public final class FinanceViewFactory {
 	}
 
 	public static JPanel financeBarChart(DefaultCategoryDataset dataset, Color color) {
-		JFreeChart chart = ChartFactory.createBarChart(null, "Categorie", "Montant (M$)", dataset,
+		return barChart(dataset, color, "Montant (M$)");
+	}
+
+	public static JPanel countBarChart(DefaultCategoryDataset dataset, Color color) {
+		return barChart(dataset, color, "Equipes");
+	}
+
+	private static JPanel barChart(DefaultCategoryDataset dataset, Color color, String rangeAxisLabel) {
+		JFreeChart chart = ChartFactory.createBarChart(null, "Categorie", rangeAxisLabel, dataset,
 				PlotOrientation.VERTICAL, false, false, false);
 
 		CategoryPlot chartArea = chart.getCategoryPlot();
@@ -173,8 +184,36 @@ public final class FinanceViewFactory {
 		return wrapChart(chart, 190);
 	}
 
+	public static JPanel financePieChart(DefaultPieDataset<String> dataset) {
+		JFreeChart chart = ChartFactory.createPieChart(null, dataset, false, false, false);
+		chart.setBackgroundPaint(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+
+		PiePlot plot = (PiePlot) chart.getPlot();
+		plot.setBackgroundPaint(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		plot.setOutlineVisible(false);
+		plot.setShadowPaint(null);
+		plot.setLabelBackgroundPaint(null);
+		plot.setLabelOutlinePaint(null);
+		plot.setLabelShadowPaint(null);
+		plot.setLabelPaint(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		plot.setLabelFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+		plot.setNoDataMessage("Aucune donnee financiere n'est disponible pour le moment.");
+		plot.setNoDataMessagePaint(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		plot.setSectionPaint("TV", DashboardPanelUtil.REVENUE_COLOR);
+		plot.setSectionPaint("Sponsoring", DashboardPanelUtil.POLICY_BALANCED_COLOR);
+		plot.setSectionPaint("Merch", DashboardPanelUtil.STRATEGY_REBUILD_COLOR);
+
+		return wrapChart(chart, 220);
+	}
+
 	private static void applyChartTheme(JFreeChart chart, Color mainColor) {
 		chart.setBackgroundPaint(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+
+		Plot plot = chart.getPlot();
+		if (plot instanceof PiePlot) {
+			applyPieChartTheme((PiePlot) plot);
+			return;
+		}
 
 		CategoryPlot chartArea = chart.getCategoryPlot();
 		styleChartArea(chartArea);
@@ -189,6 +228,9 @@ public final class FinanceViewFactory {
 			renderer.setSeriesPaint(0, mainColor);
 			if (chartArea.getDataset() != null && chartArea.getDataset().getRowCount() > 1) {
 				renderer.setSeriesPaint(1, DashboardPanelUtil.EXPENSE_COLOR);
+			}
+			if (chartArea.getDataset() != null && chartArea.getDataset().getRowCount() > 2) {
+				renderer.setSeriesPaint(2, DashboardPanelUtil.STRATEGY_REBUILD_COLOR);
 			}
 		}
 
@@ -209,6 +251,22 @@ public final class FinanceViewFactory {
 			}
 			renderer.setSeriesPaint(0, barColor);
 		}
+	}
+
+	private static void applyPieChartTheme(PiePlot plot) {
+		plot.setBackgroundPaint(DashboardPanelUtil.PANEL_SURFACE_COLOR);
+		plot.setOutlineVisible(false);
+		plot.setShadowPaint(null);
+		plot.setLabelBackgroundPaint(null);
+		plot.setLabelOutlinePaint(null);
+		plot.setLabelShadowPaint(null);
+		plot.setLabelPaint(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		plot.setLabelFont(new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+		plot.setNoDataMessage("Aucune donnee financiere n'est disponible pour le moment.");
+		plot.setNoDataMessagePaint(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		plot.setSectionPaint("TV", DashboardPanelUtil.REVENUE_COLOR);
+		plot.setSectionPaint("Sponsoring", DashboardPanelUtil.POLICY_BALANCED_COLOR);
+		plot.setSectionPaint("Merch", DashboardPanelUtil.STRATEGY_REBUILD_COLOR);
 	}
 
 	private static void styleChartArea(CategoryPlot chartArea) {

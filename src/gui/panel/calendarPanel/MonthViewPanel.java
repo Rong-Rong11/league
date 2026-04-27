@@ -18,6 +18,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import config.CalendarConfiguration;
 import data.calendar.GameDay;
 import data.sport.setup.Game;
 import gui.dashboard.MatchDashboard;
@@ -25,15 +26,18 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
+import process.orchestrator.interf.GUIInterface;
 import process.utility.CalendarUtility;
 import gui.utility.TeamDisplayUtility;
 
 public class MonthViewPanel extends JPanel implements ThemeAware {
 	private static final String[] DAY_NAMES = { "LUN", "MAR", "MER", "JEU", "VEN", "SAM", "DIM" };
+	private GUIInterface guiInterface;
 	private MatchDashboard matchDashboard;
 	private Runnable showMatchDashboardAction;
 
-	public MonthViewPanel() {
+	public MonthViewPanel(GUIInterface guiInterface) {
+		this.guiInterface = guiInterface;
 		setLayout(new GridLayout(0, 7));
 		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
 	}
@@ -88,6 +92,11 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 		if (gameDay != null && gameDay.isDisplayed()) {
 			dayPanel.setBackground(getDisplayedDayBackground());
 		}
+		if (sameMonth && isPlayoffGameDay(gameDay)) {
+			dayPanel.setBackground(gameDay.isDisplayed()
+					? getDisplayedPlayoffDayBackground()
+					: getPlayoffDayBackground());
+		}
 		if (!sameMonth) {
 			dayPanel.setBackground(getOtherMonthBackground());
 		}
@@ -96,7 +105,7 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 		topPanel.setOpaque(false);
 		topPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 0, 8));
 
-		JLabel dayNumberLabel = new JLabel(String.valueOf(date.getDayOfMonth()), JLabel.CENTER);
+		JLabel dayNumberLabel = new JLabel(buildDayNumberText(date, sameMonth), JLabel.CENTER);
 		LabelStyleUtil.styleValueLabel(dayNumberLabel, 16);
 		if (!sameMonth) {
 			dayNumberLabel.setForeground(getOutsideMonthTextColor());
@@ -107,9 +116,10 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 			RoundedPanel currentDayBadge = new RoundedPanel(18);
 			currentDayBadge.setLayout(new BorderLayout());
 			currentDayBadge.setBackground(DashboardPanelUtil.ACCENT_RED_COLOR);
-			currentDayBadge.setPreferredSize(new Dimension(34, 28));
-			currentDayBadge.setMinimumSize(new Dimension(34, 28));
-			currentDayBadge.setMaximumSize(new Dimension(34, 28));
+			int badgeWidth = isSpecialEventDay(date) && sameMonth ? 44 : 34;
+			currentDayBadge.setPreferredSize(new Dimension(badgeWidth, 28));
+			currentDayBadge.setMinimumSize(new Dimension(badgeWidth, 28));
+			currentDayBadge.setMaximumSize(new Dimension(badgeWidth, 28));
 			dayNumberLabel.setForeground(DashboardPanelUtil.getPrimaryActionTextColor());
 			currentDayBadge.add(dayNumberLabel, BorderLayout.CENTER);
 			topPanel.add(currentDayBadge, BorderLayout.WEST);
@@ -130,7 +140,8 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 				String homeTeam = TeamDisplayUtility.getAbbreviation(displayedGames.get(i).getGameContext().getHomeTeam());
 				String awayTeam = TeamDisplayUtility.getAbbreviation(displayedGames.get(i).getGameContext().getAwayTeam());
 				boolean hasBottomSpacing = i < matchCount - 1;
-				matchesPanel.add(buildMatchLabel(homeTeam + " vs " + awayTeam, hasBottomSpacing ? 4 : 0));
+				matchesPanel.add(buildMatchLabel(displayedGames.get(i), buildMatchText(displayedGames.get(i), homeTeam, awayTeam),
+						hasBottomSpacing ? 4 : 0));
 			}
 			dayPanel.add(matchesPanel, BorderLayout.CENTER);
 		}
@@ -138,19 +149,50 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 		return dayPanel;
 	}
 
-	private JLabel buildMatchLabel(String text, int bottomSpacing) {
+	private JLabel buildMatchLabel(Game game, String text, int bottomSpacing) {
 		JLabel label = new JLabel(text);
 		label.setOpaque(true);
-		label.setBackground(getMatchChipColor());
+		label.setBackground(game.getPlayoffRound() == null ? getMatchChipColor() : getPlayoffMatchChipColor());
 		LabelStyleUtil.styleValueLabel(label, 11);
 		label.setBorder(BorderFactory.createEmptyBorder(3, 6, 3 + bottomSpacing, 6));
 		label.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
 		return label;
 	}
 
+	private String buildMatchText(Game game, String homeTeam, String awayTeam) {
+		if (game.getPlayoffRound() == null || guiInterface == null) {
+			return homeTeam + " vs " + awayTeam;
+		}
+		String bestOfLabel = guiInterface.getPlayoffGameLabel(game);
+		if (bestOfLabel == null || bestOfLabel.equals("")) {
+			return homeTeam + "-" + awayTeam;
+		}
+		return bestOfLabel + " " + homeTeam + "-" + awayTeam;
+	}
+
 	private boolean isSameMonth(LocalDate date, YearMonth displayedMonth) {
 		return date.getYear() == displayedMonth.getYear()
 				&& date.getMonthValue() == displayedMonth.getMonthValue();
+	}
+
+	private String buildDayNumberText(LocalDate date, boolean sameMonth) {
+		String text = String.valueOf(date.getDayOfMonth());
+		if (sameMonth && isSpecialEventDay(date)) {
+			text += " +";
+		}
+		return text;
+	}
+
+	private boolean isSpecialEventDay(LocalDate date) {
+		return date.equals(CalendarConfiguration.CHRISTMAS_DAY)
+				|| date.equals(CalendarUtility.getMLKDay())
+				|| isRegularSeasonBoundary(date);
+	}
+
+	private boolean isRegularSeasonBoundary(LocalDate date) {
+		return guiInterface != null
+				&& (date.equals(guiInterface.getRegularSeasonStartDate())
+						|| date.equals(guiInterface.getRegularSeasonEndDate()));
 	}
 
 	public static String buildMonthText(YearMonth yearMonth) {
@@ -185,6 +227,30 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 
 	private Color getMatchChipColor() {
 		return DashboardPanelUtil.getCalendarMatchChipColor();
+	}
+
+	private Color getPlayoffDayBackground() {
+		return DashboardPanelUtil.getCalendarPlayoffDayBackgroundColor();
+	}
+
+	private Color getDisplayedPlayoffDayBackground() {
+		return DashboardPanelUtil.getCalendarDisplayedPlayoffDayBackgroundColor();
+	}
+
+	private Color getPlayoffMatchChipColor() {
+		return DashboardPanelUtil.getCalendarPlayoffMatchChipColor();
+	}
+
+	private boolean isPlayoffGameDay(GameDay gameDay) {
+		if (gameDay == null) {
+			return false;
+		}
+		for (Game game : gameDay.getGames()) {
+			if (game.getPlayoffRound() != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -227,7 +293,7 @@ public class MonthViewPanel extends JPanel implements ThemeAware {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (matchDashboard != null) {
-				matchDashboard.showGameDay(gameDay, date);
+				matchDashboard.loadGamesOfDay(date);
 			}
 			if (showMatchDashboardAction != null) {
 				showMatchDashboardAction.run();

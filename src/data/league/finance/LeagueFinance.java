@@ -11,12 +11,14 @@ public class LeagueFinance {
 	private LeagueFinancialRules leagueFinancialRules;
 	private LeagueRedistributionPolicy leagueRedistributionPolicy = new LeagueRedistributionPolicy();
 	private HashMap<Integer, MonthlyCentralRevenueData> monthlyCentralRevenueHistory = new HashMap<>();
+	private CentralRevenueSeasonDynamics centralRevenueSeasonDynamics;
 
 	public LeagueFinance(Budget budget, double salaryCap, double luxuryTaxLine, double minimumTeamSalary,
-			double leagueValue) {
+			double leagueValue, CentralRevenueSeasonDynamics centralRevenueSeasonDynamics) {
 		super();
 		this.budget = budget;
 		this.leagueValue = leagueValue;
+		this.centralRevenueSeasonDynamics = centralRevenueSeasonDynamics;
 		leagueFinancialRules = new LeagueFinancialRules(salaryCap, luxuryTaxLine, minimumTeamSalary);
 	}
 
@@ -54,6 +56,10 @@ public class LeagueFinance {
 
 	public HashMap<Integer, MonthlyCentralRevenueData> getMonthlyCentralRevenueHistory() {
 		return monthlyCentralRevenueHistory;
+	}
+
+	public CentralRevenueSeasonDynamics getCentralRevenueSeasonDynamics() {
+		return centralRevenueSeasonDynamics;
 	}
 
 	// les sommes en millions

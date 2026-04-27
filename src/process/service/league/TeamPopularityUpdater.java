@@ -1,174 +1,126 @@
 package process.service.league;
 
+import org.apache.log4j.Logger;
+
 import data.league.PlayoffRound;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
-import data.team.finance.mediamarket.MediaMarket;
-import data.team.finance.transfer.TeamTransferStrategy;
+import log.LoggerUtility;
 import process.repository.TeamRepository;
 
 public class TeamPopularityUpdater {
-private TeamRepository teamRepositery = TeamRepository.getInstance();
+	private static final Logger logger = LoggerUtility.getLogger(TeamPopularityUpdater.class, "text");
 
-public TeamPopularityUpdater() {
+	private TeamRepository teamRepositery = TeamRepository.getInstance();
+	private TeamPopularityVariationCalculator variationCalculator = new TeamPopularityVariationCalculator();
+	private PlayoffPopularityImpactCalculator playoffImpactCalculator = new PlayoffPopularityImpactCalculator();
 
-}
-
-public void updateBeforeSeason() {
-	for (Team team : teamRepositery.getAllTeams()) {
-		updateTeamBeforeSeason(team);
-	}
-}
-
-public void updateMonthlyPopularity() {
-	for (Team team : teamRepositery.getAllTeams()) {
-		updateTeamMonthlyPopularity(team);
-	}
-}
-
-public void applyPlayoffQualificationBonus(Team team) {
-	double bonus = 3.0;
-	double newPopularity = clampPopularity(team.getCurrentPopularity() + bonus);
-	team.setCurrentPopularity(newPopularity);
-}
-
-public void applyPlayoffRoundBonus(Team team, PlayoffRound round) {
-	double bonus = getPlayoffRoundPopularityBonus(round);
-	double newPopularity = clampPopularity(team.getCurrentPopularity() + bonus);
-	team.setCurrentPopularity(newPopularity);
-}
-
-public void applyMissedPlayoffPenalty(Team team) {
-	double penalty = calculateMissedPlayoffPenalty(team);
-	double newPopularity = clampPopularity(team.getCurrentPopularity() - penalty);
-	team.setCurrentPopularity(newPopularity);
-}
-
-// à varier car sinon on tous la même note
-private void updateTeamBeforeSeason(Team team) {
-	double currentPopularity = team.getFormerPopularity();
-	double variation = 0.0;
-
-	variation += calculateCommonPopularityBase(team);
-	variation += calculatePreSeasonSpecificVariation(team);
-	variation += calculateRandomVariation(0.8);
-
-	double newPopularity = clampPopularity(currentPopularity + variation);
-	team.setFormerPopularity(newPopularity);
-	team.setCurrentPopularity(newPopularity);
-}
-
-private void updateTeamMonthlyPopularity(Team team) {
-	double currentPopularity = team.getCurrentPopularity();
-	double variation = 0.0;
-
-	variation += calculateCommonPopularityBase(team);
-	variation += calculateMonthlySpecificVariation(team);
-	variation += calculateRandomVariation(0.6);
-
-	double newPopularity = currentPopularity + (variation * 0.4);
-	newPopularity = clampPopularity(newPopularity);
-	team.setCurrentPopularity(newPopularity);
-}
-
-private double calculateCommonPopularityBase(Team team) {
-	double variation = 0.0;
-
-	EconomicProfil economicProfil = team.getTeamFinance().getEconomicProfil();
-	MediaMarket mediaMarket = team.getTeamFinance().getMediaMarket();
-
-	if (team.hasStarPlayer()) {
-		variation += 1.4;
+	public TeamPopularityUpdater() {
 	}
 
-	variation += economicProfil.getFanLoyalty() - 0.5 * 1.5;
-	variation += economicProfil.getHistoricalPrestige() - 0.5 * 1.2;
-	variation += economicProfil.getCommercialAggressiveness() - 0.5 * 0.8;
-
-	variation += mediaMarket.getFanBaseModifier() * 1.5;
-	variation += mediaMarket.getPrestigeModifier() * 1.2;
-	variation += mediaMarket.getBusinessOpportunityModifier() * 0.8;
-
-	return variation;
-}
-
-private double calculatePreSeasonSpecificVariation(Team team) {
-	double variation = 0.0;
-
-	MediaMarket mediaMarket = team.getTeamFinance().getMediaMarket();
-	TeamTransferStrategy strategy = team.getTeamFinance().getTeamTransferStrategy();
-	if (team.hasStarPlayer()) {
-		variation += 1.0;
-	}
-	if (strategy.isAllIn()) {
-		variation += 1.5;
-	} else if (strategy.isRebuild()) {
-		variation -= 1.5;
-	}
-	double payroll = team.getTeamFinance().getCurrentPayroll();
-	variation += (payroll / 200.0);
-	variation += mediaMarket.getPrestigeModifier() * 1.2;
-	variation += (Math.random() * 1.0) - 0.5;
-
-	return variation;
-}
-
-private double calculateMonthlySpecificVariation(Team team) {
-	double variation = 0.0;
-	double performance = team.getTeamPerformance().getPerformanceRating();
-	int winStreak = team.getTeamPerformance().getCurrentWinStreak();
-	variation += (performance - 0.5) * 6.0;
-	variation += Math.min(winStreak, 10) * 0.35;
-
-	return variation;
-}
-
-private double calculateRandomVariation(double amplitude) {
-	return (Math.random() * amplitude);
-}
-
-private double getPlayoffRoundPopularityBonus(PlayoffRound round) {
-	if (round == null) {
-		return 0.0;
+	public void updateBeforeSeason() {
+		logger.debug("Updating team popularity before season");
+		for (Team team : teamRepositery.getAllTeams()) {
+			updateTeamBeforeSeason(team);
+		}
+		logger.debug("Team popularity updated before season");
 	}
 
-	switch (round) {
-		case FIRST_ROUND:
-			return 3.0;
-		case CONFERENCE_SEMIFINALS:
-			return 4.5;
-		case CONFERENCE_FINALS:
-			return 6.5;
-		case NBA_FINALS:
-			return 9.0;
-		default:
-			return 0.0;
-	}
-}
-
-private double calculateMissedPlayoffPenalty(Team team) {
-	EconomicProfil economicProfil = team.getTeamFinance().getEconomicProfil();
-	MediaMarket mediaMarket = team.getTeamFinance().getMediaMarket();
-	double currentPopularity = team.getCurrentPopularity();
-
-	if (currentPopularity < 65) {
-		return 0.0;
+	public void updateMonthlyPopularity() {
+		logger.debug("Updating monthly team popularity");
+		for (Team team : teamRepositery.getAllTeams()) {
+			updateTeamMonthlyPopularity(team);
+		}
+		logger.debug("Monthly team popularity updated");
 	}
 
-	double penalty = 0.0;
+	public void applyPlayoffQualificationBonus(Team team) {
+		if (team == null) {
+			logger.warn("Skipping playoff qualification popularity bonus because team is null");
+			return;
+		}
 
-	penalty += (currentPopularity - 65) * 0.08;
-	penalty += economicProfil.getHistoricalPrestige() * 1.5;
-	penalty += economicProfil.getCommercialAggressiveness() * 1.0;
-	penalty += mediaMarket.getPrestigeModifier() * 1.2;
-	penalty += mediaMarket.getFanBaseModifier() * 1.0;
-	penalty += mediaMarket.getBusinessOpportunityModifier() * 0.8;
-	penalty -= economicProfil.getFanLoyalty() * 1.2;
+		double bonus = 3.0;
+		double newPopularity = clampPopularity(team.getCurrentPopularity() + bonus);
 
-	return Math.max(0.0, penalty);
-}
+		logger.debug("Applying playoff qualification popularity bonus to " + team.getName());
+		logger.trace("Bonus: " + bonus + ", new popularity: " + newPopularity);
 
-private double clampPopularity(double popularity) {
-	return Math.max(20.0, Math.min(100.0, popularity));
-}
+		team.setCurrentPopularity(newPopularity);
+	}
+
+	public void applyPlayoffRoundBonus(Team team, PlayoffRound round) {
+		if (team == null || round == null) {
+			logger.warn("Skipping playoff round popularity bonus because team or round is null");
+			return;
+		}
+
+		double bonus = playoffImpactCalculator.getPlayoffRoundPopularityBonus(round);
+		double newPopularity = clampPopularity(team.getCurrentPopularity() + bonus);
+
+		logger.debug("Applying playoff round popularity bonus to " + team.getName() + " for round " + round);
+		logger.trace("Bonus: " + bonus + ", new popularity: " + newPopularity);
+
+		team.setCurrentPopularity(newPopularity);
+	}
+
+	public void applyMissedPlayoffPenalty(Team team) {
+		if (team == null) {
+			logger.warn("Skipping missed playoff penalty because team is null");
+			return;
+		}
+
+		double penalty = playoffImpactCalculator.calculateMissedPlayoffPenalty(team);
+		double newPopularity = clampPopularity(team.getCurrentPopularity() - penalty);
+
+		logger.debug("Applying missed playoff penalty to " + team.getName());
+		logger.trace("Penalty: " + penalty + ", new popularity: " + newPopularity);
+
+		team.setCurrentPopularity(newPopularity);
+	}
+
+	private void updateTeamBeforeSeason(Team team) {
+		if (team == null) {
+			logger.warn("Skipping preseason popularity update because team is null");
+			return;
+		}
+
+		double currentPopularity = team.getFormerPopularity();
+		double variation = variationCalculator.calculatePreSeasonVariation(team);
+
+		double newPopularity = clampPopularity(currentPopularity + variation);
+
+		logger.trace("Preseason update for " + team.getName()
+				+ " | current: " + currentPopularity
+				+ ", variation: " + variation
+				+ ", new: " + newPopularity);
+
+		team.setFormerPopularity(newPopularity);
+		team.setCurrentPopularity(newPopularity);
+	}
+
+	private void updateTeamMonthlyPopularity(Team team) {
+		if (team == null) {
+			logger.warn("Skipping monthly popularity update because team is null");
+			return;
+		}
+
+		double currentPopularity = team.getCurrentPopularity();
+		double variation = variationCalculator.calculateMonthlyVariation(team);
+
+		double newPopularity = currentPopularity + (variation * 0.4);
+		newPopularity = clampPopularity(newPopularity);
+
+		logger.trace("Monthly update for " + team.getName()
+				+ " | current: " + currentPopularity
+				+ ", variation: " + variation
+				+ ", new: " + newPopularity);
+
+		team.setCurrentPopularity(newPopularity);
+	}
+
+	private double clampPopularity(double popularity) {
+		double clamped = Math.max(20.0, Math.min(100.0, popularity));
+		logger.trace("Clamping popularity value: " + popularity + " -> " + clamped);
+		return clamped;
+	}
 }

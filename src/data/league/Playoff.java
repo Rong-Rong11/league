@@ -12,6 +12,7 @@ import data.team.Team;
 public class Playoff
 		extends Season {
 	private PlayoffRound currentRound;
+	private Team champion;
 	private ArrayList<Team> qualifiedEastTeams = new ArrayList<>();
 	private ArrayList<Team> qualifiedWestTeams = new ArrayList<>();
 
@@ -40,6 +41,14 @@ public class Playoff
 
 	public void setCurrentRound(PlayoffRound currentRound) {
 		this.currentRound = currentRound;
+	}
+
+	public Team getChampion() {
+		return champion;
+	}
+
+	public void setChampion(Team champion) {
+		this.champion = champion;
 	}
 
 	public void setQualifiedEastTeams(ArrayList<Team> qualifiedEastTeams) {

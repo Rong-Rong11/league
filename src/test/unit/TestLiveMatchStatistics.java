@@ -10,13 +10,13 @@ import org.junit.Test;
 import config.GameConfiguration;
 import data.league.League;
 import data.player.Player;
+import data.sport.live.LiveMatchStatistics;
 import data.sport.play.OffensiveTry;
 import data.sport.play.action.PointScored;
 import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
 import data.sport.setup.Game;
 import data.team.Team;
-import process.service.live.LiveMatchStatistics;
 import test.support.TestSupport;
 
 public class TestLiveMatchStatistics {

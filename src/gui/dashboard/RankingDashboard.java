@@ -44,6 +44,15 @@ public class RankingDashboard extends JPanel implements ThemeAware, RefreshableD
 		rankingPerformancePanel.refreshPerformance();
 	}
 
+	public void showPlayoffs() {
+		rankingLeagueViewPanel.showPlayoffs();
+		rankingPerformancePanel.refreshPerformance();
+	}
+
+	public void setSeasonEndAction(Runnable seasonEndAction) {
+		rankingLeagueViewPanel.setSeasonEndAction(seasonEndAction);
+	}
+
 	@Override
 	public void refresh() {
 		refreshRanking();

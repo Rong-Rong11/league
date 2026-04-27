@@ -188,8 +188,8 @@ public class OpeningDashboard extends JPanel implements ThemeAware {
 	private void refreshSelectedTeamPanels() {
 		teamSelectionPanel.updateTeam(selectedTeam);
 		if (selectedTeam != null) {
-			teamSelectionPanel.setSelectedPolicy(selectedTeam.getTeamFinance().getFinancialProfil());
-			teamSelectionPanel.setSelectedMarketSize(selectedTeam.getTeamFinance().getMarketSize());
+			teamSelectionPanel.setSelectedPolicy(selectedTeam.getTeamFinance().getBehavior().getFinancialProfil());
+			teamSelectionPanel.setSelectedMarketSize(selectedTeam.getTeamFinance().getStructure().getMarketSize());
 		}
 		policyDetailPanel.updateTeam(selectedTeam);
 		if (selectedTeam == null) {

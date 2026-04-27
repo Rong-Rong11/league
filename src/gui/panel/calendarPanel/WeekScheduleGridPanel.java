@@ -40,7 +40,7 @@ public class WeekScheduleGridPanel extends RoundedPanel implements ThemeAware {
 	private final LocalDate indicatorDay;
 	private final OpenDayAction openDayAction;
 	private final DaySimulationAction daySimulationAction;
-	private final WeekScheduleCardFactory cardFactory = new WeekScheduleCardFactory();
+	private final WeekScheduleCardFactory cardFactory;
 
 	public WeekScheduleGridPanel(GUIInterface guiInterface, LocalDate weekStart, LocalDate indicatorDay,
 			OpenDayAction openDayAction, DaySimulationAction daySimulationAction) {
@@ -50,6 +50,7 @@ public class WeekScheduleGridPanel extends RoundedPanel implements ThemeAware {
 		this.indicatorDay = indicatorDay;
 		this.openDayAction = openDayAction;
 		this.daySimulationAction = daySimulationAction;
+		this.cardFactory = new WeekScheduleCardFactory(guiInterface);
 		setLayout(new BorderLayout());
 		setBackground(getCellBackground());
 		setBorder(BorderFactory.createLineBorder(getGridBorderColor(), 1));
@@ -202,8 +203,15 @@ public class WeekScheduleGridPanel extends RoundedPanel implements ThemeAware {
 	}
 
 	private boolean isOutsideSeason(LocalDate day) {
+		if (!guiInterface.isSeasonInitialized()) {
+			return true;
+		}
+		java.util.TreeMap<LocalDate, GameDay> seasonCalendar = guiInterface.getSeasonCalendar();
+		if (seasonCalendar.isEmpty()) {
+			return true;
+		}
 		return day.isBefore(guiInterface.getRegularSeasonStartDate())
-				|| day.isAfter(guiInterface.getRegularSeasonEndDate());
+				|| day.isAfter(seasonCalendar.lastKey());
 	}
 
 	private Color getGridBorderColor() {

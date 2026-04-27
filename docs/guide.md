@@ -79,6 +79,129 @@ Ordre de compréhension :
 - `GameManager` fournit les règles de sélection et de calendrier ;
 - `GameSimulator` joue le match et met à jour l’état.
 
+## 5.1 Pseudo-code de construction du calendrier
+
+Le mécanisme de construction repose sur la classe abstraite `CalendarBuilder`, puis sur des spécialisations pour la saison régulière et les playoffs.
+
+### Pseudo-code général
+
+```text
+ALGORITHME buildCalendar
+    réinitialiser les schedules des équipes
+    générer la liste des matchs à programmer
+    construire le calendrier final
+    retourner le calendrier
+FIN
+```
+
+### Pseudo-code correspondant à `CalendarBuilder`
+
+```text
+fonction buildCalendar()
+    resetSchedule()
+    generateGames()
+    calendrier <- build()
+    retourner calendrier
+fin fonction
+```
+
+### Pseudo-code pour la saison régulière
+
+```text
+fonction buildRegularSeasonCalendar(league)
+    placer les événements spéciaux dans la saison
+    calendrier <- vide
+    dateCourante <- date de début de saison
+
+    tant que dateCourante <= date de fin de saison
+        gameDay <- nouvelle journée pour dateCourante
+
+        configurer le sélecteur sur dateCourante
+        matchsDuJour <- sélectionner les matchs jouables à cette date
+        associer matchsDuJour à gameDay
+
+        trier les matchs par importance
+        pour chaque match
+            si match très important
+                moment <- Evening
+            sinon si match important
+                moment <- Night
+            sinon
+                moment <- Afternoon
+            fin si
+        fin pour
+
+        pour chaque match de matchsDuJour
+            notifier le schedule des équipes
+        fin pour
+
+        si gameDay n'est pas vide
+            ajouter gameDay au calendrier
+        fin si
+
+        dateCourante <- dateCourante + 1 jour
+    fin tant que
+
+    retourner NBACalendar(calendrier)
+fin fonction
+```
+
+### Pseudo-code pour les playoffs
+
+```text
+fonction buildPlayoffCalendar(round, dateDebut)
+    calendrier <- vide
+
+    générer les matchs attendus de la série de playoffs
+
+    pour chaque série du tour
+        récupérer les 4 premiers matchs théoriques
+        calculer un décalage de départ pour alterner les séries
+
+        programmer :
+            match 1 à dateDebut + 0 ou 1 jour
+            match 2 à dateDebut + 2 ou 3 jours
+            match 3 à dateDebut + 4 ou 5 jours
+            match 4 à dateDebut + 7 ou 8 jours
+
+        pour chaque match programmé
+            l'ajouter au GameDay correspondant
+            fixer le moment du match à Night
+            notifier le schedule
+        fin pour
+    fin pour
+
+    retourner NBACalendar(calendrier)
+fin fonction
+```
+
+### Cas des différents builders
+
+```text
+si tour = First Round
+    dateDebut <- PLAYOFF_DEBUT_DATE
+
+si tour = Conference Semis
+    dateDebut <- dateFinTourPrecedent + 2 jours
+
+si tour = Conference Finals
+    dateDebut <- dateFinTourPrecedent + 2 jours
+
+si tour = NBA Finals
+    dateDebut <- dateFinTourPrecedent + 2 jours
+```
+
+### Idée clé
+
+```text
+Le builder de calendrier suit toujours la même logique :
+1. remettre à zéro l'état de planification
+2. générer les matchs
+3. répartir les matchs dans le temps
+4. créer les objets GameDay
+5. retourner un NBACalendar prêt à être utilisé par la simulation
+```
+
 ## 6. Ordre de lecture recommandé
 
 Pour un nouveau développeur, le meilleur parcours est le suivant :
