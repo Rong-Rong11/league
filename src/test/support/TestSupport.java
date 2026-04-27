@@ -182,8 +182,8 @@ public class TestSupport {
 		for (PlayoffSeries series : seriesList) {
 			series.setHigherTeamWins(4);
 			series.setLowerTeamWins(0);
-			series.setNumberPlayedGames(4);
 			series.setFinished(true);
+			series.setNumberPlayedGames(4);
 		}
 	}
 
@@ -209,6 +209,12 @@ public class TestSupport {
 		markHigherSeedAsWinner(league.getPlayoff().getWestConferenceFinals());
 		league.setPlayoff(new PlayoffBuilder(league).buildNbaFinalsPlayoffs());
 		league.getPlayoff().setCurrentRound(PlayoffRound.NBA_FINALS);
+	}
+
+	public static void assertSeriesFinished(ArrayList<PlayoffSeries> seriesList) {
+		for (PlayoffSeries series : seriesList) {
+			assertTrue(series.isFinished());
+		}
 	}
 
 	public static ArrayList<GameDay> firstGameDays(NBACalendar calendar, int count) {

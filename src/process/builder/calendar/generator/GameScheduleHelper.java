@@ -10,9 +10,6 @@ import log.LoggerUtility;
 public final class GameScheduleHelper {
 	private static final Logger logger = LoggerUtility.getLogger(GameScheduleHelper.class, "text");
 
-	private GameScheduleHelper() {
-	}
-
 	public static Game createGame(Team homeTeam, Team awayTeam, int gameType) {
 		return new Game(new GameContext(homeTeam, awayTeam, gameType));
 	}

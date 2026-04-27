@@ -11,7 +11,7 @@ public class ScheduleReset {
 	private TeamRepository teamRepositery = TeamRepository.getInstance();
 
 	public void initialization() {
-		logger.info("Resetting schedules for all teams");
+		logger.debug("Resetting schedules for all teams");
 		logger.debug("Resetting schedules for " + this.teamRepositery.getAllTeams().size() + " teams");
 		for (Team team : this.teamRepositery.getAllTeams()) {
 			if (team == null) {
@@ -20,7 +20,7 @@ public class ScheduleReset {
 			}
 			clearSchedule(team);
 		}
-		logger.info("All team schedules reset successfully");
+		logger.debug("All team schedules reset successfully");
 	}
 
 	private void clearSchedule(Team team) {

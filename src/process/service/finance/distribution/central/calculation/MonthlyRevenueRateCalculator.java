@@ -34,7 +34,7 @@ public class MonthlyRevenueRateCalculator {
 			case CONFERENCE_FINALS:
 				return 5.6;
 			case NBA_FINALS:
-				return 7;
+				return 8.1;
 			default:
 				return 1.0;
 		}
