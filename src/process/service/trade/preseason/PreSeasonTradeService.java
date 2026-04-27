@@ -64,13 +64,6 @@ public class PreSeasonTradeService extends TradeService {
 
 	@Override
 	public ArrayList<Trade> getTrades() {
-<<<<<<< HEAD
 		return new ArrayList<Trade>(preSeasonTrades);
 	}
-=======
-		// TODO Auto-generated method stub
-		return preSeasonTrades;
-	}
-
->>>>>>> 1a53c982b130332ac2b35bb2a4d5c56e761b4b07
 }
