@@ -19,7 +19,6 @@ public class NbaFinalCalendarBuilder extends PlayoffCalendarBuilder {
 
 	@Override
 	protected NBACalendar build() {
-		// TODO Auto-generated method stub
 		TreeMap<LocalDate, GameDay> playoffCalendar = new TreeMap<>();
 
 		LocalDate startDate = roundEndDate.plusDays(2);
@@ -32,7 +31,6 @@ public class NbaFinalCalendarBuilder extends PlayoffCalendarBuilder {
 
 	@Override
 	protected void generateGames() {
-		// TODO Auto-generated method stub
 		PlayoffGameGenerator.generateNbaFinalsPlayoffGames(getLeague().getPlayoff());
 
 	}

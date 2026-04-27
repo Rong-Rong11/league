@@ -1,7 +1,7 @@
 package test.manual;
 
 import gui.frame.MainGui;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 import process.orchestrator.manager.SimulationManager;
 
 public class TestGUI {

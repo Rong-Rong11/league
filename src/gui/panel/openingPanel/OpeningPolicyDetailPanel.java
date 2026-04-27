@@ -1,4 +1,4 @@
-package gui.panel.openningPanel;
+package gui.panel.openingPanel;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -11,7 +11,7 @@ import data.team.Team;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 import gui.utility.TeamDisplayUtility;
 
 public class OpeningPolicyDetailPanel extends JPanel implements ThemeAware {

@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 import gui.dashboard.CalendarDashboard;
 import gui.dashboard.FinanceDashboard;
-import gui.dashboard.LaunchingDashboard;
+import gui.dashboard.WelcomeDashboard;
 import gui.dashboard.LiveMatchDashboard;
 import gui.dashboard.LoadingDashboard;
 import gui.dashboard.MapDashboard;
@@ -26,7 +26,7 @@ import gui.dashboard.RosterDashboard;
 import gui.dashboard.SeasonEndDashboard;
 import gui.layout.SidebarPanel;
 import gui.panel.common.DashboardPanelUtil;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class MainGui extends JFrame {
 
@@ -34,7 +34,7 @@ public class MainGui extends JFrame {
 	private JPanel rootPanel;
 	private CardLayout dashboardLayout;
 	private JPanel dashboardPanel;
-	private LaunchingDashboard launchingDashboard;
+	private WelcomeDashboard welcomeDashboard;
 	private LoadingDashboard loadingDashboard;
 	private OpeningDashboard openingPanel;
 	private RegularSeasonEndDashboard regularSeasonEndDashboard;
@@ -74,7 +74,7 @@ public class MainGui extends JFrame {
 		dashboardLayout = new CardLayout();
 		dashboardPanel = new JPanel(dashboardLayout);
 		refreshableDashboards = new HashMap<String, RefreshableDashboard>();
-		launchingDashboard = new LaunchingDashboard();
+		welcomeDashboard = new WelcomeDashboard();
 		loadingDashboard = new LoadingDashboard();
 		openingPanel = new OpeningDashboard(guiInterface);
 		regularSeasonEndDashboard = new RegularSeasonEndDashboard(guiInterface);
@@ -83,7 +83,7 @@ public class MainGui extends JFrame {
 	}
 
 	private void organize(boolean visible) {
-		rootPanel.add(launchingDashboard, "launching");
+		rootPanel.add(welcomeDashboard, "welcome");
 		rootPanel.add(loadingDashboard, "loading");
 		rootPanel.add(openingPanel, "opening");
 		rootPanel.add(mainPanel, "main");
@@ -94,7 +94,7 @@ public class MainGui extends JFrame {
 		add(rootPanel, BorderLayout.CENTER);
 
 		showDashboardCard("match");
-		showRootCard("launching");
+		showRootCard("welcome");
 
 		pack();
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -153,8 +153,8 @@ public class MainGui extends JFrame {
 	}
 
 	private void registerOpeningActions() {
-		launchingDashboard.getContinueButton().addActionListener(new ShowOpeningDashboardAction());
-		launchingDashboard.getThemeButton().addActionListener(new ToggleThemeAction());
+		welcomeDashboard.getContinueButton().addActionListener(new ShowOpeningDashboardAction());
+		welcomeDashboard.getThemeButton().addActionListener(new ToggleThemeAction());
 		openingPanel.getContinueButton().addActionListener(new OpenApplicationAction(openingPanel));
 		openingPanel.getThemeButton().addActionListener(new ToggleThemeAction());
 		regularSeasonEndDashboard.getReviewRankingButton().addActionListener(new ReviewRankingAction());
@@ -445,8 +445,8 @@ public class MainGui extends JFrame {
 		if (financeDashboard != null) {
 			financeDashboard.applyTheme();
 		}
-		if (launchingDashboard != null) {
-			launchingDashboard.applyTheme();
+		if (welcomeDashboard != null) {
+			welcomeDashboard.applyTheme();
 		}
 		if (loadingDashboard != null) {
 			loadingDashboard.applyTheme();

@@ -1,31 +1,31 @@
 package data.team.finance;
 
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 
 public class TeamFinanceStructure {
 
-	private EconomicProfil economicProfil;
+	private EconomicProfile economicProfile;
 	private MarketSize marketSize;
 	private MediaMarket mediaMarket;
 
 	public TeamFinanceStructure(MarketSize marketSize) {
-		this(new EconomicProfil(), marketSize, new MediaMarket());
+		this(new EconomicProfile(), marketSize, new MediaMarket());
 	}
 
-	public TeamFinanceStructure(EconomicProfil economicProfil, MarketSize marketSize, MediaMarket mediaMarket) {
-		this.economicProfil = economicProfil;
+	public TeamFinanceStructure(EconomicProfile economicProfile, MarketSize marketSize, MediaMarket mediaMarket) {
+		this.economicProfile = economicProfile;
 		this.marketSize = marketSize;
 		this.mediaMarket = mediaMarket;
 	}
 
-	public EconomicProfil getEconomicProfil() {
-		return economicProfil;
+	public EconomicProfile getEconomicProfile() {
+		return economicProfile;
 	}
 
-	public void setEconomicProfil(EconomicProfil economicProfil) {
-		this.economicProfil = economicProfil;
+	public void setEconomicProfile(EconomicProfile economicProfile) {
+		this.economicProfile = economicProfile;
 	}
 
 	public MarketSize getMarketSize() {

@@ -21,7 +21,7 @@ import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
 
-public class LaunchingDashboard extends JPanel implements ThemeAware {
+public class WelcomeDashboard extends JPanel implements ThemeAware {
 
 	private JLabel badgeLabel;
 	private JLabel titleLabel;
@@ -33,7 +33,7 @@ public class LaunchingDashboard extends JPanel implements ThemeAware {
 	private JButton infoButton;
 	private JButton themeButton;
 
-	public LaunchingDashboard() {
+	public WelcomeDashboard() {
 		create();
 		organize();
 		actions();
@@ -181,7 +181,7 @@ public class LaunchingDashboard extends JPanel implements ThemeAware {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JOptionPane.showMessageDialog(
-					LaunchingDashboard.this,
+					WelcomeDashboard.this,
 					"Avant de lancer la simulation, vous pouvez selectionner une equipe directement sur la carte "
 							+ "et configurer ses parametres financiers, comme la taille du marche ou le profil economique.\n\n"
 							+ "Une fois la configuration terminee, vous pouvez lancer la simulation et suivre une saison complete de NBA.\n\n"

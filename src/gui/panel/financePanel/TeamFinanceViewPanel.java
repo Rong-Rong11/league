@@ -22,7 +22,7 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.MonthNavigatorPanel;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 
@@ -436,7 +436,7 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		if (team == null || team.getTeamFinance() == null) {
 			return null;
 		}
-		return team.getTeamFinance().getBehavior().getFinancialProfil();
+		return team.getTeamFinance().getBehavior().getFinancialPolicy();
 	}
 
 	private Object getMarketSize(Team team) {
@@ -456,19 +456,19 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 	private double getFanLoyalty(Team team) {
 		if (team == null || team.getTeamFinance() == null)
 			return 0.0;
-		return team.getTeamFinance().getStructure().getEconomicProfil().getFanLoyalty();
+		return team.getTeamFinance().getStructure().getEconomicProfile().getFanLoyalty();
 	}
 
 	private double getCommercialAggressiveness(Team team) {
 		if (team == null || team.getTeamFinance() == null)
 			return 0.0;
-		return team.getTeamFinance().getStructure().getEconomicProfil().getCommercialAggressiveness();
+		return team.getTeamFinance().getStructure().getEconomicProfile().getCommercialAggressiveness();
 	}
 
 	private double getHistoricalPrestige(Team team) {
 		if (team == null || team.getTeamFinance() == null)
 			return 0.0;
-		return team.getTeamFinance().getStructure().getEconomicProfil().getHistoricalPrestige();
+		return team.getTeamFinance().getStructure().getEconomicProfile().getHistoricalPrestige();
 	}
 
 	private String formatCoefficient(double value) {

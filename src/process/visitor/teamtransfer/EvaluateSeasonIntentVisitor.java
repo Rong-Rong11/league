@@ -79,7 +79,7 @@ public class EvaluateSeasonIntentVisitor
 				this.team.getTeamFinance().getCurrentPayroll(),
 				this.salaryCap,
 				this.team.getTeamFinance().getStructure().getMarketSize());
-		if (this.team.getTeamFinance().getBehavior().getFinancialProfil().accept(validateTradeVisitor).booleanValue()) {
+		if (this.team.getTeamFinance().getBehavior().getFinancialPolicy().accept(validateTradeVisitor).booleanValue()) {
 			return "seller";
 		}
 		if (this.teamPerformatingRate > 0.75) {

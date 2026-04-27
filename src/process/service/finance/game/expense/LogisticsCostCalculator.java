@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.mediamarket.MediaMarket;
 import log.LoggerUtility;
 import process.utility.CalendarUtility;
@@ -32,7 +32,7 @@ public class LogisticsCostCalculator {
 		}
 		Team homeTeam = game.getGameContext().getHomeTeam();
 		MediaMarket mediaMarket = homeTeam.getTeamFinance().getStructure().getMediaMarket();
-		EconomicProfil economicProfil = homeTeam.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = homeTeam.getTeamFinance().getStructure().getEconomicProfile();
 		logger.trace("Calculating logistics costs for home team " + homeTeam.getName());
 
 		double baseTransport = 0.06;
@@ -49,8 +49,8 @@ public class LogisticsCostCalculator {
 		}
 
 		modifier += mediaMarket.getBusinessOpportunityModifier() * 0.08;
-		modifier += economicProfil.getCommercialAggressiveness() * 0.10;
-		modifier += economicProfil.getHistoricalPrestige() * 0.05;
+		modifier += economicProfile.getCommercialAggressiveness() * 0.10;
+		modifier += economicProfile.getHistoricalPrestige() * 0.05;
 		logger.trace("Logistics modifier after market and economic profile is " + modifier);
 
 		double bonusRate = bonusProvider.getLogisticBonusRate(game, homeTeam);

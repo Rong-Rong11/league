@@ -21,7 +21,7 @@ import gui.panel.matchPanel.MatchDayListPanel.MatchSelectionListener;
 import gui.panel.matchPanel.MatchDetailPanel;
 import gui.panel.matchPanel.MatchFinancePanel;
 import gui.panel.matchPanel.MatchHeaderPanel;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class MatchDashboard extends JPanel implements ThemeAware, RefreshableDashboard {
 	private static final int DASHBOARD_SPACING = 16;

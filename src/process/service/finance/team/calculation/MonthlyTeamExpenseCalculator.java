@@ -7,7 +7,7 @@ import data.league.League;
 import data.team.Team;
 import data.team.finance.MonthlyTeamExpense;
 import data.team.finance.TeamFinance;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
@@ -42,18 +42,18 @@ public class MonthlyTeamExpenseCalculator {
 		TeamFinance teamFinance = team.getTeamFinance();
 		MarketSize marketSize = teamFinance.getStructure().getMarketSize();
 		MediaMarket mediaMarket = teamFinance.getStructure().getMediaMarket();
-		EconomicProfil economicProfil = teamFinance.getStructure().getEconomicProfil();
-		FinancialPolicy financialPolicy = teamFinance.getBehavior().getFinancialProfil();
+		EconomicProfile economicProfile = teamFinance.getStructure().getEconomicProfile();
+		FinancialPolicy financialPolicy = teamFinance.getBehavior().getFinancialPolicy();
 
 		double marketMultiplier = rateCalculator.getMarketMultiplier(marketSize);
 		double monthlyPayroll = team.getTeamFinance().getCurrentPayroll()
 				/ FinanceConfiguration.NUMBER_OF_FINANCIAL_MONTHS;
 		double monthlyLuxuryTax = calculateMonthlyLuxuryTax(teamFinance);
 		double stadiumMaintenance = calculateStadiumMaintenance(team, marketMultiplier, mediaMarket,
-				economicProfil, financialPolicy);
-		double staffCost = calculateStaffCost(team, marketMultiplier, economicProfil, financialPolicy);
+				economicProfile, financialPolicy);
+		double staffCost = calculateStaffCost(team, marketMultiplier, economicProfile, financialPolicy);
 		double administrativeCost = calculateAdministrativeCost(team, marketMultiplier, mediaMarket,
-				economicProfil,
+				economicProfile,
 				financialPolicy);
 		double seasonExpenseMultiplier = rateCalculator.getSeasonContextExpenseMultiplier(month);
 		logger.trace("Base monthly expenses for "
@@ -109,13 +109,13 @@ public class MonthlyTeamExpenseCalculator {
 	}
 
 	private double calculateStadiumMaintenance(Team team, double marketMultiplier, MediaMarket mediaMarket,
-			EconomicProfil economicProfil, FinancialPolicy financialPolicy) {
+			EconomicProfile economicProfile, FinancialPolicy financialPolicy) {
 		double capacityFactor = team.getStadium().getCapacity() / 20000.0;
 		double maintenance = 3 * marketMultiplier * capacityFactor;
 		logger.trace("Base stadium maintenance for " + team.getName() + " is " + maintenance);
 
 		maintenance *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.26);
-		maintenance *= (1 + economicProfil.getHistoricalPrestige() * 0.15);
+		maintenance *= (1 + economicProfile.getHistoricalPrestige() * 0.15);
 		maintenance *= 1.15;
 		maintenance *= financialPolicy.accept(new MaintenanceCostMultiplierVisitor());
 		maintenance *= rateCalculator.getSmallMarketCostFactor(team.getTeamFinance().getStructure().getMarketSize(),
@@ -125,7 +125,7 @@ public class MonthlyTeamExpenseCalculator {
 		return maintenance;
 	}
 
-	private double calculateStaffCost(Team team, double marketMultiplier, EconomicProfil economicProfil,
+	private double calculateStaffCost(Team team, double marketMultiplier, EconomicProfile economicProfile,
 			FinancialPolicy financialPolicy) {
 		int numberOfPlayers = team.getCurrentPlayers().size();
 		double popularityFactor = (team.getCurrentPopularity() / 100.0);
@@ -138,8 +138,8 @@ public class MonthlyTeamExpenseCalculator {
 				+ numberOfPlayers
 				+ " players");
 
-		staffCost *= (1 + economicProfil.getFanLoyalty() * 0.23);
-		staffCost *= (1 + economicProfil.getCommercialAggressiveness() * 0.1);
+		staffCost *= (1 + economicProfile.getFanLoyalty() * 0.23);
+		staffCost *= (1 + economicProfile.getCommercialAggressiveness() * 0.1);
 		staffCost *= rateCalculator.getSmallMarketCostFactor(team.getTeamFinance().getStructure().getMarketSize(), 0.75);
 		if (team.hasStarPlayer()) {
 			logger.trace("Applying star player staff cost multiplier for " + team.getName());
@@ -153,12 +153,12 @@ public class MonthlyTeamExpenseCalculator {
 	}
 
 	private double calculateAdministrativeCost(Team team, double marketMultiplier, MediaMarket mediaMarket,
-			EconomicProfil economicProfil, FinancialPolicy financialPolicy) {
+			EconomicProfile economicProfile, FinancialPolicy financialPolicy) {
 		double administrativeCost = 3 * (1 + marketMultiplier);
 		logger.trace("Base administrative cost for " + team.getName() + " is " + administrativeCost);
 
 		administrativeCost *= (1 + mediaMarket.getBusinessOpportunityModifier() * 0.10);
-		administrativeCost *= (1 + economicProfil.getCommercialAggressiveness() * 0.10);
+		administrativeCost *= (1 + economicProfile.getCommercialAggressiveness() * 0.10);
 		administrativeCost *= 1.10;
 		administrativeCost *= financialPolicy.accept(new AdministrativeCostMultiplierVisitor());
 		administrativeCost *= rateCalculator

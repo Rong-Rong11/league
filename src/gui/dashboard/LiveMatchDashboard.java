@@ -18,7 +18,7 @@ import gui.panel.common.ThemeAware;
 import gui.panel.matchPanel.liveMatchPanel.LiveActionsPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveMatchHeaderPanel;
 import gui.panel.matchPanel.liveMatchPanel.LiveTeamStatsPanel;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class LiveMatchDashboard extends JPanel implements Runnable, ThemeAware {
 	private static final int DASHBOARD_SPACING = 16;

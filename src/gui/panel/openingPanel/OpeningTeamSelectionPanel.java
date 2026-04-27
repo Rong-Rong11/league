@@ -1,4 +1,4 @@
-package gui.panel.openningPanel;
+package gui.panel.openingPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -221,7 +221,7 @@ public class OpeningTeamSelectionPanel extends JPanel implements ThemeAware {
 		cityLabel.setText(TeamDisplayUtility.getCityName(team));
 		teamLabel.setText(TeamDisplayUtility.getShortName(team));
 		setButtonsEnabled(true);
-		selectedPolicy = team.getTeamFinance().getBehavior().getFinancialProfil();
+		selectedPolicy = team.getTeamFinance().getBehavior().getFinancialPolicy();
 		selectedMarketSize = team.getTeamFinance().getStructure().getMarketSize();
 		refreshPolicyButtons();
 		refreshMarketSizeButtons();

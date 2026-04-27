@@ -103,64 +103,72 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 		@Override
 		public void run() {
 			try {
-				runUiStep(0, DEFAULT_SUBTITLE);
+				updateProgress(0, DEFAULT_SUBTITLE);
 				advanceStep(8, "Preparation de la saison...");
 				advanceStep(18, "Verification des donnees...");
 				advanceStep(30, "Organisation de la saison...");
 
-				runUiStep(42, "Initialisation du calendrier et des finances...");
-				runUiAction(new SeasonInitializationAction(handler));
+				updateProgress(42, "Initialisation du calendrier et des finances...");
+				runSeasonInitialization();
 				advanceStep(58, "Calendrier pret...");
 				advanceStep(70, "Preparation des tableaux de bord...");
 
-				runUiStep(82, "Chargement des matchs et des tableaux de bord...");
-				runUiAction(new MatchLoadingAction(handler));
+				updateProgress(82, "Chargement des matchs et des tableaux de bord...");
+				runMatchLoading();
 				advanceStep(90, "Chargement du premier jour...");
 				advanceStep(96, "Finalisation de l ouverture...");
-				runUiStep(100, "Ouverture de la simulation...");
+				updateProgress(100, "Ouverture de la simulation...");
 				pause(FINAL_DELAY_MS);
-				runUiAction(new FinishLoadingAction(handler));
+				runFinishLoading();
 			} catch (InterruptedException exception) {
 				Thread.currentThread().interrupt();
 			}
 		}
+
+		private void runSeasonInitialization() {
+			if (handler != null) {
+				handler.initializeSeason();
+			}
+		}
+
+		private void runMatchLoading() {
+			runOnUiThread(new MatchLoadingTask(handler));
+		}
+
+		private void runFinishLoading() {
+			runOnUiThread(new FinishLoadingTask(handler));
+		}
 	}
 
 	private void advanceStep(int progress, String text) throws InterruptedException {
-		runUiStep(progress, text);
+		updateProgress(progress, text);
 		pause(STEP_DELAY_MS);
 	}
 
-	private void runUiStep(int progress, String text) {
-		runUiAction(new ProgressUpdateAction(progress, text));
+	private void updateProgress(final int progress, final String text) {
+		runOnUiThread(new ProgressUpdateTask(progress, text));
 	}
 
-	private void runUiAction(Runnable action) {
+	private void runOnUiThread(Runnable action) {
 		if (action == null) {
 			return;
 		}
-		try {
-			if (SwingUtilities.isEventDispatchThread()) {
-				action.run();
-				return;
-			}
-			SwingUtilities.invokeAndWait(action);
-		} catch (InterruptedException exception) {
-			Thread.currentThread().interrupt();
-		} catch (Exception exception) {
-			throw new IllegalStateException(exception);
+		if (SwingUtilities.isEventDispatchThread()) {
+			action.run();
+			return;
 		}
+		SwingUtilities.invokeLater(action);
 	}
 
 	private void pause(int delayMs) throws InterruptedException {
 		Thread.sleep(delayMs);
 	}
 
-	private class ProgressUpdateAction implements Runnable {
+	private class ProgressUpdateTask implements Runnable {
 		private int progress;
 		private String text;
 
-		private ProgressUpdateAction(int progress, String text) {
+		private ProgressUpdateTask(int progress, String text) {
 			this.progress = progress;
 			this.text = text;
 		}
@@ -171,25 +179,10 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 		}
 	}
 
-	private class SeasonInitializationAction implements Runnable {
+	private class MatchLoadingTask implements Runnable {
 		private LoadingSequenceHandler handler;
 
-		private SeasonInitializationAction(LoadingSequenceHandler handler) {
-			this.handler = handler;
-		}
-
-		@Override
-		public void run() {
-			if (handler != null) {
-				handler.initializeSeason();
-			}
-		}
-	}
-
-	private class MatchLoadingAction implements Runnable {
-		private LoadingSequenceHandler handler;
-
-		private MatchLoadingAction(LoadingSequenceHandler handler) {
+		private MatchLoadingTask(LoadingSequenceHandler handler) {
 			this.handler = handler;
 		}
 
@@ -201,10 +194,10 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 		}
 	}
 
-	private class FinishLoadingAction implements Runnable {
+	private class FinishLoadingTask implements Runnable {
 		private LoadingSequenceHandler handler;
 
-		private FinishLoadingAction(LoadingSequenceHandler handler) {
+		private FinishLoadingTask(LoadingSequenceHandler handler) {
 			this.handler = handler;
 		}
 

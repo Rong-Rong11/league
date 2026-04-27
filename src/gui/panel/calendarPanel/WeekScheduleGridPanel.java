@@ -24,7 +24,7 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class WeekScheduleGridPanel extends RoundedPanel implements ThemeAware {
 	private static final long serialVersionUID = 1L;

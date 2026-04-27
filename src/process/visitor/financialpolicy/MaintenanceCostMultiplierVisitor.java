@@ -4,7 +4,7 @@ import data.team.finance.financialpolicy.AmbitiousPolicy;
 import data.team.finance.financialpolicy.BalancedPolicy;
 import data.team.finance.financialpolicy.ThriftyPolicy;
 
-public class MaintenanceCostMultiplierVisitor implements FinancialProfilVisitor<Double> {
+public class MaintenanceCostMultiplierVisitor implements FinancialPolicyVisitor<Double> {
 
 	@Override
 	public Double visit(ThriftyPolicy thriftyPolicy) {

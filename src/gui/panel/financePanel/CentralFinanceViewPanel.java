@@ -20,7 +20,7 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.MonthNavigatorPanel;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class CentralFinanceViewPanel extends JPanel implements ThemeAware {
 

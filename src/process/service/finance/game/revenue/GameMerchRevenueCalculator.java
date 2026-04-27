@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.mediamarket.MediaMarket;
 import log.LoggerUtility;
 import process.utility.FinanceUtility;
@@ -35,7 +35,7 @@ public class GameMerchRevenueCalculator {
 			return;
 		}
 		MediaMarket mediaMarket = homeTeam.getTeamFinance().getStructure().getMediaMarket();
-		EconomicProfil economicProfil = homeTeam.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = homeTeam.getTeamFinance().getStructure().getEconomicProfile();
 		double teamValueFactor = FinanceUtility.getNormalizedTeamValue(homeTeam);
 		boolean rivalryGame = game.getGameContext().isRivalry();
 		logger.trace("Calculating merch revenue for "
@@ -49,10 +49,10 @@ public class GameMerchRevenueCalculator {
 		double averageSpend = 42;
 		logger.trace("Base merch purchase rate is " + purchaseRate + " and average spend is " + averageSpend);
 
-		if (economicProfil != null) {
-			purchaseRate += economicProfil.getFanLoyalty() * 0.008;
-			purchaseRate += economicProfil.getHistoricalPrestige() * 0.012;
-			averageSpend *= (1 + economicProfil.getHistoricalPrestige() * 0.05);
+		if (economicProfile != null) {
+			purchaseRate += economicProfile.getFanLoyalty() * 0.008;
+			purchaseRate += economicProfile.getHistoricalPrestige() * 0.012;
+			averageSpend *= (1 + economicProfile.getHistoricalPrestige() * 0.05);
 			logger.trace("Applied economic profile merch modifiers");
 		}
 

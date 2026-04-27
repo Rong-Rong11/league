@@ -7,7 +7,7 @@ import data.team.finance.financialpolicy.AmbitiousPolicy;
 import data.team.finance.financialpolicy.BalancedPolicy;
 import data.team.finance.financialpolicy.ThriftyPolicy;
 
-public interface FinancialProfilVisitor<F> {
+public interface FinancialPolicyVisitor<F> {
 	public F visit(ThriftyPolicy var1);
 
 	public F visit(BalancedPolicy var1);

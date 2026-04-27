@@ -9,7 +9,7 @@ import data.league.League;
 import data.sport.setup.Game;
 import data.sport.setup.GameMoment;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.mediamarket.MediaMarket;
 import log.LoggerUtility;
 import process.utility.CalendarUtility;
@@ -61,7 +61,7 @@ public class GameAttendanceCalculator {
 				+ " with popularity rate "
 				+ popularityRate);
 		MediaMarket mediaMarket = homeTeam.getTeamFinance().getStructure().getMediaMarket();
-		EconomicProfil economicProfil = homeTeam.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = homeTeam.getTeamFinance().getStructure().getEconomicProfile();
 		double teamValueFactor = FinanceUtility.getNormalizedTeamValue(homeTeam);
 
 		double importantDayBonus = CalendarUtility.isImportantDay(date)
@@ -79,8 +79,8 @@ public class GameAttendanceCalculator {
 				+ importantDayBonus);
 
 		attendanceRate += mediaMarket.getFanBaseModifier() * 0.12;
-		attendanceRate += economicProfil.getFanLoyalty() * 0.16;
-		attendanceRate += economicProfil.getHistoricalPrestige() * 0.06;
+		attendanceRate += economicProfile.getFanLoyalty() * 0.16;
+		attendanceRate += economicProfile.getHistoricalPrestige() * 0.06;
 		attendanceRate += teamValueFactor * 0.05;
 		double providerBonus = bonusProvider.getAttendanceBonusRate(homeTeam, popularityRate);
 		attendanceRate += providerBonus;
@@ -95,8 +95,8 @@ public class GameAttendanceCalculator {
 		attendanceRate += gameTimeBonus;
 
 		double financeBoost = (mediaMarket.getFanBaseModifier() * 0.40)
-				+ (economicProfil.getFanLoyalty() * 0.35)
-				+ (economicProfil.getHistoricalPrestige() * 0.15)
+				+ (economicProfile.getFanLoyalty() * 0.35)
+				+ (economicProfile.getHistoricalPrestige() * 0.15)
 				+ (teamValueFactor * 0.10);
 
 		if (popularityRate > 0.82) {

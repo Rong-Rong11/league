@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.mediamarket.MediaMarket;
 import log.LoggerUtility;
 
@@ -33,7 +33,7 @@ public class GameConcessionsRevenueCalculator {
 			logger.warn("Skipping concessions revenue calculation because game stat is null");
 			return;
 		}
-		EconomicProfil economicProfil = homeTeam.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = homeTeam.getTeamFinance().getStructure().getEconomicProfile();
 		MediaMarket mediaMarket = homeTeam.getTeamFinance().getStructure().getMediaMarket();
 		boolean rivalryGame = game.getGameContext().isRivalry();
 		logger.trace("Calculating concessions revenue for "
@@ -47,9 +47,9 @@ public class GameConcessionsRevenueCalculator {
 		double averageSpend = 21;
 		logger.trace("Base concessions purchase rate is " + purchaseRate + " and average spend is " + averageSpend);
 
-		if (economicProfil != null) {
-			purchaseRate += economicProfil.getFanLoyalty() * 0.05;
-			averageSpend *= (1 + economicProfil.getHistoricalPrestige() * 0.04);
+		if (economicProfile != null) {
+			purchaseRate += economicProfile.getFanLoyalty() * 0.05;
+			averageSpend *= (1 + economicProfile.getHistoricalPrestige() * 0.04);
 			logger.trace("Applied economic profile concessions modifiers");
 		}
 

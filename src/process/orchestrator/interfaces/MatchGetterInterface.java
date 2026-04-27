@@ -1,4 +1,4 @@
-package process.orchestrator.interf;
+package process.orchestrator.interfaces;
 
 import data.finance.GameStat;
 import data.sport.setup.Game;

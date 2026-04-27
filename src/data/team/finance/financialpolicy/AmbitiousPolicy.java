@@ -1,6 +1,6 @@
 package data.team.finance.financialpolicy;
 
-import process.visitor.financialpolicy.FinancialProfilVisitor;
+import process.visitor.financialpolicy.FinancialPolicyVisitor;
 
 public class AmbitiousPolicy
 		extends FinancialPolicy {
@@ -9,7 +9,7 @@ public class AmbitiousPolicy
 	}
 
 	@Override
-	public <F> F accept(FinancialProfilVisitor<F> financialProfilVisitor) {
-		return financialProfilVisitor.visit(this);
+	public <F> F accept(FinancialPolicyVisitor<F> financialPolicyVisitor) {
+		return financialPolicyVisitor.visit(this);
 	}
 }

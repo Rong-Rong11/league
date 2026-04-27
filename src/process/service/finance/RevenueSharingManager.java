@@ -11,7 +11,7 @@ import data.finance.budget.income.IncomeType;
 import data.league.League;
 import data.league.finance.LeagueRedistributionPolicy;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import log.LoggerUtility;
@@ -333,7 +333,7 @@ public class RevenueSharingManager {
 
 		MarketSize marketSize = team.getTeamFinance().getStructure().getMarketSize();
 		MediaMarket mediaMarket = team.getTeamFinance().getStructure().getMediaMarket();
-		EconomicProfil economicProfil = team.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = team.getTeamFinance().getStructure().getEconomicProfile();
 
 		factor *= getMarketMultiplier(marketSize);
 
@@ -345,9 +345,9 @@ public class RevenueSharingManager {
 		mediaFactor += mediaMarket.getFanBaseModifier() * 0.10;
 		mediaFactor += mediaMarket.getPricingPowerModifier() * 0.10;
 
-		ecomonicFactor += economicProfil.getFanLoyalty() * 0.15;
-		ecomonicFactor += economicProfil.getCommercialAggressiveness() * 0.15;
-		ecomonicFactor += economicProfil.getHistoricalPrestige() * 0.10;
+		ecomonicFactor += economicProfile.getFanLoyalty() * 0.15;
+		ecomonicFactor += economicProfile.getCommercialAggressiveness() * 0.15;
+		ecomonicFactor += economicProfile.getHistoricalPrestige() * 0.10;
 
 		double combinedFactor = 1 + (mediaFactor * 0.6 + ecomonicFactor * 0.4);
 		factor *= combinedFactor;
