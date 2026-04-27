@@ -8,8 +8,8 @@ public class Conference {
 	private String name;
 	private HashMap<String, Division> divisions;
 
-	public Conference(String string) {
-		this.name = string;
+	public Conference(String name) {
+		this.name = name;
 		this.divisions = new HashMap<String, Division>();
 	}
 
@@ -21,8 +21,8 @@ public class Conference {
 		this.divisions = hashMap;
 	}
 
-	public void addTeam(Team team, String string) {
-		Division division = this.divisions.get(string);
+	public void addTeam(Team team, String divisionName) {
+		Division division = this.divisions.get(divisionName);
 		division.addTeam(team);
 	}
 
@@ -35,10 +35,10 @@ public class Conference {
 	}
 
 	public String toString() {
-		String string = this.name;
+		String text = this.name;
 		for (Division division : this.divisions.values()) {
-			string = string + "\n" + division.toString();
+			text = text + "\n" + division.toString();
 		}
-		return string;
+		return text;
 	}
 }

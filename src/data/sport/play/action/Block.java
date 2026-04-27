@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.sport.play.action;
 
 import data.player.Player;
@@ -10,9 +7,9 @@ public class Block
 extends ActionResult {
 	private Player blockingPlayer;
 
-	public Block(String string, Player player) {
-		super(string);
-		this.blockingPlayer = player;
+	public Block(String name, Player blockingPlayer) {
+		super(name);
+		this.blockingPlayer = blockingPlayer;
 	}
 
 	public Player getBlockingPlayer() {

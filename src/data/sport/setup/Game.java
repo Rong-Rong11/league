@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.sport.setup;
 
 import data.league.PlayoffRound;
@@ -45,24 +42,24 @@ public class Game {
 		return this.homeFinalScore;
 	}
 
-	public void setHomeFinalScore(int n) {
-		this.homeFinalScore = n;
+	public void setHomeFinalScore(int homeFinalScore) {
+		this.homeFinalScore = homeFinalScore;
 	}
 
 	public int getAwayFinalScore() {
 		return this.awayFinalScore;
 	}
 
-	public void setAwayFinalScore(int n) {
-		this.awayFinalScore = n;
+	public void setAwayFinalScore(int awayFinalScore) {
+		this.awayFinalScore = awayFinalScore;
 	}
 
 	public boolean isDisplayed() {
 		return this.displayed;
 	}
 
-	public void setDisplayed(boolean bl) {
-		this.displayed = bl;
+	public void setDisplayed(boolean displayed) {
+		this.displayed = displayed;
 	}
 
 	public PlayoffRound getPlayoffRound() {

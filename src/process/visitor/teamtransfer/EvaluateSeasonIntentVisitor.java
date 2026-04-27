@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package process.visitor.teamtransfer;
 
 import data.team.Team;

@@ -8,7 +8,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 public class DashboardPanelUtil {
 	private static final ThemePalette LIGHT_THEME_PALETTE = new LightThemePalette();
@@ -391,5 +393,24 @@ public class DashboardPanelUtil {
 		column.setOpaque(false);
 		column.setPreferredSize(new Dimension(width, 10));
 		return column;
+	}
+
+	public static Border createSurfaceBorder(int padding) {
+		return createSurfaceBorder(padding, padding);
+	}
+
+	public static Border createSurfaceBorder(int verticalPadding, int horizontalPadding) {
+		return BorderFactory.createCompoundBorder(
+				BorderFactory.createLineBorder(BORDER_COLOR, 1),
+				BorderFactory.createEmptyBorder(verticalPadding, horizontalPadding, verticalPadding, horizontalPadding));
+	}
+
+	public static void applySurfaceCard(JComponent component, int padding) {
+		applySurfaceCard(component, padding, padding);
+	}
+
+	public static void applySurfaceCard(JComponent component, int verticalPadding, int horizontalPadding) {
+		component.setBackground(PANEL_SURFACE_COLOR);
+		component.setBorder(createSurfaceBorder(verticalPadding, horizontalPadding));
 	}
 }

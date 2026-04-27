@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.player;
 
 
@@ -13,16 +10,16 @@ public class HealthStatus {
 		return this.fatigue;
 	}
 
-	public void setFatigue(double d) {
-		this.fatigue = d;
+	public void setFatigue(double fatigue) {
+		this.fatigue = fatigue;
 	}
 
 	public boolean isInjured() {
 		return this.isInjured;
 	}
 
-	public void setInjured(boolean bl) {
-		this.isInjured = bl;
+	public void setInjured(boolean injured) {
+		this.isInjured = injured;
 	}
 
 	public Injury getInjury() {

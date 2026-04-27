@@ -6,12 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
-import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import org.jfree.data.category.DefaultCategoryDataset;
 
 import data.finance.budget.Budget;
 import data.finance.budget.expense.Expense;
@@ -38,13 +35,10 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 	private final JLabel selectedRevenueValueLabel;
 	private final JLabel selectedExpenseValueLabel;
 	private final JLabel selectedNetValueLabel;
-	private final JLabel luxuryTaxValueLabel;
 	private final TeamFinanceProfilePanel profilePanel;
 	private final TeamFinanceBreakdownPanel revenuePanel;
 	private final TeamFinanceBreakdownPanel expensePanel;
-	private final DefaultCategoryDataset revenueDataset;
-	private final DefaultCategoryDataset expenseDataset;
-	private final DefaultCategoryDataset historyDataset;
+	private final org.jfree.data.category.DefaultCategoryDataset historyDataset;
 
 	public TeamFinanceViewPanel(GUIInterface guiInterface) {
 		this.guiInterface = guiInterface;
@@ -55,13 +49,10 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		selectedRevenueValueLabel = FinanceViewFactory.metricLabel();
 		selectedExpenseValueLabel = FinanceViewFactory.metricLabel();
 		selectedNetValueLabel = FinanceViewFactory.metricLabel();
-		luxuryTaxValueLabel = FinanceViewFactory.metricLabel();
 		profilePanel = new TeamFinanceProfilePanel();
 		revenuePanel = new TeamFinanceBreakdownPanel("Revenus", "Aucun", DashboardPanelUtil.REVENUE_COLOR);
 		expensePanel = new TeamFinanceBreakdownPanel("Depenses", "Aucune", DashboardPanelUtil.EXPENSE_COLOR);
-		revenueDataset = new DefaultCategoryDataset();
-		expenseDataset = new DefaultCategoryDataset();
-		historyDataset = new DefaultCategoryDataset();
+		historyDataset = new org.jfree.data.category.DefaultCategoryDataset();
 
 		organize();
 		actions();

@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package process.visitor.teamtransfer;
 
 import data.team.finance.transfer.AllIn;
@@ -15,9 +12,9 @@ implements TeamTransferVisitor<Boolean> {
 	private int transfersMade;
 	private String seasonIntent;
 
-	public SeasonTradeSatisfactionVisitor(int n, String string) {
-		this.transfersMade = n;
-		this.seasonIntent = string;
+	public SeasonTradeSatisfactionVisitor(int transfersMade, String seasonIntent) {
+		this.transfersMade = transfersMade;
+		this.seasonIntent = seasonIntent;
 	}
 
 	@Override

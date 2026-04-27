@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.finance.budget;
 
 import data.finance.budget.expense.Expense;
@@ -14,33 +11,33 @@ public class Budget {
 	private HashMap<Integer, HashMap<String, Expense>> monthlyExpenses = new HashMap<>();
 	private HashMap<Integer, Double> monthlyNetHistory = new HashMap<>();
 
-	public Budget(double d) {
-		this.initialAmount = d;
-		this.remainingAmount = d;
+	public Budget(double initialAmount) {
+		this.initialAmount = initialAmount;
+		this.remainingAmount = initialAmount;
 	}
 
 	public double getInitialAmount() {
 		return this.initialAmount;
 	}
 
-	public void setInitialAmount(double d) {
-		this.initialAmount = d;
+	public void setInitialAmount(double initialAmount) {
+		this.initialAmount = initialAmount;
 	}
 
 	public double getRemainingAmount() {
 		return this.remainingAmount;
 	}
 
-	public void setRemainingAmount(double d) {
-		this.remainingAmount = d;
+	public void setRemainingAmount(double remainingAmount) {
+		this.remainingAmount = remainingAmount;
 	}
 
-	public HashMap<String, Income> getIncomesForMonth(int n) {
-		return this.monthlyIncomes.get(n);
+	public HashMap<String, Income> getIncomesForMonth(int month) {
+		return this.monthlyIncomes.get(month);
 	}
 
-	public HashMap<String, Expense> getExpensesForMonth(int n) {
-		return this.monthlyExpenses.get(n);
+	public HashMap<String, Expense> getExpensesForMonth(int month) {
+		return this.monthlyExpenses.get(month);
 	}
 
 	public HashMap<Integer, HashMap<String, Income>> getMonthlyIncomes() {

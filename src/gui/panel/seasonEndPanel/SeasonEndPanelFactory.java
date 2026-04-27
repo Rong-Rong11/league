@@ -3,7 +3,6 @@ package gui.panel.seasonEndPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -27,23 +26,17 @@ public final class SeasonEndPanelFactory {
 
 	public static RoundedPanel buildStatCard(String title, String value, String subtitle, Color valueColor) {
 		RoundedPanel card = new RoundedPanel(new BorderLayout(), 16);
-		card.setBackground(DashboardPanelUtil.PANEL_SURFACE_COLOR);
-		card.setBorder(BorderFactory.createCompoundBorder(
-				BorderFactory.createLineBorder(DashboardPanelUtil.BORDER_COLOR, 1),
-				BorderFactory.createEmptyBorder(14, 14, 14, 14)));
+		DashboardPanelUtil.applySurfaceCard(card, 14);
 
 		JPanel textPanel = new JPanel();
 		textPanel.setOpaque(false);
 		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 		JLabel titleLabel = new JLabel(title);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
-		titleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(titleLabel, 14);
 		JLabel valueLabel = new JLabel(value);
-		valueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-		valueLabel.setForeground(valueColor);
+		LabelStyleUtil.styleValueLabel(valueLabel, 18, valueColor);
 		JLabel subtitleLabel = new JLabel(subtitle);
-		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 12);
 		textPanel.add(titleLabel);
 		textPanel.add(javax.swing.Box.createVerticalStrut(9));
 		textPanel.add(valueLabel);
@@ -100,11 +93,9 @@ public final class SeasonEndPanelFactory {
 		JPanel row = new JPanel(new BorderLayout(10, 0));
 		row.setOpaque(false);
 		JLabel titleLabel = new JLabel(title);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
-		titleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(titleLabel, 12);
 		JLabel valueLabel = new JLabel(value);
-		valueLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		valueLabel.setForeground(valueColor);
+		LabelStyleUtil.styleValueLabel(valueLabel, 12, valueColor);
 		row.add(titleLabel, BorderLayout.CENTER);
 		row.add(valueLabel, BorderLayout.EAST);
 		row.setMaximumSize(new Dimension(Integer.MAX_VALUE, row.getPreferredSize().height));
@@ -113,8 +104,7 @@ public final class SeasonEndPanelFactory {
 
 	public static JLabel buildSectionLabel(String text) {
 		JLabel label = new JLabel(text);
-		label.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
-		label.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleTitleLabel(label, 12);
 		return label;
 	}
 
@@ -125,18 +115,15 @@ public final class SeasonEndPanelFactory {
 
 		JLabel titleLabel = new JLabel(TeamDisplayUtility.getShortName(team) + " | "
 				+ dataProvider.formatMoney(dataProvider.getTotalTeamNet(team)));
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
-		titleLabel.setForeground(accentColor);
+		LabelStyleUtil.styleAccentLabel(titleLabel, 11, accentColor);
 
 		JLabel profileLabel = new JLabel(dataProvider.getMarketLabel(team) + " | "
 				+ dataProvider.getPolicyLabel(team) + " | " + dataProvider.getStrategyLabel(team));
-		profileLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
-		profileLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(profileLabel, 10);
 
 		JLabel moneyLabel = new JLabel("Budget " + dataProvider.formatMoney(dataProvider.getRemainingBudget(team))
 				+ " | Payroll " + dataProvider.formatMoney(dataProvider.getCurrentPayroll(team)));
-		moneyLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
-		moneyLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(moneyLabel, 10);
 
 		row.add(titleLabel);
 		row.add(profileLabel);

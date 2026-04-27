@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.team.calendar;
 
 import java.time.LocalDate;

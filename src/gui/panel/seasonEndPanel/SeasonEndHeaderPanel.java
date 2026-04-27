@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 
 import gui.panel.common.ButtonStyleUtil;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedButton;
 import gui.panel.common.ThemeAware;
 
@@ -66,13 +67,11 @@ public class SeasonEndHeaderPanel extends JPanel implements ThemeAware {
 		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 
 		JLabel titleLabel = new JLabel("Simulation terminee", SwingConstants.CENTER);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 28));
-		titleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
+		LabelStyleUtil.styleTitleLabel(titleLabel, 28);
 		titleLabel.setAlignmentX(LEFT_ALIGNMENT);
 
 		JLabel subtitleLabel = new JLabel(dataProvider.buildHeaderSubtitle(), SwingConstants.CENTER);
-		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
-		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 14);
 		subtitleLabel.setAlignmentX(LEFT_ALIGNMENT);
 
 		textPanel.add(Box.createVerticalStrut(4));

@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.finance;
 
 
@@ -47,31 +44,31 @@ public class GameStat {
 		return this.attendees;
 	}
 
-	public void setAttendees(int n) {
-		this.attendees = n;
+	public void setAttendees(int attendees) {
+		this.attendees = attendees;
 	}
 
 	public double getTicketPrice() {
 		return this.ticketPrice;
 	}
 
-	public void setTicketPrice(double d) {
-		this.ticketPrice = d;
+	public void setTicketPrice(double ticketPrice) {
+		this.ticketPrice = ticketPrice;
 	}
 
 	public double getAttendanceRate() {
 		return this.attendanceRate;
 	}
 
-	public void setAttendanceRate(double d) {
-		this.attendanceRate = d;
+	public void setAttendanceRate(double attendanceRate) {
+		this.attendanceRate = attendanceRate;
 	}
 
 	public double getPopularity() {
 		return this.popularity;
 	}
 
-	public void setPopularity(double d) {
-		this.popularity = d;
+	public void setPopularity(double popularity) {
+		this.popularity = popularity;
 	}
 }

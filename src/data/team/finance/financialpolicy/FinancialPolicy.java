@@ -8,5 +8,5 @@ public abstract class FinancialPolicy {
 
 	}
 
-	public abstract <F> F accept(FinancialPolicyVisitor<F> var1);
+	public abstract <F> F accept(FinancialPolicyVisitor<F> visitor);
 }

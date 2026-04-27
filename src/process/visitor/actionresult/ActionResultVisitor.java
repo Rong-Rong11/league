@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package process.visitor.actionresult;
 
 import data.sport.play.action.Block;
@@ -11,15 +8,15 @@ import data.sport.play.action.Rebound;
 import data.sport.play.action.Turnover;
 
 public interface ActionResultVisitor<A> {
-	public A visit(Block var1);
+	public A visit(Block block);
 
-	public A visit(PointScored var1);
+	public A visit(PointScored pointScored);
 
-	public A visit(MissedShot var1);
+	public A visit(MissedShot missedShot);
 
-	public A visit(Rebound var1);
+	public A visit(Rebound rebound);
 
-	public A visit(Turnover var1);
+	public A visit(Turnover turnover);
 
-	public A visit(EndOfTime var1);
+	public A visit(EndOfTime endOfTime);
 }

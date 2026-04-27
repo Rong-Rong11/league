@@ -9,7 +9,6 @@ import javax.swing.JLabel;
 
 import config.FinanceConfiguration;
 import data.finance.budget.Budget;
-import data.finance.budget.FinanceScope;
 import data.finance.budget.expense.Expense;
 import data.finance.budget.income.Income;
 import data.team.Team;
@@ -17,6 +16,8 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.MonthNavigatorPanel;
 import gui.panel.common.PlayerDisplayUtil;
 import process.orchestrator.interfaces.GUIInterface;
+import process.utility.FinanceLabelUtility;
+import process.utility.FinanceSummaryUtility;
 
 public final class FinanceDataUtil {
 
@@ -38,24 +39,7 @@ public final class FinanceDataUtil {
 	}
 
 	public static List<Integer> availableMonths(GUIInterface guiInterface, Budget budget) {
-		List<Integer> months = new ArrayList<Integer>();
-		if (budget == null) {
-			months.add(1);
-			return months;
-		}
-
-		for (int month = 1; month <= lastVisibleMonth(guiInterface); month++) {
-			Map<String, Income> incomes = budget.getIncomesForMonth(month);
-			Map<String, Expense> expenses = budget.getExpensesForMonth(month);
-			if ((incomes != null && !incomes.isEmpty()) || (expenses != null && !expenses.isEmpty())) {
-				months.add(month);
-			}
-		}
-
-		if (months.isEmpty()) {
-			months.add(1);
-		}
-		return months;
+		return FinanceSummaryUtility.availableMonths(budget, lastVisibleMonth(guiInterface));
 	}
 
 	public static int selectedMonth(MonthNavigatorPanel navigator) {
@@ -100,35 +84,15 @@ public final class FinanceDataUtil {
 	}
 
 	public static double totalIncome(Map<String, Income> incomes) {
-		double total = 0.0;
-		if (incomes != null) {
-			for (Income income : incomes.values()) {
-				total += income.getAmount();
-			}
-		}
-		return total;
+		return FinanceSummaryUtility.totalIncome(incomes);
 	}
 
 	public static double totalLocalIncome(Map<String, Income> incomes) {
-		double total = 0.0;
-		if (incomes != null) {
-			for (Income income : incomes.values()) {
-				if (income.getIncomeType() != null && income.getIncomeType().getScope() == FinanceScope.LOCAL) {
-					total += income.getAmount();
-				}
-			}
-		}
-		return total;
+		return FinanceSummaryUtility.totalLocalIncome(incomes);
 	}
 
 	public static double totalExpense(Map<String, Expense> expenses) {
-		double total = 0.0;
-		if (expenses != null) {
-			for (Expense expense : expenses.values()) {
-				total += expense.getAmount();
-			}
-		}
-		return total;
+		return FinanceSummaryUtility.totalExpense(expenses);
 	}
 
 	public static double monthNet(Budget budget, int month) {
@@ -217,62 +181,16 @@ public final class FinanceDataUtil {
 		return text;
 	}
 
-	private static String getSimpleClassName(Object object) {
-		if (object == null) {
-			return "-";
-		}
-		return object.getClass().getSimpleName().replaceAll("([a-z])([A-Z])", "$1 $2");
-	}
-
 	public static String formatPolicy(Object object) {
-		String name = getSimpleClassName(object);
-		if ("Thrifty Policy".equals(name)) {
-			return "Politique econome";
-		}
-		if ("Balanced Policy".equals(name)) {
-			return "Politique equilibree";
-		}
-		if ("Ambitious Policy".equals(name)) {
-			return "Politique ambitieuse";
-		}
-		return name;
+		return FinanceLabelUtility.formatPolicy(object);
 	}
 
 	public static String formatMarket(Object object) {
-		String name = getSimpleClassName(object);
-		if ("Small Size".equals(name)) {
-			return "Petit marche";
-		}
-		if ("Medium Size".equals(name)) {
-			return "Marche moyen";
-		}
-		if ("Large Size".equals(name)) {
-			return "Grand marche";
-		}
-		return name;
+		return FinanceLabelUtility.formatMarket(object);
 	}
 
 	public static String formatStrategy(Object object) {
-		String name = getSimpleClassName(object);
-		if ("Rebuild".equals(name)) {
-			return "Reconstruction";
-		}
-		if ("Balanced".equals(name)) {
-			return "Equilibre";
-		}
-		if ("All In".equals(name)) {
-			return "All in";
-		}
-		if ("Salary Dump".equals(name)) {
-			return "Degraissage salarial";
-		}
-		if ("Small Adjust".equals(name)) {
-			return "Petits ajustements";
-		}
-		if ("Superstar Build".equals(name)) {
-			return "Construction superstar";
-		}
-		return name;
+		return FinanceLabelUtility.formatStrategy(object);
 	}
 
 	public static void setAmountColor(JLabel label, double value) {

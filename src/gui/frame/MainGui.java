@@ -26,6 +26,7 @@ import gui.dashboard.RosterDashboard;
 import gui.dashboard.SeasonEndDashboard;
 import gui.layout.SidebarPanel;
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.ThemeAware;
 import process.orchestrator.interfaces.GUIInterface;
 
 public class MainGui extends JFrame {
@@ -416,43 +417,33 @@ public class MainGui extends JFrame {
 		rootPanel.setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
 		mainPanel.setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
 		dashboardPanel.setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
-		openingPanel.applyTheme();
-		if (sidebar != null) {
-			sidebar.applyTheme();
-			syncSidebarSeasonEndVisibility();
+		applyTheme(openingPanel);
+		applyTheme(sidebar);
+		syncSidebarSeasonEndVisibility();
+		applyTheme(matchDashboard);
+		applyTheme(liveMatchDashboard);
+		applyTheme(calendarDashboard);
+		refreshThemeSensitiveDashboards();
+		applyTheme(mapDashboard);
+		applyTheme(rosterDashboard);
+		applyTheme(rankingDashboard);
+		applyTheme(financeDashboard);
+		applyTheme(welcomeDashboard);
+		applyTheme(loadingDashboard);
+	}
+
+	private void applyTheme(ThemeAware component) {
+		if (component != null) {
+			component.applyTheme();
 		}
-		if (matchDashboard != null) {
-			matchDashboard.applyTheme();
-		}
-		if (liveMatchDashboard != null) {
-			liveMatchDashboard.applyTheme();
-		}
-		if (calendarDashboard != null) {
-			calendarDashboard.applyTheme();
-		}
+	}
+
+	private void refreshThemeSensitiveDashboards() {
 		if (regularSeasonEndDashboard != null) {
 			regularSeasonEndDashboard.refresh();
 		}
 		if (seasonEndDashboard != null) {
 			seasonEndDashboard.refresh();
-		}
-		if (mapDashboard != null) {
-			mapDashboard.applyTheme();
-		}
-		if (rosterDashboard != null) {
-			rosterDashboard.applyTheme();
-		}
-		if (rankingDashboard != null) {
-			rankingDashboard.applyTheme();
-		}
-		if (financeDashboard != null) {
-			financeDashboard.applyTheme();
-		}
-		if (welcomeDashboard != null) {
-			welcomeDashboard.applyTheme();
-		}
-		if (loadingDashboard != null) {
-			loadingDashboard.applyTheme();
 		}
 	}
 

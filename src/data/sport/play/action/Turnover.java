@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.sport.play.action;
 
 import data.player.Player;
@@ -11,10 +8,10 @@ extends ActionResult {
 	private Player interceptedPlayer;
 	private Player defensePlayer;
 
-	public Turnover(String string, Player player, Player player2) {
-		super(string);
-		this.interceptedPlayer = player;
-		this.defensePlayer = player2;
+	public Turnover(String name, Player interceptedPlayer, Player defensePlayer) {
+		super(name);
+		this.interceptedPlayer = interceptedPlayer;
+		this.defensePlayer = defensePlayer;
 	}
 
 	public Player getInterceptedPlayer() {

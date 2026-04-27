@@ -1,7 +1,6 @@
 package gui.dashboard;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,6 +11,7 @@ import javax.swing.JProgressBar;
 import javax.swing.Timer;
 
 import gui.panel.common.DashboardPanelUtil;
+import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.ThemeAware;
 
 public class LoadingDashboard extends JPanel implements ThemeAware {
@@ -39,10 +39,10 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 		setBorder(BorderFactory.createEmptyBorder(120, 220, 120, 220));
 
 		titleLabel = new JLabel("Chargement de la saison", JLabel.CENTER);
-		titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 38));
+		LabelStyleUtil.styleTitleLabel(titleLabel, 38);
 
 		subtitleLabel = new JLabel(DEFAULT_SUBTITLE, JLabel.CENTER);
-		subtitleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 16);
 
 		progressBar = new JProgressBar(0, 100);
 		progressBar.setStringPainted(true);
@@ -88,9 +88,9 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 	}
 
 	public void startLoadingSequence(LoadingSequenceHandler handler) {
-		stopLoadingTimer();
+		stopTimer();
 		reset();
-		loadingPhases = buildLoadingPhases(handler);
+		loadingPhases = createSteps(handler);
 		loadingPhaseIndex = 0;
 		currentProgress = 0;
 		loadingTimer = new Timer(STEP_DELAY_MS, new LoadingTimerAction());
@@ -105,7 +105,7 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 		void finishLoading();
 	}
 
-	private LoadingPhase[] buildLoadingPhases(LoadingSequenceHandler handler) {
+	private LoadingPhase[] createSteps(LoadingSequenceHandler handler) {
 		return new LoadingPhase[] {
 				new LoadingPhase(8, "Preparation de la saison...", null),
 				new LoadingPhase(18, "Verification des donnees...", null),
@@ -120,14 +120,14 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 		};
 	}
 
-	private void applyNextStep() {
+	private void runStep() {
 		if (loadingPhases == null || loadingPhaseIndex >= loadingPhases.length) {
-			stopLoadingTimer();
+			stopTimer();
 			return;
 		}
 
 		LoadingPhase phase = loadingPhases[loadingPhaseIndex];
-		currentProgress = nextProgressValue(currentProgress, phase.targetProgress);
+		currentProgress = computeNextProgress(currentProgress, phase.targetProgress);
 		setProgress((int) Math.round(currentProgress), phase.text);
 
 		if (currentProgress + 0.001 < phase.targetProgress) {
@@ -142,11 +142,11 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 
 		loadingPhaseIndex++;
 		if (loadingPhaseIndex >= loadingPhases.length) {
-			stopLoadingTimer();
+			stopTimer();
 		}
 	}
 
-	private double nextProgressValue(double currentValue, int targetValue) {
+	private double computeNextProgress(double currentValue, int targetValue) {
 		double remaining = targetValue - currentValue;
 		if (remaining <= 0) {
 			return targetValue;
@@ -155,7 +155,7 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 		return Math.min(currentValue + step, targetValue);
 	}
 
-	private void stopLoadingTimer() {
+	private void stopTimer() {
 		if (loadingTimer != null) {
 			loadingTimer.stop();
 			loadingTimer = null;
@@ -165,7 +165,7 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 	private class LoadingTimerAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			applyNextStep();
+			runStep();
 		}
 	}
 
@@ -229,8 +229,8 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 	@Override
 	public void applyTheme() {
 		setBackground(DashboardPanelUtil.DASHBOARD_BACKGROUND_COLOR);
-		titleLabel.setForeground(DashboardPanelUtil.TITLE_TEXT_COLOR);
-		subtitleLabel.setForeground(DashboardPanelUtil.SUBTITLE_TEXT_COLOR);
+		LabelStyleUtil.styleTitleLabel(titleLabel, 38);
+		LabelStyleUtil.styleSubtitleLabel(subtitleLabel, 16);
 		progressBar.setForeground(DashboardPanelUtil.getPrimaryActionColor());
 		progressBar.setBackground(DashboardPanelUtil.BUTTON_SURFACE_COLOR);
 	}

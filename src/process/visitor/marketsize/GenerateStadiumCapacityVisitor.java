@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package process.visitor.marketsize;
 
 import data.team.finance.marketsize.LargeSize;

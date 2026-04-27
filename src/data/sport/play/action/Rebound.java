@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package data.sport.play.action;
 
 import data.player.Player;
@@ -11,10 +8,10 @@ extends ActionResult {
 	private Player reboundPlayer;
 	private Player missedPlayer;
 
-	public Rebound(String string, Player player, Player player2) {
-		super(string);
-		this.reboundPlayer = player;
-		this.missedPlayer = player2;
+	public Rebound(String name, Player reboundPlayer, Player missedPlayer) {
+		super(name);
+		this.reboundPlayer = reboundPlayer;
+		this.missedPlayer = missedPlayer;
 	}
 
 	public Player getReboundPlayer() {

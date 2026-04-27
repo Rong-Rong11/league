@@ -1,6 +1,3 @@
-/*
-	* Decompiled with CFR 0.152.
-	*/
 package process.repository;
 
 import java.util.ArrayList;
@@ -19,13 +16,13 @@ public class DivisionRepository {
 		return instance;
 	}
 
-	public void register(String string, Division division) {
-		this.divisions.put(string, division);
+	public void register(String divisionName, Division division) {
+		this.divisions.put(divisionName, division);
 	}
 
-	public Division getDivision(String string) {
-		if (this.divisions.containsKey(string)) {
-			return this.divisions.get(string);
+	public Division getDivision(String divisionName) {
+		if (this.divisions.containsKey(divisionName)) {
+			return this.divisions.get(divisionName);
 		}
 		return null;
 	}
