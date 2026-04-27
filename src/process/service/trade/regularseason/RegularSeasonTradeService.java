@@ -83,4 +83,13 @@ public class RegularSeasonTradeService extends TradeService {
 	protected boolean isSeasonTrade() {
 		return true;
 	}
+
+	@Override
+	public ArrayList<Trade> getTrades() {
+		ArrayList<Trade> regularSeasonTrades = new ArrayList<Trade>();
+		for (ArrayList<Trade> tradesAtDate : seasonTrades.values()) {
+			regularSeasonTrades.addAll(tradesAtDate);
+		}
+		return regularSeasonTrades;
+	}
 }

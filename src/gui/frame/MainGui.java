@@ -15,6 +15,7 @@ import gui.dashboard.CalendarDashboard;
 import gui.dashboard.FinanceDashboard;
 import gui.dashboard.LaunchingDashboard;
 import gui.dashboard.LiveMatchDashboard;
+import gui.dashboard.LoadingDashboard;
 import gui.dashboard.MapDashboard;
 import gui.dashboard.MatchDashboard;
 import gui.dashboard.OpeningDashboard;
@@ -34,6 +35,7 @@ public class MainGui extends JFrame {
 	private CardLayout dashboardLayout;
 	private JPanel dashboardPanel;
 	private LaunchingDashboard launchingDashboard;
+	private LoadingDashboard loadingDashboard;
 	private OpeningDashboard openingPanel;
 	private RegularSeasonEndDashboard regularSeasonEndDashboard;
 	private SeasonEndDashboard seasonEndDashboard;
@@ -73,6 +75,7 @@ public class MainGui extends JFrame {
 		dashboardPanel = new JPanel(dashboardLayout);
 		refreshableDashboards = new HashMap<String, RefreshableDashboard>();
 		launchingDashboard = new LaunchingDashboard();
+		loadingDashboard = new LoadingDashboard();
 		openingPanel = new OpeningDashboard(guiInterface);
 		regularSeasonEndDashboard = new RegularSeasonEndDashboard(guiInterface);
 		seasonEndDashboard = new SeasonEndDashboard(guiInterface);
@@ -81,6 +84,7 @@ public class MainGui extends JFrame {
 
 	private void organize(boolean visible) {
 		rootPanel.add(launchingDashboard, "launching");
+		rootPanel.add(loadingDashboard, "loading");
 		rootPanel.add(openingPanel, "opening");
 		rootPanel.add(mainPanel, "main");
 		rootPanel.add(regularSeasonEndDashboard, "regularSeasonEnd");
@@ -311,14 +315,37 @@ public class MainGui extends JFrame {
 				openingPanel.showSelectionWarning();
 				return;
 			}
+			startApplicationWithLoading();
+		}
+	}
 
+	private void startApplicationWithLoading() {
+		showRootCard("loading");
+		loadingDashboard.startLoadingSequence(new ApplicationLoadingHandler());
+	}
+
+	private class ApplicationLoadingHandler implements LoadingDashboard.LoadingSequenceHandler {
+		@Override
+		public void initializeSeason() {
 			calendarDashboard.startSeason();
 			syncSidebarSeasonEndVisibility();
-			matchDashboard.loadGamesOfDay(guiInterface.getMatchDisplayDate());
-			sidebar.setActiveSection("match");
-			showDashboardCard("match");
-			showRootCard("main");
 		}
+
+		@Override
+		public void loadMatches() {
+			matchDashboard.loadGamesOfDay(guiInterface.getMatchDisplayDate());
+		}
+
+		@Override
+		public void finishLoading() {
+			openMainApplication();
+		}
+	}
+
+	private void openMainApplication() {
+		sidebar.setActiveSection("match");
+		showDashboardCard("match");
+		showRootCard("main");
 	}
 
 	private class QuitAction implements ActionListener {
@@ -420,6 +447,9 @@ public class MainGui extends JFrame {
 		}
 		if (launchingDashboard != null) {
 			launchingDashboard.applyTheme();
+		}
+		if (loadingDashboard != null) {
+			loadingDashboard.applyTheme();
 		}
 	}
 

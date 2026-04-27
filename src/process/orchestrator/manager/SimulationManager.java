@@ -13,6 +13,7 @@ import config.CalendarConfiguration;
 import config.FinanceConfiguration;
 import data.calendar.GameDay;
 import data.finance.GameStat;
+import data.finance.transfer.Trade;
 import data.finance.budget.Budget;
 import data.finance.budget.income.Income;
 import data.finance.budget.income.IncomeCategory;
@@ -98,6 +99,14 @@ public class SimulationManager implements GUIInterface {
 	@Override
 	public League getLeague() {
 		return league;
+	}
+
+	@Override
+	public ArrayList<Trade> getTradesForTeam(Team team) {
+		ArrayList<Trade> teamTrades = new ArrayList<Trade>();
+		teamTrades.addAll(preSeasonTradeService.getTradesForTeam(team));
+		teamTrades.addAll(regularSeasonTradeService.getTradesForTeam(team));
+		return teamTrades;
 	}
 
 	public Playoff getPlayoff() {

@@ -61,4 +61,9 @@ public class PreSeasonTradeService extends TradeService {
 	protected boolean isSeasonTrade() {
 		return false;
 	}
+
+	@Override
+	public ArrayList<Trade> getTrades() {
+		return new ArrayList<Trade>(preSeasonTrades);
+	}
 }
