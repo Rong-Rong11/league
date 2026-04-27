@@ -12,7 +12,7 @@ import data.sport.setup.Game;
 import data.sport.setup.GameContext;
 import data.sport.setup.PlayoffSeries;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import process.visitor.marketsize.CalculateGamePopularityVisitor;
@@ -91,8 +91,8 @@ public class CalendarUtility {
 		score += awayMedia.getPrestigeModifier() * 20;
 		score += awayMedia.getFanBaseModifier() * 10;
 
-		EconomicProfil homeEconomicProfile = home.getTeamFinance().getStructure().getEconomicProfil();
-		EconomicProfil awayEconomicProfile = away.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile homeEconomicProfile = home.getTeamFinance().getStructure().getEconomicProfile();
+		EconomicProfile awayEconomicProfile = away.getTeamFinance().getStructure().getEconomicProfile();
 
 		score += homeEconomicProfile.getFanLoyalty() * 15;
 		score += homeEconomicProfile.getHistoricalPrestige() * 10;

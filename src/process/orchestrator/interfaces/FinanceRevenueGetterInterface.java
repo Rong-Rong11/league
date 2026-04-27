@@ -1,4 +1,4 @@
-package process.orchestrator.interf;
+package process.orchestrator.interfaces;
 
 public interface FinanceRevenueGetterInterface {
 

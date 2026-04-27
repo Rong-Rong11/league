@@ -6,7 +6,7 @@ import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.team.Stadium;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
 import log.LoggerUtility;
@@ -39,7 +39,7 @@ public class GameTicketPriceCalculator {
 		}
 		MarketSize marketSize = homeTeam.getTeamFinance().getStructure().getMarketSize();
 		MediaMarket mediaMarket = homeTeam.getTeamFinance().getStructure().getMediaMarket();
-		EconomicProfil economicProfil = homeTeam.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = homeTeam.getTeamFinance().getStructure().getEconomicProfile();
 		double teamValueFactor = FinanceUtility.getNormalizedTeamValue(homeTeam);
 		logger.trace("Calculating ticket price for "
 				+ homeTeam.getName()
@@ -62,8 +62,8 @@ public class GameTicketPriceCalculator {
 		}
 
 		price *= (1 + mediaMarket.getPricingPowerModifier() * 0.09);
-		price *= (1 + economicProfil.getHistoricalPrestige() * 0.04);
-		price *= (1 - economicProfil.getPriceElasticity() * 0.18);
+		price *= (1 + economicProfile.getHistoricalPrestige() * 0.04);
+		price *= (1 - economicProfile.getPriceElasticity() * 0.18);
 		price *= (1 + teamValueFactor * 0.05);
 		logger.trace("Ticket price after market and economic modifiers is " + price);
 		double bonusRate = bonusProvider.getTicketPriceBonusRate(game, homeTeam, attendees, popularityRate);

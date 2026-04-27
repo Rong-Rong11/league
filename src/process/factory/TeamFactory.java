@@ -36,19 +36,19 @@ public class TeamFactory {
 		logger.debug("Creating team " + teamName);
 		String rivalTeamName = TeamFactory.checkRivalTeam(data[11]);
 		double teamPopularity = Float.valueOf(data[12]).floatValue();
-		FinancialPolicy financialProfil = TeamUtility.randomFinancialProfil();
+		FinancialPolicy financialPolicy = TeamUtility.randomFinancialPolicy();
 		MarketSize marketSize = TeamUtility.randomMarketSize();
 		Budget budget = new Budget(0.0);
 		logger.debug("Team finance base data generated for "
 				+ teamName
 				+ " with policy "
-				+ financialProfil.getClass().getSimpleName()
+				+ financialPolicy.getClass().getSimpleName()
 				+ " and market size "
 				+ marketSize.getClass().getSimpleName());
 
-		TeamTransferStrategy teamTransferStrategy = financialProfil
+		TeamTransferStrategy teamTransferStrategy = financialPolicy
 				.accept(new ChooseTransferStrategyVisitor(rivalTeamName));
-		TeamFinance teamFinance = new TeamFinance(financialProfil, budget, marketSize, teamTransferStrategy);
+		TeamFinance teamFinance = new TeamFinance(financialPolicy, budget, marketSize, teamTransferStrategy);
 		String stadiumName = data[33];
 		Stadium stadium = new Stadium(stadiumName, 0.0, 0);
 		Team team = new Team(teamName, rivalTeamName, teamPopularity, teamFinance, stadium);

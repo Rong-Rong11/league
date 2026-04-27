@@ -5,20 +5,20 @@ import data.team.finance.transfer.TeamTransferStrategy;
 
 public class TeamFinanceBehavior {
 
-	private FinancialPolicy financialProfil;
+	private FinancialPolicy financialPolicy;
 	private TeamTransferStrategy teamTransferStrategy;
 
-	public TeamFinanceBehavior(FinancialPolicy financialProfil, TeamTransferStrategy teamTransferStrategy) {
-		this.financialProfil = financialProfil;
+	public TeamFinanceBehavior(FinancialPolicy financialPolicy, TeamTransferStrategy teamTransferStrategy) {
+		this.financialPolicy = financialPolicy;
 		this.teamTransferStrategy = teamTransferStrategy;
 	}
 
-	public FinancialPolicy getFinancialProfil() {
-		return financialProfil;
+	public FinancialPolicy getFinancialPolicy() {
+		return financialPolicy;
 	}
 
-	public void setFinancialProfil(FinancialPolicy financialProfil) {
-		this.financialProfil = financialProfil;
+	public void setFinancialPolicy(FinancialPolicy financialPolicy) {
+		this.financialPolicy = financialPolicy;
 	}
 
 	public TeamTransferStrategy getTeamTransferStrategy() {

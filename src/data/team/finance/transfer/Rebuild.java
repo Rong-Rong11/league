@@ -13,37 +13,31 @@ public class Rebuild
 
 	@Override
 	public boolean isAllIn() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isBalanced() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isRebuild() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isSalaryDump() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isSmallAdjust() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isSuperstarBuild() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

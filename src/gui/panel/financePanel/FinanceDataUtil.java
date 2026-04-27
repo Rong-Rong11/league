@@ -16,7 +16,7 @@ import data.team.Team;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.MonthNavigatorPanel;
 import gui.panel.common.PlayerDisplayUtil;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public final class FinanceDataUtil {
 

@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import log.LoggerUtility;
 
 public class SecurityCostCalculator {
@@ -28,7 +28,7 @@ public class SecurityCostCalculator {
 			logger.warn("Skipping security cost calculation because game stat is null");
 			return;
 		}
-		EconomicProfil economicProfil = homeTeam.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = homeTeam.getTeamFinance().getStructure().getEconomicProfile();
 		logger.trace("Calculating security costs for " + homeTeam.getName() + " with attendees " + attendees);
 
 		double costPerFan = 5.5;
@@ -40,11 +40,11 @@ public class SecurityCostCalculator {
 			modifier += 0.30;
 		}
 
-		if (economicProfil.getFanLoyalty() > 0.5) {
+		if (economicProfile.getFanLoyalty() > 0.5) {
 			logger.trace("Applying loyal fanbase security modifier");
 			modifier += 0.05;
 		}
-		modifier += economicProfil.getFanLoyalty() * 0.18;
+		modifier += economicProfile.getFanLoyalty() * 0.18;
 		logger.trace("Security modifier after fan loyalty is " + modifier);
 		double bonusRate = bonusProvider.getSecurityBonusRate(game, homeTeam, attendees);
 		modifier += bonusRate;

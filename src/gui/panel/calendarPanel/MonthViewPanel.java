@@ -26,7 +26,7 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 import process.utility.CalendarUtility;
 import gui.utility.TeamDisplayUtility;
 

@@ -2,24 +2,31 @@ package gui.dashboard;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.ThemeAware;
 
 public class LoadingDashboard extends JPanel implements ThemeAware {
 	private static final String DEFAULT_SUBTITLE = "Preparation du calendrier, des matchs et des finances...";
-	private static final int STEP_DELAY_MS = 80;
-	private static final int FINAL_DELAY_MS = 120;
+	private static final int STEP_DELAY_MS = 16;
+	private static final double MIN_PROGRESS_STEP = 0.35;
+	private static final double PROGRESS_CATCHUP_FACTOR = 0.18;
 
 	private JLabel titleLabel;
 	private JLabel subtitleLabel;
 	private JProgressBar progressBar;
+	private Timer loadingTimer;
+	private LoadingPhase[] loadingPhases;
+	private int loadingPhaseIndex;
+	private double currentProgress;
 
 	public LoadingDashboard() {
 		create();
@@ -81,8 +88,13 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 	}
 
 	public void startLoadingSequence(LoadingSequenceHandler handler) {
-		Thread loadingThread = new Thread(new LoadingSequenceWorker(handler), "loading-sequence");
-		loadingThread.start();
+		stopLoadingTimer();
+		reset();
+		loadingPhases = buildLoadingPhases(handler);
+		loadingPhaseIndex = 0;
+		currentProgress = 0;
+		loadingTimer = new Timer(STEP_DELAY_MS, new LoadingTimerAction());
+		loadingTimer.start();
 	}
 
 	public interface LoadingSequenceHandler {
@@ -93,88 +105,86 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 		void finishLoading();
 	}
 
-	private class LoadingSequenceWorker implements Runnable {
-		private LoadingSequenceHandler handler;
-
-		private LoadingSequenceWorker(LoadingSequenceHandler handler) {
-			this.handler = handler;
-		}
-
-		@Override
-		public void run() {
-			try {
-				runUiStep(0, DEFAULT_SUBTITLE);
-				advanceStep(8, "Preparation de la saison...");
-				advanceStep(18, "Verification des donnees...");
-				advanceStep(30, "Organisation de la saison...");
-
-				runUiStep(42, "Initialisation du calendrier et des finances...");
-				runUiAction(new SeasonInitializationAction(handler));
-				advanceStep(58, "Calendrier pret...");
-				advanceStep(70, "Preparation des tableaux de bord...");
-
-				runUiStep(82, "Chargement des matchs et des tableaux de bord...");
-				runUiAction(new MatchLoadingAction(handler));
-				advanceStep(90, "Chargement du premier jour...");
-				advanceStep(96, "Finalisation de l ouverture...");
-				runUiStep(100, "Ouverture de la simulation...");
-				pause(FINAL_DELAY_MS);
-				runUiAction(new FinishLoadingAction(handler));
-			} catch (InterruptedException exception) {
-				Thread.currentThread().interrupt();
-			}
-		}
+	private LoadingPhase[] buildLoadingPhases(LoadingSequenceHandler handler) {
+		return new LoadingPhase[] {
+				new LoadingPhase(8, "Preparation de la saison...", null),
+				new LoadingPhase(18, "Verification des donnees...", null),
+				new LoadingPhase(30, "Organisation de la saison...", null),
+				new LoadingPhase(42, "Initialisation du calendrier et des finances...", new InitializeSeasonTask(handler)),
+				new LoadingPhase(58, "Calendrier pret...", null),
+				new LoadingPhase(70, "Preparation des tableaux de bord...", null),
+				new LoadingPhase(82, "Chargement des matchs et des tableaux de bord...", new LoadMatchesTask(handler)),
+				new LoadingPhase(90, "Chargement du premier jour...", null),
+				new LoadingPhase(96, "Finalisation de l ouverture...", null),
+				new LoadingPhase(100, "Ouverture de la simulation...", new FinishLoadingTask(handler))
+		};
 	}
 
-	private void advanceStep(int progress, String text) throws InterruptedException {
-		runUiStep(progress, text);
-		pause(STEP_DELAY_MS);
-	}
-
-	private void runUiStep(int progress, String text) {
-		runUiAction(new ProgressUpdateAction(progress, text));
-	}
-
-	private void runUiAction(Runnable action) {
-		if (action == null) {
+	private void applyNextStep() {
+		if (loadingPhases == null || loadingPhaseIndex >= loadingPhases.length) {
+			stopLoadingTimer();
 			return;
 		}
-		try {
-			if (SwingUtilities.isEventDispatchThread()) {
-				action.run();
-				return;
-			}
-			SwingUtilities.invokeAndWait(action);
-		} catch (InterruptedException exception) {
-			Thread.currentThread().interrupt();
-		} catch (Exception exception) {
-			throw new IllegalStateException(exception);
+
+		LoadingPhase phase = loadingPhases[loadingPhaseIndex];
+		currentProgress = nextProgressValue(currentProgress, phase.targetProgress);
+		setProgress((int) Math.round(currentProgress), phase.text);
+
+		if (currentProgress + 0.001 < phase.targetProgress) {
+			return;
+		}
+
+		currentProgress = phase.targetProgress;
+		setProgress(phase.targetProgress, phase.text);
+		if (phase.action != null) {
+			phase.action.run();
+		}
+
+		loadingPhaseIndex++;
+		if (loadingPhaseIndex >= loadingPhases.length) {
+			stopLoadingTimer();
 		}
 	}
 
-	private void pause(int delayMs) throws InterruptedException {
-		Thread.sleep(delayMs);
+	private double nextProgressValue(double currentValue, int targetValue) {
+		double remaining = targetValue - currentValue;
+		if (remaining <= 0) {
+			return targetValue;
+		}
+		double step = Math.max(MIN_PROGRESS_STEP, remaining * PROGRESS_CATCHUP_FACTOR);
+		return Math.min(currentValue + step, targetValue);
 	}
 
-	private class ProgressUpdateAction implements Runnable {
-		private int progress;
-		private String text;
-
-		private ProgressUpdateAction(int progress, String text) {
-			this.progress = progress;
-			this.text = text;
+	private void stopLoadingTimer() {
+		if (loadingTimer != null) {
+			loadingTimer.stop();
+			loadingTimer = null;
 		}
+	}
 
+	private class LoadingTimerAction implements ActionListener {
 		@Override
-		public void run() {
-			setProgress(progress, text);
+		public void actionPerformed(ActionEvent e) {
+			applyNextStep();
 		}
 	}
 
-	private class SeasonInitializationAction implements Runnable {
+	private class LoadingPhase {
+		private int targetProgress;
+		private String text;
+		private Runnable action;
+
+		private LoadingPhase(int targetProgress, String text, Runnable action) {
+			this.targetProgress = targetProgress;
+			this.text = text;
+			this.action = action;
+		}
+	}
+
+	private class InitializeSeasonTask implements Runnable {
 		private LoadingSequenceHandler handler;
 
-		private SeasonInitializationAction(LoadingSequenceHandler handler) {
+		private InitializeSeasonTask(LoadingSequenceHandler handler) {
 			this.handler = handler;
 		}
 
@@ -186,10 +196,10 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 		}
 	}
 
-	private class MatchLoadingAction implements Runnable {
+	private class LoadMatchesTask implements Runnable {
 		private LoadingSequenceHandler handler;
 
-		private MatchLoadingAction(LoadingSequenceHandler handler) {
+		private LoadMatchesTask(LoadingSequenceHandler handler) {
 			this.handler = handler;
 		}
 
@@ -201,10 +211,10 @@ public class LoadingDashboard extends JPanel implements ThemeAware {
 		}
 	}
 
-	private class FinishLoadingAction implements Runnable {
+	private class FinishLoadingTask implements Runnable {
 		private LoadingSequenceHandler handler;
 
-		private FinishLoadingAction(LoadingSequenceHandler handler) {
+		private FinishLoadingTask(LoadingSequenceHandler handler) {
 			this.handler = handler;
 		}
 

@@ -5,7 +5,7 @@ import data.team.finance.financialpolicy.AmbitiousPolicy;
 import data.team.finance.financialpolicy.BalancedPolicy;
 import data.team.finance.financialpolicy.ThriftyPolicy;
 
-public class RiskBudgetVisitor implements FinancialProfilVisitor<Boolean> {
+public class RiskBudgetVisitor implements FinancialPolicyVisitor<Boolean> {
 
 	private Budget budget;
 
@@ -16,7 +16,6 @@ public class RiskBudgetVisitor implements FinancialProfilVisitor<Boolean> {
 
 	@Override
 	public Boolean visit(ThriftyPolicy thriftyProfil) {
-		// TODO Auto-generated method stub
 		return budget.getRemainingAmount() < budget.getInitialAmount() * 0.95;
 	}
 

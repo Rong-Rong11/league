@@ -1,20 +1,18 @@
-package data.team.finance.economicprofil;
+package data.team.finance.economicprofile;
 
-import data.team.finance.mediamarket.MediaMarket;
-
-public class EconomicProfil {
+public class EconomicProfile {
 	private double fanLoyalty = 0.5;
 	private double priceElasticity = 0.5;
 	private double commercialAggressiveness = 0.5;
 	private double historicalPrestige = 0.5;
 	private double ownerDeficitTolerance = 0.5;
 
-	public EconomicProfil() {
+	public EconomicProfile() {
 
 	}
 
-	public EconomicProfil(double fanLoyalty, double priceElasticity, double commercialAggressiveness,
-			double historicalPrestige, double ownerDeficitTolerance, MediaMarket mediaMarket) {
+	public EconomicProfile(double fanLoyalty, double priceElasticity, double commercialAggressiveness,
+			double historicalPrestige, double ownerDeficitTolerance) {
 		super();
 		this.fanLoyalty = fanLoyalty;
 		this.priceElasticity = priceElasticity;

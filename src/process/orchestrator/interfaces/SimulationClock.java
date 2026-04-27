@@ -1,4 +1,4 @@
-package process.orchestrator.interf;
+package process.orchestrator.interfaces;
 
 import java.time.LocalDate;
 import java.time.Month;

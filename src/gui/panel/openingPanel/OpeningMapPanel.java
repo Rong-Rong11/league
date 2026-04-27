@@ -1,4 +1,4 @@
-package gui.panel.openningPanel;
+package gui.panel.openingPanel;
 
 import gui.panel.common.TeamMapPanel;
 

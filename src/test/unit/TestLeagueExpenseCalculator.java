@@ -17,7 +17,7 @@ import data.league.PlayoffRound;
 import data.sport.setup.Game;
 import data.sport.setup.PlayoffSeries;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.marketsize.LargeSize;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.marketsize.MediumSize;
@@ -232,10 +232,10 @@ public class TestLeagueExpenseCalculator {
 			double mediaPrestigeModifier, double businessOpportunityModifier, double pricingPowerModifier) {
 		for (Team team : league.getAllTeam()) {
 			team.getTeamFinance().getStructure().setMarketSize(marketSize);
-			EconomicProfil economicProfil = team.getTeamFinance().getStructure().getEconomicProfil();
-			economicProfil.setFanLoyalty(fanLoyalty);
-			economicProfil.setCommercialAggressiveness(commercialAggressiveness);
-			economicProfil.setHistoricalPrestige(historicalPrestige);
+			EconomicProfile economicProfile = team.getTeamFinance().getStructure().getEconomicProfile();
+			economicProfile.setFanLoyalty(fanLoyalty);
+			economicProfile.setCommercialAggressiveness(commercialAggressiveness);
+			economicProfile.setHistoricalPrestige(historicalPrestige);
 
 			MediaMarket mediaMarket = team.getTeamFinance().getStructure().getMediaMarket();
 			mediaMarket.setFanBaseModifier(fanBaseModifier);

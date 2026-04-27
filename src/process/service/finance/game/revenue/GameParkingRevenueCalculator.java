@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.mediamarket.MediaMarket;
 import log.LoggerUtility;
 
@@ -34,7 +34,7 @@ public class GameParkingRevenueCalculator {
 			return;
 		}
 		MediaMarket mediaMarket = homeTeam.getTeamFinance().getStructure().getMediaMarket();
-		EconomicProfil economicProfil = homeTeam.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = homeTeam.getTeamFinance().getStructure().getEconomicProfile();
 		logger.trace("Calculating parking revenue for " + homeTeam.getName() + " with attendees " + attendees);
 
 		double parkingRate = 0.35;
@@ -52,8 +52,8 @@ public class GameParkingRevenueCalculator {
 			logger.trace("Applied media market parking price modifier");
 		}
 
-		if (economicProfil != null) {
-			parkingRate += economicProfil.getFanLoyalty() * 0.015;
+		if (economicProfile != null) {
+			parkingRate += economicProfile.getFanLoyalty() * 0.015;
 			logger.trace("Applied fan loyalty parking rate modifier");
 		}
 

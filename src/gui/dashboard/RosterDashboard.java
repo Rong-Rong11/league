@@ -27,7 +27,7 @@ import gui.panel.common.ThemeAware;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamLogoPanel;
 import gui.panel.mapPanel.effectifPanel.teamPanel.TeamRosterPanel;
 import gui.panel.mapPanel.effectifPanel.tradePanel.TeamTradePanel;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class RosterDashboard extends JPanel implements ThemeAware, RefreshableDashboard {
 	private static final int DASHBOARD_SPACING = 16;

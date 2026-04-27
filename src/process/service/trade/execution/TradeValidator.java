@@ -55,7 +55,7 @@ public class TradeValidator {
 			return false;
 		}
 
-		FinancialPolicy financialProfil = team.getTeamFinance().getBehavior().getFinancialProfil();
+		FinancialPolicy financialPolicy = team.getTeamFinance().getBehavior().getFinancialPolicy();
 
 		if (incomingPayroll < salaryCap) {
 			logger.trace("Payroll accepted for " + team.getName() + " because incoming payroll is below salary cap");
@@ -72,7 +72,7 @@ public class TradeValidator {
 				salaryCap,
 				team.getTeamFinance().getStructure().getMarketSize());
 
-		boolean accepted = financialProfil.accept(validateTradeVisitor);
+		boolean accepted = financialPolicy.accept(validateTradeVisitor);
 
 		logger.trace("Payroll validation for " + team.getName()
 				+ " | outgoing: " + outgoingPayroll
@@ -89,10 +89,10 @@ public class TradeValidator {
 			return true;
 		}
 
-		FinancialPolicy financialProfil = team.getTeamFinance().getBehavior().getFinancialProfil();
+		FinancialPolicy financialPolicy = team.getTeamFinance().getBehavior().getFinancialPolicy();
 		Budget budget = team.getTeamFinance().getBudget();
 
-		boolean risk = financialProfil.accept(new RiskBudgetVisitor(budget));
+		boolean risk = financialPolicy.accept(new RiskBudgetVisitor(budget));
 
 		logger.trace("Budget risk for " + team.getName() + ": " + risk);
 

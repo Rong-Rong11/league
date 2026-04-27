@@ -6,7 +6,7 @@ import data.finance.budget.Budget;
 import data.team.Stadium;
 import data.team.Team;
 import data.team.finance.TeamFinance;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.marketsize.MarketSize;
 import data.team.finance.mediamarket.MediaMarket;
@@ -31,10 +31,10 @@ public class FinanceBuilder {
 		Budget budget = team.getTeamFinance().getBudget();
 		TeamFinance teamFinance = team.getTeamFinance();
 
-		EconomicProfil economicProfil = teamFinance.getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = teamFinance.getStructure().getEconomicProfile();
 		MarketSize marketSize = teamFinance.getStructure().getMarketSize();
 		MediaMarket mediaMarket = teamFinance.getStructure().getMediaMarket();
-		FinancialPolicy financialProfil = teamFinance.getBehavior().getFinancialProfil();
+		FinancialPolicy financialPolicy = teamFinance.getBehavior().getFinancialPolicy();
 
 		if (budget == null) {
 			logger.warn("Skipping team finance build because budget is null for team " + team.getName());
@@ -44,7 +44,7 @@ public class FinanceBuilder {
 			logger.warn("Skipping team finance build because market size is null for team " + team.getName());
 			return teamFinance;
 		}
-		if (economicProfil == null) {
+		if (economicProfile == null) {
 			logger.warn("Skipping team finance build because economic profile is null for team " + team.getName());
 			return teamFinance;
 		}
@@ -52,7 +52,7 @@ public class FinanceBuilder {
 			logger.warn("Skipping team finance build because media market is null for team " + team.getName());
 			return teamFinance;
 		}
-		if (financialProfil == null) {
+		if (financialPolicy == null) {
 			logger.warn("Skipping team finance build because financial policy is null for team " + team.getName());
 			return teamFinance;
 		}
@@ -65,16 +65,16 @@ public class FinanceBuilder {
 				+ ", market size "
 				+ marketSize.getClass().getSimpleName()
 				+ " and policy "
-				+ financialProfil.getClass().getSimpleName());
+				+ financialPolicy.getClass().getSimpleName());
 
 		logger.debug("Creating media market configuration");
 		MediaMarketBuilder.createMediaMarket(mediaMarket, marketSize);
 		logger.debug("Building economic profile");
-		EconomicProfileBuilder.build(economicProfil, popularity, mediaMarket, financialProfil,
+		EconomicProfileBuilder.build(economicProfile, popularity, mediaMarket, financialPolicy,
 				teamFinance.getBehavior().getTeamTransferStrategy());
 
 		logger.debug("Calculating initial budget");
-		BudgetBuilder.calculateInitialBudget(budget, marketSize, economicProfil, popularity);
+		BudgetBuilder.calculateInitialBudget(budget, marketSize, economicProfile, popularity);
 		logger.debug("Calculating initial team value");
 		teamFinance.setTeamValue(TeamValueCalculator.calculateInitialTeamValue(team, marketSize, budget));
 		logger.debug("Initializing budget state");

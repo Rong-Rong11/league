@@ -12,7 +12,7 @@ import data.team.finance.transfer.SmallAdjust;
 import data.team.finance.transfer.SuperstarBuild;
 import data.team.finance.transfer.TeamTransferStrategy;
 
-public class ChooseTransferStrategyVisitor implements FinancialProfilVisitor<TeamTransferStrategy> {
+public class ChooseTransferStrategyVisitor implements FinancialPolicyVisitor<TeamTransferStrategy> {
 	private String rivalTeamName;
 
 	public ChooseTransferStrategyVisitor(String rivalTeamName) {
@@ -22,7 +22,6 @@ public class ChooseTransferStrategyVisitor implements FinancialProfilVisitor<Tea
 
 	@Override
 	public TeamTransferStrategy visit(ThriftyPolicy thriftyProfil) {
-		// TODO Auto-generated method stub
 		double random = Math.random();
 		if (!rivalTeamName.equals(TeamConfiguration.NO_RIVAL)) {
 			if (random < 0.2) {
@@ -44,7 +43,6 @@ public class ChooseTransferStrategyVisitor implements FinancialProfilVisitor<Tea
 
 	@Override
 	public TeamTransferStrategy visit(BalancedPolicy balancedProfil) {
-		// TODO Auto-generated method stub
 		double random = Math.random();
 		if (!rivalTeamName.equals(TeamConfiguration.NO_RIVAL)) {
 			if (random < 0.4) {
@@ -66,7 +64,6 @@ public class ChooseTransferStrategyVisitor implements FinancialProfilVisitor<Tea
 
 	@Override
 	public TeamTransferStrategy visit(AmbitiousPolicy ambitiousProfil) {
-		// TODO Auto-generated method stub
 		double random = Math.random();
 		if (!rivalTeamName.equals(TeamConfiguration.NO_RIVAL)) {
 			if (random < 0.5) {

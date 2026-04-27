@@ -11,7 +11,7 @@ import data.calendar.GameDay;
 import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class WeekViewPanel extends JPanel implements ThemeAware {
 	private static final long serialVersionUID = 1L;

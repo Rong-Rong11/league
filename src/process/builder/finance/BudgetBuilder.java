@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 
 import config.FinanceConfiguration;
 import data.finance.budget.Budget;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.marketsize.MarketSize;
 import log.LoggerUtility;
 import process.visitor.marketsize.CalculateInitialTeamBudgetVisitor;
@@ -12,7 +12,7 @@ import process.visitor.marketsize.CalculateInitialTeamBudgetVisitor;
 public class BudgetBuilder {
 	private static final Logger logger = LoggerUtility.getLogger(BudgetBuilder.class, "text");
 
-	public static void calculateInitialBudget(Budget budget, MarketSize marketSize, EconomicProfil economicProfil,
+	public static void calculateInitialBudget(Budget budget, MarketSize marketSize, EconomicProfile economicProfile,
 			double popularity) {
 		if (budget == null) {
 			logger.warn("Skipping initial budget calculation because budget is null");
@@ -22,7 +22,7 @@ public class BudgetBuilder {
 			logger.warn("Skipping initial budget calculation because market size is null");
 			return;
 		}
-		if (economicProfil == null) {
+		if (economicProfile == null) {
 			logger.warn("Skipping initial budget calculation because economic profile is null");
 			return;
 		}
@@ -33,10 +33,10 @@ public class BudgetBuilder {
 				+ ", market size "
 				+ marketSize.getClass().getSimpleName()
 				+ " and profile "
-				+ economicProfil.getClass().getSimpleName());
+				+ economicProfile.getClass().getSimpleName());
 		calculateBaseBudget(budget, popularity);
 		CalculateInitialTeamBudgetVisitor calculateInitialTeamBudgetVisitor = new CalculateInitialTeamBudgetVisitor(
-				budget.getInitialAmount(), popularity, economicProfil);
+				budget.getInitialAmount(), popularity, economicProfile);
 		double initialAmount = marketSize.accept(calculateInitialTeamBudgetVisitor);
 		budget.setInitialAmount(initialAmount);
 		budget.setRemainingAmount(initialAmount);

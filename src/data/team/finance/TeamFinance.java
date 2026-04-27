@@ -19,10 +19,10 @@ public class TeamFinance {
 	private double luxuryTaxPaid;
 	private int transferMade = 0;
 
-	public TeamFinance(FinancialPolicy financialProfil, Budget budget, MarketSize marketSize,
+	public TeamFinance(FinancialPolicy financialPolicy, Budget budget, MarketSize marketSize,
 			TeamTransferStrategy teamTransferStrategy) {
 		this.structure = new TeamFinanceStructure(marketSize);
-		this.behavior = new TeamFinanceBehavior(financialProfil, teamTransferStrategy);
+		this.behavior = new TeamFinanceBehavior(financialPolicy, teamTransferStrategy);
 		this.budget = budget;
 		this.formerPayroll = 0.0;
 		this.currentPayroll = 0;

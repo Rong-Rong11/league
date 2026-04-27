@@ -2,7 +2,7 @@ package process.builder.finance;
 
 import org.apache.log4j.Logger;
 
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import data.team.finance.financialpolicy.FinancialPolicy;
 import data.team.finance.mediamarket.MediaMarket;
 import data.team.finance.transfer.TeamTransferStrategy;
@@ -11,11 +11,11 @@ import log.LoggerUtility;
 public class EconomicProfileBuilder {
 	private static final Logger logger = LoggerUtility.getLogger(EconomicProfileBuilder.class, "text");
 
-	public static void build(EconomicProfil economicProfil, double teamPopularity,
+	public static void build(EconomicProfile economicProfile, double teamPopularity,
 			MediaMarket mediaMarket,
-			FinancialPolicy financialProfil,
+			FinancialPolicy financialPolicy,
 			TeamTransferStrategy transferStrategy) {
-		if (economicProfil == null) {
+		if (economicProfile == null) {
 			logger.warn("Skipping economic profile build because economic profile is null");
 			return;
 		}
@@ -23,7 +23,7 @@ public class EconomicProfileBuilder {
 			logger.warn("Skipping economic profile build because media market is null");
 			return;
 		}
-		if (financialProfil == null) {
+		if (financialPolicy == null) {
 			logger.warn("Skipping economic profile build because financial policy is null");
 			return;
 		}
@@ -37,7 +37,7 @@ public class EconomicProfileBuilder {
 				+ ", media market "
 				+ mediaMarket.getClass().getSimpleName()
 				+ " and policy "
-				+ financialProfil.getClass().getSimpleName());
+				+ financialPolicy.getClass().getSimpleName());
 
 		double historicalPrestige = interval(0.25 + teamPopularity / 100.0 * 0.6);
 
@@ -51,13 +51,13 @@ public class EconomicProfileBuilder {
 				0.45 + mediaMarket.getBusinessOpportunityModifier() * 1.15);
 
 		double ownerDeficitTolerance = interval(
-				0.4 + getFinancialModifier(financialProfil));
+				0.4 + getFinancialModifier(financialPolicy));
 
-		economicProfil.setFanLoyalty(fanLoyalty);
-		economicProfil.setPriceElasticity(priceElasticity);
-		economicProfil.setCommercialAggressiveness(commercialAggressiveness);
-		economicProfil.setHistoricalPrestige(historicalPrestige);
-		economicProfil.setOwnerDeficitTolerance(ownerDeficitTolerance);
+		economicProfile.setFanLoyalty(fanLoyalty);
+		economicProfile.setPriceElasticity(priceElasticity);
+		economicProfile.setCommercialAggressiveness(commercialAggressiveness);
+		economicProfile.setHistoricalPrestige(historicalPrestige);
+		economicProfile.setOwnerDeficitTolerance(ownerDeficitTolerance);
 		logger.debug("Economic profile built with fan loyalty "
 				+ fanLoyalty
 				+ ", price elasticity "
@@ -71,8 +71,8 @@ public class EconomicProfileBuilder {
 		logger.info("Economic profile build completed");
 	}
 
-	private static double getFinancialModifier(FinancialPolicy financialProfil) {
-		logger.trace("Applying financial modifier for " + financialProfil.getClass().getSimpleName());
+	private static double getFinancialModifier(FinancialPolicy financialPolicy) {
+		logger.trace("Applying financial modifier for " + financialPolicy.getClass().getSimpleName());
 		return 0.2; // simple version (a ameliorer plus tard)
 	}
 

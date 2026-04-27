@@ -22,12 +22,13 @@ import gui.panel.common.DashboardPanelUtil;
 import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.MonthNavigatorPanel;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 
-	private static final int DASHBOARD_SPACING = 10;
-	private static final int RIGHT_COLUMN_WIDTH = 280;
+	static final int DASHBOARD_SPACING = 10;
+	static final int RIGHT_COLUMN_WIDTH = 280;
+	static final int RIGHT_COLUMN_SECTION_SPACING = 10;
 
 	private boolean updatingSelectors;
 	private final GUIInterface guiInterface;
@@ -38,19 +39,9 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 	private final JLabel selectedExpenseValueLabel;
 	private final JLabel selectedNetValueLabel;
 	private final JLabel luxuryTaxValueLabel;
-	private final JLabel profileValueLabel;
-	private final JLabel marketValueLabel;
-	private final JLabel strategyValueLabel;
-	private final JLabel ticketPriceValueLabel;
-	private final JLabel capacityValueLabel;
-	private final JLabel fanLoyaltyValueLabel;
-	private final JLabel commercialAggressivenessValueLabel;
-	private final JLabel historicalPrestigeValueLabel;
-	private final JLabel fanBaseValueLabel;
-	private final JLabel businessOpportunityValueLabel;
-	private final JLabel pricingPowerValueLabel;
-	private final JPanel revenueMetricsPanel;
-	private final JPanel expenseMetricsPanel;
+	private final TeamFinanceProfilePanel profilePanel;
+	private final TeamFinanceBreakdownPanel revenuePanel;
+	private final TeamFinanceBreakdownPanel expensePanel;
 	private final DefaultCategoryDataset revenueDataset;
 	private final DefaultCategoryDataset expenseDataset;
 	private final DefaultCategoryDataset historyDataset;
@@ -65,19 +56,9 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		selectedExpenseValueLabel = FinanceViewFactory.metricLabel();
 		selectedNetValueLabel = FinanceViewFactory.metricLabel();
 		luxuryTaxValueLabel = FinanceViewFactory.metricLabel();
-		profileValueLabel = FinanceViewFactory.infoLabel();
-		marketValueLabel = FinanceViewFactory.infoLabel();
-		strategyValueLabel = FinanceViewFactory.infoLabel();
-		ticketPriceValueLabel = FinanceViewFactory.infoLabel();
-		capacityValueLabel = FinanceViewFactory.infoLabel();
-		fanLoyaltyValueLabel = FinanceViewFactory.infoLabel();
-		commercialAggressivenessValueLabel = FinanceViewFactory.infoLabel();
-		historicalPrestigeValueLabel = FinanceViewFactory.infoLabel();
-		fanBaseValueLabel = FinanceViewFactory.infoLabel();
-		businessOpportunityValueLabel = FinanceViewFactory.infoLabel();
-		pricingPowerValueLabel = FinanceViewFactory.infoLabel();
-		revenueMetricsPanel = FinanceViewFactory.metricListPanel();
-		expenseMetricsPanel = FinanceViewFactory.metricListPanel();
+		profilePanel = new TeamFinanceProfilePanel();
+		revenuePanel = new TeamFinanceBreakdownPanel("Revenus", "Aucun", DashboardPanelUtil.REVENUE_COLOR);
+		expensePanel = new TeamFinanceBreakdownPanel("Depenses", "Aucune", DashboardPanelUtil.EXPENSE_COLOR);
 		revenueDataset = new DefaultCategoryDataset();
 		expenseDataset = new DefaultCategoryDataset();
 		historyDataset = new DefaultCategoryDataset();
@@ -109,15 +90,15 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 
 		JPanel bottomRow = new JPanel(new GridLayout(1, 2, DASHBOARD_SPACING, 0));
 		bottomRow.setOpaque(false);
-		bottomRow.add(new BuildBox("REVENUS", "Mois selectionne", buildRevenuePanel()));
-		bottomRow.add(new BuildBox("DEPENSES", "Mois selectionne", buildExpensePanel()));
+		bottomRow.add(new BuildBox("REVENUS", "Mois selectionne", revenuePanel));
+		bottomRow.add(new BuildBox("DEPENSES", "Mois selectionne", expensePanel));
 		centerColumn.add(FinanceViewFactory.panelWithHeight(bottomRow, 280), BorderLayout.CENTER);
 		return centerColumn;
 	}
 
 	private JPanel buildRightColumn() {
 		JPanel column = DashboardPanelUtil.createRightColumn(RIGHT_COLUMN_WIDTH, 12);
-		column.add(new BuildBox("INFOS STABLES", "Profil et infrastructure", buildStaticInfoPanel()), BorderLayout.NORTH);
+		column.add(new BuildBox("INFOS STABLES", "Profil et infrastructure", profilePanel), BorderLayout.NORTH);
 		return column;
 	}
 
@@ -130,74 +111,6 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		summaryPanel.add(FinanceViewFactory.metricCard("Net mois", selectedNetValueLabel));
 		summaryPanel.add(FinanceViewFactory.metricCard("Mois", monthSelector));
 		return summaryPanel;
-	}
-
-	private JPanel buildProfilePanel() {
-		JPanel panel = FinanceViewFactory.infoPanel();
-		panel.add(FinanceViewFactory.infoRow("Politique financiere", profileValueLabel));
-		panel.add(Box.createVerticalStrut(10));
-
-		panel.add(FinanceViewFactory.infoRow("Taille du marche", marketValueLabel));
-		panel.add(Box.createVerticalStrut(10));
-
-		panel.add(FinanceViewFactory.infoRow("Fidelite des fans", fanLoyaltyValueLabel));
-		panel.add(Box.createVerticalStrut(10));
-
-		panel.add(FinanceViewFactory.infoRow("Agressivite commerciale", commercialAggressivenessValueLabel));
-		panel.add(Box.createVerticalStrut(10));
-
-		panel.add(FinanceViewFactory.infoRow("Prestige historique", historicalPrestigeValueLabel));
-		panel.add(Box.createVerticalStrut(10));
-
-		panel.add(FinanceViewFactory.infoRow("Base de fans", fanBaseValueLabel));
-		panel.add(Box.createVerticalStrut(10));
-
-		panel.add(FinanceViewFactory.infoRow("Opportunites commerciales", businessOpportunityValueLabel));
-		panel.add(Box.createVerticalStrut(10));
-
-		panel.add(FinanceViewFactory.infoRow("Pouvoir de prix", pricingPowerValueLabel));
-		panel.add(Box.createVerticalStrut(10));
-
-		panel.add(FinanceViewFactory.infoRow("Strategie", strategyValueLabel));
-		panel.add(Box.createVerticalStrut(10));
-
-		panel.add(FinanceViewFactory.infoRow("Taxe de luxe payee", luxuryTaxValueLabel));
-
-		return panel;
-	}
-
-	private JPanel buildRevenuePanel() {
-		JPanel panel = new JPanel(new BorderLayout(0, DASHBOARD_SPACING));
-		panel.setOpaque(false);
-		panel.add(revenueMetricsPanel, BorderLayout.NORTH);
-		panel.add(FinanceViewFactory.financeBarChart(revenueDataset, DashboardPanelUtil.REVENUE_COLOR),
-				BorderLayout.CENTER);
-		return panel;
-	}
-
-	private JPanel buildExpensePanel() {
-		JPanel panel = new JPanel(new BorderLayout(0, DASHBOARD_SPACING));
-		panel.setOpaque(false);
-		panel.add(expenseMetricsPanel, BorderLayout.NORTH);
-		panel.add(FinanceViewFactory.financeBarChart(expenseDataset, DashboardPanelUtil.EXPENSE_COLOR),
-				BorderLayout.CENTER);
-		return panel;
-	}
-
-	private JPanel buildInfrastructurePanel() {
-		JPanel panel = FinanceViewFactory.infoPanel();
-		panel.add(FinanceViewFactory.infoRow("Capacite", capacityValueLabel));
-		panel.add(Box.createVerticalStrut(10));
-		panel.add(FinanceViewFactory.infoRow("Prix billet", ticketPriceValueLabel));
-		return panel;
-	}
-
-	private JPanel buildStaticInfoPanel() {
-		JPanel panel = new JPanel(new GridLayout(2, 1, 0, DASHBOARD_SPACING));
-		panel.setOpaque(false);
-		panel.add(buildProfilePanel());
-		panel.add(buildInfrastructurePanel());
-		return panel;
 	}
 
 	private void actions() {
@@ -231,30 +144,12 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		selectedRevenueValueLabel.setText(FinanceDataUtil.formatMoney(selectedRevenue));
 		selectedExpenseValueLabel.setText(FinanceDataUtil.formatMoney(selectedExpense));
 		selectedNetValueLabel.setText(FinanceDataUtil.formatMoney(selectedNet));
-		luxuryTaxValueLabel.setText(FinanceDataUtil.formatMoney(getLuxuryTaxPaid(team)));
-		profileValueLabel.setText(FinanceDataUtil.formatPolicy(getFinancialPolicy(team)));
-		marketValueLabel.setText(FinanceDataUtil.formatMarket(getMarketSize(team)));
-		strategyValueLabel.setText(FinanceDataUtil.formatStrategy(getTransferStrategy(team)));
-		fanBaseValueLabel.setText(formatCoefficient(getFanBase(team)));
-		businessOpportunityValueLabel.setText(formatCoefficient(getBusinessOpportunity(team)));
-		pricingPowerValueLabel.setText(formatCoefficient(getPricingPower(team)));
-		ticketPriceValueLabel
-				.setText(team.getStadium() == null ? "-" : FinanceDataUtil.formatMoney(team.getStadium().getTicketPrice()));
-		capacityValueLabel.setText(team.getStadium() == null ? "-" : String.valueOf(team.getStadium().getCapacity()));
-		fanLoyaltyValueLabel.setText(formatCoefficient(getFanLoyalty(team)));
-		commercialAggressivenessValueLabel.setText(formatCoefficient(getCommercialAggressiveness(team)));
-		historicalPrestigeValueLabel.setText(formatCoefficient(getHistoricalPrestige(team)));
+		profilePanel.updateForTeam(team, this);
 
 		budgetValueLabel.setForeground(DashboardPanelUtil.NEUTRAL_ACCENT_COLOR);
 		FinanceDataUtil.setRevenueColor(selectedRevenueValueLabel);
 		FinanceDataUtil.setExpenseColor(selectedExpenseValueLabel);
 		FinanceDataUtil.setAmountColor(selectedNetValueLabel, selectedNet);
-		luxuryTaxValueLabel.setForeground(DashboardPanelUtil.EXPENSE_COLOR);
-		FinanceDataUtil.setPolicyColor(profileValueLabel, profileValueLabel.getText());
-		FinanceDataUtil.setMarketColor(marketValueLabel, marketValueLabel.getText());
-		FinanceDataUtil.setStrategyColor(strategyValueLabel, strategyValueLabel.getText());
-		ticketPriceValueLabel.setForeground(DashboardPanelUtil.REVENUE_COLOR);
-		capacityValueLabel.setForeground(DashboardPanelUtil.POLICY_BALANCED_COLOR);
 
 		rebuildIncomeBreakdown(team, month);
 		rebuildExpenseBreakdown(team, month);
@@ -262,51 +157,14 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 	}
 
 	private void rebuildIncomeBreakdown(Team team, int month) {
-		revenueDataset.clear();
-		revenueMetricsPanel.removeAll();
 		Map<String, Income> incomes = FinanceDataUtil.teamIncomes(team, month);
-		double total = FinanceDataUtil.totalIncome(incomes);
-		revenueMetricsPanel.add(FinanceViewFactory.valueRow("Total revenus", FinanceDataUtil.formatMoney(total),
-				DashboardPanelUtil.REVENUE_COLOR));
-		revenueMetricsPanel.add(Box.createVerticalStrut(8));
-		revenueMetricsPanel.add(FinanceViewFactory.valueRow("Revenus locaux",
-				FinanceDataUtil.formatMoney(FinanceDataUtil.totalLocalIncome(incomes)), DashboardPanelUtil.REVENUE_COLOR));
-
-		if (incomes != null && !incomes.isEmpty()) {
-			for (Income income : incomes.values()) {
-				revenueDataset.addValue(income.getAmount(), "Revenus", FinanceDataUtil.formatTypeName(income.getName()));
-			}
-		} else {
-			revenueDataset.addValue(0.0, "Revenus", "Aucun");
-		}
-
-		revenueMetricsPanel.revalidate();
-		revenueMetricsPanel.repaint();
+		revenuePanel.showIncomeBreakdown(incomes);
 	}
 
 	private void rebuildExpenseBreakdown(Team team, int month) {
-		expenseDataset.clear();
-		expenseMetricsPanel.removeAll();
 		Map<String, Expense> expenses = FinanceDataUtil.teamExpenses(team, month);
-		double total = FinanceDataUtil.totalExpense(expenses);
-		expenseMetricsPanel.add(FinanceViewFactory.valueRow("Total depenses", FinanceDataUtil.formatMoney(total),
-				DashboardPanelUtil.EXPENSE_COLOR));
-		expenseMetricsPanel.add(Box.createVerticalStrut(8));
 		double monthNet = FinanceDataUtil.teamMonthNet(guiInterface, team, month);
-		expenseMetricsPanel.add(FinanceViewFactory.valueRow("Net du mois",
-				FinanceDataUtil.formatMoney(monthNet),
-				DashboardPanelUtil.getValueColorForAmount(monthNet)));
-
-		if (expenses != null && !expenses.isEmpty()) {
-			for (Expense expense : expenses.values()) {
-				expenseDataset.addValue(expense.getAmount(), "Depenses", FinanceDataUtil.formatTypeName(expense.getName()));
-			}
-		} else {
-			expenseDataset.addValue(0.0, "Depenses", "Aucune");
-		}
-
-		expenseMetricsPanel.revalidate();
-		expenseMetricsPanel.repaint();
+		expensePanel.showExpenseBreakdown(expenses, monthNet);
 	}
 
 	private void rebuildHistoryDataset(Team team) {
@@ -343,28 +201,24 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		selectedRevenueValueLabel.setText("Aucun revenu mensuel n'est disponible.");
 		selectedExpenseValueLabel.setText("Aucune depense mensuelle n'est disponible.");
 		selectedNetValueLabel.setText("Aucun resultat mensuel n'est disponible.");
-		luxuryTaxValueLabel.setText("Aucune taxe de luxe n'est disponible.");
-		profileValueLabel.setText("Aucun profil financier n'est disponible.");
-		marketValueLabel.setText("Aucune taille de marche n'est disponible.");
-		strategyValueLabel.setText("Aucune strategie n'est disponible.");
-		fanLoyaltyValueLabel.setText("Aucune fidelite des fans n'est disponible.");
-		commercialAggressivenessValueLabel.setText("Aucune agressivite commerciale n'est disponible.");
-		historicalPrestigeValueLabel.setText("Aucun prestige historique n'est disponible.");
-		fanBaseValueLabel.setText("Aucune base de fans n'est disponible.");
-		businessOpportunityValueLabel.setText("Aucune opportunite commerciale n'est disponible.");
-		pricingPowerValueLabel.setText("Aucun pouvoir de prix n'est disponible.");
-		ticketPriceValueLabel.setText("Aucun prix de billet n'est disponible.");
-		capacityValueLabel.setText("Aucune capacite n'est disponible.");
+		profilePanel.showEmptyState(new String[] {
+				"Aucun profil financier n'est disponible.",
+				"Aucune taille de marche n'est disponible.",
+				"Aucune strategie n'est disponible.",
+				"Aucun prix de billet n'est disponible.",
+				"Aucune capacite n'est disponible.",
+				"Aucune fidelite des fans n'est disponible.",
+				"Aucune agressivite commerciale n'est disponible.",
+				"Aucun prestige historique n'est disponible.",
+				"Aucune base de fans n'est disponible.",
+				"Aucune opportunite commerciale n'est disponible.",
+				"Aucun pouvoir de prix n'est disponible.",
+				"Aucune taxe de luxe n'est disponible."
+		});
 		applyEmptyStateLabels();
-		revenueDataset.clear();
-		expenseDataset.clear();
 		historyDataset.clear();
-		revenueMetricsPanel.removeAll();
-		expenseMetricsPanel.removeAll();
-		revenueMetricsPanel.add(buildEmptyStateMessage("Aucune repartition de revenus n'est disponible."));
-		expenseMetricsPanel.add(buildEmptyStateMessage("Aucune repartition de depenses n'est disponible."));
-		revenueMetricsPanel.revalidate();
-		expenseMetricsPanel.revalidate();
+		revenuePanel.showEmptyState("Aucune repartition de revenus n'est disponible.");
+		expensePanel.showEmptyState("Aucune repartition de depenses n'est disponible.");
 	}
 
 	public void showSeasonNotStartedState() {
@@ -372,28 +226,24 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		selectedRevenueValueLabel.setText("Les revenus mensuels apparaitront apres le lancement.");
 		selectedExpenseValueLabel.setText("Les depenses mensuelles apparaitront apres le lancement.");
 		selectedNetValueLabel.setText("Le resultat mensuel sera calcule apres le lancement.");
-		luxuryTaxValueLabel.setText("La taxe de luxe sera calculee apres le lancement.");
-		profileValueLabel.setText("Le profil financier sera affiche apres le lancement.");
-		marketValueLabel.setText("La taille du marche sera affichee apres le lancement.");
-		strategyValueLabel.setText("La strategie sera affichee apres le lancement.");
-		fanLoyaltyValueLabel.setText("Aucune fidelite des fans n'est disponible.");
-		commercialAggressivenessValueLabel.setText("Aucune agressivite commerciale n'est disponible.");
-		historicalPrestigeValueLabel.setText("Aucun prestige historique n'est disponible.");
-		fanBaseValueLabel.setText("Aucune base de fans n'est disponible.");
-		businessOpportunityValueLabel.setText("Aucune opportunite commerciale n'est disponible.");
-		pricingPowerValueLabel.setText("Aucun pouvoir de prix n'est disponible.");
-		ticketPriceValueLabel.setText("Le prix du billet sera affiche apres le lancement.");
-		capacityValueLabel.setText("La capacite sera affichee apres le lancement.");
+		profilePanel.showEmptyState(new String[] {
+				"Le profil financier sera affiche apres le lancement.",
+				"La taille du marche sera affichee apres le lancement.",
+				"La strategie sera affichee apres le lancement.",
+				"Le prix du billet sera affiche apres le lancement.",
+				"La capacite sera affichee apres le lancement.",
+				"Aucune fidelite des fans n'est disponible.",
+				"Aucune agressivite commerciale n'est disponible.",
+				"Aucun prestige historique n'est disponible.",
+				"Aucune base de fans n'est disponible.",
+				"Aucune opportunite commerciale n'est disponible.",
+				"Aucun pouvoir de prix n'est disponible.",
+				"La taxe de luxe sera calculee apres le lancement."
+		});
 		applyEmptyStateLabels();
-		revenueDataset.clear();
-		expenseDataset.clear();
 		historyDataset.clear();
-		revenueMetricsPanel.removeAll();
-		expenseMetricsPanel.removeAll();
-		revenueMetricsPanel.add(buildEmptyStateMessage("Lancez la saison pour afficher les revenus de l'equipe."));
-		expenseMetricsPanel.add(buildEmptyStateMessage("Lancez la saison pour afficher les depenses de l'equipe."));
-		revenueMetricsPanel.revalidate();
-		expenseMetricsPanel.revalidate();
+		revenuePanel.showEmptyState("Lancez la saison pour afficher les revenus de l'equipe.");
+		expensePanel.showEmptyState("Lancez la saison pour afficher les depenses de l'equipe.");
 	}
 
 	private void applyEmptyStateLabels() {
@@ -401,77 +251,59 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		applyEmptyStateLabel(selectedRevenueValueLabel, 12);
 		applyEmptyStateLabel(selectedExpenseValueLabel, 12);
 		applyEmptyStateLabel(selectedNetValueLabel, 12);
-		applyEmptyStateLabel(luxuryTaxValueLabel, 12);
-		applyEmptyStateLabel(profileValueLabel, 12);
-		applyEmptyStateLabel(marketValueLabel, 12);
-		applyEmptyStateLabel(strategyValueLabel, 12);
-		applyEmptyStateLabel(fanLoyaltyValueLabel, 12);
-		applyEmptyStateLabel(commercialAggressivenessValueLabel, 12);
-		applyEmptyStateLabel(historicalPrestigeValueLabel, 12);
-		applyEmptyStateLabel(fanBaseValueLabel, 12);
-		applyEmptyStateLabel(businessOpportunityValueLabel, 12);
-		applyEmptyStateLabel(pricingPowerValueLabel, 12);
-		applyEmptyStateLabel(ticketPriceValueLabel, 12);
-		applyEmptyStateLabel(capacityValueLabel, 12);
 	}
 
 	private void applyEmptyStateLabel(JLabel label, int fontSize) {
 		LabelStyleUtil.styleSubtitleLabel(label, fontSize);
 	}
 
-	private JLabel buildEmptyStateMessage(String text) {
-		JLabel label = new JLabel(text);
-		LabelStyleUtil.styleSubtitleLabel(label, 12);
-		return label;
-	}
-
-	private double getLuxuryTaxPaid(Team team) {
+	double getLuxuryTaxPaid(Team team) {
 		if (team == null || team.getTeamFinance() == null) {
 			return 0.0;
 		}
 		return team.getTeamFinance().getLuxuryTaxPaid();
 	}
 
-	private Object getFinancialPolicy(Team team) {
+	Object getFinancialPolicy(Team team) {
 		if (team == null || team.getTeamFinance() == null) {
 			return null;
 		}
-		return team.getTeamFinance().getBehavior().getFinancialProfil();
+		return team.getTeamFinance().getBehavior().getFinancialPolicy();
 	}
 
-	private Object getMarketSize(Team team) {
+	Object getMarketSize(Team team) {
 		if (team == null || team.getTeamFinance() == null) {
 			return null;
 		}
 		return team.getTeamFinance().getStructure().getMarketSize();
 	}
 
-	private Object getTransferStrategy(Team team) {
+	Object getTransferStrategy(Team team) {
 		if (team == null || team.getTeamFinance() == null) {
 			return null;
 		}
 		return team.getTeamFinance().getBehavior().getTeamTransferStrategy();
 	}
 
-	private double getFanLoyalty(Team team) {
+	double getFanLoyalty(Team team) {
 		if (team == null || team.getTeamFinance() == null)
 			return 0.0;
-		return team.getTeamFinance().getStructure().getEconomicProfil().getFanLoyalty();
+		return team.getTeamFinance().getStructure().getEconomicProfile().getFanLoyalty();
 	}
 
-	private double getCommercialAggressiveness(Team team) {
+	double getCommercialAggressiveness(Team team) {
 		if (team == null || team.getTeamFinance() == null)
 			return 0.0;
-		return team.getTeamFinance().getStructure().getEconomicProfil().getCommercialAggressiveness();
+		return team.getTeamFinance().getStructure().getEconomicProfile().getCommercialAggressiveness();
 	}
 
-	private double getHistoricalPrestige(Team team) {
+	double getHistoricalPrestige(Team team) {
 		if (team == null || team.getTeamFinance() == null)
 			return 0.0;
-		return team.getTeamFinance().getStructure().getEconomicProfil().getHistoricalPrestige();
+		return team.getTeamFinance().getStructure().getEconomicProfile().getHistoricalPrestige();
 	}
 
-	private String formatCoefficient(double value) {
+	String formatCoefficient(double value) {
 		String level;
 
 		if (value < 0.30) {
@@ -487,19 +319,19 @@ public class TeamFinanceViewPanel extends JPanel implements ThemeAware {
 		return level + " (" + Math.round(value * 100) + "%)";
 	}
 
-	private double getFanBase(Team team) {
+	double getFanBase(Team team) {
 		if (team == null || team.getTeamFinance() == null)
 			return 0.0;
 		return team.getTeamFinance().getStructure().getMediaMarket().getFanBaseModifier();
 	}
 
-	private double getBusinessOpportunity(Team team) {
+	double getBusinessOpportunity(Team team) {
 		if (team == null || team.getTeamFinance() == null)
 			return 0.0;
 		return team.getTeamFinance().getStructure().getMediaMarket().getBusinessOpportunityModifier();
 	}
 
-	private double getPricingPower(Team team) {
+	double getPricingPower(Team team) {
 		if (team == null || team.getTeamFinance() == null)
 			return 0.0;
 		return team.getTeamFinance().getStructure().getMediaMarket().getPricingPowerModifier();

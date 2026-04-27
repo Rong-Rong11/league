@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import data.finance.GameStat;
 import data.sport.setup.Game;
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import log.LoggerUtility;
 
 public class StaffCostCalculator {
@@ -28,7 +28,7 @@ public class StaffCostCalculator {
 			logger.warn("Skipping staff cost calculation because game stat is null");
 			return;
 		}
-		EconomicProfil economicProfil = homeTeam.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile economicProfile = homeTeam.getTeamFinance().getStructure().getEconomicProfile();
 		logger.trace("Calculating staff costs for " + homeTeam.getName());
 
 		double baseStaffCost = 0.17;
@@ -44,7 +44,7 @@ public class StaffCostCalculator {
 			modifier -= 0.10;
 		}
 
-		modifier += economicProfil.getFanLoyalty() * 0.05;
+		modifier += economicProfile.getFanLoyalty() * 0.05;
 		logger.trace("Staff modifier after fan loyalty is " + modifier);
 		double bonusRate = bonusProvider.getStaffBonusRate(game, homeTeam);
 		modifier += bonusRate;

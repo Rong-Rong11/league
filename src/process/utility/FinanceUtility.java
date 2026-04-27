@@ -316,12 +316,12 @@ public class FinanceUtility {
 
 		double historicalPrestige = team.getTeamFinance()
 				.getStructure()
-				.getEconomicProfil()
+				.getEconomicProfile()
 				.getHistoricalPrestige();
 
 		double fanLoyalty = team.getTeamFinance()
 				.getStructure()
-				.getEconomicProfil()
+				.getEconomicProfile()
 				.getFanLoyalty();
 
 		double mediaPrestige = team.getTeamFinance()

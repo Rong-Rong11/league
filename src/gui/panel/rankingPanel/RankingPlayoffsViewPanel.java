@@ -18,7 +18,7 @@ import gui.panel.common.LabelStyleUtil;
 import gui.panel.common.PlaceholderPanel;
 import gui.panel.common.RoundedPanel;
 import gui.panel.common.ThemeAware;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class RankingPlayoffsViewPanel extends JPanel implements ThemeAware {
 	private final GUIInterface guiInterface;

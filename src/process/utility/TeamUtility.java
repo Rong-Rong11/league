@@ -90,7 +90,7 @@ public class TeamUtility {
 		teamPerformance.setPerformanceRating(performanceRating);
 	}
 
-	public static FinancialPolicy randomFinancialProfil() {
+	public static FinancialPolicy randomFinancialPolicy() {
 		double random = Math.random();
 		if (random < 0.3) {
 			return new AmbitiousPolicy();

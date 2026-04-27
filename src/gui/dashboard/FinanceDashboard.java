@@ -12,7 +12,7 @@ import gui.panel.financePanel.CentralFinanceViewPanel;
 import gui.panel.financePanel.FinanceHeaderPanel;
 import gui.panel.financePanel.LeagueFinanceViewPanel;
 import gui.panel.financePanel.TeamFinanceViewPanel;
-import process.orchestrator.interf.GUIInterface;
+import process.orchestrator.interfaces.GUIInterface;
 
 public class FinanceDashboard extends JPanel implements ThemeAware, RefreshableDashboard {
 

@@ -1,6 +1,6 @@
 package data.team.finance.financialpolicy;
 
-import process.visitor.financialpolicy.FinancialProfilVisitor;
+import process.visitor.financialpolicy.FinancialPolicyVisitor;
 
 public abstract class FinancialPolicy {
 
@@ -8,5 +8,5 @@ public abstract class FinancialPolicy {
 
 	}
 
-	public abstract <F> F accept(FinancialProfilVisitor<F> var1);
+	public abstract <F> F accept(FinancialPolicyVisitor<F> var1);
 }

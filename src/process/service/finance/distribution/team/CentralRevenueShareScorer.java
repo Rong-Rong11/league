@@ -3,7 +3,7 @@ package process.service.finance.distribution.team;
 import org.apache.log4j.Logger;
 
 import data.team.Team;
-import data.team.finance.economicprofil.EconomicProfil;
+import data.team.finance.economicprofile.EconomicProfile;
 import log.LoggerUtility;
 import process.utility.FinanceUtility;
 
@@ -37,7 +37,7 @@ public class CentralRevenueShareScorer {
 	}
 
 	private double calculateTvShareScore(Team team) {
-		EconomicProfil profil = team.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile profil = team.getTeamFinance().getStructure().getEconomicProfile();
 		double score = 1.0;
 		logger.trace("TV share base score starts at " + score + " for " + team.getName());
 		score += team.getCurrentPopularity() / 250.0;
@@ -54,7 +54,7 @@ public class CentralRevenueShareScorer {
 	}
 
 	private double calculateSponsoringShareScore(Team team) {
-		EconomicProfil profil = team.getTeamFinance().getStructure().getEconomicProfil();
+		EconomicProfile profil = team.getTeamFinance().getStructure().getEconomicProfile();
 		double score = 1.0;
 		logger.trace("Sponsoring share base score starts at " + score + " for " + team.getName());
 		score += team.getCurrentPopularity() / 200.0;
