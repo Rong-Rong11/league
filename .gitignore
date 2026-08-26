@@ -1,28 +1,32 @@
-# =========================
-# Dossiers de build
-# =========================
+# Build outputs
 bin/
 out/
 target/
+*.class
 
-# =========================
-# Logs
-# =========================
+# Runtime logs
 *.log
+src/log/*.txt
 
-# =========================
-# VS Code
-# =========================
+# IDE files
 .vscode/
-
-# =========================
-# Eclipse
-# =========================
 .project
 .classpath
 .settings/
+*.iml
+.idea/
 
-# =========================
-# macOS
-# =========================
+# Operating system files
 .DS_Store
+Thumbs.db
+
+# Local exports and duplicate copies
+usb_export/
+git/
+*.zip
+
+# Secrets and local configuration
+.env
+.env.*
+*.pem
+*.key
